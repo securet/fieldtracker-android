@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.oppo.sfamanagement.database.API;
 import com.oppo.sfamanagement.database.DigitalClockView;
 import com.oppo.sfamanagement.database.MoreFragment;
+import com.oppo.sfamanagement.fragment.StoreListFragment;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -188,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pd.show();
-		};
+		}
 
 		@Override
 		protected String doInBackground(String... params) {
@@ -284,6 +285,14 @@ public class MainActivity extends AppCompatActivity {
 		startActivity(new Intent(MainActivity.this, LoginActivity.class));
 
 
+
+	}
+
+	public void onStoreClick(View view) {
+		Fragment fragment =(Fragment) new StoreListFragment();
+		FragmentManager fm = getSupportFragmentManager();
+		fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
+		fm.executePendingTransactions();
 
 	}
 }

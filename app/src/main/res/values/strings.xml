@@ -14,5 +14,23 @@
     <string name="unknown_geofence_error">Unknown error</string>
     <string name="geofences_added">Geofences added</string>
     <string name="geofences_removed">Geofences removed</string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="attendence_tracker">Attendence Tracker</string>
+    <string name="password_hint">PASSWORD</string>
+    <string name="username_hint">USERNAME</string>
+    <string name="login_text">LOGIN</string>
+    <string name="allsmart_logo">All Smart Logo</string>
+    <string name="powered_by">Powered by Allsmart Technosolutions</string>
+    <string name="oppo_logo">Oppo Logo</string>
+    <string name="gps_yellow_icon">GPS yello icon</string>
+    <string name="store">Stores</string>
+    <string name="promoters">Promoters</string>
+    <string name="leaves">Leaves</string>
+    <string name="contact_support">Contact Support</string>
+    <string name="log_off">Log Off</string>
+    <string name="add_store_button">Add Store</string>
+    <string name="edit_store">Edit Store</string>
+    <string name="default_address">Ground floor, Dainik Bhaskar Mal, Hoshangabad Rd, Zone - 1, Maharana Pratap Nagar Bhopal</string>
+    <string name="get_cuurent_location">Get Current Location</string>
 
 </resources>

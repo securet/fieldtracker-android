@@ -13,6 +13,7 @@ import com.oppo.sfamanagement.LeaveFragment;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.MapFragment;
 import com.oppo.sfamanagement.R;
+import com.oppo.sfamanagement.fragment.StoreListFragment;
 
 public class MoreFragment extends Fragment {
 
@@ -49,6 +50,7 @@ public class MoreFragment extends Fragment {
     public void onResume() {
         super.onResume();
     }
+
 
 
 }

@@ -33,18 +33,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
-                android:text="Attendance Tracker"
+                android:text="@string/attendence_tracker"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
         </LinearLayout>
 
         <ImageView
+            android:contentDescription="@string/gps_yellow_icon"
             android:id="@+id/ivCurrentLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
             android:src="@drawable/right_arrow" />
     </LinearLayout>

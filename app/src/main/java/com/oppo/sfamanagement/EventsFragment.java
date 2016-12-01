@@ -16,9 +16,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.oppo.sfamanagement.adapter.ListViewHistoryAdapter;
 import com.oppo.sfamanagement.database.API;
 import com.oppo.sfamanagement.database.Event;
 import com.oppo.sfamanagement.database.EventDataSource;
+import com.oppo.sfamanagement.model.History;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,7 +32,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class EventsFragment extends Fragment {
-	protected EventListAdapter adapter;
+	protected ListViewHistoryAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -40,9 +42,9 @@ public class EventsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_events, container,false);
-		ArrayList<Event> list = new ArrayList<Event>();
+		ArrayList<History> list = new ArrayList<History>();
 		ListView listLv = (ListView) rootView.findViewById(R.id.list);
-		adapter = new EventListAdapter(getActivity(), R.layout.item_event, list);
+		adapter = new ListViewHistoryAdapter(getActivity(), R.layout.history_list_item, list);
 		listLv.setAdapter(adapter);
 		return rootView;
 	}
@@ -89,7 +91,7 @@ public class EventsFragment extends Fragment {
 		@Override
 		protected void onPostExecute(String result) {
 			((MainActivity)getActivity()).pd.dismiss();
-			ArrayList<Event> attendenceList = new ArrayList<>();
+			ArrayList<History> attendenceList = new ArrayList<>();
 			if(API.DEBUG)
 				System.out.println("The Message Is: " + result);
 			if (!(result.equals("No Internet")) || !(result.equals(""))) {
@@ -102,7 +104,7 @@ public class EventsFragment extends Fragment {
 						JSONArray objArray = list.getJSONArray("data");
 						for(int i=0;i<objArray.length();i++)
 						{
-							Event listData = new Event();
+							History listData = new History();
 							JSONObject obj = objArray.getJSONObject(i);
 							String statusId = obj.getString("statusId");
 							JSONObject serviceType = obj.getJSONObject("serviceType");
@@ -110,7 +112,7 @@ public class EventsFragment extends Fragment {
 							if(serviceTypeId.equalsIgnoreCase("16"))
 							{
 								JSONObject site = obj.getJSONObject("site");
-								listData.setPlaceName(site.getString("name"));
+							//	listData.setPlaceName(site.getString("name"));
 								String createdTimestamp = obj.getString("createdTimestamp");
 								SimpleDateFormat simpleDateFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 								Date timeIn = new Date();
@@ -122,8 +124,8 @@ public class EventsFragment extends Fragment {
 								}
 								Calendar mCalendar = Calendar.getInstance();
 								mCalendar.setTimeInMillis(timeIn.getTime());
-								listData.setDate(DateFormat.format("dd-MM-yyyy", mCalendar).toString());
-								String mFormat = "HH:mm:ss";
+								listData.setDate(DateFormat.format("dd-MMM-yy", mCalendar).toString());
+								String mFormat = "hh:mm";
 								listData.setTimeIn(DateFormat.format(mFormat, mCalendar).toString());
 								if(statusId.equalsIgnoreCase("Closed"))
 								{
@@ -137,10 +139,9 @@ public class EventsFragment extends Fragment {
 									}
 									mCalendar.setTimeInMillis(timeOut.getTime());
 									listData.setTimeOut(DateFormat.format(mFormat, mCalendar).toString());
-									long millis = timeOut.getTime()-timeIn.getTime();
-									listData.setTime(String.format("%02dh %02dm %02ds", TimeUnit.MILLISECONDS.toHours(millis),
-											TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
-											TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))));
+									long millis = timeOut.getTime()- timeIn.getTime();
+									listData.setTime(String.format("%02dh %02dm", TimeUnit.MILLISECONDS.toHours(millis),
+											TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))));
 								}else{
 									listData.setTimeOut("-");
 									listData.setTime("-");
