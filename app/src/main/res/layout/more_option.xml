@@ -26,6 +26,7 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:padding="10dip"
+        android:onClick="onPromotersClick"
         android:layout_marginBottom="10dp"
         android:text="@string/promoters"
         android:textColor="@android:color/black"
@@ -39,6 +40,7 @@
         android:padding="10dip"
         android:layout_marginBottom="10dp"
         android:text="@string/leaves"
+        android:onClick="onLeavesClick"
         android:textColor="@android:color/black"
         android:textSize="20sp" />
 

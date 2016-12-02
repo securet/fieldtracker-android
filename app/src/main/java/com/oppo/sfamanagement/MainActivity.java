@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.oppo.sfamanagement.database.API;
 import com.oppo.sfamanagement.database.DigitalClockView;
 import com.oppo.sfamanagement.database.MoreFragment;
+import com.oppo.sfamanagement.fragment.LeaveStatusFragment;
+import com.oppo.sfamanagement.fragment.PromotersFragment;
 import com.oppo.sfamanagement.fragment.StoreListFragment;
 
 import org.json.JSONArray;
@@ -294,5 +296,19 @@ public class MainActivity extends AppCompatActivity {
 		fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
 		fm.executePendingTransactions();
 
+	}
+
+	public void onPromotersClick(View view) {
+		Fragment fragment =(Fragment) new PromotersFragment();
+		FragmentManager fm = getSupportFragmentManager();
+		fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
+		fm.executePendingTransactions();
+	}
+
+	public void onLeavesClick(View view) {
+		Fragment fragment = new LeaveStatusFragment();
+		FragmentManager fm = getSupportFragmentManager();
+		fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
+		fm.executePendingTransactions();
 	}
 }

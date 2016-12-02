@@ -32,5 +32,18 @@
     <string name="edit_store">Edit Store</string>
     <string name="default_address">Ground floor, Dainik Bhaskar Mal, Hoshangabad Rd, Zone - 1, Maharana Pratap Nagar Bhopal</string>
     <string name="get_cuurent_location">Get Current Location</string>
+    <string name="store_name">Store Name</string>
+    <string name="store_address">Store Address</string>
+    <string name="add_promoter_button">Add Promoter</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone">Phone #</string>
+    <string name="email_address">Email Address</string>
+    <string name="address">Address</string>
+    <string name="se_assignment">SE Assignment</string>
+    <string name="store_assignment">Store Assignment</string>
+    <string name="weekly_off">Weekly Off</string>
+    <string name="leave_status">Leave Status</string>
+    <string name="leave_request">Leave Request</string>
 
 </resources>

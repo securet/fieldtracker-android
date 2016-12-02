@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="15dp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvHistoryDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="23sp"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:text="12-OCt-16"/>
+        <TextView
+            android:id="@+id/tvHistoryTimeIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginTop="5dp"
+            android:textColor="@android:color/black"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:text="Time In: 10:12 am"/>
+        <TextView
+            android:id="@+id/tvHistoryTimeOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:text="Time In: 10:12 am"/>
+
+
+    </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tvHistoryTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:text="9h 10m"
+            android:textSize="25sp" />
+    <TextView
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/linearHistory" />
+    </RelativeLayout>

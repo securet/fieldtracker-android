@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@android:color/black"
+        android:text="@string/add_promoter_button"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center_vertical"
+        android:hint="@string/se_assignment"
+        android:textStyle="italic"
+        android:padding="5dp"
+        android:textSize="18sp"
+        android:background="@drawable/edittext_editstore_item"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="5dp"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:textStyle="italic"
+        android:layout_marginRight="20dp"
+        android:padding="5dp"
+        android:hint="@string/store_assignment"
+        android:textSize="18sp"
+        android:background="@drawable/edittext_editstore_item"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="5dp" />
+    <TextView
+        android:textStyle="italic"
+        android:textSize="18sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/weekly_off"/>
+    <LinearLayout
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/checkboxM"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="M"
+                android:layout_marginLeft="8dp"
+                android:textSize="18sp"/>
+        </LinearLayout>
+        <LinearLayout
+
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/checkboxTue"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="T"
+                android:layout_marginLeft="8dp"
+                android:textSize="18sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/checkboxW"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="W"
+                android:layout_marginLeft="8dp"
+                android:textSize="18sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/checkboxThu"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="T"
+                android:layout_marginLeft="8dp"
+                android:textSize="18sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/checkboxF"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="F"
+                android:layout_marginLeft="8dp"
+                android:textSize="18sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/checkboxSat"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="S"
+                android:layout_marginLeft="8dp"
+                android:textSize="18sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/checkboxSun"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="S"
+                android:layout_marginLeft="8dp"
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/password_lock_icon"
+            android:layout_width="60dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="60dp" />
+        <ImageView
+            android:src="@drawable/password_lock_icon"
+            android:layout_width="60dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_height="60dp" />
+        <ImageView
+            android:src="@drawable/password_lock_icon"
+            android:layout_width="60dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_height="60dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:text="Add"
+            android:textAllCaps="false"
+            android:background="@drawable/editstore_edit_button"
+            android:textSize="22sp"
+            android:textColor="@color/colorWhite"
+            android:layout_width="150dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_height="40dp" />
+        <Button
+            android:text="Cancel"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:textAllCaps="false"
+            android:gravity="center_horizontal|center_vertical"
+            android:background="@drawable/editstore_cancel_button"
+            android:textColor="@color/colorWhite"
+            android:textSize="22sp"
+            android:layout_width="150dp"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
+    </ScrollView>
