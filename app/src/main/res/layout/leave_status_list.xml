@@ -21,10 +21,10 @@
             android:text="@string/leave_request"
             android:textAllCaps="false"
             android:textSize="15sp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginLeft="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/editstore_edit_button"
             android:textColor="@color/colorWhite"
             android:layout_alignParentRight="true"/>

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
 <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -184,17 +180,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
+            android:id="@+id/ivPhoto"
             android:src="@drawable/password_lock_icon"
             android:layout_width="60dp"
             android:layout_marginRight="20dp"
             android:layout_height="60dp" />
         <ImageView
+            android:id="@+id/ivAadhar"
             android:src="@drawable/password_lock_icon"
             android:layout_width="60dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_height="60dp" />
         <ImageView
+            android:id="@+id/ivAddressProof"
             android:src="@drawable/password_lock_icon"
             android:layout_width="60dp"
             android:layout_marginRight="20dp"
@@ -214,9 +213,9 @@
             android:text="Add"
             android:textAllCaps="false"
             android:background="@drawable/editstore_edit_button"
-            android:textSize="22sp"
             android:textColor="@color/colorWhite"
-            android:layout_width="150dp"
+            android:layout_width="110dp"
+            android:textSize="18sp"
             android:gravity="center_vertical|center_horizontal"
             android:layout_marginRight="5dp"
             android:layout_marginEnd="5dp"
@@ -226,14 +225,13 @@
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:textAllCaps="false"
+            android:textSize="18sp"
             android:gravity="center_horizontal|center_vertical"
             android:background="@drawable/editstore_cancel_button"
             android:textColor="@color/colorWhite"
-            android:textSize="22sp"
-            android:layout_width="150dp"
+            android:layout_width="110dp"
             android:layout_height="40dp" />
 
     </LinearLayout>
 
 </LinearLayout>
-    </ScrollView>

@@ -34,6 +34,7 @@
     </RelativeLayout>
 
     <ListView
+        android:background="#eceae8"
         android:id="@+id/lvPromotersList"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
