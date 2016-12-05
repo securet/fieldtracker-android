@@ -28,12 +28,21 @@ public class CameraPreviewClass extends SurfaceView implements SurfaceHolder.Cal
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         try {
-            mCamera.setPreviewDisplay(holder);
-            mCamera.startPreview();
-        } catch (IOException e) {
+            mCamera = Camera.open();
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
-
+        Camera.Parameters parameters = mCamera.getParameters();
+        parameters.setPreviewFrameRate(24);
+        parameters.setPreviewSize(352,288);
+        mCamera.setParameters(parameters);
+        mCamera.setDisplayOrientation(90);
+        try {
+            mCamera.setPreviewDisplay(mHolder);
+            mCamera.startPreview();
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -52,6 +61,7 @@ public class CameraPreviewClass extends SurfaceView implements SurfaceHolder.Cal
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        mCamera.stopPreview();
         mCamera.release();
     }
 }

@@ -26,6 +26,7 @@ import com.oppo.sfamanagement.database.DigitalClockView;
 import com.oppo.sfamanagement.database.MoreFragment;
 import com.oppo.sfamanagement.fragment.LeaveStatusFragment;
 import com.oppo.sfamanagement.fragment.PromotersFragment;
+import com.oppo.sfamanagement.fragment.RetakeFragment;
 import com.oppo.sfamanagement.fragment.StoreListFragment;
 
 import org.json.JSONArray;
@@ -186,6 +187,8 @@ public class MainActivity extends AppCompatActivity {
 				break;
 		}
 	}
+
+
 	private class UserSiteTask extends AsyncTask<String, Void, String> {
 		@Override
 		protected void onPreExecute() {
