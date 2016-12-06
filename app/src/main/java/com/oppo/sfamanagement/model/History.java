@@ -11,6 +11,16 @@ public class History {
     private String timeOut;
     private String time;
 
+    public History() {
+
+    }
+    public History(String date,String timeIn,String timeOut,String time) {
+        this.date = date;
+        this.timeIn = timeIn;
+        this.timeOut = timeOut;
+        this.time = time;
+    }
+
     public String getDate() {
         return date;
     }

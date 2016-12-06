@@ -55,13 +55,23 @@
         android:text="9h 10m"
         android:textSize="25sp" />
     <ScrollView
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@id/linearHistory"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         
         <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"></LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include layout="@layout/history_tracking_item"/>
+            <include layout="@layout/history_tracking_element_red"/>
+            <include layout="@layout/history_tracking_element_green"/>
+            <include layout="@layout/history_tracking_element_red"/>
+            <include layout="@layout/history_tracking_element_green"/>
+            <include layout="@layout/history_tracking_element_gray"/>
+        </LinearLayout>
     </ScrollView>
 </RelativeLayout>

@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.oppo.sfamanagement.adapter.ListViewHistoryAdapter;
 import com.oppo.sfamanagement.database.API;
 import com.oppo.sfamanagement.database.Event;
 import com.oppo.sfamanagement.database.EventDataSource;
+import com.oppo.sfamanagement.fragment.HistoryListTrackFragment;
 import com.oppo.sfamanagement.model.History;
 
 import org.json.JSONArray;
@@ -31,7 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class EventsFragment extends Fragment {
+public class EventsFragment extends Fragment implements AdapterView.OnItemClickListener{
 	protected ListViewHistoryAdapter adapter;
 
 	@Override
@@ -44,12 +46,13 @@ public class EventsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_events, container,false);
 		ArrayList<History> list = new ArrayList<History>();
 		ListView listLv = (ListView) rootView.findViewById(R.id.list);
-		adapter = new ListViewHistoryAdapter(getActivity(), R.layout.history_list_item, list);
+		adapter = new ListViewHistoryAdapter(getActivity(), R.layout.history_list_item, hardCodeData());
 		listLv.setAdapter(adapter);
+		listLv.setOnItemClickListener(this);
 		return rootView;
 	}
 
-	@Override
+/*	@Override
 	public void onResume() {
 		super.onResume();
 		loadData();
@@ -68,8 +71,20 @@ public class EventsFragment extends Fragment {
 //		adapter.addAll(list);
 //		adapter.notifyDataSetChanged();
 	}
+	*/
 
-	private class UserLoginListTask extends AsyncTask<String, Void, String> {
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		switch (position) {
+			default:
+				Fragment f = new HistoryListTrackFragment();
+				FragmentManager fm = getFragmentManager();
+				fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
+				fm.executePendingTransactions();
+		}
+	}
+
+/*	private class UserLoginListTask extends AsyncTask<String, Void, String> {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -187,5 +202,17 @@ public class EventsFragment extends Fragment {
 			pe.printStackTrace();
 		}
 		return  output;
+	}*/
+
+	private ArrayList<History> hardCodeData() {
+		ArrayList<History> arrayList = new ArrayList<>();
+		History a = new History("12-OCT-16","10:12am","10:12am","9h 10m");
+		History b = new History("12-OCT-16","10:12am","10:12am","9h 10m");
+		History c = new History("12-OCT-16","10:12am","10:12am","9h 10m");
+		arrayList.add(a);
+		arrayList.add(b);
+		arrayList.add(c);
+		return arrayList;
 	}
+
 }

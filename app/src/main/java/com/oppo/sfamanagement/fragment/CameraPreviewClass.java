@@ -2,10 +2,12 @@ package com.oppo.sfamanagement.fragment;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by allsmartlt218 on 05-12-2016.
@@ -15,6 +17,7 @@ public class CameraPreviewClass extends SurfaceView implements SurfaceHolder.Cal
 
     private SurfaceHolder mHolder;
     private Camera mCamera;
+  //  private List<Camera.Size> previewSize = parameters.getSupportedPreviewSizes();
 
     public CameraPreviewClass(Context context, Camera camera) {
         super(context);
@@ -32,9 +35,14 @@ public class CameraPreviewClass extends SurfaceView implements SurfaceHolder.Cal
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
+
+        Camera.Size previewSize ;
         Camera.Parameters parameters = mCamera.getParameters();
+        List<Camera.Size> list = parameters.getSupportedPreviewSizes();
+        previewSize = list.get(0);
+        Log.d("list",(String.valueOf(list.size())) + previewSize.width +" "+previewSize.height);
         parameters.setPreviewFrameRate(24);
-        parameters.setPreviewSize(352,288);
+        parameters.setPreviewSize(previewSize.width,previewSize.height);
         mCamera.setParameters(parameters);
         mCamera.setDisplayOrientation(90);
         try {
@@ -44,6 +52,17 @@ public class CameraPreviewClass extends SurfaceView implements SurfaceHolder.Cal
             e.printStackTrace();
         }
     }
+
+  /*  @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        final int width = resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
+        final int height = resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
+        setMeasuredDimension(width, height);
+
+        if (previewSize != null) {
+            mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, width, height);
+        }
+    }*/
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {

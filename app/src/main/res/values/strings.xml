@@ -45,5 +45,6 @@
     <string name="weekly_off">Weekly Off</string>
     <string name="leave_status">Leave Status</string>
     <string name="leave_request">Leave Request</string>
+    <string name="time_in">|   Time In</string>
 
 </resources>
