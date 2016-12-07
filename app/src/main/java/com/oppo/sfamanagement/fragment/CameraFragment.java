@@ -52,7 +52,7 @@ public class CameraFragment extends Fragment {
         pictureCallback = new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-               if (cameraForB == AddPromoterArrowFragment.FRONT_CAMREA_OPEN) {
+               if (cameraForB == AddPromoterFragment.FRONT_CAMREA_OPEN) {
                    pic = getOutputMediaFile(MEDIA_TYPE_IMAGE_FRONT);
                    if (pic != null) {
                        try {
@@ -102,7 +102,7 @@ public class CameraFragment extends Fragment {
             }
         });
         if (hasCamera(getContext())) {
-            if(cameraForB == AddPromoterArrowFragment.FRONT_CAMREA_OPEN) {
+            if(cameraForB == AddPromoterFragment.FRONT_CAMREA_OPEN) {
                  camera = getCameraInstace();
             } else {
                 camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);

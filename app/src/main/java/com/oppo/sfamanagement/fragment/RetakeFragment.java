@@ -51,7 +51,7 @@ public class RetakeFragment extends Fragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new AddPromoterArrowFragment();
+                Fragment fragment = new AddPromoterFragment();
                 FragmentManager fm = getFragmentManager();
                 Bundle bundle = new Bundle();
                 //bundle.putBoolean("confirm",true);

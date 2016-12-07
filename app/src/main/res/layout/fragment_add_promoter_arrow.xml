@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="22sp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:textColor="@android:color/black"
@@ -27,7 +27,7 @@
         android:background="@drawable/edittext_editstore_item"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
         />
     <EditText
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
         android:background="@drawable/edittext_editstore_item"
         android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="10dp" />
     <TextView
         android:textStyle="italic"
         android:textSize="18sp"
@@ -174,7 +174,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
         android:layout_width="match_parent"
@@ -202,8 +202,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
         android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -215,22 +215,22 @@
             android:background="@drawable/editstore_edit_button"
             android:textColor="@color/colorWhite"
             android:layout_width="110dp"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:gravity="center_vertical|center_horizontal"
             android:layout_marginRight="5dp"
             android:layout_marginEnd="5dp"
-            android:layout_height="40dp" />
+            android:layout_height="wrap_content" />
         <Button
             android:text="Cancel"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:textAllCaps="false"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:gravity="center_horizontal|center_vertical"
             android:background="@drawable/editstore_cancel_button"
             android:textColor="@color/colorWhite"
             android:layout_width="110dp"
-            android:layout_height="40dp" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
