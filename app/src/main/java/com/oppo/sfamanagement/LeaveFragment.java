@@ -176,8 +176,8 @@ public class LeaveFragment extends Fragment implements DatePickerDialog.OnDateSe
 					}
 					UserLoginTask task = new UserLoginTask();
 					task.execute(new String[] {
-							((MainActivity)getActivity()).myPrefs.getString("UserName", ""),
-							((MainActivity)getActivity()).myPrefs.getString("Password", "") });
+							((MainActivity)getActivity()).preferences.getString("UserName", ""),
+							((MainActivity)getActivity()).preferences.getString("Password", "") });
 				}
 
 			}
@@ -230,8 +230,8 @@ public class LeaveFragment extends Fragment implements DatePickerDialog.OnDateSe
 //		adapter.notifyDataSetChanged();
 		UserLoginListTask task = new UserLoginListTask();
 		task.execute(new String[] {
-				((MainActivity)getActivity()).myPrefs.getString("UserName", ""),
-				((MainActivity)getActivity()).myPrefs.getString("Password", "") });
+				((MainActivity)getActivity()).preferences.getString("UserName", ""),
+				((MainActivity)getActivity()).preferences.getString("Password", "") });
 	}
 	private class UserLoginListTask extends AsyncTask<String, Void, String> {
 		@Override
@@ -337,12 +337,12 @@ public class LeaveFragment extends Fragment implements DatePickerDialog.OnDateSe
 
 					// Request
 					multipart= new MultipartUtility(API.GetLoginRest(params[0], params[1]), "UTF-8");
-					multipart.addFormField("site.siteId",((MainActivity) getActivity()).myPrefs.getString("siteId","21364"));
+					multipart.addFormField("site.siteId",((MainActivity) getActivity()).preferences.getString("siteId","21364"));
 					multipart.addFormField("serviceType.serviceTypeId","17");
 					multipart.addFormField("description",strDesc);
 					multipart.addFormField("issueType.issueTypeId",strType+"");
-					multipart.addFormField("latitude",((MainActivity)getActivity()).myPrefs.getString("userlat",""));
-					multipart.addFormField("longitude",((MainActivity)getActivity()).myPrefs.getString("userlong",""));
+					multipart.addFormField("latitude",((MainActivity)getActivity()).preferences.getString("userlat",""));
+					multipart.addFormField("longitude",((MainActivity)getActivity()).preferences.getString("userlong",""));
 					multipart.addFormField("severity.enumerationId","MAJOR");
 
                 /*This is to add file content*/

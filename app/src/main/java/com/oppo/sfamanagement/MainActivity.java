@@ -1,9 +1,11 @@
 package com.oppo.sfamanagement;
 
+import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -22,22 +24,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.oppo.sfamanagement.database.API;
+import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.DigitalClockView;
 import com.oppo.sfamanagement.database.MoreFragment;
+import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.fragment.LeaveStatusFragment;
 import com.oppo.sfamanagement.fragment.PromotersFragment;
 import com.oppo.sfamanagement.fragment.RetakeFragment;
 import com.oppo.sfamanagement.fragment.StoreListFragment;
+import com.oppo.sfamanagement.webmethods.LoaderConstant;
+import com.oppo.sfamanagement.webmethods.LoaderMethod;
+import com.oppo.sfamanagement.webmethods.LoaderServices;
+import com.oppo.sfamanagement.webmethods.Services;
+import com.oppo.sfamanagement.webmethods.UrlBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 	public static String TAG = "lstech.aos.debug";
 
 	static public boolean geofencesAlreadyRegistered = false;
-	public SharedPreferences.Editor prefsEditor;
-	public SharedPreferences myPrefs;
+	public Preferences preferences;
 	ProgressDialog pd;
 	public final static int  MAP =0,LIST=1,MORE=2;
 	public int openPage = MAP;
@@ -53,17 +61,21 @@ public class MainActivity extends AppCompatActivity {
 		if (actionBar != null){
 			actionBar.hide();
 		}
-		myPrefs = getSharedPreferences("myPrefs", MODE_PRIVATE);
+		preferences = new Preferences(MainActivity.this);
 		pd = new ProgressDialog(MainActivity.this);
 		pd.setMessage("Please wait...");
 		pd.setCancelable(false);
-		UserSiteTask task = new UserSiteTask();
-		task.execute(new String[] {
-				myPrefs.getString("UserName", ""),
-				myPrefs.getString("Password", "") });
-		prefsEditor =  myPrefs.edit();
-		prefsEditor.putBoolean("inLocation", false);
-		prefsEditor.commit();
+
+		Bundle b = new Bundle();
+		b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails(Services.STORE_DETAIL,preferences.getString(Preferences.PARTYID,"")));
+		b.putString(AppsConstant.METHOD, AppsConstant.GET );
+		b.putString(AppsConstant.PASSWORD, "");
+		getLoaderManager().initLoader(LoaderConstant.USER_STORE_DETAIL,b,MainActivity.this).forceLoad();
+//		UserSiteTask task = new UserSiteTask();
+//		task.execute(new String[] { preferences.getString(Preferences.USERNAME, ""),preferences.getString("USERPASSWORD", "") });
+
+		preferences.saveBoolean(Preferences.INLOCATION, false);
+		preferences.commit();
 		ivCurrentLocation= (ImageView) findViewById(R.id.ivCurrentLocation);
 		tvSiteName = (TextView) findViewById(R.id.tvSiteName);
 		tvUserName = (TextView) findViewById(R.id.tvUserName);
@@ -114,17 +126,8 @@ public class MainActivity extends AppCompatActivity {
 				}
 			}
 		});
-		String strName = myPrefs.getString("EmployeeName","");
-		if(!TextUtils.isEmpty(strName)&&strName.contains(" "))
-		{
-			String[] strNames = strName.split(" ");
-			tvUserName.setText(strNames[0]);
-			tvUserSerName.setText(strNames[1]);
-		}else if(!TextUtils.isEmpty(strName)) {
-			tvUserName.setText(strName);
-			tvUserSerName.setText("");
-		}
-//		startService(new Intent(this, GeolocationService.class));
+		tvUserName.setText(preferences.getString(Preferences.USERFIRSTNAME,""));
+		tvUserSerName.setText(preferences.getString(Preferences.USERLASTNAME,""));
 		llAttendance = (LinearLayout) findViewById(R.id.llAttendance);
 		llAttendance.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -188,109 +191,91 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-
-	private class UserSiteTask extends AsyncTask<String, Void, String> {
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			pd.show();
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			String response = "";
-			try {
-				response = API.GetSitesRest(params[0], params[1]);
-			} catch (Exception e) {
-				e.printStackTrace();
-				response = "";
-			}
-			return response;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			pd.dismiss();
-			if(API.DEBUG)
-				System.out.println("The Message Is: " + result);
-			if (!(result.equals("No Internet")) || !(result.equals(""))) {
-				try {
-
-					if(result.toString().contains("status") && (new JSONObject(result).getString("status").toString().equals("success")))
-					{
-						JSONObject data = new JSONObject(result);
-
-						JSONArray objArray = data.getJSONArray("data");
-						for(int i=0;i<objArray.length();i++)
-						{
-							JSONObject obj = objArray.getJSONObject(i);
-							String siteId = obj.getString("siteId");
-							String name = obj.getString("name");
-							String latitude = obj.getString("latitude");
-							String longitude = obj.getString("longitude");
-
-							prefsEditor = myPrefs.edit();
-							prefsEditor.putString("siteId", siteId); // value to store
-							prefsEditor.commit();
-
-							prefsEditor = myPrefs.edit();
-							prefsEditor.putString("SiteName", name); // value to store
-							prefsEditor.commit();
-							//17.464755, 78.481333
-							prefsEditor = myPrefs.edit();
-//							prefsEditor.putString("latitude", "17.464755");
-							prefsEditor.putString("latitude", latitude); // value to store
-							prefsEditor.commit();
-
-							prefsEditor = myPrefs.edit();
-//							prefsEditor.putString("longitude", "78.481333");
-							prefsEditor.putString("longitude", longitude); // value to store
-							prefsEditor.commit();
-						}
-					}else{
-						Toast.makeText(getApplicationContext(), ""+new JSONObject(result).getString("messages").toString(), Toast.LENGTH_SHORT).show();
-					}
-
-
-
-				} catch (Exception e) {
-					if(API.DEBUG){
-						e.printStackTrace();
-					}
-
-					Toast.makeText(getApplicationContext(),
-							"Error in response. Please try again.",
-							Toast.LENGTH_SHORT).show();
-				}
-			} else {
-				Toast.makeText(getApplicationContext(),
-						"Error in response. Please try again.",
-						Toast.LENGTH_SHORT).show();
-			}
-			tvSiteName.setText(myPrefs.getString("SiteName",""));
-			Fragment f = new MapFragment();
-			FragmentManager fragmentManager = getSupportFragmentManager();
-			fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
-			fragmentManager.executePendingTransactions();
-		}
-
-	}
+//
+//	private class UserSiteTask extends AsyncTask<String, Void, String> {
+//		@Override
+//		protected void onPreExecute() {
+//			super.onPreExecute();
+//			pd.show();
+//		}
+//
+//		@Override
+//		protected String doInBackground(String... params) {
+//			String response = "";
+//			try {
+//				response = API.GetSitesRest(params[0], params[1]);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				response = "";
+//			}
+//			return response;
+//		}
+//
+//		@Override
+//		protected void onPostExecute(String result) {
+//			pd.dismiss();
+//			if(API.DEBUG)
+//				System.out.println("The Message Is: " + result);
+//			if (!(result.equals("No Internet")) || !(result.equals(""))) {
+//				try {
+//
+//					if(result.toString().contains("status") && (new JSONObject(result).getString("status").toString().equals("success")))
+//					{
+//						JSONObject data = new JSONObject(result);
+//
+//						JSONArray objArray = data.getJSONArray("data");
+//						for(int i=0;i<objArray.length();i++)
+//						{
+//							JSONObject obj = objArray.getJSONObject(i);
+//							String siteId = obj.getString("siteId");
+//							String name = obj.getString("name");
+//							String latitude = obj.getString("latitude");
+//							String longitude = obj.getString("longitude");
+//
+//							preferences.saveString(Preferences.SITEID, siteId); // value to store
+//							preferences.commit();
+//							preferences.saveString(Preferences.SITENAME, name); // value to store
+//							preferences.commit();
+//							//17.464755, 78.481333
+//							preferences.saveString(Preferences.LATITUDE, latitude); // value to store
+//							preferences.commit();
+//							preferences.saveString(Preferences.LONGITUDE, longitude); // value to store
+//							preferences.commit();
+//						}
+//					}else{
+//						Toast.makeText(getApplicationContext(), ""+new JSONObject(result).getString("messages").toString(), Toast.LENGTH_SHORT).show();
+//					}
+//
+//
+//
+//				} catch (Exception e) {
+//					if(API.DEBUG){
+//						e.printStackTrace();
+//					}
+//
+//					Toast.makeText(getApplicationContext(),
+//							"Error in response. Please try again.",
+//							Toast.LENGTH_SHORT).show();
+//				}
+//			} else {
+//				Toast.makeText(getApplicationContext(),
+//						"Error in response. Please try again.",
+//						Toast.LENGTH_SHORT).show();
+//			}
+//			tvSiteName.setText(preferences.getString(Preferences.SITENAME,""));
+//			Fragment f = new MapFragment();
+//			FragmentManager fragmentManager = getSupportFragmentManager();
+//			fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
+//			fragmentManager.executePendingTransactions();
+//		}
+//
+//	}
 	public void Logout()
 	{
-
-
-		/*LogoutTask task = new LogoutTask();
-		task.execute(new String[]{myPrefs.getString("EmployeeID", "0"),myPrefs.getString("EmployeeToken", "Token")});*/
-
-		prefsEditor = myPrefs.edit();
-		prefsEditor.putBoolean("login", false); // value to store
-		prefsEditor.commit();
-
+		preferences.saveBoolean(Preferences.ISLOGIN, false); // value to store
+		preferences.commit();
 		finish();
 		startActivity(new Intent(MainActivity.this, LoginActivity.class));
-
-
-
 	}
 
 	public void onStoreClick(View view) {
@@ -314,4 +299,47 @@ public class MainActivity extends AppCompatActivity {
 		fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
 		fm.executePendingTransactions();
 	}
+
+
+	@Override
+	public Loader onCreateLoader(int id, Bundle args)
+	{
+		pd.show();
+		switch (id)
+		{
+			case LoaderConstant.USER_STORE_DETAIL:
+				return new LoaderServices(MainActivity.this, LoaderMethod.USER_STORE_DETAIL, args);
+			default:
+				return null;
+		}
+	}
+	@Override
+	public void onLoaderReset (Loader loader){
+
+	}
+	@Override
+	public void onLoadFinished(Loader loader, Object data)
+	{
+		pd.dismiss();
+		switch (loader.getId())
+		{
+			case LoaderConstant.USER_STORE_DETAIL:
+				if(data!=null && data instanceof String && ((String)data).equalsIgnoreCase("Success"))
+				{
+
+				}else{
+					Toast.makeText(getApplicationContext(),
+							"Error in response. Please try again.",
+							Toast.LENGTH_SHORT).show();
+				}
+				tvSiteName.setText(preferences.getString(Preferences.SITENAME,""));
+				Fragment f = new MapFragment();
+				FragmentManager fragmentManager = getSupportFragmentManager();
+				fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
+				fragmentManager.executePendingTransactions();
+				break;
+		}
+		getLoaderManager().destroyLoader(loader.getId());
+	}
+
 }

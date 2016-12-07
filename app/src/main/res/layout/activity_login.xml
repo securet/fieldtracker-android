@@ -50,7 +50,7 @@
             android:drawableRight="@android:drawable/ic_dialog_email"
             android:drawableEnd="@android:drawable/ic_dialog_email"
             android:inputType="textEmailAddress"
-            android:text="dilip@oppo.com"
+            android:text="anand@securet.in"
             android:textSize="20sp" />
 
         <EditText
@@ -69,7 +69,7 @@
             android:layout_marginRight="25dp"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
-            android:text="oppo123"
+            android:text="test@1234"
             android:textSize="20sp" />
 
         <TextView

@@ -64,6 +64,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.oppo.sfamanagement.database.API;
 import com.oppo.sfamanagement.database.EventDataSource;
 import com.oppo.sfamanagement.database.MultipartUtility;
+import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.database.ShiftTimeView;
 import com.oppo.sfamanagement.database.StringUtils;
 
@@ -136,9 +137,8 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		fragmentTransaction.commit();
 		buildGoogleApiClient();
 
-		((MainActivity) getActivity()).prefsEditor = ((MainActivity) getActivity()).myPrefs.edit();
-		((MainActivity) getActivity()).prefsEditor.putString("locationstatus", ""); // value to store
-		((MainActivity) getActivity()).prefsEditor.commit();
+		((MainActivity) getActivity()).preferences.saveString("locationstatus", ""); // value to store
+		((MainActivity) getActivity()).preferences.commit();
 		tvTimeInOut = (TextView) rootView.findViewById(R.id.tvTimeInOut);
 		tvTimeInOutLocation = (TextView) rootView.findViewById(R.id.tvTimeInOutLocation);
 		ShiftTimeView stvShiftTime = (ShiftTimeView) rootView.findViewById(R.id.stvShiftTime);
@@ -147,7 +147,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		llLogin_Logout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(((MainActivity)getActivity()).myPrefs.getBoolean("inLocation", false)){
+				if(((MainActivity)getActivity()).preferences.getBoolean("inLocation", false)){
 
 						if(checkCameraPermission()){
 							if(checkStoragePermission())
@@ -183,37 +183,33 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		if(checkPermission()) {
 			if (map != null) {
 				map.animateCamera(CameraUpdateFactory.newLatLngZoom(new
-						LatLng(StringUtils.getDouble(((MainActivity)getActivity()).myPrefs.getString("userlat",""))
-						, StringUtils.getDouble(((MainActivity)getActivity()).myPrefs.getString("userlong",""))),18));
+						LatLng(StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString("userlat",""))
+						, StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString("userlong",""))),18));
 			}
 		}
 	}
 	public void UpdateLocationStatus()
 	{
-		if(TextUtils.isEmpty(((MainActivity)getActivity()).myPrefs.getString("locationstatus", "")))
+		if(TextUtils.isEmpty(((MainActivity)getActivity()).preferences.getString("locationstatus", "")))
 		{
-			if (((MainActivity) getActivity()).myPrefs.getBoolean("inLocation", false) ) {
-				tvTimeInOutLocation.setText("at " + ((MainActivity) getActivity()).myPrefs.getString("SiteName", ""));
-				((MainActivity) getActivity()).prefsEditor = ((MainActivity) getActivity()).myPrefs.edit();
-				((MainActivity) getActivity()).prefsEditor.putString("locationstatus", "False"); // value to store
-				((MainActivity) getActivity()).prefsEditor.commit();
+			if (((MainActivity) getActivity()).preferences.getBoolean("inLocation", false) ) {
+				tvTimeInOutLocation.setText("at " + ((MainActivity) getActivity()).preferences.getString("SiteName", ""));
+				((MainActivity) getActivity()).preferences.saveString("locationstatus", "False"); // value to store
+				((MainActivity) getActivity()).preferences.commit();
 			} else {
 				tvTimeInOutLocation.setText("(Not at location)");
-				((MainActivity) getActivity()).prefsEditor = ((MainActivity) getActivity()).myPrefs.edit();
-				((MainActivity) getActivity()).prefsEditor.putString("locationstatus", "True"); // value to store
-				((MainActivity) getActivity()).prefsEditor.commit();
+				((MainActivity) getActivity()).preferences.saveString("locationstatus", "True"); // value to store
+				((MainActivity) getActivity()).preferences.commit();
 			}
 		}else {
-			if (((MainActivity) getActivity()).myPrefs.getBoolean("inLocation", false) && !((MainActivity) getActivity()).myPrefs.getString("locationstatus", "").equalsIgnoreCase("False")) {
-				tvTimeInOutLocation.setText("at " + ((MainActivity) getActivity()).myPrefs.getString("SiteName", ""));
-				((MainActivity) getActivity()).prefsEditor = ((MainActivity) getActivity()).myPrefs.edit();
-				((MainActivity) getActivity()).prefsEditor.putString("locationstatus", "False"); // value to store
-				((MainActivity) getActivity()).prefsEditor.commit();
-			} else if (!((MainActivity) getActivity()).myPrefs.getBoolean("inLocation", false) && !((MainActivity) getActivity()).myPrefs.getString("locationstatus", "").equalsIgnoreCase("True")) {
+			if (((MainActivity) getActivity()).preferences.getBoolean("inLocation", false) && !((MainActivity) getActivity()).preferences.getString("locationstatus", "").equalsIgnoreCase("False")) {
+				tvTimeInOutLocation.setText("at " + ((MainActivity) getActivity()).preferences.getString("SiteName", ""));
+				((MainActivity) getActivity()).preferences.saveString("locationstatus", "False"); // value to store
+				((MainActivity) getActivity()).preferences.commit();
+			} else if (!((MainActivity) getActivity()).preferences.getBoolean("inLocation", false) && !((MainActivity) getActivity()).preferences.getString("locationstatus", "").equalsIgnoreCase("True")) {
 				tvTimeInOutLocation.setText("(Not at location)");
-				((MainActivity) getActivity()).prefsEditor = ((MainActivity) getActivity()).myPrefs.edit();
-				((MainActivity) getActivity()).prefsEditor.putString("locationstatus", "True"); // value to store
-				((MainActivity) getActivity()).prefsEditor.commit();
+				((MainActivity) getActivity()).preferences.saveString("locationstatus", "True"); // value to store
+				((MainActivity) getActivity()).preferences.commit();
 			}
 		}
 
@@ -221,7 +217,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	}
 	public void UpdateLoginLogOut()
 	{
-		if(TextUtils.isEmpty( ((MainActivity)getActivity()).myPrefs.getString("TokenCode", ""))) {
+		if(TextUtils.isEmpty( ((MainActivity)getActivity()).preferences.getString("TokenCode", ""))) {
 			llShiftTime.setVisibility(View.GONE);
 			tvTimeInOut.setText("Time In");
 		}else{
@@ -281,8 +277,8 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		Log.d(MainActivity.TAG, "Registering Geofences");
 
 		HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore
-				.getInstance(((MainActivity)getActivity()).myPrefs.getString("SiteName",""), StringUtils.getDouble(((MainActivity)getActivity()).myPrefs.getString("latitude",""))
-						, StringUtils.getDouble(((MainActivity)getActivity()).myPrefs.getString("longitude","")),100).getSimpleGeofences();
+				.getInstance(((MainActivity)getActivity()).preferences.getString(Preferences.SITENAME,""), StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.LATITUDE,""))
+						, StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.LONGITUDE,"")),StringUtils.getInt(((MainActivity)getActivity()).preferences.getString(Preferences.SITE_RADIUS,""))).getSimpleGeofences();
 
 		GeofencingRequest.Builder geofencingRequestBuilder = new GeofencingRequest.Builder();
 		for (Map.Entry<String, SimpleGeofence> item : geofences.entrySet()) {
@@ -471,8 +467,8 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 				if (imageFile.exists()){
 					UserLoginTask task = new UserLoginTask();
 					task.execute(new String[] {
-							((MainActivity)getActivity()).myPrefs.getString("UserName", ""),
-							((MainActivity)getActivity()).myPrefs.getString("Password", "") });
+							((MainActivity)getActivity()).preferences.getString("UserName", ""),
+							((MainActivity)getActivity()).preferences.getString("Password", "") });
 				}
 			}
 		}
@@ -564,8 +560,8 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	}
 	protected void displayGeofences()
 	{
-		HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore.getInstance(((MainActivity)getActivity()).myPrefs.getString("SiteName",""), StringUtils.getDouble(((MainActivity)getActivity()).myPrefs.getString("latitude",""))
-				, StringUtils.getDouble(((MainActivity)getActivity()).myPrefs.getString("longitude","")),100).getSimpleGeofences();
+		HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore.getInstance(((MainActivity)getActivity()).preferences.getString(Preferences.SITENAME,""), StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.LATITUDE,""))
+				, StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.LONGITUDE,"")),StringUtils.getInt(((MainActivity)getActivity()).preferences.getString(Preferences.SITE_RADIUS,""))).getSimpleGeofences();
 		for (Map.Entry<String, SimpleGeofence> item : geofences.entrySet()) {
 			SimpleGeofence sg = item.getValue();
 			CircleOptions circleOptions = new CircleOptions()
@@ -588,12 +584,10 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		if (myPositionMarker == null) {
 			createMarker(latitude, longitude);
 		}
-		((MainActivity)getActivity()).prefsEditor = ((MainActivity)getActivity()).myPrefs.edit();
-		((MainActivity)getActivity()).prefsEditor.putString("userlat", latitude+""); // value to store
-		((MainActivity)getActivity()).prefsEditor.commit();
-		((MainActivity)getActivity()).prefsEditor = ((MainActivity)getActivity()).myPrefs.edit();
-		((MainActivity)getActivity()).prefsEditor.putString("userlong", longitude+""); // value to store
-		((MainActivity)getActivity()).prefsEditor.commit();
+		((MainActivity)getActivity()).preferences.saveString("userlat", latitude+""); // value to store
+		((MainActivity)getActivity()).preferences.commit();
+		((MainActivity)getActivity()).preferences.saveString("userlong", longitude+""); // value to store
+		((MainActivity)getActivity()).preferences.commit();
 		UpdateLocationStatus();
 		LatLng latLng = new LatLng(latitude, longitude);
 		myPositionMarker.setPosition(latLng);
@@ -618,20 +612,20 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 				// In your case you are not adding form data so ignore this
                 /*This is to add parameter values */
 
-				if(TextUtils.isEmpty( ((MainActivity)getActivity()).myPrefs.getString("TokenCode", ""))){
+				if(TextUtils.isEmpty( ((MainActivity)getActivity()).preferences.getString("TokenCode", ""))){
 					// Login
 					multipart= new MultipartUtility(API.GetLoginRest(params[0], params[1]), "UTF-8");
-					multipart.addFormField("site.siteId",((MainActivity) getActivity()).myPrefs.getString("siteId","21364"));
+					multipart.addFormField("site.siteId",((MainActivity) getActivity()).preferences.getString("siteId","21364"));
 					multipart.addFormField("serviceType.serviceTypeId","16");
 					multipart.addFormField("description","Time In");
 					multipart.addFormField("issueType.issueTypeId","29");
-					multipart.addFormField("latitude",((MainActivity)getActivity()).myPrefs.getString("userlat",""));
-					multipart.addFormField("longitude",((MainActivity)getActivity()).myPrefs.getString("userlong",""));
+					multipart.addFormField("latitude",((MainActivity)getActivity()).preferences.getString("userlat",""));
+					multipart.addFormField("longitude",((MainActivity)getActivity()).preferences.getString("userlong",""));
 					multipart.addFormField("severity.enumerationId","MAJOR");
 				}else{
 					// logout
 					multipart= new MultipartUtility(API.GetLogOutRest(params[0], params[1]), "UTF-8");
-					multipart.addFormField("ticketId",((MainActivity)getActivity()).myPrefs.getString("TokenCode",""));
+					multipart.addFormField("ticketId",((MainActivity)getActivity()).preferences.getString("TokenCode",""));
 					multipart.addFormField("status.enumerationId","CLOSED");
 					multipart.addFormField("description","Time Out");
 				}
@@ -665,7 +659,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 					{
 						String ticketId = "";
 						String transitionName = "Time Out";
-						if(TextUtils.isEmpty( ((MainActivity)getActivity()).myPrefs.getString("TokenCode", ""))) {
+						if(TextUtils.isEmpty( ((MainActivity)getActivity()).preferences.getString("TokenCode", ""))) {
 							// Login
 							JSONObject data = new JSONObject(result);
 							JSONObject obj = data.getJSONObject("data");
@@ -673,15 +667,13 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 							transitionName = "Time In";
 							strDate = DateFormat.format("dd/M/yyyy HH:mm:ss",new Date()).toString();
 						}
-						((MainActivity) getActivity()).prefsEditor = ((MainActivity) getActivity()).myPrefs.edit();
-						((MainActivity) getActivity()).prefsEditor.putString("TokenCode", ticketId); // value to store
-						((MainActivity) getActivity()).prefsEditor.commit();
-						((MainActivity) getActivity()).prefsEditor = ((MainActivity) getActivity()).myPrefs.edit();
-						((MainActivity) getActivity()).prefsEditor.putString("LoginDate", strDate); // value to store
-						((MainActivity) getActivity()).prefsEditor.commit();
+						((MainActivity) getActivity()).preferences.saveString("TokenCode", ticketId); // value to store
+						((MainActivity) getActivity()).preferences.commit();
+						((MainActivity) getActivity()).preferences.saveString("LoginDate", strDate); // value to store
+						((MainActivity) getActivity()).preferences.commit();
 						String date = DateFormat.format("yyyy-MM-dd HH:mm:ss",new Date()).toString();
 						EventDataSource eds = new EventDataSource(getActivity());
-						eds.create(transitionName, date,  ((MainActivity)getActivity()).myPrefs.getString("SiteName", ""));
+						eds.create(transitionName, date,  ((MainActivity)getActivity()).preferences.getString("SiteName", ""));
 						eds.close();
 					}else{
 						Toast.makeText(getActivity(), ""+new JSONObject(result).getString("messages").toString(), Toast.LENGTH_SHORT).show();
