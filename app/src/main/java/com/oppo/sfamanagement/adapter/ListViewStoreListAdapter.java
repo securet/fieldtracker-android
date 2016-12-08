@@ -3,11 +3,11 @@ package com.oppo.sfamanagement.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.oppo.sfamanagement.R;
@@ -19,16 +19,19 @@ import java.util.ArrayList;
  * Created by allsmartlt218 on 01-12-2016.
  */
 
-public class ListViewStoreListAdapter extends ArrayAdapter<String> {
+public class ListViewStoreListAdapter extends BaseAdapter {
 
-    protected ArrayList<String> list;
+    protected ArrayList<Store> list;
     protected Activity activity;
     protected int resourceId;
-    public ListViewStoreListAdapter(Activity activity, int resource, ArrayList<String> list) {
-        super(activity,resource,list);
+    public ListViewStoreListAdapter(Activity activity, int resource, ArrayList<Store> list) {
         this.list = list;
         this.activity = activity;
         this.resourceId = resource;
+    }
+    public void refresh( ArrayList<Store> list){
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -36,14 +39,14 @@ public class ListViewStoreListAdapter extends ArrayAdapter<String> {
         return list.size();
     }
 
-
-    public Store getItem(Store position) {
-        return position;
+    @Override
+    public Store getItem(int position) {
+        return list.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return super.getItemId(position);
+        return position;
     }
 
     @NonNull
@@ -56,7 +59,8 @@ public class ListViewStoreListAdapter extends ArrayAdapter<String> {
         }
       //  Store store = new Store();
         TextView tvStoreList = (TextView)rowView.findViewById(R.id.tvStoreItem);
-        tvStoreList.setText(list.get(position));
+        Store store = getItem(position);
+        tvStoreList.setText(store.getStoreName());
         return rowView;
     }
 }

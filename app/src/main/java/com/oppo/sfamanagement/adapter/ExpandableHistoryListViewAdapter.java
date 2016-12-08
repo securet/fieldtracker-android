@@ -1,14 +1,31 @@
 package com.oppo.sfamanagement.adapter;
 
+import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+
+import com.oppo.sfamanagement.model.History;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by allsmartlt218 on 07-12-2016.
  */
 
 public class ExpandableHistoryListViewAdapter extends BaseExpandableListAdapter {
+
+    private Activity activity;
+    List<History> list;
+    private HashMap<Integer,List<History>> hashMap;
+
+    public ExpandableHistoryListViewAdapter(Activity activity, HashMap<Integer,List<History>> hashMap, List<History> list) {
+        this.activity = activity;
+        this.hashMap = hashMap;
+        this.list = list;
+    }
+
     @Override
     public int getGroupCount() {
         return 0;

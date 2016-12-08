@@ -9,6 +9,8 @@ public class LoaderConstant {
     public static final int USER_LOGIN=2;
     public static final int USER_STORE_DETAIL=3;
     public static final int STORE_DETAIL=4;
+    public static final int STORE_LIST=5;
+    public static final int STORE_UPDATE=6;
 
 
 }

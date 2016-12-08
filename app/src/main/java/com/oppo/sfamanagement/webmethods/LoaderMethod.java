@@ -9,5 +9,8 @@ public enum LoaderMethod
     LOG_OUT,
     USER_STORE_DETAIL,
     IMAGE_UPLOAD,
-    USER_LOGIN
+    USER_LOGIN,
+    STORE_LIST,
+    STORE_UPDATE
+
 }

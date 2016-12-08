@@ -410,8 +410,12 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	}
 	private boolean checkPermission() {
 		// Ask for permission if it wasn't granted yet
-		return (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_FINE_LOCATION)
-				== PackageManager.PERMISSION_GRANTED );
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
+			return (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+					== PackageManager.PERMISSION_GRANTED);
+		} else {
+			return true;
+		}
 	}
 	String strFile;
 	private void OpenCamera(){

@@ -6,6 +6,9 @@ import android.os.Bundle;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.Preferences;
+import com.oppo.sfamanagement.parsers.StoreDetailParser;
+import com.oppo.sfamanagement.parsers.StoreListParser;
+import com.oppo.sfamanagement.parsers.StoreUpdateParser;
 import com.oppo.sfamanagement.parsers.UserDetailParser;
 import com.oppo.sfamanagement.parsers.UserStoreDetailParser;
 
@@ -44,6 +47,12 @@ public class LoaderServices extends CustomAsyncTask
                 return new UserDetailParser(response,preferences).Parse();
             case USER_STORE_DETAIL:
                 return new UserStoreDetailParser(response,preferences).Parse();
+            case STORE_DETAIL:
+                return new StoreDetailParser(response,preferences).Parse();
+            case STORE_LIST:
+                return new StoreListParser(response,preferences).Parse();
+            case STORE_UPDATE:
+                return new StoreUpdateParser(response).Parse();
             default:
                 return  null;
 

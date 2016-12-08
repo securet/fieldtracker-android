@@ -13,5 +13,7 @@ public class Services{
 
     public static String USER_LOGIN	 = "user";
     public static String STORE_DETAIL	 = "stores";
+    public static String STORE_LIST = "stores/user/list";
     public static String LOGOUT	 = "logout";
+    public static String STORE_UPDATE = "stores";
 }
