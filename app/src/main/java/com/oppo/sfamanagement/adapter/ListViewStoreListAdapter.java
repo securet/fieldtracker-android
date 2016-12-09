@@ -41,6 +41,7 @@ public class ListViewStoreListAdapter extends BaseAdapter {
 
     @Override
     public Store getItem(int position) {
+
         return list.get(position);
     }
 
@@ -63,4 +64,5 @@ public class ListViewStoreListAdapter extends BaseAdapter {
         tvStoreList.setText(store.getStoreName());
         return rowView;
     }
+
 }

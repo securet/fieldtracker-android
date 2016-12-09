@@ -19,5 +19,6 @@ public class AppsConstant {
     public static String METHOD ="METHOD";
     public static String PARAMS ="PARAMS";
     public static String GET ="GET";
+    public static String PUT = "PUT";
     public static String POST ="POST";
 }

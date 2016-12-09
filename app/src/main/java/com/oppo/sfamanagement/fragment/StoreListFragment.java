@@ -1,5 +1,6 @@
 package com.oppo.sfamanagement.fragment;
 
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.content.Loader;
@@ -52,6 +53,7 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_stores,container,false);
         btnAddStore = (Button)view.findViewById(R.id.btAddStore);
+        listView = (ListView) view.findViewById(R.id.lvStoreList);
 
       //  listView = (ListView) view.findViewById(R.id.lvStoreList);
      /*   adapter = new ListViewStoreListAdapter(getActivity(),R.layout.store_list_item,list);
@@ -64,14 +66,10 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
                 android.support.v4.app.Fragment fragment = new AddStoreFragment();
                 fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
                 fm.executePendingTransactions();
+
             }
         });
-        return view;
-    }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
         pd = new ProgressDialog(getContext());
         pd.setMessage("Please wait...");
         pd.setCancelable(false);
@@ -80,6 +78,12 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
         b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.STORE_LIST));
         b.putString(AppsConstant.METHOD, AppsConstant.GET );
         getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_LIST,b, StoreListFragment.this).forceLoad();
+        return view;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
     }
 
     @Override
@@ -92,6 +96,7 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
         fragment.setArguments(b);
         fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
         fm.executePendingTransactions();
+
 
     }
 
@@ -128,13 +133,16 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
                 }
                 adapter = new ListViewStoreListAdapter(getActivity(),R.layout.store_list_item,((ArrayList)data));
 
-                listView = (ListView) getView().findViewById(R.id.lvStoreList);
+
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(this);
                 list = (ArrayList<Store>) data;
+                adapter.refresh(list);
                 break;
         }
-        getLoaderManager().destroyLoader(loader.getId());
+        if (isAdded()) {
+            getLoaderManager().destroyLoader(loader.getId());
+        }
 
     }
 

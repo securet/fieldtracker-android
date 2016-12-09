@@ -21,4 +21,10 @@ public class UrlBuilder {
         return b.toString();
     }
 
+    public static String getStoreUpdate(String strServices, String productStoreId) {
+        StringBuilder b = new StringBuilder();
+        b.append(Services.DomainUrl).append(strServices).append("/" + productStoreId);
+        return b.toString();
+    }
+
 }

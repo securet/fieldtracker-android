@@ -30,14 +30,29 @@ public class ParameterBuilder {
         String url = "" ;
         try {
             url = "productStoreId" + URLEncoder.encode(storeId,"UTF-8") +
-                    "@storeName" + URLEncoder.encode(storeName,"UTF-8") +
-                    "address" + URLEncoder.encode(storeAddress, "UTF-8") +
-                    "latitude" + URLEncoder.encode(lattitude, "UTF-8") +
-                    "longitude" + URLEncoder.encode(longitude, "UTF-8");
+                    "&storeName" + URLEncoder.encode(storeName,"UTF-8") +
+                    "&address" + URLEncoder.encode(storeAddress, "UTF-8") +
+                    "&latitude" + URLEncoder.encode(lattitude, "UTF-8") +
+                    "&longitude" + URLEncoder.encode(longitude, "UTF-8");
 
         } catch (Exception e) {
             Logger.e("Log",e);
         }finally {
+            return url;
+        }
+    }
+
+    public static String getAddStore(String storeName, String storeAddress,String latitude,String longitude) {
+        String url = "";
+        try {
+            url = "storeName" + URLEncoder.encode(storeName,"UTF-8") +
+                    "&address" + URLEncoder.encode(storeAddress,"UTF-8") +
+                    "&latitude" + URLEncoder.encode(latitude,"UTF-8") +
+                    "&longitude" + URLEncoder.encode(longitude,"UTF-8");
+
+        } catch (Exception e) {
+            Logger.e("Log",e);
+        } finally {
             return url;
         }
     }

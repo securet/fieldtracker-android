@@ -11,6 +11,8 @@ public enum LoaderMethod
     IMAGE_UPLOAD,
     USER_LOGIN,
     STORE_LIST,
-    STORE_UPDATE
+    STORE_UPDATE,
+    ADD_STORE,
+    PROMOTER_LIST
 
 }

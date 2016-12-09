@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.app.LoaderManager;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,8 +57,8 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
         storeId = b.getStoreId();
         storeName.setText(b.getStoreName());
         address.setText(b.getAddress());
-        lattitude.setText(b.getLattitude());
-        longitude.setText(b.getLongitude());
+        lattitude.setText("Lat: " + b.getLattitude());
+        longitude.setText("Lon: " +b.getLongitude());
         return view;
     }
 
@@ -71,12 +72,16 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                 String sLongitude = longitude.getText().toString();
 
                 Bundle b = new Bundle();
-                b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails((Services.STORE_UPDATE),String.valueOf(storeId)));
-                b.putString(AppsConstant.METHOD, AppsConstant.POST );
+                b.putString(AppsConstant.URL, UrlBuilder.getStoreUpdate(Services.STORE_UPDATE,String.valueOf(storeId)));
+                b.putString(AppsConstant.METHOD, AppsConstant.PUT );
                 b.putString(AppsConstant.PARAMS, ParameterBuilder.getStoreUpdate(String.valueOf(storeId),sName,sAddress,sLattitude,sLongitude));
-                getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_LIST,b, EditStoreFragment.this).forceLoad();
+                getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_UPDATE,b, EditStoreFragment.this).forceLoad();
                 break;
             case R.id.btCancel:
+                Fragment fragment = new StoreListFragment();
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
+                fm.executePendingTransactions();
                 break;
         }
     }
@@ -94,7 +99,9 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onLoadFinished(android.content.Loader loader, Object data) {
-
+        if (isAdded()) {
+            getLoaderManager().destroyLoader(loader.getId());
+        }
     }
 
     @Override

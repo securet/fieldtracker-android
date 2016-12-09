@@ -17,6 +17,8 @@ import com.oppo.sfamanagement.fragment.StoreListFragment;
 
 public class MoreFragment extends Fragment {
 
+    TextView store;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,17 @@ public class MoreFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ((MainActivity)getActivity()).Logout();
+            }
+        });
+
+        store = (TextView)rootView.findViewById(R.id.store);
+        store.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new StoreListFragment();
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
+                fm.executePendingTransactions();
             }
         });
 

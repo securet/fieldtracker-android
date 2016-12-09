@@ -7,13 +7,15 @@ import com.oppo.sfamanagement.database.AppsConstant;
  */
 public class Services{
 
+
     public static String domain= AppsConstant.isProduction?"ft.allsmart.in":"ft.allsmart.in";
     public static String DomainUrl = "http://"+domain+"/rest/s1/ft/";
-
 
     public static String USER_LOGIN	 = "user";
     public static String STORE_DETAIL	 = "stores";
     public static String STORE_LIST = "stores/user/list";
     public static String LOGOUT	 = "logout";
     public static String STORE_UPDATE = "stores";
+    public static String ADD_STORE = "stores";
+    public static String PROMOTER_LIST = "request/promoter/list";
 }

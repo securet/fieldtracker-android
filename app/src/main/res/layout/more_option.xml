@@ -9,12 +9,12 @@
 
 
     <TextView
+        android:id="@+id/store"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:padding="10dip"
-        android:onClick="onStoreClick"
         android:layout_marginBottom="10dp"
         android:text="@string/store"
         android:textColor="@android:color/black"

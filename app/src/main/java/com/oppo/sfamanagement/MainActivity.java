@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	LinearLayout llAttendance,llHistory,llMore;
 	ImageView ivCurrentLocation;
 	DigitalClockView dtcLoginTime;
-	TextView tvSiteName,tvUserName,tvUserSerName;
+	TextView tvSiteName,tvUserName,tvUserSerName,store;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		tvUserName = (TextView) findViewById(R.id.tvUserName);
 		tvUserSerName = (TextView) findViewById(R.id.tvUserSerName);
 		dtcLoginTime = (DigitalClockView) findViewById(R.id.dtcLoginTime);
+
 		ivCurrentLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -276,14 +277,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		preferences.commit();
 		finish();
 		startActivity(new Intent(MainActivity.this, LoginActivity.class));
-	}
-
-	public void onStoreClick(View view) {
-		Fragment fragment =(Fragment) new StoreListFragment();
-		FragmentManager fm = getSupportFragmentManager();
-		fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
-		fm.executePendingTransactions();
-
 	}
 
 	public void onPromotersClick(View view) {
