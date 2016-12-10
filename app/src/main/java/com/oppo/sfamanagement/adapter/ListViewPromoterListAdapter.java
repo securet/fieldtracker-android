@@ -57,7 +57,7 @@ public class ListViewPromoterListAdapter extends BaseAdapter {
         }
         TextView tvPromoter = (TextView) view.findViewById(R.id.tvPromoterItem);
         Promoter p = getItem(position);
-        tvPromoter.setText(p.getFirstName());
+        tvPromoter.setText(p.getFirstName() + " " + p.getLastName());
         return view;
     }
 }

@@ -57,4 +57,41 @@ public class ParameterBuilder {
         }
     }
 
+    public static String getAddPromoter(String rqtAddPromoter, String fName, String lName, String sPh, String email, String sAdd, String s, String reqSubmitted, String addPromoter, String s1, String s2, String s3) {
+        String url = "";
+        try {
+            url = "requestType" + URLEncoder.encode(rqtAddPromoter,"UTF-8") +
+                    "&firstName" + URLEncoder.encode(fName,"UTF-8") +
+                    "&lastName" + URLEncoder.encode(lName,"UTF-8") +
+                    "&phone" + URLEncoder.encode(sPh,"UTF-8") +
+                    "&address" + URLEncoder.encode(sAdd,"UTF-8") +
+                    "&emailId" + URLEncoder.encode(email,"UTF-8") +
+                    "&productStoreId" + URLEncoder.encode(s,"UTF-8") +
+                    "&statusId" + URLEncoder.encode(reqSubmitted,"UTF-8") +
+                    "&requestTypeEnumId" + URLEncoder.encode(addPromoter,"UTF-8") +
+                    "&aadharIdPath" + URLEncoder.encode(s1,"UTF-8") +
+                    "&userPhoto" + URLEncoder.encode(s2,"UTF-8") +
+                    "&addressIdPath" + URLEncoder.encode(s3,"UTF-8");
+
+
+        } catch (Exception e) {
+            Logger.e("Log",e);
+        }finally {
+            return url;
+        }
+    }
+
+    /*public static String getPromoterUpdate() {
+        String url = "";
+        try {
+            url = "" + URLEncoder.encode()
+        } catch (Exception e) {
+            Logger.e("Log",e);
+        } finally {
+            return url;
+        }
+    }*/
+
+
+
 }

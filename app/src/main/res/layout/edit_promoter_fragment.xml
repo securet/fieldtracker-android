@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:text="@string/edit_promoter"
+            android:textSize="22sp"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:textColor="@android:color/black"
+            android:layout_height="match_parent"
+            />
+        <EditText
+            android:id="@+id/etPromoterFN"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textStyle="italic"
+            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/edittext_editstore_item"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:hint="First Name"/>
+        <EditText
+            android:id="@+id/etPromoterLN"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textStyle="italic"
+            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/edittext_editstore_item"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:hint="Last Name"/>
+        <EditText
+            android:id="@+id/etPromoterPh"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textStyle="italic"
+            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/edittext_editstore_item"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:hint="Phone #"/>
+        <EditText
+            android:id="@+id/etPromoterEA"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textStyle="italic"
+            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/edittext_editstore_item"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:hint="Email Address"/>
+        <EditText
+            android:id="@+id/etPromoterAdd"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:textStyle="italic"
+            android:paddingTop="5dp"
+            android:gravity="start"
+            android:paddingLeft="10dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/edittext_editstore_item"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:hint="Address"/>
+        
+       <include layout="@layout/fragment_add_promoter_arrow"/>
+
+    </LinearLayout>
+
+</ScrollView>

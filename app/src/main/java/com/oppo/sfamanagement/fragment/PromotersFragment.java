@@ -56,9 +56,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
         promoterList.add("Amith Shah");
         promoterList.add("Mahesh Jai");
         promoterList.add("Rohith Pai"); */
-        pd = new ProgressDialog(getContext());
-        pd.setMessage("Please wait...");
-        pd.setCancelable(false);
+
         listView = (ListView) view.findViewById(R.id.lvPromotersList);
         btAddPromoter = (Button) view.findViewById(R.id.btAddPromoter);
 
@@ -71,6 +69,9 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
                 fm.executePendingTransactions();
             }
         });
+        pd = new ProgressDialog(getContext());
+        pd.setMessage("Please wait...");
+        pd.setCancelable(false);
 
         Bundle b = new Bundle();
         b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.PROMOTER_LIST));
@@ -81,6 +82,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
+        pd.show();
         switch (id) {
             case LoaderConstant.PROMOTER_LIST:
                 return new LoaderServices(getContext(), LoaderMethod.PROMOTER_LIST,args);
@@ -104,7 +106,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
         list = (ArrayList<Promoter>)data;
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
-
+        getActivity().getLoaderManager().destroyLoader(loader.getId());
 
     }
 
@@ -115,6 +117,13 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        Promoter p = list.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("promoter",p);
+        FragmentManager fm = getFragmentManager();
+        Fragment fragment = new EditPromoterFragment();
+        fragment.setArguments(bundle);
+        fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
+        fm.executePendingTransactions();
     }
 }

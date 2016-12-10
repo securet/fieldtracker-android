@@ -28,29 +28,34 @@ public class PromoterListParser {
                 JSONArray jsonArray = parentObject.getJSONArray("requestList");
                 for(int i = 0 ; i < jsonArray.length() ; i++) {
                     JSONObject childObject = jsonArray.getJSONObject(i);
+                    if(childObject.has("requestId")) {
+                        promoter = new Promoter();
+                        promoter.setRequestId(childObject.getString("requestId"));
+                    }
                     if(childObject.has("requestJson")){
-                        JSONObject childArray = childObject.getJSONObject("requestJson");
-                         if(childArray.has("requestInfo")) {
+               //         JSONObject  object = childObject.getJSONObject("requestJson");
+                        String s = childObject.getString("requestJson");
+                        JSONObject object = new JSONObject(s);
+                        if(object.has("requestType")) {
 
+                            promoter.setRequestType(object.getString("requestType"));
+                            if(object.has("requestInfo")) {
+                                JSONObject o = object.getJSONObject("requestInfo");
 
-                                JSONArray array = childArray.getJSONArray("requestInfo");
-                                for(int k = 0 ; k < array.length() ; k++) {
-                                    JSONObject o = array.getJSONObject(k);
-                                    promoter = new Promoter();
-                                    promoter.setFirstName(o.getString("firstName"));
-                                    promoter.setLastName(o.getString("lastName"));
-                                    promoter.setPhoneNum(o.getString("phone"));
-                                    promoter.setEmailAddress(o.getString("emailId"));
-                                    promoter.setAddress(o.getString("address"));
-                                    list.add(promoter);
-                                }
+                                promoter.setFirstName(o.getString("firstName"));
+                                promoter.setLastName(o.getString("lastName"));
+                                promoter.setPhoneNum(o.getString("phone"));
+                                promoter.setEmailAddress(o.getString("emailId"));
+                                promoter.setAddress(o.getString("address"));
 
+                                list.add(promoter);
+                            }
                         }
                     }
                 }
             }
         } catch (JSONException e) {
-
+            e.printStackTrace();
         } finally {
             return list;
         }

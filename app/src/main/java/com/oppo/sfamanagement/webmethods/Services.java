@@ -18,4 +18,6 @@ public class Services{
     public static String STORE_UPDATE = "stores";
     public static String ADD_STORE = "stores";
     public static String PROMOTER_LIST = "request/promoter/list";
+    public static String UPDATE_PROMOTER = "request/promoter";
+    public static String ADD_PROMOTER = "request/promoter";
 }

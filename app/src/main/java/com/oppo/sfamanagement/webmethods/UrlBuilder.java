@@ -27,4 +27,10 @@ public class UrlBuilder {
         return b.toString();
     }
 
+    public static String getUpdatePromoter(String strService, String requestId) {
+        StringBuilder b = new StringBuilder();
+        b.append(Services.DomainUrl).append(strService).append("/" + requestId);
+        return b.toString();
+    }
+
 }

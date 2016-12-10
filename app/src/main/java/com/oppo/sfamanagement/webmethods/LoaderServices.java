@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.Preferences;
+import com.oppo.sfamanagement.parsers.AddPromoterParser;
 import com.oppo.sfamanagement.parsers.AddStoreParser;
 import com.oppo.sfamanagement.parsers.PromoterListParser;
 import com.oppo.sfamanagement.parsers.StoreDetailParser;
@@ -13,6 +14,8 @@ import com.oppo.sfamanagement.parsers.StoreListParser;
 import com.oppo.sfamanagement.parsers.StoreUpdateParser;
 import com.oppo.sfamanagement.parsers.UserDetailParser;
 import com.oppo.sfamanagement.parsers.UserStoreDetailParser;
+
+import static com.oppo.sfamanagement.webmethods.Services.ADD_PROMOTER;
 
 
 /**
@@ -59,6 +62,8 @@ public class LoaderServices extends CustomAsyncTask
                 return new AddStoreParser(response).Parse();
             case PROMOTER_LIST:
                 return new PromoterListParser(response).Parse();
+            case ADD_PROMOTER:
+                return new AddPromoterParser(response).Parse();
             default:
                 return  null;
 

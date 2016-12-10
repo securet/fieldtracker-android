@@ -165,6 +165,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
+
         if (isAdded()) {
             getLoaderManager().destroyLoader(loader.getId());
         }

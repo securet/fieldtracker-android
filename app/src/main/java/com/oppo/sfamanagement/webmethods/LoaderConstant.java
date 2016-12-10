@@ -13,4 +13,6 @@ public class LoaderConstant {
     public static final int STORE_UPDATE=6;
     public static final int ADD_STORE=7;
     public static final int PROMOTER_LIST=8;
+    public static final int UPDATE_PROMOTER=9;
+    public static final int ADD_PROMOTER = 10;
 }
