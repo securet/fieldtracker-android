@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		b.putString(AppsConstant.METHOD, AppsConstant.GET );
 		b.putString(AppsConstant.PASSWORD, "");
 		getLoaderManager().initLoader(LoaderConstant.USER_STORE_DETAIL,b,MainActivity.this).forceLoad();
+
 //		UserSiteTask task = new UserSiteTask();
 //		task.execute(new String[] { preferences.getString(Preferences.USERNAME, ""),preferences.getString("USERPASSWORD", "") });
 

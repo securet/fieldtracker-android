@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dip"
+    android:layout_height="100dip"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dip" >
+
+   <!-- <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center" >-->
+
+        <ImageView
+            android:id="@+id/ivOutsideImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/loaderpng" />
+
+      <!--  <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" >
+
+            <include
+                android:id="@+id/notelist"
+                layout="@layout/firstview" />
+
+        </FrameLayout>-->
+   <!-- </RelativeLayout>-->
+
+    <!--<TextView
+        android:id="@+id/tvLoading"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="Still loading data..."
+        android:textColor="#ffffff"
+        android:textSize="16dp" />-->
+
+</LinearLayout>

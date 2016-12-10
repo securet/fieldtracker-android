@@ -21,4 +21,5 @@ public class AppsConstant {
     public static String GET ="GET";
     public static String PUT = "PUT";
     public static String POST ="POST";
+    public static int RunningLoaderCount =0;
 }

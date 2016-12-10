@@ -5,6 +5,7 @@ package com.oppo.sfamanagement;
  */
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,12 +15,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.oppo.sfamanagement.database.API;
 import com.oppo.sfamanagement.database.AppsConstant;
+import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.database.RestHelper;
 import com.oppo.sfamanagement.database.Utils;
@@ -37,7 +43,7 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
 
     Button loginBtn;
     EditText emailET, passwordET;
-    ProgressDialog pd;
+//    ProgressDialog pd;
     public Preferences preferences;
     private boolean isLogin = false;
     @Override
@@ -61,9 +67,9 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
         // lictener
         loginBtn.setOnClickListener(this);
 
-        pd = new ProgressDialog(LoginActivity.this);
-        pd.setMessage("Please wait...");
-        pd.setCancelable(false);
+//        pd = new ProgressDialog(LoginActivity.this);
+//        pd.setMessage("Please wait...");
+//        pd.setCancelable(false);
 
     }
 
@@ -198,7 +204,7 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
     @Override
     public Loader onCreateLoader(int id, Bundle args)
     {
-        pd.show();
+        showHideProgressForLoder(false);
         switch (id)
         {
             case LoaderConstant.USER_LOGIN:
@@ -214,7 +220,7 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
     @Override
     public void onLoadFinished(Loader loader, Object data)
     {
-        pd.dismiss();
+        showHideProgressForLoder(true);
         switch (loader.getId())
         {
             case LoaderConstant.USER_LOGIN:
@@ -243,5 +249,65 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
         }
         getLoaderManager().destroyLoader(loader.getId());
     }
+    String SHOW_HIDE_LOADER = "SHOW_HIDE_LOADER";
+    public void showHideProgressForLoder(boolean isForHide)
+    {
+        synchronized (SHOW_HIDE_LOADER)
+        {
+            if(isForHide)
+            {
+                if(AppsConstant.RunningLoaderCount>0)
+                    AppsConstant.RunningLoaderCount = AppsConstant.RunningLoaderCount-1;
+                if(AppsConstant.RunningLoaderCount==0)
+                    hideLoader();
+            }
+            else
+            {
+                AppsConstant.RunningLoaderCount++;
+                showLoader("");
+            }
 
+        }
+    }
+    public void hideLoader()
+    {
+        if (dialog != null && dialog.isShowing())
+        {
+            dialog.dismiss();
+        }
+    }
+    public void showLoader(String strMessage){
+        runOnUiThread(new RunShowLoaderCustom());
+    }
+    class RunShowLoaderCustom implements Runnable
+    {
+        public RunShowLoaderCustom()
+        {
+        }
+        @Override
+        public void run()
+        {
+            try
+            {
+                if(dialog == null|| (dialog != null && !dialog.isShowing()))
+                {
+                    dialog = new Dialog(LoginActivity.this, R.style.Theme_Dialog_Translucent);
+                    dialog.setContentView(R.layout.custom_loader);
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    ImageView ivOutsideImage;
+                    ivOutsideImage = (ImageView) dialog.findViewById(R.id.ivOutsideImage);
+                    Animation rotateXaxis = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.rotate_x_axis);
+                    rotateXaxis.setInterpolator(new LinearInterpolator());
+                    ivOutsideImage.setAnimation(rotateXaxis);
+                }
+            }
+            catch(Exception e)
+            {
+                dialog = null;
+                Logger.e("Log",e);
+            }
+        }
+    }
+    private Dialog dialog;
 }
