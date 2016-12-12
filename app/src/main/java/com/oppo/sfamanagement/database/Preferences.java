@@ -31,6 +31,14 @@ public class Preferences
     public static String BASIC_AUTH = "BasicAuth";
     public static String ROLETYPEID = "roleTypeId";
     public static String PARTYID = "partyId";
+    public static String PHOTO = "photo";
+    public static String AADHAR = "aadhar";
+    public static String ADDRESS_PROOF = "addressProof";
+    public static String FIRST = "first";
+    public static String LAST = "last";
+    public static String PHONE = "phone";
+    public static String ADDRESS = "address";
+    public static String EMAIL = "email";
     public Preferences(Context context)
     {
         preferences = context.getSharedPreferences("AttendanceTracker", context.MODE_PRIVATE);

@@ -1,6 +1,7 @@
 package com.oppo.sfamanagement.fragment;
 
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,10 +15,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.oppo.sfamanagement.CameraActivity;
 import com.oppo.sfamanagement.LoginActivity;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
+import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
 import com.oppo.sfamanagement.webmethods.LoaderMethod;
 import com.oppo.sfamanagement.webmethods.LoaderServices;
@@ -33,6 +36,8 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
     EditText fN,lN,ph,eAdd,address;
     protected static final int FRONT_CAMREA_OPEN = 1;
     protected static final int BACK_CAMREA_OPEN = 2;
+    protected Preferences preferences;
+    String image[] = new String[3];
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +57,8 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
         address = (EditText) view.findViewById(R.id.etPAdd);
         Button Add = (Button) view.findViewById(R.id.btPAdd);
         Button Cancel = (Button) view.findViewById(R.id.btAddPCancel);
+
+//        String imagePath = getArguments().getString("server_imagepath");
         Add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,10 +67,15 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 String sPh = ph.getText().toString();
                 String  email = eAdd.getText().toString();
                 String sAdd = address.getText().toString();
+                for (int i = 0 ;i < 3 ; i++) {
+                    String photo = getArguments().getString("image_server_path");
+                    image[i] = photo;
+               }
                 Bundle b = new Bundle();
                 b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.ADD_PROMOTER));
                 b.putString(AppsConstant.METHOD, AppsConstant.POST);
-                b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddPromoter("RqtAddPromoter",fName,lName,sPh,email,sAdd,"100000","ReqSubmitted","RqtAddPromoter","/img/","/img/","/img/"));
+                b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddPromoter("RqtAddPromoter",fName,lName,sPh,email,sAdd,
+                        "100000","ReqSubmitted","RqtAddPromoter",image[0],image[1],image[2]));
                 getActivity().getLoaderManager().initLoader(LoaderConstant.ADD_PROMOTER,b,AddPromoterFragment.this).forceLoad();
             }
         });
@@ -77,19 +89,25 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivPhoto:
-                Fragment fragment = new CameraFragment();
+
+
+                Intent i = new Intent(getActivity(), CameraActivity.class);
+                startActivity(i);
+   /*             Fragment fragment = new CameraFragment();
                 FragmentManager fm = getFragmentManager();
                 Bundle bundle = new Bundle();
                 bundle.putInt("camera_key",FRONT_CAMREA_OPEN);
+                bundle.putString("purpose","For Photo");
                 fragment.setArguments(bundle);
                 fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
-                fm.executePendingTransactions();
+                fm.executePendingTransactions();*/
                 break;
             case R.id.ivAadhar:
                 Fragment fragment2 = new CameraFragment();
                 FragmentManager fm2 = getFragmentManager();
                 Bundle bundle2 = new Bundle();
                 bundle2.putInt("camera_key",BACK_CAMREA_OPEN);
+                bundle2.putString("purpose","For Aadhar");
                 fragment2.setArguments(bundle2);
                 fm2.beginTransaction().replace(R.id.flMiddle,fragment2).addToBackStack(null).commit();
                 fm2.executePendingTransactions();
@@ -99,6 +117,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 FragmentManager fm3 = getFragmentManager();
                 Bundle bundle3 = new Bundle();
                 bundle3.putInt("camera_key",BACK_CAMREA_OPEN);
+                bundle3.putString("purpose","For Address Proof");
                 fragment3.setArguments(bundle3);
                 fm3.beginTransaction().replace(R.id.flMiddle,fragment3).addToBackStack(null).commit();
                 fm3.executePendingTransactions();
@@ -120,6 +139,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
         ((MainActivity)getActivity()).showHideProgressForLoder(true);
+
         if (isAdded()) {
             getLoaderManager().destroyLoader(loader.getId());
         }

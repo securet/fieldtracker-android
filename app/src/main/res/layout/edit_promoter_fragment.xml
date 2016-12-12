@@ -90,6 +90,7 @@
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -288,40 +289,41 @@
                     android:layout_height="60dp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
-                android:gravity="center_horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btEPEdit"
-                    android:text="@string/edit"
-                    android:textAllCaps="false"
-                    android:background="@drawable/editstore_edit_button"
-                    android:textColor="@color/colorWhite"
-                    android:layout_width="110dp"
-                    android:textSize="22sp"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_height="wrap_content" />
-                <Button
-                    android:id="@+id/btEAddPCancel"
-                    android:text="Cancel"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:textAllCaps="false"
-                    android:textSize="22sp"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:background="@drawable/editstore_cancel_button"
-                    android:textColor="@color/colorWhite"
-                    android:layout_width="110dp"
-                    android:layout_height="wrap_content" />
 
-            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btEPEdit"
+                android:text="@string/edit"
+                android:textAllCaps="false"
+                android:background="@drawable/editstore_edit_button"
+                android:textColor="@color/colorWhite"
+                android:layout_width="110dp"
+                android:textSize="22sp"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/btEAddPCancel"
+                android:text="Cancel"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:textAllCaps="false"
+                android:textSize="22sp"
+                android:gravity="center_horizontal|center_vertical"
+                android:background="@drawable/editstore_cancel_button"
+                android:textColor="@color/colorWhite"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

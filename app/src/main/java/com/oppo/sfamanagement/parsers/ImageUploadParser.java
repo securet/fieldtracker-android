@@ -15,12 +15,17 @@ public class ImageUploadParser {
     }
 
     public String Parse() {
+        String filePath = "";
         try {
             JSONObject parentObject = new JSONObject(response);
-        } catch (JSONException e) {
 
+            if(parentObject.has("savedFilename")) {
+                filePath = parentObject.getString("savedFilename");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         } finally {
-            return result;
+            return filePath;
         }
     }
 }

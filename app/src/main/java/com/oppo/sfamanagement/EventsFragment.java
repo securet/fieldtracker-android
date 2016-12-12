@@ -14,14 +14,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.oppo.sfamanagement.adapter.ExpandableHistoryListViewAdapter;
 import com.oppo.sfamanagement.adapter.ListViewHistoryAdapter;
 import com.oppo.sfamanagement.database.API;
 import com.oppo.sfamanagement.database.Event;
 import com.oppo.sfamanagement.database.EventDataSource;
+import com.oppo.sfamanagement.fragment.DynamicElement;
 import com.oppo.sfamanagement.fragment.HistoryListTrackFragment;
+import com.oppo.sfamanagement.model.DynamicElementModel;
 import com.oppo.sfamanagement.model.History;
 
 import org.json.JSONArray;
@@ -31,10 +35,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class EventsFragment extends Fragment implements AdapterView.OnItemClickListener{
-	protected ListViewHistoryAdapter adapter;
+	protected ExpandableHistoryListViewAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,11 +50,21 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_events, container,false);
-		ArrayList<History> list = new ArrayList<History>();
-		ListView listLv = (ListView) rootView.findViewById(R.id.list);
-		adapter = new ListViewHistoryAdapter(getActivity(), R.layout.history_list_item, hardCodeData());
+		ExpandableListView listLv = (ExpandableListView) rootView.findViewById(R.id.expandableList);
+		adapter = new ExpandableHistoryListViewAdapter(getActivity(),getData(),hardCodeData() );
 		listLv.setAdapter(adapter);
-		listLv.setOnItemClickListener(this);
+		listLv.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+			@Override
+			public void onGroupExpand(int groupPosition) {
+
+			}
+		});
+		listLv.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+			@Override
+			public void onGroupCollapse(int groupPosition) {
+
+			}
+		});
 		return rootView;
 	}
 
@@ -204,15 +220,27 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 		return  output;
 	}*/
 
-	private ArrayList<History> hardCodeData() {
-		ArrayList<History> arrayList = new ArrayList<>();
-		History a = new History("12-OCT-16","10:12am","10:12am","9h 10m");
-		History b = new History("12-OCT-16","10:12am","10:12am","9h 10m");
-		History c = new History("12-OCT-16","10:12am","10:12am","9h 10m");
+	private List<DynamicElementModel> hardCodeData() {
+		List<DynamicElementModel> arrayList = new ArrayList<>();
+		DynamicElementModel a = new DynamicElementModel("10:45","11:32","11:56","03:01","03:23","06:41");
+		DynamicElementModel b = new DynamicElementModel("10:45","11:32","11:56","03:01","03:23","06:41");
+		DynamicElementModel c = new DynamicElementModel("10:45","11:32","11:56","03:01","03:23","06:41");
 		arrayList.add(a);
 		arrayList.add(b);
 		arrayList.add(c);
 		return arrayList;
+	}
+	private HashMap<History,List<DynamicElementModel>> getData() {
+		HashMap<History,List<DynamicElementModel>> hashMap = new HashMap<>();
+		History a = new History("12-OCT-16","10:12am","10:12am","9h 10m");
+		History b = new History("12-OCT-16","10:12am","10:12am","9h 10m");
+		History c = new History("12-OCT-16","10:12am","10:12am","9h 10m");
+		List<DynamicElementModel> lis = new ArrayList<>();
+
+		DynamicElementModel p = new DynamicElementModel("10:45","11:32","11:56","03:01","03:23","06:41");
+		lis.add(p);
+		hashMap.put(a,lis);
+		return hashMap;
 	}
 
 }

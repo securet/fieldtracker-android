@@ -49,6 +49,7 @@ public class CameraFragment extends Fragment {
         FrameLayout fl = (FrameLayout) view.findViewById(R.id.flLiveCameraPreview);
         final ImageButton imageButton = (ImageButton) view.findViewById(R.id.ibPhotoCapture);
         final int cameraForB = getArguments().getInt("camera_key");
+        final String purpose = getArguments().getString("purpose");
         pictureCallback = new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
@@ -69,6 +70,7 @@ public class CameraFragment extends Fragment {
                    Fragment f = new RetakeFragment();
                    Bundle bundle = new Bundle();
                    bundle.putString("image_taken",pic.getAbsolutePath());
+                   bundle.putString("image_purpose",purpose);
                    f.setArguments(bundle);
                    fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
                    fm.executePendingTransactions();
@@ -89,6 +91,7 @@ public class CameraFragment extends Fragment {
                    Fragment f = new RetakeFragment();
                    Bundle bundle = new Bundle();
                    bundle.putString("image_taken",pic.getAbsolutePath());
+                   bundle.putString("image_purpose",purpose);
                    f.setArguments(bundle);
                    fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
                    fm.executePendingTransactions();
@@ -165,4 +168,10 @@ public class CameraFragment extends Fragment {
         return mediaFile;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().remove(this).commit();
+    }
 }
