@@ -14,8 +14,10 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -39,7 +41,7 @@ public class MultipartUtility {
      * @param charset
      * @throws IOException
      */
-    public MultipartUtility(String requestURL, String charset)
+    public MultipartUtility(String requestURL, String charset,Preferences preferences)
             throws IOException {
         this.charset = charset;
         TrustManager[] trustAllCerts = new TrustManager[]
@@ -59,6 +61,13 @@ public class MultipartUtility {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        HostnameVerifier allHostsValid = new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
         // creates a unique boundary based on time stamp
         boundary = "===" + System.currentTimeMillis() + "===";
         URL url = new URL(requestURL);
@@ -68,6 +77,7 @@ public class MultipartUtility {
         httpConn.setDoInput(true);
         httpConn.setRequestProperty("Content-Type",
                 "multipart/form-data; boundary=" + boundary);
+        httpConn.setRequestProperty("Authorization", "" + preferences.getString(Preferences.BASIC_AUTH,""));
         outputStream = httpConn.getOutputStream();
         writer = new PrintWriter(new OutputStreamWriter(outputStream, charset),
                 true);

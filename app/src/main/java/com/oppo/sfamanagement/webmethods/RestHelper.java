@@ -7,8 +7,11 @@ import android.util.Base64;
 import android.util.Log;
 
 
+import com.oppo.sfamanagement.MainActivity;
+import com.oppo.sfamanagement.database.API;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.Logger;
+import com.oppo.sfamanagement.database.MultipartUtility;
 import com.oppo.sfamanagement.database.Preferences;
 
 import org.json.JSONObject;
@@ -251,10 +254,10 @@ public class RestHelper
             connection.setRequestProperty("User-Agent", "mozilla");
             connection.setRequestProperty("Authorization", "" + preferences.getString(Preferences.BASIC_AUTH,""));
             connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-            connection.setRequestProperty("uploaded_file", strFile);
+            connection.setRequestProperty("snapshotFile", strFile);
             dos = new DataOutputStream(connection.getOutputStream());
             dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""+ strFile + "\"" + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"snapshotFile\";filename=\""+ strFile + "\"" + lineEnd);
             dos.writeBytes(lineEnd);
             bytesAvailable = fileInputStream.available(); // create a buffer of  maximum size
             bufferSize = Math.min(bytesAvailable, maxBufferSize);
@@ -308,6 +311,30 @@ public class RestHelper
             return response;
 
         }
+    }
+    public String makeRestCallAndGetResponseImageUpload(String strUrl, String strFile,String strFilePurpse,Preferences preferences)
+    {
+
+        String response = "";
+        try {
+            MultipartUtility multipart ;
+
+            // In your case you are not adding form data so ignore this
+                /*This is to add parameter values */
+            multipart= new MultipartUtility(strUrl, "UTF-8",preferences);
+            multipart.addFormField("purpose","Time In");
+                /*This is to add file content*/
+            multipart.addFilePart("snapshotFile",new File(strFile));
+
+            for (String line : multipart.finish()) {
+                response += line;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response = "";
+        }
+        return response;
+
     }
 //    private static Picasso mInstance = null;
 //    public static Picasso getInstance(Context context)

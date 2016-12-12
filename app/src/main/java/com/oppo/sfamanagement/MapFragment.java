@@ -616,34 +616,34 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 				// In your case you are not adding form data so ignore this
                 /*This is to add parameter values */
 
-				if(TextUtils.isEmpty( ((MainActivity)getActivity()).preferences.getString("TokenCode", ""))){
-					// Login
-					multipart= new MultipartUtility(API.GetLoginRest(params[0], params[1]), "UTF-8");
-					multipart.addFormField("site.siteId",((MainActivity) getActivity()).preferences.getString("siteId","21364"));
-					multipart.addFormField("serviceType.serviceTypeId","16");
-					multipart.addFormField("description","Time In");
-					multipart.addFormField("issueType.issueTypeId","29");
-					multipart.addFormField("latitude",((MainActivity)getActivity()).preferences.getString("userlat",""));
-					multipart.addFormField("longitude",((MainActivity)getActivity()).preferences.getString("userlong",""));
-					multipart.addFormField("severity.enumerationId","MAJOR");
-				}else{
-					// logout
-					multipart= new MultipartUtility(API.GetLogOutRest(params[0], params[1]), "UTF-8");
-					multipart.addFormField("ticketId",((MainActivity)getActivity()).preferences.getString("TokenCode",""));
-					multipart.addFormField("status.enumerationId","CLOSED");
-					multipart.addFormField("description","Time Out");
-				}
-
-
-
-                /*This is to add file content*/
-//				for (int i = 0; i < myFileArray.size(); i++) {
-					multipart.addFilePart("ticketAttachments",new File(strFile));
+//				if(TextUtils.isEmpty( ((MainActivity)getActivity()).preferences.getString("TokenCode", ""))){
+//					// Login
+//					multipart= new MultipartUtility(API.GetLoginRest(params[0], params[1]), "UTF-8");
+//					multipart.addFormField("site.siteId",((MainActivity) getActivity()).preferences.getString("siteId","21364"));
+//					multipart.addFormField("serviceType.serviceTypeId","16");
+//					multipart.addFormField("description","Time In");
+//					multipart.addFormField("issueType.issueTypeId","29");
+//					multipart.addFormField("latitude",((MainActivity)getActivity()).preferences.getString("userlat",""));
+//					multipart.addFormField("longitude",((MainActivity)getActivity()).preferences.getString("userlong",""));
+//					multipart.addFormField("severity.enumerationId","MAJOR");
+//				}else{
+//					// logout
+//					multipart= new MultipartUtility(API.GetLogOutRest(params[0], params[1]), "UTF-8");
+//					multipart.addFormField("ticketId",((MainActivity)getActivity()).preferences.getString("TokenCode",""));
+//					multipart.addFormField("status.enumerationId","CLOSED");
+//					multipart.addFormField("description","Time Out");
 //				}
-
-				for (String line : multipart.finish()) {
-					response = line;
-				}
+//
+//
+//
+//                /*This is to add file content*/
+////				for (int i = 0; i < myFileArray.size(); i++) {
+//					multipart.addFilePart("ticketAttachments",new File(strFile));
+////				}
+//
+//				for (String line : multipart.finish()) {
+//					response = line;
+//				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				response = "";

@@ -44,8 +44,10 @@ public class LoaderServices extends CustomAsyncTask
         String response ="";// Base64
         if(strType==LoaderMethod.USER_LOGIN)
             response = new RestHelper().makeRestCallAndGetResponseLogin(args.getString(AppsConstant.URL),args.getString(AppsConstant.USER), args.getString(AppsConstant.PASSWORD),preferences);
+//        else  if(strType==LoaderMethod.IMAGE_UPLOAD)
+//            response = new RestHelper().makeRestCallAndGetResponseImageUpload(args.getString(AppsConstant.URL), args.getString(AppsConstant.FILE),preferences);
         else  if(strType==LoaderMethod.IMAGE_UPLOAD)
-            response = new RestHelper().makeRestCallAndGetResponseImageUpload(args.getString(AppsConstant.URL), args.getString(AppsConstant.FILE),preferences);
+            response = new RestHelper().makeRestCallAndGetResponseImageUpload(args.getString(AppsConstant.URL), args.getString(AppsConstant.FILE), args.getString(AppsConstant.FILEPURPOSE),preferences);
         else
             response = new RestHelper().makeRestCallAndGetResponse(args.getString(AppsConstant.URL),args.getString(AppsConstant.METHOD), args.getString(AppsConstant.PARAMS),preferences);
        switch (strType)

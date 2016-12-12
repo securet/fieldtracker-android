@@ -336,23 +336,23 @@ public class LeaveFragment extends Fragment implements DatePickerDialog.OnDateSe
                 /*This is to add parameter values */
 
 					// Request
-					multipart= new MultipartUtility(API.GetLoginRest(params[0], params[1]), "UTF-8");
-					multipart.addFormField("site.siteId",((MainActivity) getActivity()).preferences.getString("siteId","21364"));
-					multipart.addFormField("serviceType.serviceTypeId","17");
-					multipart.addFormField("description",strDesc);
-					multipart.addFormField("issueType.issueTypeId",strType+"");
-					multipart.addFormField("latitude",((MainActivity)getActivity()).preferences.getString("userlat",""));
-					multipart.addFormField("longitude",((MainActivity)getActivity()).preferences.getString("userlong",""));
-					multipart.addFormField("severity.enumerationId","MAJOR");
+//					multipart= new MultipartUtility(API.GetLoginRest(params[0], params[1]), "UTF-8");
+//					multipart.addFormField("site.siteId",((MainActivity) getActivity()).preferences.getString("siteId","21364"));
+//					multipart.addFormField("serviceType.serviceTypeId","17");
+//					multipart.addFormField("description",strDesc);
+//					multipart.addFormField("issueType.issueTypeId",strType+"");
+//					multipart.addFormField("latitude",((MainActivity)getActivity()).preferences.getString("userlat",""));
+//					multipart.addFormField("longitude",((MainActivity)getActivity()).preferences.getString("userlong",""));
+//					multipart.addFormField("severity.enumerationId","MAJOR");
 
                 /*This is to add file content*/
 //				for (int i = 0; i < myFileArray.size(); i+''+) {
-				multipart.addFilePart("ticketAttachments","Test");
+//				multipart.addFilePart("ticketAttachments","Test");
 //				}
 
-				for (String line : multipart.finish()) {
-					response = line;
-				}
+//				for (String line : multipart.finish()) {
+//					response = line;
+//				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				response = "";

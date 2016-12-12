@@ -16,6 +16,7 @@ public class AppsConstant {
     public static String USER ="USER";
     public static String PASSWORD ="PASSWORD";
     public static String FILE ="FILE";
+    public static String FILEPURPOSE ="FILEPURPOSE";
     public static String METHOD ="METHOD";
     public static String PARAMS ="PARAMS";
     public static String GET ="GET";
