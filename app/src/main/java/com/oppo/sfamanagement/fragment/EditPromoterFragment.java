@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.oppo.sfamanagement.LoginActivity;
+import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.model.Promoter;
@@ -66,7 +67,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
-        new LoginActivity().showHideProgressForLoder(false);
+        ((MainActivity)getActivity()).showHideProgressForLoder(false);
         switch(id) {
             case LoaderConstant.UPDATE_PROMOTER:
                 return new LoaderServices(getContext(), LoaderMethod.UPDATE_PROMOTER,args);
@@ -77,7 +78,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
-        new LoginActivity().showHideProgressForLoder(true);
+        ((MainActivity)getActivity()).showHideProgressForLoder(true);
         getLoaderManager().destroyLoader(loader.getId());
     }
 

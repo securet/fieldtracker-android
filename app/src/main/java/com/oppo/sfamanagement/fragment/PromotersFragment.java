@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.oppo.sfamanagement.LoginActivity;
+import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.adapter.ListViewPromoterListAdapter;
 import com.oppo.sfamanagement.database.AppsConstant;
@@ -83,7 +84,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
-        new LoginActivity().showHideProgressForLoder(false);
+        ((MainActivity)getActivity()).showHideProgressForLoder(false);
         switch (id) {
             case LoaderConstant.PROMOTER_LIST:
                 return new LoaderServices(getContext(), LoaderMethod.PROMOTER_LIST,args);
@@ -94,7 +95,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
-        new LoginActivity().showHideProgressForLoder(true);
+        ((MainActivity)getActivity()).showHideProgressForLoder(true);
         if(data != null && data instanceof ArrayList){
 
         }  else {

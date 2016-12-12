@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.oppo.sfamanagement.LoginActivity;
+import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.adapter.ListViewStoreListAdapter;
 import com.oppo.sfamanagement.database.AppsConstant;
@@ -107,7 +108,7 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
-        new LoginActivity().showHideProgressForLoder(false);
+        ((MainActivity)getActivity()).showHideProgressForLoder(false);
         switch (id) {
             case LoaderConstant.STORE_LIST:
                 return new LoaderServices(getActivity(),LoaderMethod.STORE_LIST,args);
@@ -119,7 +120,7 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public void onLoadFinished(Loader loader, Object data) {
-        new LoginActivity().showHideProgressForLoder(true);
+        ((MainActivity)getActivity()).showHideProgressForLoder(true);
         switch (loader.getId())
         {
             case LoaderConstant.STORE_LIST:

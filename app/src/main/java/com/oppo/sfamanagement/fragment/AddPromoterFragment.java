@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.oppo.sfamanagement.LoginActivity;
+import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
@@ -107,7 +108,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
 
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
-        new LoginActivity().showHideProgressForLoder(false);
+        ((MainActivity)getActivity()).showHideProgressForLoder(false);
         switch (id) {
             case LoaderConstant.ADD_PROMOTER:
                 return new LoaderServices(getContext(), LoaderMethod.ADD_PROMOTER,args);
@@ -118,7 +119,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
-        new LoginActivity().showHideProgressForLoder(true);
+        ((MainActivity)getActivity()).showHideProgressForLoder(true);
         if (isAdded()) {
             getLoaderManager().destroyLoader(loader.getId());
         }

@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
@@ -97,6 +98,7 @@ public class RetakeFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
+        ((MainActivity)getActivity()).showHideProgressForLoder(false);
         switch (id) {
             case LoaderConstant.IMAGE_UPLOAD:
                 return new LoaderServices(getContext(), LoaderMethod.IMAGE_UPLOAD,args);
@@ -107,7 +109,8 @@ public class RetakeFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
-
+        ((MainActivity)getActivity()).showHideProgressForLoder(true);
+        getLoaderManager().destroyLoader(loader.getId());
     }
 
     @Override
