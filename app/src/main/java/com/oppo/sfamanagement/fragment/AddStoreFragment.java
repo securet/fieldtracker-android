@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.oppo.sfamanagement.LoginActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.adapter.ListViewPromoterListAdapter;
 import com.oppo.sfamanagement.database.AppsConstant;
@@ -155,6 +156,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
+        new LoginActivity().showHideProgressForLoder(false);
         switch (id) {
             case LoaderConstant.ADD_STORE:
                 return new LoaderServices(getActivity(), LoaderMethod.ADD_STORE,args);
@@ -165,7 +167,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
-
+        new LoginActivity().showHideProgressForLoder(true);
         if (isAdded()) {
             getLoaderManager().destroyLoader(loader.getId());
         }

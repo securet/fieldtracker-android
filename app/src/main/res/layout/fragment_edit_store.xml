@@ -99,6 +99,7 @@
             android:text="Add"
             android:textAllCaps="false"
             android:textSize="22sp"
+            android:background="@drawable/editstore_edit_button"
             android:textColor="@color/colorWhite"
             android:layout_width="150dp"
             android:layout_marginRight="5dp"

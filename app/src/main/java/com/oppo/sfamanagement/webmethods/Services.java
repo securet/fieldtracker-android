@@ -10,6 +10,7 @@ public class Services{
 
     public static String domain= AppsConstant.isProduction?"ft.allsmart.in":"ft.allsmart.in";
     public static String DomainUrl = "http://"+domain+"/rest/s1/ft/";
+    public static String DomainUrlImage = "http://"+domain+"/apps/ft/Requests/uploadImage";
 
     public static String USER_LOGIN	 = "user";
     public static String STORE_DETAIL	 = "stores";
@@ -20,4 +21,5 @@ public class Services{
     public static String PROMOTER_LIST = "request/promoter/list";
     public static String UPDATE_PROMOTER = "request/promoter";
     public static String ADD_PROMOTER = "request/promoter";
+ //   public static String UPLOAD_IMAGE = "/apps/ft/Requests/uploadImage";
 }

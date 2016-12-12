@@ -8,7 +8,9 @@ import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.parsers.AddPromoterParser;
 import com.oppo.sfamanagement.parsers.AddStoreParser;
+import com.oppo.sfamanagement.parsers.ImageUploadParser;
 import com.oppo.sfamanagement.parsers.PromoterListParser;
+import com.oppo.sfamanagement.parsers.PromoterUpdateParser;
 import com.oppo.sfamanagement.parsers.StoreDetailParser;
 import com.oppo.sfamanagement.parsers.StoreListParser;
 import com.oppo.sfamanagement.parsers.StoreUpdateParser;
@@ -64,6 +66,10 @@ public class LoaderServices extends CustomAsyncTask
                 return new PromoterListParser(response).Parse();
             case ADD_PROMOTER:
                 return new AddPromoterParser(response).Parse();
+            case UPDATE_PROMOTER:
+                return new PromoterUpdateParser(response).Parse();
+            case IMAGE_UPLOAD:
+                return new ImageUploadParser(response).Parse();
             default:
                 return  null;
 

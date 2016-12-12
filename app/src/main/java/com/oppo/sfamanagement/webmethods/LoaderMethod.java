@@ -15,6 +15,6 @@ public enum LoaderMethod
     ADD_STORE,
     PROMOTER_LIST,
     UPDATE_PROMOTER,
-    ADD_PROMOTER
+    ADD_PROMOTER,
 
 }

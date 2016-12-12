@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.oppo.sfamanagement.LoginActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.model.Store;
@@ -89,6 +90,7 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public android.content.Loader onCreateLoader(int id, Bundle args) {
+        new LoginActivity().showHideProgressForLoder(false);
         switch (id) {
             case LoaderConstant.STORE_UPDATE:
                 return new LoaderServices(getContext(),LoaderMethod.STORE_UPDATE,args);
@@ -99,6 +101,7 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onLoadFinished(android.content.Loader loader, Object data) {
+        new LoginActivity().showHideProgressForLoder(true);
         if (isAdded()) {
             getLoaderManager().destroyLoader(loader.getId());
         }

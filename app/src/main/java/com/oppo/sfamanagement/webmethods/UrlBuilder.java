@@ -33,4 +33,10 @@ public class UrlBuilder {
         return b.toString();
     }
 
+    public static String getImageUrl(String strService) {
+        StringBuilder b = new StringBuilder();
+        b.append(Services.DomainUrlImage);
+        return b.toString();
+    }
+
 }

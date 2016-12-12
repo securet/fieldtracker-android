@@ -2,6 +2,7 @@ package com.oppo.sfamanagement.webmethods;
 
 import com.oppo.sfamanagement.database.Logger;
 
+import java.net.URL;
 import java.net.URLEncoder;
 
 /**
@@ -81,16 +82,43 @@ public class ParameterBuilder {
         }
     }
 
-    /*public static String getPromoterUpdate() {
+    public static String getImageUpload(String snapShotFile) {
         String url = "";
         try {
-            url = "" + URLEncoder.encode()
+            url = "snapShotFile" + URLEncoder.encode(snapShotFile, "UTF-8");
         } catch (Exception e) {
             Logger.e("Log",e);
         } finally {
             return url;
         }
-    }*/
+    }
+
+    public static String getPromoterUpdate(String requestId,String requestType,String firstName,
+                                           String lastName,String phone,String address,String emailId,
+                                           String productStoreId,String statusId,String requestTypeEnumId,
+                                           String description,String aadharIdPath,String userPhoto,String addressIdPath) {
+        String url = "";
+        try {
+            url = "requestId" + URLEncoder.encode(requestId,"UTF-8") +
+                    "&requestType" + URLEncoder.encode(requestType,"UTF-8") +
+                    "&firstName" + URLEncoder.encode(firstName,"UTF-8") +
+                    "&lastName" + URLEncoder.encode(lastName,"UTF-8") +
+                    "&phone" + URLEncoder.encode(phone,"UTF-8") +
+                    "&address" + URLEncoder.encode(address,"UTF-8") +
+                    "&emailId" + URLEncoder.encode(emailId,"UTF-8") +
+                    "&productStoreId" + URLEncoder.encode(productStoreId,"UTF-8") +
+                    "&statusId" + URLEncoder.encode(statusId,"UTF-8") +
+                    "&requestTypeEnumId" + URLEncoder.encode(requestTypeEnumId,"UTF-8") +
+                    "&description" + URLEncoder.encode(description,"UTF-8") +
+                    "&aadharIdPath" + URLEncoder.encode(aadharIdPath,"UTF-8") +
+                    "&userPhoto" + URLEncoder.encode(userPhoto,"UTF-8") +
+                    "&addressIdPath" + URLEncoder.encode(addressIdPath,"UTF-8") ;
+        } catch (Exception e) {
+            Logger.e("Log",e);
+        } finally {
+            return url;
+        }
+    }
 
 
 

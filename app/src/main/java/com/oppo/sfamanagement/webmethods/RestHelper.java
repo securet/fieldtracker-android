@@ -270,9 +270,17 @@ public class RestHelper
             // send multipart form data necesssary after file data...
             dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-            int serverResponseCode = connection.getResponseCode();
-            String serverResponseMessage = connection.getResponseMessage();
-            InputStream stream = connection.getInputStream();
+
+            int status = connection.getResponseCode();
+            InputStream stream;
+            if(status!=200){
+                stream = connection.getErrorStream();
+            }else{
+                stream = connection.getInputStream();
+            }
+//            int serverResponseCode = connection.getResponseCode();
+//            String serverResponseMessage = connection.getResponseMessage();
+//            InputStream stream = connection.getInputStream();
             reader = new BufferedReader(new InputStreamReader(stream));
             StringBuilder bufferout = new StringBuilder();
             String line = "";
