@@ -179,24 +179,29 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/ivPhoto"
-            android:src="@drawable/password_lock_icon"
-            android:layout_width="60dp"
+            android:src="@drawable/photo"
+            android:padding="10dp"
+            android:background="@drawable/image_background"
+            android:layout_width="70dp"
             android:layout_marginRight="20dp"
-            android:layout_height="60dp" />
+            android:layout_height="70dp" />
         <ImageView
             android:id="@+id/ivAadhar"
-            android:src="@drawable/password_lock_icon"
-            android:layout_width="60dp"
+            android:src="@drawable/aadhar"
+            android:layout_width="70dp"
+            android:padding="5dp"
+            android:background="@drawable/image_background"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_height="60dp" />
+            android:layout_height="70dp" />
         <ImageView
             android:id="@+id/ivAddressProof"
-            android:src="@drawable/password_lock_icon"
-            android:layout_width="60dp"
-            android:layout_marginRight="20dp"
+            android:background="@drawable/image_background"
+            android:src="@drawable/id_card"
+            android:padding="5dp"
+            android:layout_width="70dp"
             android:layout_marginLeft="20dp"
-            android:layout_height="60dp" />
+            android:layout_height="70dp" />
     </LinearLayout>
 
     <LinearLayout

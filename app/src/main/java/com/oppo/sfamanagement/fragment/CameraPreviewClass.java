@@ -41,7 +41,7 @@ public class CameraPreviewClass extends SurfaceView implements SurfaceHolder.Cal
         List<Camera.Size> list = parameters.getSupportedPreviewSizes();
         previewSize = list.get(0);
         Log.d("list",(String.valueOf(list.size())) + previewSize.width +" "+previewSize.height);
-        parameters.setPreviewFrameRate(24);
+        parameters.setPreviewFrameRate(20);
         parameters.setPreviewSize(previewSize.width,previewSize.height);
         mCamera.setParameters(parameters);
         mCamera.setDisplayOrientation(90);

@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/app_logo" />
+                android:src="@drawable/applogo" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -42,6 +42,7 @@
         </LinearLayout>
 
         <ImageView
+            android:visibility="gone"
             android:contentDescription="@string/gps_yellow_icon"
             android:id="@+id/ivCurrentLocation"
             android:layout_width="wrap_content"
@@ -65,11 +66,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:gravity="center"
             android:orientation="vertical"
             android:paddingLeft="20dip">
 
             <LinearLayout
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -121,6 +126,8 @@
 
             <TextView
                 android:id="@+id/tvUserName"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -134,7 +141,7 @@
                 android:id="@+id/tvUserSerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="end"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
                 android:text="Joshi"
@@ -147,7 +154,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
-            android:src="@drawable/profile_pic" />
+            android:src="@drawable/usericon" />
     </LinearLayout>
 
     <FrameLayout
@@ -162,7 +169,12 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="horizontal"
-        android:padding="10dip">
+        android:paddingTop="5dip"
+        android:paddingBottom="5dp"
+        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
+        android:paddingLeft="10dp"
+        android:paddingStart="10dp">
 
         <LinearLayout
             android:id="@+id/llAttendance"
@@ -177,7 +189,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/attendance" />
+                android:src="@drawable/attendanceoff" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -202,7 +214,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/history" />
+                android:src="@drawable/historyoff" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -226,8 +238,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/more" />
+                android:layout_marginBottom="15dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:src="@drawable/moreoff" />
 
             <TextView
                 android:layout_width="wrap_content"

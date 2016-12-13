@@ -1,8 +1,11 @@
 package com.oppo.sfamanagement.fragment;
 
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +17,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.oppo.sfamanagement.AddPromoterCameraHandler;
 import com.oppo.sfamanagement.CameraActivity;
 import com.oppo.sfamanagement.LoginActivity;
 import com.oppo.sfamanagement.MainActivity;
@@ -34,8 +39,9 @@ import com.oppo.sfamanagement.webmethods.UrlBuilder;
 
 public class AddPromoterFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Object> {
     EditText fN,lN,ph,eAdd,address;
-    protected static final int FRONT_CAMREA_OPEN = 1;
-    protected static final int BACK_CAMREA_OPEN = 2;
+    public static final int FRONT_CAMREA_OPEN = 1;
+    public static final int BACK_CAMREA_OPEN = 2;
+    ImageView ivPhoto,ivAdhar,ivAddressProof;
     protected Preferences preferences;
     String image[] = new String[3];
     @Override
@@ -47,9 +53,9 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_promoter,container,false);
-        ImageView ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
-        ImageView ivAdhar = (ImageView) view.findViewById(R.id.ivAadhar);
-        ImageView ivAddressProof = (ImageView) view.findViewById(R.id.ivAddressProof);
+        ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
+        ivAdhar = (ImageView) view.findViewById(R.id.ivAadhar);
+        ivAddressProof = (ImageView) view.findViewById(R.id.ivAddressProof);
         fN = (EditText) view.findViewById(R.id.etPFN);
         lN = (EditText) view.findViewById(R.id.etPLN);
         ph = (EditText) view.findViewById(R.id.etPPh);
@@ -82,7 +88,22 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
         ivPhoto.setOnClickListener(this);
         ivAdhar.setOnClickListener(this);
         ivAddressProof.setOnClickListener(this);
+
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 2){
+            String responseValue = data.getStringExtra("response");
+            if(!responseValue.equals(null) && !responseValue.equals("cancel")) {
+                Toast.makeText(getContext(),responseValue,Toast.LENGTH_SHORT).show();
+                Bitmap bmp = BitmapFactory.decodeFile(responseValue);
+                ivPhoto.setImageBitmap(bmp);
+                ivPhoto.setEnabled(false);
+            }
+        }
     }
 
     @Override
@@ -90,17 +111,16 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
         switch (v.getId()) {
             case R.id.ivPhoto:
 
-
-                Intent i = new Intent(getActivity(), CameraActivity.class);
-                startActivity(i);
-   /*             Fragment fragment = new CameraFragment();
-                FragmentManager fm = getFragmentManager();
                 Bundle bundle = new Bundle();
                 bundle.putInt("camera_key",FRONT_CAMREA_OPEN);
                 bundle.putString("purpose","For Photo");
-                fragment.setArguments(bundle);
-                fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
-                fm.executePendingTransactions();*/
+                Intent i = new Intent(getActivity(), AddPromoterCameraHandler.class);
+                i.putExtra("camera_key",FRONT_CAMREA_OPEN);
+                i.putExtra("purpose","For Photo");
+                startActivityForResult(i,2);
+                //((Activity) getActivity()).overridePendingTransition(0,0);
+   //             Fragment fragment = new CameraFragment();
+
                 break;
             case R.id.ivAadhar:
                 Fragment fragment2 = new CameraFragment();

@@ -19,10 +19,10 @@
         <ImageView
             android:contentDescription="@string/oppo_logo"
             android:layout_width="200dp"
-            android:layout_height="80dp"
+            android:layout_height="30dp"
             android:layout_gravity="center_horizontal"
             android:layout_margin="3dp"
-            android:background="@drawable/logo" />
+            android:background="@drawable/oppologowhite" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,19 +36,21 @@
         <EditText
             android:id="@+id/emailET"
             android:layout_width="fill_parent"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
             android:paddingLeft="5dp"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:paddingRight="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/login_edittext"
             android:hint="@string/username_hint"
-            android:drawableRight="@android:drawable/ic_dialog_email"
-            android:drawableEnd="@android:drawable/ic_dialog_email"
+            android:drawableRight="@drawable/email"
+            android:drawableEnd="@drawable/email"
             android:inputType="textEmailAddress"
             android:text="anand@securet.in"
             android:textSize="20sp" />
@@ -57,14 +59,14 @@
             android:id="@+id/passwordET"
             android:background="@drawable/login_edittext"
             android:layout_width="fill_parent"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
             android:paddingLeft="5dp"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:paddingRight="5dp"
-            android:drawableEnd="@android:drawable/ic_lock_idle_lock"
-            android:drawableRight="@android:drawable/ic_lock_idle_lock"
-            android:layout_marginBottom="10dp"
+            android:drawableEnd="@drawable/password"
+            android:drawableRight="@drawable/password"
+            android:layout_marginBottom="15dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:hint="@string/password_hint"
@@ -92,35 +94,33 @@
             android:text="@string/login_text"
             android:textColor="@color/colorLoginButton" />
 
-        <ImageView
-            android:contentDescription="@string/allsmart_logo"
-            android:id="@+id/ivAllSmartLogo"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/app_logo"
-            android:layout_width="60dp"
-            android:layout_height="60dp" />
+
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:paddingBottom="5dp">
-
+        android:layout_gravity="center_horizontal">
         <TextView
+            android:id="@+id/tvPoweredBy"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="2dp"
+            android:layout_marginLeft="25dp"
             android:text="@string/powered_by"
             android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
-
-    </LinearLayout>
-
+        <ImageView
+            android:layout_below="@id/tvPoweredBy"
+            android:contentDescription="@string/allsmart_logo"
+            android:id="@+id/ivAllSmartLogo"
+            android:src="@drawable/allsmartmainlogo"
+            android:layout_width="130dp"
+            android:layout_height="35dp" />
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
