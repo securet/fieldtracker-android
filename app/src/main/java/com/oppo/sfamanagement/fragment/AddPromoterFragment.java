@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
     public static final int FRONT_CAMREA_OPEN = 1;
     public static final int BACK_CAMREA_OPEN = 2;
     ImageView ivPhoto,ivAdhar,ivAddressProof;
-    protected Preferences preferences;
+ //   protected Preferences preferences;
     String image[] = new String[3];
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,10 +74,6 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 String sPh = ph.getText().toString();
                 String  email = eAdd.getText().toString();
                 String sAdd = address.getText().toString();
-                for (int i = 0 ;i < 3 ; i++) {
-                    String photo = getArguments().getString("image_server_path");
-                    image[i] = photo;
-               }
                 Bundle b = new Bundle();
                 b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.ADD_PROMOTER));
                 b.putString(AppsConstant.METHOD, AppsConstant.POST);
@@ -95,15 +92,32 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 2){
-            String responseValue = data.getStringExtra("response");
+        if(resultCode == AppsConstant.IMAGE_PHOTO){
+            String responseValue = data.getStringExtra("image_photo");
             if(!responseValue.equals(null) && !responseValue.equals("cancel")) {
                 Toast.makeText(getContext(),responseValue,Toast.LENGTH_SHORT).show();
-                Bitmap bmp = BitmapFactory.decodeFile(responseValue);
-                ivPhoto.setImageBitmap(bmp);
+                Log.d("path",responseValue);
+                image[0] = responseValue;
                 ivPhoto.setEnabled(false);
             }
+        } else if (resultCode == AppsConstant.IMAGE_AADHAR) {
+            String responseValue = data.getStringExtra("image_photo");
+            if(!responseValue.equals(null) && !responseValue.equals("cancel")) {
+                Toast.makeText(getContext(),responseValue,Toast.LENGTH_SHORT).show();
+                Log.d("path",responseValue);
+                image[1] = responseValue;
+                ivAdhar.setEnabled(false);
+            }
+        } else if (resultCode == AppsConstant.IMAGE_ADDRESS_PROOF) {
+            String responseValue = data.getStringExtra("image_photo");
+            if(!responseValue.equals(null) && !responseValue.equals("cancel")) {
+                Toast.makeText(getContext(),responseValue,Toast.LENGTH_SHORT).show();
+                Log.d("path",responseValue);
+                image[2] = responseValue;
+                ivAddressProof.setEnabled(false);
+            }
         }
+
     }
 
     @Override
@@ -111,36 +125,28 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
         switch (v.getId()) {
             case R.id.ivPhoto:
 
-                Bundle bundle = new Bundle();
+              /*  Bundle bundle = new Bundle();
                 bundle.putInt("camera_key",FRONT_CAMREA_OPEN);
-                bundle.putString("purpose","For Photo");
+                bundle.putString("purpose","For Photo"); */
                 Intent i = new Intent(getActivity(), AddPromoterCameraHandler.class);
                 i.putExtra("camera_key",FRONT_CAMREA_OPEN);
                 i.putExtra("purpose","For Photo");
-                startActivityForResult(i,2);
+                startActivityForResult(i,AppsConstant.IMAGE_PHOTO);
                 //((Activity) getActivity()).overridePendingTransition(0,0);
    //             Fragment fragment = new CameraFragment();
 
                 break;
             case R.id.ivAadhar:
-                Fragment fragment2 = new CameraFragment();
-                FragmentManager fm2 = getFragmentManager();
-                Bundle bundle2 = new Bundle();
-                bundle2.putInt("camera_key",BACK_CAMREA_OPEN);
-                bundle2.putString("purpose","For Aadhar");
-                fragment2.setArguments(bundle2);
-                fm2.beginTransaction().replace(R.id.flMiddle,fragment2).addToBackStack(null).commit();
-                fm2.executePendingTransactions();
+                Intent i2 = new Intent(getActivity(),AddPromoterCameraHandler.class);
+                i2.putExtra("camera_key",BACK_CAMREA_OPEN);
+                i2.putExtra("purpose","For Aadhar");
+                startActivityForResult(i2,AppsConstant.IMAGE_AADHAR);
                 break;
             case R.id.ivAddressProof:
-                Fragment fragment3 = new CameraFragment();
-                FragmentManager fm3 = getFragmentManager();
-                Bundle bundle3 = new Bundle();
-                bundle3.putInt("camera_key",BACK_CAMREA_OPEN);
-                bundle3.putString("purpose","For Address Proof");
-                fragment3.setArguments(bundle3);
-                fm3.beginTransaction().replace(R.id.flMiddle,fragment3).addToBackStack(null).commit();
-                fm3.executePendingTransactions();
+                Intent i3 = new Intent(getActivity(),AddPromoterCameraHandler.class);
+                i3.putExtra("camera_key",BACK_CAMREA_OPEN);
+                i3.putExtra("purpose","For Address Proof");
+                startActivityForResult(i3,AppsConstant.IMAGE_ADDRESS_PROOF);
                 break;
         }
     }

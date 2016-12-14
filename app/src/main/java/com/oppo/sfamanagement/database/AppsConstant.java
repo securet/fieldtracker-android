@@ -22,5 +22,8 @@ public class AppsConstant {
     public static String GET ="GET";
     public static String PUT = "PUT";
     public static String POST ="POST";
+    public static int IMAGE_PHOTO = 2;
+    public static int IMAGE_AADHAR = 3;
+    public static int IMAGE_ADDRESS_PROOF = 4;
     public static int RunningLoaderCount =0;
 }

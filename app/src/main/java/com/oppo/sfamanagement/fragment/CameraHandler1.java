@@ -89,7 +89,7 @@ public class CameraHandler1 extends Fragment{
                     bundle.putString("image_taken",pic.getAbsolutePath());
                     bundle.putString("image_purpose",purpose);
                     f.setArguments(bundle);
-                    fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
+                    fm.beginTransaction().replace(R.id.flCapture,f).addToBackStack(null).commit();
                     fm.executePendingTransactions();
                 }
             }
