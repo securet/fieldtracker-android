@@ -1,257 +1,110 @@
 package com.oppo.sfamanagement;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.hardware.Camera;
-import android.net.Uri;
+import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.oppo.sfamanagement.fragment.AddPromoterFragment;
-import com.oppo.sfamanagement.fragment.CameraPreviewClass;
-import com.oppo.sfamanagement.fragment.RetakeFragment;
+import com.oppo.sfamanagement.database.AppsConstant;
+import com.oppo.sfamanagement.database.Logger;
+import com.oppo.sfamanagement.database.Preferences;
+import com.oppo.sfamanagement.fragment.CameraFragment;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
 
 /**
- * Created by allsmartlt218 on 12-12-2016.
+ * Created by allsmartlt218 on 13-12-2016.
  */
 
-public class CameraActivity extends AppCompatActivity  {
+public class CameraActivity extends AppCompatActivity{
 
-    private Camera camera;
-    private CameraPreviewClass previewClass;
-    private Camera.PictureCallback pictureCallback;
-    private ImageButton imageButton;
-    private static final int MEDIA_TYPE_IMAGE_FRONT = 1;
-    private static final int MEDIA_TYPE_IMAGE_BACK = 2;
-    private File pic;
-    FrameLayout surfaceView;
-    SurfaceHolder surfaceHolder;
-
+    private Preferences preferences;
+    private TextView tvUser,tvUserSername,tvSiteName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.camera_layout);
-        imageButton = (ImageButton) findViewById(R.id.ibPhotoCapture);
-        surfaceView = (FrameLayout) findViewById(R.id.flLivePreview);
-       // surfaceHolder = surfaceView.getHolder();
-      //  surfaceHolder.addCallback(this);
-    //    surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
-        final int cameraForB = getIntent().getIntExtra("camera_key",AddPromoterFragment.FRONT_CAMREA_OPEN);
-        final String purpose = getIntent().getStringExtra("purpose");
-
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                camera.takePicture(null,null,pictureCallback);
+        setContentView(R.layout.camera_handler);
+        preferences = new Preferences(CameraActivity.this);
+        tvUser = (TextView) findViewById(R.id.tvUserName);
+        tvUserSername = (TextView) findViewById(R.id.tvUserSerName);
+        tvSiteName = (TextView) findViewById(R.id.tvSiteName);
+        tvUser.setText(preferences.getString(Preferences.USERFIRSTNAME,"username"));
+        tvUserSername.setText(preferences.getString(Preferences.USERLASTNAME,"lastname"));
+        tvSiteName.setText(preferences.getString(Preferences.SITENAME,"sitename"));
+        //FrameLayout fl = (FrameLayout) findViewById(R.id.flCapture);
+        Fragment fragment = new CameraFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().replace(R.id.flCapture,fragment).commit();
+        fm.executePendingTransactions();
+    }
+    String SHOW_HIDE_LOADER = "SHOW_HIDE_LOADER";
+    public void showHideProgressForLoder(boolean isForHide)
+    {
+        synchronized (SHOW_HIDE_LOADER)
+        {
+            if(isForHide)
+            {
+                if(AppsConstant.RunningLoaderCount>0)
+                    AppsConstant.RunningLoaderCount = AppsConstant.RunningLoaderCount-1;
+                if(AppsConstant.RunningLoaderCount==0)
+                    hideLoader();
             }
-        });
+            else
+            {
+                AppsConstant.RunningLoaderCount++;
+                showLoader("");
+            }
 
-        pictureCallback = new Camera.PictureCallback() {
-            @Override
-            public void onPictureTaken(byte[] data, Camera camera) {
-                if (cameraForB == AddPromoterFragment.FRONT_CAMREA_OPEN) {
-                    pic = getOutputMediaFile(MEDIA_TYPE_IMAGE_FRONT);
-                    if (pic != null) {
-                        try {
-                            FileOutputStream fos = new FileOutputStream(pic);
-                            fos.write(data);
-                            fos.close();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Log.d("path",pic.getAbsolutePath());
-                     //   refreshCamera();
-                    }
-                    Intent i = new Intent(CameraActivity.this,RetakeActivity.class);
-                    String path = pic.getAbsolutePath();
-                    i.putExtra("image_taken",path);
-                    i.putExtra("image_purpose",purpose);
-                    startActivityForResult(i,1);
-                } else {
-                    pic = getOutputMediaFile(MEDIA_TYPE_IMAGE_BACK);
-                    if (pic != null) {
-                        try {
-                            FileOutputStream fos = new FileOutputStream(pic);
-                            fos.write(data);
-                            fos.close();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Log.d("path",pic.getAbsolutePath());
-                       // refreshCamera();
-                    }
-
-                    Intent i = new Intent(CameraActivity.this,RetakeActivity.class);
-                    String path = pic.getAbsolutePath();
-                    i.putExtra("image_taken",path);
-                    i.putExtra("image_purpose",purpose);
-                    startActivityForResult(i,1);
+        }
+    }
+    public void hideLoader()
+    {
+        if (dialog != null && dialog.isShowing())
+        {
+            dialog.dismiss();
+        }
+    }
+    public void showLoader(String strMessage){
+        runOnUiThread(new CameraActivity.RunShowLoaderCustom());
+    }
+    class RunShowLoaderCustom implements Runnable
+    {
+        public RunShowLoaderCustom()
+        {
+        }
+        @Override
+        public void run()
+        {
+            try
+            {
+                if(dialog == null|| (dialog != null && !dialog.isShowing()))
+                {
+                    dialog = new Dialog(CameraActivity.this, R.style.Theme_Dialog_Translucent);
+                    dialog.setContentView(R.layout.custom_loader);
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    ImageView ivOutsideImage;
+                    ivOutsideImage = (ImageView) dialog.findViewById(R.id.ivOutsideImage);
+                    Animation rotateXaxis = AnimationUtils.loadAnimation(CameraActivity.this, R.anim.rotate_x_axis);
+                    rotateXaxis.setInterpolator(new LinearInterpolator());
+                    ivOutsideImage.setAnimation(rotateXaxis);
                 }
             }
-        };
-
-        if (hasCamera(getApplicationContext())) {
-            if(cameraForB == AddPromoterFragment.FRONT_CAMREA_OPEN) {
-                camera = getCameraInstace();
-            } else {
-                camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
-            }
-            previewClass = new CameraPreviewClass(getApplicationContext(),camera);
-            surfaceView.addView(previewClass);
-        }
-    }
-
-    private Camera getCameraInstace() {
-        Camera c = null;
-        try {
-            if (Camera.getNumberOfCameras() >= 2) {
-                c = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
-            }
-            else{
-                c = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return c;
-    }
-
-    public boolean hasCamera(Context context) {
-        if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private static Uri getOutputMediaFileUri (int type) {
-        return Uri.fromFile(getOutputMediaFile(type));
-    }
-
-    private static File getOutputMediaFile(int type) {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), "Oppo");
-
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                Log.d("CAMERA", "failed to create directory");
-                return null;
-            }
-        }
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE_FRONT){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_FRONT" + ".jpg");
-        } else if(type == MEDIA_TYPE_IMAGE_BACK) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_BACK" + ".jpg");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
-            }
-
-  /*  @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        try {
-            camera = Camera.open();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-
-        Camera.Size previewSize ;
-        Camera.Parameters parameters = camera.getParameters();
-        List<Camera.Size> list = parameters.getSupportedPreviewSizes();
-        previewSize = list.get(0);
-        Log.d("list",(String.valueOf(list.size())) + previewSize.width +" "+previewSize.height);
-        parameters.setPreviewFrameRate(20);
-        parameters.setPreviewSize(previewSize.width,previewSize.height);
-        camera.setParameters(parameters);
-        camera.setDisplayOrientation(90);
-        try {
-            camera.setPreviewDisplay(surfaceHolder);
-            camera.startPreview();
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        refreshCamera();
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        camera.stopPreview();
-        camera.release();
-        camera = null;
-
-    }*/
-
-    /*public void refreshCamera() {
-        if (surfaceHolder.getSurface() == null) {
-            return;
-        }
-        try {
-            camera.stopPreview();
-        } catch (Exception e) {
-
-        }
-        try {
-            camera.setPreviewDisplay(surfaceHolder);
-            camera.startPreview();
-        } catch (Exception e) {
-
-        }
-    }*/
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 1) {
-            String response = data.getStringExtra("response");
-            if(!response.equals(null) && !response.equals("Cancel")) {
-                Intent i = new Intent();
-                i.putExtra("image_response",response);
-                setResult(2,i);
-                finish();
-            } else {
-                Intent i = new Intent();
-                i.putExtra("image_response","cancel");
-                setResult(2,i);
-                finish();
+            catch(Exception e)
+            {
+                dialog = null;
+                Logger.e("Log",e);
             }
         }
     }
+    private Dialog dialog;
 }
-
-
-

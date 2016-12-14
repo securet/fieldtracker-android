@@ -7,9 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -17,7 +15,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -27,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.oppo.sfamanagement.database.API;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.DigitalClockView;
 import com.oppo.sfamanagement.database.Logger;
@@ -35,16 +31,11 @@ import com.oppo.sfamanagement.database.MoreFragment;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.fragment.LeaveStatusFragment;
 import com.oppo.sfamanagement.fragment.PromotersFragment;
-import com.oppo.sfamanagement.fragment.RetakeFragment;
-import com.oppo.sfamanagement.fragment.StoreListFragment;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
 import com.oppo.sfamanagement.webmethods.LoaderMethod;
 import com.oppo.sfamanagement.webmethods.LoaderServices;
 import com.oppo.sfamanagement.webmethods.Services;
 import com.oppo.sfamanagement.webmethods.UrlBuilder;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 	public static String TAG = "lstech.aos.debug";

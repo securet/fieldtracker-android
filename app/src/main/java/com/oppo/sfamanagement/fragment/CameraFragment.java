@@ -24,78 +24,74 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * Created by allsmartlt218 on 05-12-2016.
+ * Created by allsmartlt218 on 13-12-2016.
  */
 
-public class CameraFragment extends Fragment {
+public class CameraFragment extends Fragment{
 
-    private CameraPreviewClass mCameraPreview;
+    private Camera camera;
+    private CameraPreviewClass previewClass;
+    private Camera.PictureCallback pictureCallback;
+    private ImageButton imageButton;
     private static final int MEDIA_TYPE_IMAGE_FRONT = 1;
     private static final int MEDIA_TYPE_IMAGE_BACK = 2;
-    private Camera camera;
-    private Camera.PictureCallback pictureCallback;
-    byte[] imageData;
     private File pic;
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    FrameLayout surfaceView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.camera_live_preview,container,false);
-        FrameLayout fl = (FrameLayout) view.findViewById(R.id.flLiveCameraPreview);
-        final ImageButton imageButton = (ImageButton) view.findViewById(R.id.ibPhotoCapture);
-        final int cameraForB = getArguments().getInt("camera_key");
-        final String purpose = getArguments().getString("purpose");
+        View view = inflater.inflate(R.layout.camera_handler_1,container,false);
+        surfaceView = (FrameLayout) view.findViewById(R.id.flLivePreview);
+        imageButton = (ImageButton) view.findViewById(R.id.ibPhotoCapture);
+        final int cameraForB = getActivity().getIntent().getIntExtra("camera_key",AddPromoterFragment.FRONT_CAMREA_OPEN);
+        final String purpose = getActivity().getIntent().getStringExtra("purpose");
         pictureCallback = new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-               if (cameraForB == AddPromoterFragment.FRONT_CAMREA_OPEN) {
-                   pic = getOutputMediaFile(MEDIA_TYPE_IMAGE_FRONT);
-                   if (pic != null) {
-                       try {
-                           FileOutputStream fos = new FileOutputStream(pic);
-                           fos.write(data);
-                           fos.close();
-                       } catch (FileNotFoundException e) {
-                           e.printStackTrace();
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                       }
-                   }
-                   FragmentManager fm = getFragmentManager();
-                   Fragment f = new RetakeFragment();
-                   Bundle bundle = new Bundle();
-                   bundle.putString("image_taken",pic.getAbsolutePath());
-                   bundle.putString("image_purpose",purpose);
-                   f.setArguments(bundle);
-                   fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
-                   fm.executePendingTransactions();
-               } else {
-                   pic = getOutputMediaFile(MEDIA_TYPE_IMAGE_BACK);
-                   if (pic != null) {
-                       try {
-                           FileOutputStream fos = new FileOutputStream(pic);
-                           fos.write(data);
-                           fos.close();
-                       } catch (FileNotFoundException e) {
-                           e.printStackTrace();
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                       }
-                   }
-                   FragmentManager fm = getFragmentManager();
-                   Fragment f = new RetakeFragment();
-                   Bundle bundle = new Bundle();
-                   bundle.putString("image_taken",pic.getAbsolutePath());
-                   bundle.putString("image_purpose",purpose);
-                   f.setArguments(bundle);
-                   fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
-                   fm.executePendingTransactions();
-               }
+                if (cameraForB == AddPromoterFragment.FRONT_CAMREA_OPEN) {
+                    pic = getOutputMediaFile(MEDIA_TYPE_IMAGE_FRONT);
+                    if (pic != null) {
+                        try {
+                            FileOutputStream fos = new FileOutputStream(pic);
+                            fos.write(data);
+                            fos.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    FragmentManager fm = getFragmentManager();
+                    Fragment f = new RetakeFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("image_taken",pic.getAbsolutePath());
+                    bundle.putString("image_purpose",purpose);
+                    f.setArguments(bundle);
+                    fm.beginTransaction().replace(R.id.flCapture,f).commit();
+                    fm.executePendingTransactions();
+                } else {
+                    pic = getOutputMediaFile(MEDIA_TYPE_IMAGE_BACK);
+                    if (pic != null) {
+                        try {
+                            FileOutputStream fos = new FileOutputStream(pic);
+                            fos.write(data);
+                            fos.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    FragmentManager fm = getFragmentManager();
+                    Fragment f = new RetakeFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("image_taken",pic.getAbsolutePath());
+                    bundle.putString("image_purpose",purpose);
+                    f.setArguments(bundle);
+                    fm.beginTransaction().replace(R.id.flCapture,f).addToBackStack(null).commit();
+                    fm.executePendingTransactions();
+                }
             }
         };
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -106,15 +102,22 @@ public class CameraFragment extends Fragment {
         });
         if (hasCamera(getContext())) {
             if(cameraForB == AddPromoterFragment.FRONT_CAMREA_OPEN) {
-                 camera = getCameraInstace();
+                camera = getCameraInstace();
             } else {
                 camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
             }
 
-            mCameraPreview = new CameraPreviewClass(getContext(),camera);
-            fl.addView(mCameraPreview);
+            previewClass = new CameraPreviewClass(getContext(),camera);
+            surfaceView.addView(previewClass);
         }
         return view;
+    }
+    public boolean hasCamera(Context context) {
+        if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private Camera getCameraInstace() {
@@ -130,14 +133,6 @@ public class CameraFragment extends Fragment {
             e.printStackTrace();
         }
         return c;
-    }
-
-    public boolean hasCamera(Context context) {
-        if(context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     private static Uri getOutputMediaFileUri (int type) {
@@ -166,12 +161,5 @@ public class CameraFragment extends Fragment {
         }
 
         return mediaFile;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().remove(this).commit();
     }
 }

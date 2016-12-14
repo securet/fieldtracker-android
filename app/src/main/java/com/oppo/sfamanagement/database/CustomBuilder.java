@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 
 import com.oppo.sfamanagement.R;
+import com.oppo.sfamanagement.model.Store;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -229,6 +230,11 @@ public class CustomBuilder
 							{
 								vecTemp.add(vecData.get(i));
 							}
+						} else if (obj instanceof Store) {
+							field = ((Store) obj).getStoreName();
+							if (field.toLowerCase().contains(s.toString().toLowerCase())) {
+                                vecTemp.add(vecData.get(i));
+							}
 						}
 
 
@@ -328,7 +334,14 @@ public class CustomBuilder
 				ivSelected.setVisibility(View.VISIBLE);
 				if(selObj instanceof String && ((String)selObj).equalsIgnoreCase(name))
 					isShowAsSelected = true;
-			}
+			} else if (obj instanceof Store) {
+                name = ((Store) obj).getStoreName();
+                ivSelected.setVisibility(View.VISIBLE);
+               /* if (selObj instanceof Store && ((Store) selObj).getStoreName().equalsIgnoreCase(name)) {
+                    isShowAsSelected = true;
+                }*/
+
+            }
 			tvSelectUrCountry.setText(name);
 			if(isShowAsSelected)
 				ivSelected.setBackgroundResource(R.drawable.radio_checked);
