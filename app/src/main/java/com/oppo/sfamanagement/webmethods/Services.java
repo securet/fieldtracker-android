@@ -21,5 +21,5 @@ public class Services{
     public static String PROMOTER_LIST = "request/promoter/list";
     public static String UPDATE_PROMOTER = "request/promoter";
     public static String ADD_PROMOTER = "request/promoter";
- //   public static String UPLOAD_IMAGE = "/apps/ft/Requests/uploadImage";
+    public static String TIME_IN_OUT = "attendance/log";
 }

@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,14 +63,19 @@ public class CameraFragment extends Fragment{
                             e.printStackTrace();
                         }
                     }
-                    FragmentManager fm = getFragmentManager();
-                    Fragment f = new RetakeFragment();
+
+
+                    RetakeFragment fragment = new RetakeFragment();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     Bundle bundle = new Bundle();
                     bundle.putString("image_taken",pic.getAbsolutePath());
                     bundle.putString("image_purpose",purpose);
-                    f.setArguments(bundle);
-                    fm.beginTransaction().replace(R.id.flCapture,f).commit();
-                    fm.executePendingTransactions();
+                    fragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.flCapture, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commitAllowingStateLoss();
+
                 } else {
                     pic = getOutputMediaFile(MEDIA_TYPE_IMAGE_BACK);
                     if (pic != null) {

@@ -1,29 +1,23 @@
 package com.oppo.sfamanagement;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.LoaderManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -31,23 +25,17 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.Manifest;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
-import com.google.android.gms.location.GeofencingEvent;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -62,34 +50,29 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.oppo.sfamanagement.database.API;
+import com.oppo.sfamanagement.database.AppsConstant;
+import com.oppo.sfamanagement.database.CalenderUtils;
 import com.oppo.sfamanagement.database.EventDataSource;
 import com.oppo.sfamanagement.database.MultipartUtility;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.database.ShiftTimeView;
 import com.oppo.sfamanagement.database.StringUtils;
+import com.oppo.sfamanagement.webmethods.LoaderConstant;
+import com.oppo.sfamanagement.webmethods.LoaderMethod;
+import com.oppo.sfamanagement.webmethods.LoaderServices;
+import com.oppo.sfamanagement.webmethods.ParameterBuilder;
+import com.oppo.sfamanagement.webmethods.Services;
+import com.oppo.sfamanagement.webmethods.UrlBuilder;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 public class MapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
-		GoogleApiClient.OnConnectionFailedListener,LocationListener, ResultCallback<Status> {
+		GoogleApiClient.OnConnectionFailedListener,LocationListener, ResultCallback<Status>, LoaderManager.LoaderCallbacks {
 	protected SupportMapFragment mapFragment;
 	protected GoogleMap map;
 	protected Marker myPositionMarker;
@@ -97,27 +80,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
 	public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 5;
 	private PendingIntent mPendingIntent;
-//	private BroadcastReceiver receiver = new BroadcastReceiver() {
-//
-//		@Override
-//		public void onReceive(Context context, Intent intent) {
-//			Bundle bundle = intent.getExtras();
-//			if (bundle != null) {
-//				//Toast.makeText(getActivity(),"Test",Toast.LENGTH_LONG).show();
-//				int resultCode = bundle.getInt("done");
-//				if (resultCode == 1) {
-//					Double latitude = bundle.getDouble("latitude");
-//					Double longitude = bundle.getDouble("longitude");
-//					updateMarker(latitude, longitude);
-//				}
-////				if(((MainActivity)getActivity()).myPrefs.getBoolean("inLocation", false)){
-////					Toast.makeText(getActivity(),"Enter",Toast.LENGTH_LONG).show();
-////				}else{
-////					Toast.makeText(getActivity(),"Exit",Toast.LENGTH_LONG).show();
-////				}
-//			}
-//		}
-//	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -137,7 +99,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		fragmentTransaction.commit();
 		buildGoogleApiClient();
 
-		((MainActivity) getActivity()).preferences.saveString("locationstatus", ""); // value to store
+		((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, ""); // value to store
 		((MainActivity) getActivity()).preferences.commit();
 		tvTimeInOut = (TextView) rootView.findViewById(R.id.tvTimeInOut);
 		tvTimeInOutLocation = (TextView) rootView.findViewById(R.id.tvTimeInOutLocation);
@@ -147,7 +109,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		llLogin_Logout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(((MainActivity)getActivity()).preferences.getBoolean("inLocation", false)){
+				if(((MainActivity)getActivity()).preferences.getBoolean(Preferences.INLOCATION, false)){
 
 						if(checkCameraPermission()){
 							if(checkStoragePermission())
@@ -178,51 +140,103 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		return rootView;
 	}
 
+	@Override
+	public Loader onCreateLoader(int id, Bundle args) {
+		((MainActivity)getActivity()).showHideProgressForLoder(false);
+		switch (id) {
+			case LoaderConstant.TIMEINOUT:
+				return new LoaderServices(getContext(), LoaderMethod.TIMEINOUT,args);
+			default:
+				return null;
+		}
+	}
+
+	@Override
+	public void onLoadFinished(Loader loader, Object data) {
+		((MainActivity)getActivity()).showHideProgressForLoder(true);
+		if(TextUtils.isEmpty(((MainActivity)getActivity()).preferences.getString(Preferences.LOCATIONSTATUS, "")))
+		{
+			if (((MainActivity) getActivity()).preferences.getBoolean(Preferences.INLOCATION, false) ) {
+				tvTimeInOutLocation.setText("at " + ((MainActivity) getActivity()).preferences.getString(Preferences.SITENAME, ""));
+				((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "False"); // value to store
+				((MainActivity) getActivity()).preferences.commit();
+				UpdateTimeInOut("");
+			} else {
+				tvTimeInOutLocation.setText("(Not at location)");
+				((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "True"); // value to store
+				((MainActivity) getActivity()).preferences.commit();
+				UpdateTimeInOut("");
+			}
+		}
+
+			String strDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
+			if(((MainActivity)getActivity()).preferences.getString(Preferences.TIMEINOUTSTATUS,strDate+"Pending").equalsIgnoreCase(strDate+"TimeIn")) {
+				tvTimeInOut.setText("Time Out");
+			}else{
+				tvTimeInOut.setText("Time In");
+			}
+		UpdateLoginLogOut();
+		if (isAdded()) {
+			getLoaderManager().destroyLoader(loader.getId());
+		}
+	}
+
+	@Override
+	public void onLoaderReset(Loader loader) {
+
+	}
 	public void moveToCurentLocation()
 	{
 		if(checkPermission()) {
 			if (map != null) {
 				map.animateCamera(CameraUpdateFactory.newLatLngZoom(new
-						LatLng(StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString("userlat",""))
-						, StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString("userlong",""))),18));
+						LatLng(StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.USERLATITUDE,""))
+						, StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.USERLONGITUDE,""))),18));
 			}
 		}
 	}
 	public void UpdateLocationStatus()
 	{
-		if(TextUtils.isEmpty(((MainActivity)getActivity()).preferences.getString("locationstatus", "")))
+		if(TextUtils.isEmpty(((MainActivity)getActivity()).preferences.getString(Preferences.LOCATIONSTATUS, "")))
 		{
-			if (((MainActivity) getActivity()).preferences.getBoolean("inLocation", false) ) {
-				tvTimeInOutLocation.setText("at " + ((MainActivity) getActivity()).preferences.getString("SiteName", ""));
-				((MainActivity) getActivity()).preferences.saveString("locationstatus", "False"); // value to store
+			if (((MainActivity) getActivity()).preferences.getBoolean(Preferences.INLOCATION, false) ) {
+				tvTimeInOutLocation.setText("at " + ((MainActivity) getActivity()).preferences.getString(Preferences.SITENAME, ""));
+				((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "False"); // value to store
 				((MainActivity) getActivity()).preferences.commit();
+				UpdateTimeInOut("");
 			} else {
 				tvTimeInOutLocation.setText("(Not at location)");
-				((MainActivity) getActivity()).preferences.saveString("locationstatus", "True"); // value to store
+				((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "True"); // value to store
 				((MainActivity) getActivity()).preferences.commit();
+				UpdateTimeInOut("");
 			}
-		}else {
-			if (((MainActivity) getActivity()).preferences.getBoolean("inLocation", false) && !((MainActivity) getActivity()).preferences.getString("locationstatus", "").equalsIgnoreCase("False")) {
-				tvTimeInOutLocation.setText("at " + ((MainActivity) getActivity()).preferences.getString("SiteName", ""));
-				((MainActivity) getActivity()).preferences.saveString("locationstatus", "False"); // value to store
-				((MainActivity) getActivity()).preferences.commit();
-			} else if (!((MainActivity) getActivity()).preferences.getBoolean("inLocation", false) && !((MainActivity) getActivity()).preferences.getString("locationstatus", "").equalsIgnoreCase("True")) {
-				tvTimeInOutLocation.setText("(Not at location)");
-				((MainActivity) getActivity()).preferences.saveString("locationstatus", "True"); // value to store
-				((MainActivity) getActivity()).preferences.commit();
-			}
+		}else if (((MainActivity) getActivity()).preferences.getBoolean(Preferences.INLOCATION, false) && !((MainActivity) getActivity()).preferences.getString(Preferences.LOCATIONSTATUS, "").equalsIgnoreCase("False")) {
+			tvTimeInOutLocation.setText("at " + ((MainActivity) getActivity()).preferences.getString(Preferences.SITENAME, ""));
+			((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "False"); // value to store
+			((MainActivity) getActivity()).preferences.commit();
+			UpdateTimeInOut("");
+		} else if (!((MainActivity) getActivity()).preferences.getBoolean(Preferences.INLOCATION, false)
+				&& !((MainActivity) getActivity()).preferences.getString(Preferences.LOCATIONSTATUS, "").equalsIgnoreCase("True")) {
+			tvTimeInOutLocation.setText("(Not at location)");
+			((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "True"); // value to store
+			((MainActivity) getActivity()).preferences.commit();
+			UpdateTimeInOut("");
 		}
-
-
 	}
 	public void UpdateLoginLogOut()
 	{
-		if(TextUtils.isEmpty( ((MainActivity)getActivity()).preferences.getString("TokenCode", ""))) {
-			llShiftTime.setVisibility(View.GONE);
-			tvTimeInOut.setText("Time In");
-		}else{
+		String strDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
+		if(((MainActivity)getActivity()).preferences.getString(Preferences.TIMEINOUTSTATUS,strDate+"Pending").equalsIgnoreCase(strDate+"TimeIn")) {
 			llShiftTime.setVisibility(View.VISIBLE);
 			tvTimeInOut.setText("Time Out");
+			llLogin_Logout.setVisibility(View.VISIBLE);
+//		}else if(((MainActivity)getActivity()).preferences.getString(Preferences.TIMEINOUTSTATUS,strDate+"Pending").equalsIgnoreCase(strDate+"TimeOut")) {
+//			llShiftTime.setVisibility(View.GONE);
+//			llLogin_Logout.setVisibility(View.GONE);
+		}else{
+			llShiftTime.setVisibility(View.GONE);
+			tvTimeInOut.setText("Time In");
+			llLogin_Logout.setVisibility(View.VISIBLE);
 		}
 	}
 	public void onResult(Status status) {
@@ -278,7 +292,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
 		HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore
 				.getInstance(((MainActivity)getActivity()).preferences.getString(Preferences.SITENAME,""), StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.LATITUDE,""))
-						, StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.LONGITUDE,"")),StringUtils.getInt(((MainActivity)getActivity()).preferences.getString(Preferences.SITE_RADIUS,""))).getSimpleGeofences();
+						, StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.LONGITUDE,"")),StringUtils.getInt(((MainActivity)getActivity()).preferences.getString(Preferences.SITE_RADIUS, AppsConstant.DEFAULTRADIUS))).getSimpleGeofences();
 
 		GeofencingRequest.Builder geofencingRequestBuilder = new GeofencingRequest.Builder();
 		for (Map.Entry<String, SimpleGeofence> item : geofences.entrySet()) {
@@ -417,22 +431,11 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 			return true;
 		}
 	}
-	String strFile;
 	private void OpenCamera(){
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		File file = getOutputPhotoFile();
-		strFile = file.getAbsolutePath();
-		Uri fileUri = Uri.fromFile(file);
-
-		//File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
-		//fileUri =  Uri.fromFile(f);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-			intent.putExtra("android.intent.extras.LENS_FACING_FRONT", 1);
-		} else {
-			intent.putExtra("android.intent.extras.CAMERA_FACING", 1);
-		}
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-		startActivityForResult(intent, REQ_CAMERA);
+		Intent i = new Intent(getActivity(), CameraActivity.class);
+		i.putExtra("camera_key",1);
+		i.putExtra("purpose","For Photo");
+		startActivityForResult(i,REQ_CAMERA);
 	}
 	private final static int REQ_CAMERA =1003;
 	private File getOutputPhotoFile()
@@ -459,25 +462,47 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
-			if (requestCode == REQ_CAMERA){
-				Uri photoUri = null;
-				if (data == null) {
-
-				} else {
-					photoUri = data.getData();
-					strFile=photoUri.getPath();
-				}
-				File imageFile = new File(strFile);
-				if (imageFile.exists()){
-					UserLoginTask task = new UserLoginTask();
-					task.execute(new String[] {
-							((MainActivity)getActivity()).preferences.getString("UserName", ""),
-							((MainActivity)getActivity()).preferences.getString("Password", "") });
+			if (requestCode == REQ_CAMERA)
+			{
+				String strFile = data.getStringExtra("image_photo");
+				if(!strFile.equals(null) && !strFile.equals("cancel")) {
+					Toast.makeText(getContext(),strFile,Toast.LENGTH_SHORT).show();
+					Log.d("path",strFile);
+					UpdateTimeInOut(strFile);
 				}
 			}
 		}
 	}
 
+	private void UpdateTimeInOut(String strFile){
+		String strDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
+		String strActionType = "";
+		String strComments = "";
+		if(((MainActivity)getActivity()).preferences.getString(Preferences.TIMEINOUTSTATUS,strDate+"Pending").equalsIgnoreCase(strDate+"TimeIn")) {
+			if(!TextUtils.isEmpty(strFile)) {
+				strActionType = "clockOut";
+				strComments = "Time Out";
+			}else{
+				if (((MainActivity) getActivity()).preferences.getBoolean(Preferences.INLOCATION, false) ) {
+					strActionType = "clockIn";
+					strComments = "In Location";
+				}else{
+					strActionType = "clockOut";
+					strComments = "Out Location";
+				}
+			}
+		}else if(!TextUtils.isEmpty(strFile)){
+			strActionType = "clockIn";
+			strComments = "Time In";
+		}
+		if(!TextUtils.isEmpty(strActionType)) {
+			Bundle b = new Bundle();
+			b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.TIME_IN_OUT));
+			b.putString(AppsConstant.METHOD, AppsConstant.POST);
+			b.putString(AppsConstant.PARAMS, ParameterBuilder.getTimeinOut(((MainActivity) getActivity()).preferences, strComments, strActionType, strFile));
+			getActivity().getLoaderManager().initLoader(LoaderConstant.TIMEINOUT, b, MapFragment.this).forceLoad();
+		}
+	}
 	private boolean checkStoragePermission() {
 		// Ask for permission if it wasn't granted yet
 		return (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -489,18 +514,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	private void askCameraPermission() {
 		this.requestPermissions(new String[] { Manifest.permission.CAMERA },REQ_CAMERA_PERMISSION);
 	}
-//	LocationRequest locationRequest;
-//	private final int UPDATE_INTERVAL =  1000;
-//	private final int FASTEST_INTERVAL = 900;
-//	private void startLocationUpdates(){
-//		locationRequest = LocationRequest.create()
-//				.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-//				.setInterval(UPDATE_INTERVAL)
-//				.setFastestInterval(FASTEST_INTERVAL);
-//
-//		if ( checkPermission() )
-//			LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
-//	}
 	private final static int REQ_PERMISSION =1001;
 	private final static int REQ_CAMERA_PERMISSION =1002;
 	private final static int REQ_Storage_PERMISSION =1000;
@@ -509,7 +522,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	private void askPermission() {
 		this.requestPermissions(new String[] { Manifest.permission.ACCESS_FINE_LOCATION },REQ_PERMISSION);
 	}
-
 	// Verify user's response of the permission requested
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -565,7 +577,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	protected void displayGeofences()
 	{
 		HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore.getInstance(((MainActivity)getActivity()).preferences.getString(Preferences.SITENAME,""), StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.LATITUDE,""))
-				, StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.LONGITUDE,"")),StringUtils.getInt(((MainActivity)getActivity()).preferences.getString(Preferences.SITE_RADIUS,""))).getSimpleGeofences();
+				, StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.LONGITUDE,"")),StringUtils.getInt(((MainActivity)getActivity()).preferences.getString(Preferences.SITE_RADIUS,AppsConstant.DEFAULTRADIUS))).getSimpleGeofences();
 		for (Map.Entry<String, SimpleGeofence> item : geofences.entrySet()) {
 			SimpleGeofence sg = item.getValue();
 			CircleOptions circleOptions = new CircleOptions()
@@ -588,9 +600,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		if (myPositionMarker == null) {
 			createMarker(latitude, longitude);
 		}
-		((MainActivity)getActivity()).preferences.saveString("userlat", latitude+""); // value to store
+		((MainActivity)getActivity()).preferences.saveString(Preferences.USERLATITUDE, latitude+""); // value to store
 		((MainActivity)getActivity()).preferences.commit();
-		((MainActivity)getActivity()).preferences.saveString("userlong", longitude+""); // value to store
+		((MainActivity)getActivity()).preferences.saveString(Preferences.USERLONGITUDE, longitude+""); // value to store
 		((MainActivity)getActivity()).preferences.commit();
 		UpdateLocationStatus();
 		LatLng latLng = new LatLng(latitude, longitude);
@@ -702,120 +714,5 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 			UpdateLoginLogOut();
 		}
 
-	}
-
-
-	public String multipartRequest(String urlTo, Map<String, String> parmas, String filepath, String filefield, String fileMimeType) throws IOException {
-		HttpURLConnection connection = null;
-		DataOutputStream outputStream = null;
-		InputStream inputStream = null;
-
-		String twoHyphens = "--";
-		String boundary = "*****" + Long.toString(System.currentTimeMillis()) + "*****";
-		String lineEnd = "\r\n";
-
-		String result = "";
-
-		int bytesRead, bytesAvailable, bufferSize;
-		byte[] buffer;
-		int maxBufferSize = 1 * 1024 * 1024;
-
-		String[] q = filepath.split("/");
-		int idx = q.length - 1;
-
-		try {
-			File file = new File(filepath);
-			FileInputStream fileInputStream = new FileInputStream(file);
-
-			URL url = new URL(urlTo);
-			connection = (HttpURLConnection) url.openConnection();
-
-			connection.setDoInput(true);
-			connection.setDoOutput(true);
-			connection.setUseCaches(false);
-
-			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Connection", "Keep-Alive");
-			connection.setRequestProperty("User-Agent", "Android Multipart HTTP Client 1.0");
-			connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-
-			outputStream = new DataOutputStream(connection.getOutputStream());
-			outputStream.writeBytes(twoHyphens + boundary + lineEnd);
-			outputStream.writeBytes("Content-Disposition: form-data; name=\"" + filefield + "\"; filename=\"" + q[idx] + "\"" + lineEnd);
-			outputStream.writeBytes("Content-Type: " + fileMimeType + lineEnd);
-			outputStream.writeBytes("Content-Transfer-Encoding: binary" + lineEnd);
-
-			outputStream.writeBytes(lineEnd);
-
-			bytesAvailable = fileInputStream.available();
-			bufferSize = Math.min(bytesAvailable, maxBufferSize);
-			buffer = new byte[bufferSize];
-
-			bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-			while (bytesRead > 0) {
-				outputStream.write(buffer, 0, bufferSize);
-				bytesAvailable = fileInputStream.available();
-				bufferSize = Math.min(bytesAvailable, maxBufferSize);
-				bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-			}
-
-			outputStream.writeBytes(lineEnd);
-
-			// Upload POST Data
-			Iterator<String> keys = parmas.keySet().iterator();
-			while (keys.hasNext()) {
-				String key = keys.next();
-				String value = parmas.get(key);
-
-				outputStream.writeBytes(twoHyphens + boundary + lineEnd);
-				outputStream.writeBytes("Content-Disposition: form-data; name=\"" + key + "\"" + lineEnd);
-				outputStream.writeBytes("Content-Type: text/plain" + lineEnd);
-				outputStream.writeBytes(lineEnd);
-				outputStream.writeBytes(value);
-				outputStream.writeBytes(lineEnd);
-			}
-
-			outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-
-
-			if (200 != connection.getResponseCode()) {
-				throw new IOException("Failed to upload code:" + connection.getResponseCode() + " " + connection.getResponseMessage());
-			}
-
-			inputStream = connection.getInputStream();
-
-			result = this.convertStreamToString(inputStream);
-
-			fileInputStream.close();
-			inputStream.close();
-			outputStream.flush();
-			outputStream.close();
-
-			return result;
-		} catch (Exception e) {
-			throw new IOException(e.toString());
-		}
-
-	}
-
-	private String convertStreamToString(InputStream is) {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		StringBuilder sb = new StringBuilder();
-
-		String line = null;
-		try {
-			while ((line = reader.readLine()) != null) {
-				sb.append(line);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				is.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return sb.toString();
 	}
 }

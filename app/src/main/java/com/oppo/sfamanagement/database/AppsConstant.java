@@ -11,6 +11,7 @@ public class AppsConstant {
     public static boolean isDebug=false;
     public static int DEVICE_DISPLAY_HEIGHT_DEFAULT = 800;
     public static int DEVICE_DISPLAY_WIDTH_DEFAULT = 400;
+    public static String DEFAULTRADIUS = "50";
     public static Typeface RobotoSlabRegular;
     public static String URL ="URL";
     public static String USER ="USER";

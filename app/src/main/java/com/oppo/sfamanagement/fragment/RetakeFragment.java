@@ -1,5 +1,6 @@
 package com.oppo.sfamanagement.fragment;
 
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,10 +67,12 @@ public class RetakeFragment extends Fragment implements LoaderManager.LoaderCall
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getFragmentManager();
-                Fragment f = new CameraFragment();
-                fm.beginTransaction().replace(R.id.flCapture,f).commit();
-                fm.executePendingTransactions();
+                Fragment currentFragment = getFragmentManager().findFragmentById(R.id.flCapture);
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.remove(currentFragment);
+                fragmentTransaction.commitAllowingStateLoss();
+                fragmentManager.popBackStackImmediate();
             }
         });
         return view;
@@ -100,11 +104,11 @@ public class RetakeFragment extends Fragment implements LoaderManager.LoaderCall
         Intent i = new Intent();
         i.putExtra("image_photo",imagePath);
         if (imagePurpose.equals("For Photo")) {
-            getActivity().setResult(AppsConstant.IMAGE_PHOTO,i);
+            getActivity().setResult(Activity.RESULT_OK,i);
         } else if (imagePurpose.equals("For Aadhar")) {
-            getActivity().setResult(AppsConstant.IMAGE_AADHAR,i);
+            getActivity().setResult(Activity.RESULT_OK,i);
         } else if(imagePurpose.equals("For Address Proof")) {
-            getActivity().setResult(AppsConstant.IMAGE_ADDRESS_PROOF,i);
+            getActivity().setResult(Activity.RESULT_OK,i);
         }
         getLoaderManager().destroyLoader(loader.getId());
         getActivity().finish();
