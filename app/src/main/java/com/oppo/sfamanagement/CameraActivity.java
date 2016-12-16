@@ -1,6 +1,7 @@
 package com.oppo.sfamanagement;
 
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.fragment.CameraFragment;
+import com.oppo.sfamanagement.fragment.CameraFragment2;
 
 
 /**
@@ -32,7 +34,7 @@ public class CameraActivity extends AppCompatActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.camera_handler);
+        setContentView(R.layout.camera_activity);
         preferences = new Preferences(CameraActivity.this);
         tvUser = (TextView) findViewById(R.id.tvUserName);
         tvUserSername = (TextView) findViewById(R.id.tvUserSerName);
@@ -41,10 +43,16 @@ public class CameraActivity extends AppCompatActivity{
         tvUserSername.setText(preferences.getString(Preferences.USERLASTNAME,"lastname"));
         tvSiteName.setText(preferences.getString(Preferences.SITENAME,"sitename"));
         //FrameLayout fl = (FrameLayout) findViewById(R.id.flCapture);
-        Fragment fragment = new CameraFragment();
-        FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.flCapture,fragment).commit();
-        fm.executePendingTransactions();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Fragment fragment = new CameraFragment2();
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.flCapture,fragment).commit();
+        } else {
+            Fragment fragment = new CameraFragment();
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().replace(R.id.flCapture, fragment).commit();
+            fm.executePendingTransactions();
+        }
     }
     String SHOW_HIDE_LOADER = "SHOW_HIDE_LOADER";
     public void showHideProgressForLoder(boolean isForHide)

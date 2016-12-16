@@ -3,16 +3,20 @@ package com.oppo.sfamanagement.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.model.DynamicElementModel;
 import com.oppo.sfamanagement.model.History;
+import com.oppo.sfamanagement.model.HistorySublist;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,35 +26,35 @@ import java.util.List;
 
 public class ExpandableHistoryListViewAdapter extends BaseExpandableListAdapter {
 
-    private Activity activity;
-    List<DynamicElementModel> list;
-    private HashMap<History,List<DynamicElementModel>> hashMap;
+    private Context context;
+    private HashMap<History,ArrayList<HistorySublist>> hashMap;
 
-    public ExpandableHistoryListViewAdapter(Activity activity, HashMap<History,List<DynamicElementModel>> hashMap, List<DynamicElementModel> list) {
-        this.activity = activity;
+    public ExpandableHistoryListViewAdapter(Context context, HashMap<History,ArrayList<HistorySublist>> hashMap) {
+        this.context = context;
         this.hashMap = hashMap;
-        this.list = list;
     }
 
     @Override
     public int getGroupCount() {
-        return 0;
+        return hashMap.size();
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return 0;
+        return hashMap.get(groupPosition).size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return null;
+
+        return hashMap.get(groupPosition);
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return this.hashMap.get(this.list.get(groupPosition))
-                .get(childPosition);
+        ArrayList<HistorySublist> list = hashMap.get(groupPosition);
+        HistorySublist sublist = list.get(childPosition);
+        return sublist;
 
     }
 
@@ -71,9 +75,9 @@ public class ExpandableHistoryListViewAdapter extends BaseExpandableListAdapter 
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        String listTitle = (String) getGroup(groupPosition);
+        History listTitle = (History) getGroup(groupPosition);
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) activity.
+            LayoutInflater layoutInflater = (LayoutInflater) context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.history_list_group, null);
         }
@@ -83,13 +87,25 @@ public class ExpandableHistoryListViewAdapter extends BaseExpandableListAdapter 
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final String expandedListText = (String) getChild(groupPosition, childPosition);
+     // HistorySublist expandedList =(HistorySublist) hashMap.get(groupPosition).get(childPosition);
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) activity
+            LayoutInflater layoutInflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.history_list_item, parent);
-        }
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                params.setMarginStart(20);
 
+            } else {
+                params.setMargins(20,10,0,10);
+            }
+            convertView = layoutInflater.inflate(R.layout.history_tracking_item, parent,false);
+            convertView.setLayoutParams(params);
+        }
+        TextView color = (TextView) convertView.findViewById(R.id.tvColor);
+        TextView time = (TextView) convertView.findViewById(R.id.tvTime);
+        TextView timeIn = (TextView) convertView.findViewById(R.id.timeIn);
+           // time.setText(expandedList.getTime());
+            //timeIn.setText(expandedList.getTimeIn());
         return convertView;
     }
 

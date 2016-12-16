@@ -27,6 +27,7 @@ import com.oppo.sfamanagement.fragment.DynamicElement;
 import com.oppo.sfamanagement.fragment.HistoryListTrackFragment;
 import com.oppo.sfamanagement.model.DynamicElementModel;
 import com.oppo.sfamanagement.model.History;
+import com.oppo.sfamanagement.model.HistorySublist;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -220,26 +221,34 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 		return  output;
 	}*/
 
-	private List<DynamicElementModel> hardCodeData() {
-		List<DynamicElementModel> arrayList = new ArrayList<>();
-		DynamicElementModel a = new DynamicElementModel("10:45","11:32","11:56","03:01","03:23","06:41");
-		DynamicElementModel b = new DynamicElementModel("10:45","11:32","11:56","03:01","03:23","06:41");
-		DynamicElementModel c = new DynamicElementModel("10:45","11:32","11:56","03:01","03:23","06:41");
+	private List<HistorySublist> hardCodeData() {
+		List<HistorySublist> arrayList = new ArrayList<>();
+		HistorySublist a = new HistorySublist("11:32","Out of Location");
+		HistorySublist b = new HistorySublist("11:56","In Location");
+		HistorySublist c = new HistorySublist("03:01","Out Location");
 		arrayList.add(a);
 		arrayList.add(b);
 		arrayList.add(c);
 		return arrayList;
 	}
-	private HashMap<History,List<DynamicElementModel>> getData() {
-		HashMap<History,List<DynamicElementModel>> hashMap = new HashMap<>();
+	private HashMap<History,List<HistorySublist>> getData() {
+		HashMap<History,List<HistorySublist>> hashMap = new HashMap<>();
 		History a = new History("12-OCT-16","10:12am","10:12am","9h 10m");
 		History b = new History("12-OCT-16","10:12am","10:12am","9h 10m");
 		History c = new History("12-OCT-16","10:12am","10:12am","9h 10m");
-		List<DynamicElementModel> lis = new ArrayList<>();
+		List<HistorySublist> lis = new ArrayList<>();
 
-		DynamicElementModel p = new DynamicElementModel("10:45","11:32","11:56","03:01","03:23","06:41");
+		HistorySublist p = new HistorySublist("10:45","Time In");
+		HistorySublist q = new HistorySublist("11:32","Out of Location");
+		HistorySublist r = new HistorySublist("11:56","In Location");
+		HistorySublist s = new HistorySublist("03:01","Out Location");
 		lis.add(p);
+		lis.add(q);
+		lis.add(r);
+		lis.add(s);
 		hashMap.put(a,lis);
+		hashMap.put(b,lis);
+		hashMap.put(c,lis);
 		return hashMap;
 	}
 

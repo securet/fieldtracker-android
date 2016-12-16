@@ -42,7 +42,7 @@ public class CameraFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.camera_handler_1,container,false);
+        View view = inflater.inflate(R.layout.camera_fragment,container,false);
         surfaceView = (FrameLayout) view.findViewById(R.id.flLivePreview);
         imageButton = (ImageButton) view.findViewById(R.id.ibPhotoCapture);
         final int cameraForB = getActivity().getIntent().getIntExtra("camera_key",AddPromoterFragment.FRONT_CAMREA_OPEN);

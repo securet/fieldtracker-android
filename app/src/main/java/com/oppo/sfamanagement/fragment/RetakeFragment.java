@@ -41,13 +41,18 @@ public class RetakeFragment extends Fragment implements LoaderManager.LoaderCall
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.camera_handler_2,container,false);
+        View view = inflater.inflate(R.layout.retake_fragment,container,false);
         confirm = (Button) view.findViewById(R.id.btConfirm);
         cancel = (Button) view.findViewById(R.id.btRetake);
         imageView = (ImageView) view.findViewById(R.id.ivRetake);
         imagePath = getArguments().getString("image_taken");
         imagePurpose = getArguments().getString("image_purpose");
-        bmp = rotateBmp(BitmapFactory.decodeFile(imagePath));
+        if(imagePurpose.equals("For Photo")) {
+            bmp = rotateBmpFront(BitmapFactory.decodeFile(imagePath));
+        } else {
+            bmp = rotateBmpBack(BitmapFactory.decodeFile(imagePath));
+        }
+      //  bmp = BitmapFactory.decodeFile(imagePath);
         imageView.setImageBitmap(bmp);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,12 +82,22 @@ public class RetakeFragment extends Fragment implements LoaderManager.LoaderCall
         });
         return view;
     }
-    public Bitmap rotateBmp(Bitmap bmp){
+
+    private Bitmap rotateBmpBack(Bitmap bitmap) {
+        Matrix m = new Matrix();
+        m.postRotate(90);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
+        Bitmap bmp = Bitmap.createScaledBitmap(bitmap,480,640,true);
+        return bmp;
+    }
+
+    public Bitmap rotateBmpFront(Bitmap bmp){
         Matrix matrix = new Matrix();
         //set image rotation value to 90 degrees in matrix.
         matrix.postRotate(270);
         //supply the original width and height, if you don't want to change the height and width of bitmap.
-        bmp = Bitmap.createBitmap(bmp, 0, 0, 1080, 1080, matrix, true);
+        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
+        Bitmap bmp2 = Bitmap.createScaledBitmap(bmp,480,640,true);
         return bmp;
     }
 

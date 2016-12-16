@@ -48,10 +48,6 @@
 
         </activity>
         <activity
-            android:name=".RetakeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
             android:name=".CameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
