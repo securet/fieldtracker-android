@@ -46,6 +46,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
     int storeId ;
     Preferences preferences;
     ArrayList<Store> list;
+    private int i = 0;
 
  //   protected Preferences preferences;
     String image[] = new String[3];
@@ -133,29 +134,47 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == AppsConstant.IMAGE_PHOTO) {
-                String responseValue = data.getStringExtra("image_photo");
-                if (!responseValue.equals(null) && !responseValue.equals("cancel")) {
-                    Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
-                    Log.d("path", responseValue);
-                    image[0] = responseValue;
+                String responseValue = data.getStringExtra("response");
+                String purpose = data.getStringExtra("image_purpose");
+                if (!responseValue.equals(null)) {
+               //     Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
+               //     Log.d("path", responseValue);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
+                    bundle.putString(AppsConstant.FILE, responseValue);
+                    bundle.putString(AppsConstant.FILEPURPOSE,purpose);
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
+              //      image[0] = responseValue;
                     ivPhoto.setImageResource(R.drawable.photo_tick);
                     ivPhoto.setEnabled(false);
                 }
             } else if (requestCode == AppsConstant.IMAGE_AADHAR) {
-                String responseValue = data.getStringExtra("image_photo");
-                if (!responseValue.equals(null) && !responseValue.equals("cancel")) {
-                    Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
-                    Log.d("path", responseValue);
-                    image[1] = responseValue;
+                String responseValue = data.getStringExtra("response");
+                String purpose = data.getStringExtra("image_purpose");
+                if (!responseValue.equals(null)) {
+                 //   Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
+                   // Log.d("path", responseValue);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
+                    bundle.putString(AppsConstant.FILE, responseValue);
+                    bundle.putString(AppsConstant.FILEPURPOSE,purpose);
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
+               //     image[1] = responseValue;
                     ivAdhar.setImageResource(R.drawable.aadhartick);
                     ivAdhar.setEnabled(false);
                 }
             } else if (requestCode == AppsConstant.IMAGE_ADDRESS_PROOF) {
-                String responseValue = data.getStringExtra("image_photo");
-                if (!responseValue.equals(null) && !responseValue.equals("cancel")) {
+                String responseValue = data.getStringExtra("response");
+                String purpose = data.getStringExtra("image_purpose");
+                if (!responseValue.equals(null)) {
                     Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
                     Log.d("path", responseValue);
-                    image[2] = responseValue;
+                    Bundle bundle = new Bundle();
+                    bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
+                    bundle.putString(AppsConstant.FILE, responseValue);
+                    bundle.putString(AppsConstant.FILEPURPOSE,purpose);
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
+                    //image[2] = responseValue;
                     ivAddressProof.setImageResource(R.drawable.id_card_tick);
                     ivAddressProof.setEnabled(false);
                 }
@@ -202,6 +221,8 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 return new LoaderServices(getContext(), LoaderMethod.ADD_PROMOTER,args);
             case LoaderConstant.STORE_LIST:
                 return new LoaderServices(getContext(),LoaderMethod.STORE_LIST,args);
+            case LoaderConstant.IMAGE_UPLOAD:
+                return new LoaderServices(getContext(),LoaderMethod.IMAGE_UPLOAD,args);
             default:
                 return null;
         }
@@ -221,6 +242,22 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                             "Error in response. Please try again.",
                             Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case LoaderConstant.IMAGE_UPLOAD:
+                if (data != null && data instanceof String) {
+                    image[i] = (String) data;
+                    Log.d("IMAGE",image[i]);
+                    i++;
+                    if(i == 3){
+                        i = 0;
+                    }
+
+                } else {
+                    Toast.makeText(getContext(),
+                            "Error in response. Please try again.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
 
         if (isAdded()) {

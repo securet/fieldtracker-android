@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ import com.oppo.sfamanagement.webmethods.Services;
  * Created by allsmartlt218 on 13-12-2016.
  */
 
-public class RetakeFragment extends Fragment implements LoaderManager.LoaderCallbacks<Object> {
+public class RetakeFragment extends Fragment {
 
     Bitmap bmp;
     Button confirm,cancel;
@@ -58,15 +59,16 @@ public class RetakeFragment extends Fragment implements LoaderManager.LoaderCall
             @Override
             public void onClick(View v) {
 
-                Bundle bundle = new Bundle();
+                /*Bundle bundle = new Bundle();
                 bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
                 bundle.putString(AppsConstant.FILE, imagePath);
                 bundle.putString(AppsConstant.FILEPURPOSE,imagePurpose);
-                getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,RetakeFragment.this).forceLoad();
-       /*         Intent i = new Intent();
+                getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,RetakeFragment.this).forceLoad();*/
+                Intent i = new Intent();
                 i.putExtra("response",imagePath);
-                getActivity().setResult(2,i);
-                getActivity().finish();*/
+                i.putExtra("image_purpose",imagePurpose);
+                getActivity().setResult(Activity.RESULT_OK,i);
+                getActivity().finish();
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +103,7 @@ public class RetakeFragment extends Fragment implements LoaderManager.LoaderCall
         return bmp;
     }
 
-    @Override
+    /*@Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
         ((CameraActivity)getActivity()).showHideProgressForLoder(false);
         switch (id) {
@@ -116,6 +118,7 @@ public class RetakeFragment extends Fragment implements LoaderManager.LoaderCall
     public void onLoadFinished(Loader<Object> loader, Object data) {
         ((CameraActivity)getActivity()).showHideProgressForLoder(true);
         String imagePath = (String) data;
+        Log.d("SERVERPATH",imagePath);
         Intent i = new Intent();
         i.putExtra("image_photo",imagePath);
         if (imagePurpose.equals("For Photo")) {
@@ -132,5 +135,5 @@ public class RetakeFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoaderReset(Loader<Object> loader) {
 
-    }
+    }*/
 }

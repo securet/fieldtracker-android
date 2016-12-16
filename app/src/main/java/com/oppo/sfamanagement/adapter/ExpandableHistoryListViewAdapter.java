@@ -41,7 +41,8 @@ public class ExpandableHistoryListViewAdapter extends BaseExpandableListAdapter 
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return hashMap.get(groupPosition).size();
+        ArrayList<HistorySublist> sublists = hashMap.get(groupPosition);
+        return sublists.size();
     }
 
     @Override

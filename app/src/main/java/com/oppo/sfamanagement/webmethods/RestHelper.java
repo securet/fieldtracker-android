@@ -322,9 +322,9 @@ public class RestHelper
             // In your case you are not adding form data so ignore this
                 /*This is to add parameter values */
             multipart= new MultipartUtility(strUrl, "UTF-8",preferences);
-            multipart.addFormField("purpose","Time In");
+           // multipart.addFormField("purpose","Time In");
                 /*This is to add file content*/
-            multipart.addFilePart("snapshotFile",new File(strFile));
+          //  multipart.addFilePart("snapshotFile",new File(strFile));
 
             for (String line : multipart.finish()) {
                 response += line;

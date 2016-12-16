@@ -38,5 +38,13 @@ public class UrlBuilder {
         b.append(Services.DomainUrlImage);
         return b.toString();
     }
-
+    public static String getHistoryList(String strServices, String username, String pageIndex, String pageSize)
+    {
+        Uri.Builder b = Uri.parse(getUrl(strServices)).buildUpon();
+        b.appendQueryParameter("username", username);
+        b.appendQueryParameter("pageIndex", pageIndex);
+        b.appendQueryParameter("pageSize",pageSize);
+        b.build();
+        return  b.toString();
+    }
 }

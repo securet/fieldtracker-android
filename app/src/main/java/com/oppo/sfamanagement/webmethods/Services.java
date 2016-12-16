@@ -22,4 +22,5 @@ public class Services{
     public static String UPDATE_PROMOTER = "request/promoter";
     public static String ADD_PROMOTER = "request/promoter";
     public static String TIME_IN_OUT = "attendance/log";
+    public static String HISTORY_LIST = "attendance/log";
 }

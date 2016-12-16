@@ -17,4 +17,5 @@ public class LoaderConstant {
     public static final int ADD_PROMOTER = 10;
     public static final int IMAGE_UPLOAD = 11;
     public static final int TIMEINOUT = 12;
+    public static final int HISTORY_LIST = 13;
 }

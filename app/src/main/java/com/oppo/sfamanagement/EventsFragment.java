@@ -1,5 +1,7 @@
 package com.oppo.sfamanagement;
 
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,17 +23,25 @@ import android.widget.Toast;
 import com.oppo.sfamanagement.adapter.ExpandableHistoryListViewAdapter;
 import com.oppo.sfamanagement.adapter.ListViewHistoryAdapter;
 import com.oppo.sfamanagement.database.API;
+import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.Event;
 import com.oppo.sfamanagement.database.EventDataSource;
 import com.oppo.sfamanagement.fragment.DynamicElement;
 import com.oppo.sfamanagement.fragment.HistoryListTrackFragment;
 import com.oppo.sfamanagement.model.DynamicElementModel;
 import com.oppo.sfamanagement.model.History;
+import com.oppo.sfamanagement.model.HistoryNew;
 import com.oppo.sfamanagement.model.HistorySublist;
+import com.oppo.sfamanagement.webmethods.LoaderConstant;
+import com.oppo.sfamanagement.webmethods.LoaderMethod;
+import com.oppo.sfamanagement.webmethods.LoaderServices;
+import com.oppo.sfamanagement.webmethods.Services;
+import com.oppo.sfamanagement.webmethods.UrlBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,8 +50,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class EventsFragment extends Fragment implements AdapterView.OnItemClickListener{
-	protected ExpandableHistoryListViewAdapter adapter;
+public class EventsFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Object> {
+	protected ListViewHistoryAdapter adapter;
+	protected ListView listView;
+	ArrayList<HistoryNew> list;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,25 +63,24 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_events, container,false);
-		ExpandableListView listLv = (ExpandableListView) rootView.findViewById(R.id.expandableList);
-		adapter = new ExpandableHistoryListViewAdapter(getActivity(),getData(),hardCodeData() );
-		listLv.setAdapter(adapter);
-		listLv.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-			@Override
-			public void onGroupExpand(int groupPosition) {
-
-			}
-		});
-		listLv.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-			@Override
-			public void onGroupCollapse(int groupPosition) {
-
-			}
-		});
 		return rootView;
 	}
 
-/*	@Override
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		listView = (ListView) view.findViewById(R.id.expandableList);
+
+		Bundle bundle = new Bundle();
+		bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"anand@securet.in","0","10"));
+		bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
+		getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST,bundle,EventsFragment.this);
+		adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,arrayList());
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(this);
+	}
+
+	/*	@Override
 	public void onResume() {
 		super.onResume();
 		loadData();
@@ -221,7 +232,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 		return  output;
 	}*/
 
-	private List<HistorySublist> hardCodeData() {
+	/*private List<HistorySublist> hardCodeData() {
 		List<HistorySublist> arrayList = new ArrayList<>();
 		HistorySublist a = new HistorySublist("11:32","Out of Location");
 		HistorySublist b = new HistorySublist("11:56","In Location");
@@ -231,12 +242,12 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 		arrayList.add(c);
 		return arrayList;
 	}
-	private HashMap<History,List<HistorySublist>> getData() {
-		HashMap<History,List<HistorySublist>> hashMap = new HashMap<>();
+	private HashMap<History,ArrayList<HistorySublist>> getData() {
+		HashMap<History,ArrayList<HistorySublist>> hashMap = new HashMap<>();
 		History a = new History("12-OCT-16","10:12am","10:12am","9h 10m");
 		History b = new History("12-OCT-16","10:12am","10:12am","9h 10m");
 		History c = new History("12-OCT-16","10:12am","10:12am","9h 10m");
-		List<HistorySublist> lis = new ArrayList<>();
+		ArrayList<HistorySublist> lis = new ArrayList<>();
 
 		HistorySublist p = new HistorySublist("10:45","Time In");
 		HistorySublist q = new HistorySublist("11:32","Out of Location");
@@ -250,6 +261,67 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 		hashMap.put(b,lis);
 		hashMap.put(c,lis);
 		return hashMap;
+	}*/
+
+	private ArrayList<History> arrayList() {
+		ArrayList<History> list = new ArrayList<>();
+		History a = new History("12-OCT-16","10:12am","10:12am","9h 10m");
+		History b = new History("12-OCT-16","10:12am","10:12am","9h 10m");
+		History c = new History("12-OCT-16","10:12am","10:12am","9h 10m");
+		list.add(a);
+		list.add(b);
+		list.add(c);
+		return list;
 	}
 
+	@Override
+	public Loader<Object> onCreateLoader(int id, Bundle args) {
+		((MainActivity)getActivity()).showHideProgressForLoder(false);
+		switch (id) {
+			case LoaderConstant.HISTORY_LIST:
+				return new LoaderServices(getContext(), LoaderMethod.HISTORY_LIST,args);
+			default:
+				return null;
+		}
+	}
+	/*String createdTimestamp = obj.getString("createdTimestamp");
+								SimpleDateFormat simpleDateFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+								Date timeIn = new Date();
+								try
+								{
+									timeIn = simpleDateFormat.parse(createdTimestamp);
+								}catch (Exception e){
+									e.printStackTrace();
+								}
+								Calendar mCalendar = Calendar.getInstance();
+								mCalendar.setTimeInMillis(timeIn.getTime());
+								listData.setDate(DateFormat.format("dd-MMM-yy", mCalendar).toString());
+								String mFormat = "hh:mm";
+								listData.setTimeIn(DateFormat.format(mFormat, mCalendar).toString());*/
+
+	public void getDate (String timeStamp) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		Date date = new Date();
+		try {
+			date = dateFormat.parse(timeStamp);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Calendar mCalendar = Calendar.getInstance();
+		mCalendar.setTimeInMillis(date.getTime());
+
+	}
+	@Override
+	public void onLoadFinished(Loader<Object> loader, Object data) {
+		((MainActivity)getActivity()).showHideProgressForLoder(true);
+		if(data != null && data instanceof ArrayList) {
+			list = (ArrayList<HistoryNew>) data;
+		}
+		getLoaderManager().destroyLoader(loader.getId());
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Object> loader) {
+
+	}
 }
