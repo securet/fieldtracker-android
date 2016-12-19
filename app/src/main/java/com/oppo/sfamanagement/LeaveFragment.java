@@ -1,5 +1,6 @@
 package com.oppo.sfamanagement;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.oppo.sfamanagement.database.API;
+
 import com.oppo.sfamanagement.database.CustomBuilder;
 import com.oppo.sfamanagement.database.Event;
 import com.oppo.sfamanagement.database.MultipartUtility;
@@ -174,10 +175,6 @@ public class LeaveFragment extends Fragment implements DatePickerDialog.OnDateSe
 					}else{
 						strType = 30;
 					}
-					UserLoginTask task = new UserLoginTask();
-					task.execute(new String[] {
-							((MainActivity)getActivity()).preferences.getString("UserName", ""),
-							((MainActivity)getActivity()).preferences.getString("Password", "") });
 				}
 
 			}
@@ -217,189 +214,13 @@ public class LeaveFragment extends Fragment implements DatePickerDialog.OnDateSe
 	@Override
 	public void onResume() {
 		super.onResume();
-		loadData();
 	}
 
-	protected void loadData() {
-//		EventDataSource eds = new EventDataSource(getActivity());
-//		ArrayList<Event> list = eds.getEvents();
-//		eds.close();
-//
-//		adapter.clear();
-//		adapter.addAll(list);
-//		adapter.notifyDataSetChanged();
-		UserLoginListTask task = new UserLoginListTask();
-		task.execute(new String[] {
-				((MainActivity)getActivity()).preferences.getString("UserName", ""),
-				((MainActivity)getActivity()).preferences.getString("Password", "") });
-	}
-	private class UserLoginListTask extends AsyncTask<String, Void, String> {
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			((MainActivity)getActivity()).pd.show();
-		};
-
-		@Override
-		protected String doInBackground(String... params) {
-			String response = "";
-			try {
-				response = API.GetSitesListRest(params[0], params[1]);
-			} catch (Exception e) {
-				e.printStackTrace();
-				response = "";
-			}
-			return response;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			((MainActivity)getActivity()).pd.dismiss();
-			ArrayList<Event> attendenceList = new ArrayList<>();
-			if(API.DEBUG)
-				System.out.println("The Message Is: " + result);
-			if (!(result.equals("No Internet")) || !(result.equals(""))) {
-				try {
-
-					if(result.toString().contains("status") && (new JSONObject(result).getString("status").toString().equals("success")))
-					{
-						JSONObject data = new JSONObject(result);
-						JSONObject list = data.getJSONObject("data");
-						JSONArray objArray = list.getJSONArray("data");
-						for(int i=0;i<objArray.length();i++)
-						{
-							Event listData = new Event();
-							JSONObject obj = objArray.getJSONObject(i);
-							String statusId = obj.getString("statusId");
-							JSONObject serviceType = obj.getJSONObject("serviceType");
-							String serviceTypeId = serviceType.getString("serviceTypeId");
-							if(serviceTypeId.equalsIgnoreCase("17"))
-							{
-								JSONObject site = obj.getJSONObject("site");
-								listData.setPlaceName(site.getString("name"));
-								listData.setTimeOut(obj.getString("shortDesc"));
-								JSONObject issueType = obj.getJSONObject("issueType");
-								listData.setTimeIn(issueType.getString("name"));
-								String createdTimestamp = obj.getString("createdTimestamp");
-								SimpleDateFormat simpleDateFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-								Date timeIn = new Date();
-								try
-								{
-									timeIn = simpleDateFormat.parse(createdTimestamp);
-								}catch (Exception e){
-									e.printStackTrace();
-								}
-								Calendar mCalendar = Calendar.getInstance();
-								mCalendar.setTimeInMillis(timeIn.getTime());
-								listData.setDate(DateFormat.format("dd-MM-yyyy", mCalendar).toString());
-								if(statusId.equalsIgnoreCase("Resolved"))
-								{
-									listData.setTime("Approved");
-								}else{
-									listData.setTime("Requested");
-								}
-								attendenceList.add(listData);
-							}
-						}
-					}else{
-						Toast.makeText(getActivity(), ""+new JSONObject(result).getString("messages").toString(), Toast.LENGTH_SHORT).show();
-					}
-				} catch (Exception e) {
-					if(API.DEBUG){
-						e.printStackTrace();
-					}
-					Toast.makeText(getActivity(),"Error in response. Please try again.",Toast.LENGTH_SHORT).show();
-				}
-			} else {
-				Toast.makeText(getActivity(),"Error in response. Please try again.",Toast.LENGTH_SHORT).show();
-			}
-			adapter.clear();
-			adapter.addAll(attendenceList);
-			adapter.notifyDataSetChanged();
-		}
-
-	}
-	private class UserLoginTask extends AsyncTask<String, Void, String> {
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			((MainActivity)getActivity()).pd.show();
-		};
-
-		@Override
-		protected String doInBackground(String... params) {
-			String response = "";
-			try {
-				MultipartUtility multipart ;
-
-				// In your case you are not adding form data so ignore this
-                /*This is to add parameter values */
-
-					// Request
-//					multipart= new MultipartUtility(API.GetLoginRest(params[0], params[1]), "UTF-8");
-//					multipart.addFormField("site.siteId",((MainActivity) getActivity()).preferences.getString("siteId","21364"));
-//					multipart.addFormField("serviceType.serviceTypeId","17");
-//					multipart.addFormField("description",strDesc);
-//					multipart.addFormField("issueType.issueTypeId",strType+"");
-//					multipart.addFormField("latitude",((MainActivity)getActivity()).preferences.getString("userlat",""));
-//					multipart.addFormField("longitude",((MainActivity)getActivity()).preferences.getString("userlong",""));
-//					multipart.addFormField("severity.enumerationId","MAJOR");
-
-                /*This is to add file content*/
-//				for (int i = 0; i < myFileArray.size(); i+''+) {
-//				multipart.addFilePart("ticketAttachments","Test");
-//				}
-
-//				for (String line : multipart.finish()) {
-//					response = line;
-//				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				response = "";
-			}
-			return response;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			((MainActivity)getActivity()).pd.dismiss();
-			if(API.DEBUG)
-				System.out.println("The Message Is: " + result);
-			if (!(result.equals("No Internet")) || !(result.equals(""))) {
-				try {
-					String strDate = "";
-					if(result.toString().contains("status") && (new JSONObject(result).getString("status").toString().equals("success")))
-					{
-						Toast.makeText(getActivity(),
-								"Leave Request Post Successfully.",
-								Toast.LENGTH_SHORT).show();
-					}else{
-						Toast.makeText(getActivity(), ""+new JSONObject(result).getString("messages").toString(), Toast.LENGTH_SHORT).show();
-					}
 
 
 
-				} catch (Exception e) {
-					if(API.DEBUG){
-						e.printStackTrace();
-					}
 
-					Toast.makeText(getActivity(),
-							"Error in response. Please try again.",
-							Toast.LENGTH_SHORT).show();
-				}
-			} else {
-				Toast.makeText(getActivity(),
-						"Error in response. Please try again.",
-						Toast.LENGTH_SHORT).show();
-			}
-			tvReason.setText("");
-			tvFromDate.setText("");
-			tvTodate.setText("");
-			loadData();
-		}
 
-	}
 	private File getOutputPhotoFile()
 	{
 		File directory = new File(Environment.getExternalStoragePublicDirectory(

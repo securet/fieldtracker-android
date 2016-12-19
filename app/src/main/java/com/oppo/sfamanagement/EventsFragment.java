@@ -2,53 +2,27 @@ package com.oppo.sfamanagement;
 
 import android.app.LoaderManager;
 import android.content.Loader;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.oppo.sfamanagement.adapter.ExpandableHistoryListViewAdapter;
 import com.oppo.sfamanagement.adapter.ListViewHistoryAdapter;
-import com.oppo.sfamanagement.database.API;
 import com.oppo.sfamanagement.database.AppsConstant;
-import com.oppo.sfamanagement.database.Event;
-import com.oppo.sfamanagement.database.EventDataSource;
-import com.oppo.sfamanagement.fragment.DynamicElement;
 import com.oppo.sfamanagement.fragment.HistoryListTrackFragment;
-import com.oppo.sfamanagement.model.DynamicElementModel;
-import com.oppo.sfamanagement.model.History;
 import com.oppo.sfamanagement.model.HistoryNew;
-import com.oppo.sfamanagement.model.HistorySublist;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
 import com.oppo.sfamanagement.webmethods.LoaderMethod;
 import com.oppo.sfamanagement.webmethods.LoaderServices;
 import com.oppo.sfamanagement.webmethods.Services;
 import com.oppo.sfamanagement.webmethods.UrlBuilder;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class EventsFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Object> {
 	protected ListViewHistoryAdapter adapter;
@@ -75,9 +49,9 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 		bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"anand@securet.in","0","10"));
 		bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
 		getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST,bundle,EventsFragment.this);
-		adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,arrayList());
+		/*adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,arrayList());
 		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(this);
+		listView.setOnItemClickListener(this);*/
 	}
 
 	/*	@Override
@@ -107,6 +81,11 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 			default:
 				Fragment f = new HistoryListTrackFragment();
 				FragmentManager fm = getFragmentManager();
+                Bundle b = new Bundle();
+                HistoryNew hn = list.get(position);
+                b.putParcelable("sub_history",hn);
+                b.putInt("position",position);
+                f.setArguments(b);
 				fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
 				fm.executePendingTransactions();
 		}
@@ -263,16 +242,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 		return hashMap;
 	}*/
 
-	private ArrayList<History> arrayList() {
-		ArrayList<History> list = new ArrayList<>();
-		History a = new History("12-OCT-16","10:12am","10:12am","9h 10m");
-		History b = new History("12-OCT-16","10:12am","10:12am","9h 10m");
-		History c = new History("12-OCT-16","10:12am","10:12am","9h 10m");
-		list.add(a);
-		list.add(b);
-		list.add(c);
-		return list;
-	}
+
 
 	@Override
 	public Loader<Object> onCreateLoader(int id, Bundle args) {
@@ -299,7 +269,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 								String mFormat = "hh:mm";
 								listData.setTimeIn(DateFormat.format(mFormat, mCalendar).toString());*/
 
-	public void getDate (String timeStamp) {
+	/*public void getDate (String timeStamp) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		Date date = new Date();
 		try {
@@ -310,12 +280,15 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 		Calendar mCalendar = Calendar.getInstance();
 		mCalendar.setTimeInMillis(date.getTime());
 
-	}
+	}*/
 	@Override
 	public void onLoadFinished(Loader<Object> loader, Object data) {
 		((MainActivity)getActivity()).showHideProgressForLoder(true);
 		if(data != null && data instanceof ArrayList) {
 			list = (ArrayList<HistoryNew>) data;
+			adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,list);
+			listView.setAdapter(adapter);
+			listView.setOnItemClickListener(this);
 		}
 		getLoaderManager().destroyLoader(loader.getId());
 	}

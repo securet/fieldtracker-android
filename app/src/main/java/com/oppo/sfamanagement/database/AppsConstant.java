@@ -19,6 +19,7 @@ public class AppsConstant {
     public static String FILE ="FILE";
     public static String FILEPURPOSE ="FILEPURPOSE";
     public static String METHOD ="METHOD";
+    public static String REASON ="REASON";
     public static String PARAMS ="PARAMS";
     public static String GET ="GET";
     public static String PUT = "PUT";

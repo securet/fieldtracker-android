@@ -137,14 +137,14 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 String responseValue = data.getStringExtra("response");
                 String purpose = data.getStringExtra("image_purpose");
                 if (!responseValue.equals(null)) {
-               //     Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
-               //     Log.d("path", responseValue);
+                    /*Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
+                    Log.d("path", responseValue);*/
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
                     bundle.putString(AppsConstant.FILE, responseValue);
                     bundle.putString(AppsConstant.FILEPURPOSE,purpose);
                     getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
-              //      image[0] = responseValue;
+                    image[0] = responseValue;
                     ivPhoto.setImageResource(R.drawable.photo_tick);
                     ivPhoto.setEnabled(false);
                 }
@@ -152,14 +152,14 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 String responseValue = data.getStringExtra("response");
                 String purpose = data.getStringExtra("image_purpose");
                 if (!responseValue.equals(null)) {
-                 //   Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
-                   // Log.d("path", responseValue);
+                    /*Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
+                    Log.d("path", responseValue);*/
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
                     bundle.putString(AppsConstant.FILE, responseValue);
                     bundle.putString(AppsConstant.FILEPURPOSE,purpose);
                     getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
-               //     image[1] = responseValue;
+                    image[1] = responseValue;
                     ivAdhar.setImageResource(R.drawable.aadhartick);
                     ivAdhar.setEnabled(false);
                 }
@@ -167,14 +167,14 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 String responseValue = data.getStringExtra("response");
                 String purpose = data.getStringExtra("image_purpose");
                 if (!responseValue.equals(null)) {
-                    Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
-                    Log.d("path", responseValue);
+                    /*Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
+                    Log.d("path", responseValue);*/
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
                     bundle.putString(AppsConstant.FILE, responseValue);
                     bundle.putString(AppsConstant.FILEPURPOSE,purpose);
                     getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
-                    //image[2] = responseValue;
+                    image[2] = responseValue;
                     ivAddressProof.setImageResource(R.drawable.id_card_tick);
                     ivAddressProof.setEnabled(false);
                 }

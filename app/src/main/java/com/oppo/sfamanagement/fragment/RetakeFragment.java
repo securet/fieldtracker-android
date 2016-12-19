@@ -88,18 +88,20 @@ public class RetakeFragment extends Fragment {
     private Bitmap rotateBmpBack(Bitmap bitmap) {
         Matrix m = new Matrix();
         m.postRotate(90);
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
-        Bitmap bmp = Bitmap.createScaledBitmap(bitmap,480,640,true);
+        //bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth()/2, bitmap.getHeight()/2, m, true);
+         bitmap = Bitmap.createScaledBitmap(bitmap,640,480,true);
+        bmp = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),m,true);
         return bmp;
     }
 
-    public Bitmap rotateBmpFront(Bitmap bmp){
+    public Bitmap rotateBmpFront(Bitmap bitmap){
         Matrix matrix = new Matrix();
         //set image rotation value to 90 degrees in matrix.
         matrix.postRotate(270);
         //supply the original width and height, if you don't want to change the height and width of bitmap.
-        bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
-        Bitmap bmp2 = Bitmap.createScaledBitmap(bmp,480,640,true);
+        bitmap = Bitmap.createScaledBitmap(bitmap,640,480,true);
+        bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+       // Bitmap bmp2 = Bitmap.createScaledBitmap(bmp,480,640,true);
         return bmp;
     }
 

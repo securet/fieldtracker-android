@@ -102,6 +102,7 @@
                     android:layout_toRightOf="@id/tvTimeInElementBlue"/>
 
                 <TextView
+                    android:id="@+id/tvComment1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
@@ -139,6 +140,7 @@
                     android:layout_toRightOf="@id/tvTimeInRedElement1"/>
 
                 <TextView
+                    android:id="@+id/tvCommentRed1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
@@ -175,6 +177,7 @@
                     android:layout_toRightOf="@id/tvTimeInElementGreen1"/>
 
                 <TextView
+                    android:id="@+id/tvCommentGreen1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
@@ -231,7 +234,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/tvTimeInElementGreen2"
+
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@drawable/history_tracking_element_green"/>
@@ -247,6 +250,7 @@
                     android:layout_toRightOf="@id/tvTimeInElementGreen2"/>
 
                 <TextView
+                    android:id="@+id/tvCommentGreen2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"

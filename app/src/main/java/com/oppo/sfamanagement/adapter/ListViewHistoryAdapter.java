@@ -10,31 +10,31 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.oppo.sfamanagement.R;
-import com.oppo.sfamanagement.model.History;
+import com.oppo.sfamanagement.model.HistoryNew;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by allsmartlt218 on 01-12-2016.
  */
 
-public class ListViewHistoryAdapter extends ArrayAdapter<History>{
+public class ListViewHistoryAdapter extends ArrayAdapter<HistoryNew>{
 
-    protected ArrayList<History> list;
+    protected ArrayList<HistoryNew> list;
     protected int resourceId;
     protected Activity activity;
 
-    public ListViewHistoryAdapter(Activity activity, int resource, ArrayList<History> list) {
-        super(activity, resource, list);
+    public ListViewHistoryAdapter(Activity activity, int resource, ArrayList<HistoryNew> list) {
+        super(activity,resource,list);
         this.activity = activity;
         this.resourceId = resource;
         this.list = list;
     }
 
     @Nullable
-    public History getItem(History position) {
-        return position;
+    public HistoryNew getItem(int position) {
+
+        return list.get(position);
     }
 
     @Override
@@ -57,16 +57,16 @@ public class ListViewHistoryAdapter extends ArrayAdapter<History>{
             rowView = inflater.inflate(resourceId,parent,false);
         }
 
-        History history = list.get(position);
+        HistoryNew historyNew =  getItem(position);
 
         TextView tvDate = (TextView) rowView.findViewById(R.id.tvHistoryDate);
         TextView tvTimeIn = (TextView) rowView.findViewById(R.id.tvHistoryTimeIn);
         TextView tvTimeOut = (TextView) rowView.findViewById(R.id.tvHistoryTimeOut);
         TextView tvTime = (TextView) rowView.findViewById(R.id.tvHistoryTime);
-        tvDate.setText(history.getDate());
-        tvTimeIn.setText(history.getTimeIn());
-        tvTimeOut.setText(history.getTimeOut());
-        tvTime.setText(history.getTime());
+        tvDate.setText(historyNew.getDate());
+        tvTimeIn.setText(historyNew.getTimeIn());
+        tvTimeOut.setText(historyNew.getTimeOut());
+        tvTime.setText(historyNew.getHours());
         return rowView;
     }
 }

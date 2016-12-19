@@ -2,7 +2,6 @@ package com.oppo.sfamanagement.parsers;
 
 import android.text.format.DateFormat;
 
-import com.oppo.sfamanagement.model.History;
 import com.oppo.sfamanagement.model.HistoryChild;
 import com.oppo.sfamanagement.model.HistoryNew;
 
@@ -14,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by allsmartlt218 on 16-12-2016.
@@ -31,19 +31,6 @@ public class HistoryListParser {
         this.response = response;
     }
 
-    private String dateCreater(String timeStamp){
-        SimpleDateFormat simpleDateFormat =new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-        Date timeIn = new Date();
-        try
-        {
-            timeIn = simpleDateFormat.parse(timeStamp);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        Calendar mCalendar = Calendar.getInstance();
-        mCalendar.setTimeInMillis(timeIn.getTime());
-        return DateFormat.format("dd-MMM-yy", mCalendar).toString();
-    }
     public ArrayList Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
@@ -53,11 +40,35 @@ public class HistoryListParser {
                     JSONObject childOject = arrayParent.getJSONObject(i);
                     if (childOject.has("estimatedStartDate")) {
                         history = new HistoryNew();
+                        Date timeIn = null;
+                        SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+
                         String timeStamp = childOject.getString("estimatedStartDate");
-                        String date = dateCreater(timeStamp);
-                        history.setDate(date);
-                        //history.setStartDate(childOject.getString("estimatedStartDate"));
+                        Calendar mCalendar = Calendar.getInstance();
+                        try
+                        {
+                            timeIn = simpleDateFormat.parse(timeStamp.replaceAll("Z$","+0000"));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        mCalendar.setTime(timeIn);
+                        history.setDate(DateFormat.format("dd-MMM-yy", mCalendar).toString());
+                        history.setTimeIn(DateFormat.format("h:mm",mCalendar).toString());
+                        history.setStartDate(childOject.getString("estimatedStartDate"));
                         if (childOject.has("estimatedCompletionDate")) {
+                            String lastUpdatedTimestamp = childOject.getString("estimatedCompletionDate");
+                            Date timeOut = null;
+                            try
+                            {
+                                timeOut = simpleDateFormat.parse(lastUpdatedTimestamp.replaceAll("$",""));
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                            mCalendar.setTime(timeOut);
+                            history.setTimeOut(DateFormat.format("hh:mm", mCalendar).toString());
+                            long millis = timeOut.getTime()- timeIn.getTime();
+                            history.setHours(String.format("%02dh %02dm", TimeUnit.MILLISECONDS.toHours(millis),
+                                    TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))));
                             history.setEndDate(childOject.getString("estimatedCompletionDate"));
                         }
                     }
@@ -67,7 +78,18 @@ public class HistoryListParser {
                             JSONObject childObject2 = childArray.getJSONObject(j);
                             if (childObject2.has("fromDate")) {
                                 historyChild = new HistoryChild();
-                                historyChild.setFromDate(childObject2.getString("fromDate"));
+                                SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+                                String fromDate = childObject2.getString("fromDate");
+                                Calendar mCalendar = Calendar.getInstance();
+                                Date fDate = null;
+                                try {
+                                    fDate = simpleDateFormat.parse(fromDate.replaceAll("Z$","+0000"));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                mCalendar.setTime(fDate);
+                                historyChild.setFromDate(DateFormat.format("hh:mm",mCalendar).toString());
+                                //historyChild.setFromDate(childObject2.getString("fromDate"));
                                 if(childObject2.has("comments")) {
                                     historyChild.setComments(childObject2.getString("comments"));
                                     childArrayList.add(historyChild);
@@ -86,4 +108,9 @@ public class HistoryListParser {
         }
 
     }
+
+    /*private String getTimeStamp(String timeStampMain) {
+        String timeStamp = timeStampMain.replace('T',' ');
+        return timeStamp;
+    }*/
 }

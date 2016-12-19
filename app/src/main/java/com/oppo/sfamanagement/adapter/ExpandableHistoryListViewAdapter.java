@@ -1,8 +1,7 @@
+/*
 package com.oppo.sfamanagement.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +11,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.oppo.sfamanagement.R;
-import com.oppo.sfamanagement.model.DynamicElementModel;
-import com.oppo.sfamanagement.model.History;
 import com.oppo.sfamanagement.model.HistorySublist;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
+*/
 /**
  * Created by allsmartlt218 on 07-12-2016.
- */
+ *//*
+
 
 public class ExpandableHistoryListViewAdapter extends BaseExpandableListAdapter {
 
@@ -115,3 +113,4 @@ public class ExpandableHistoryListViewAdapter extends BaseExpandableListAdapter 
         return true;
     }
 }
+*/
