@@ -5,13 +5,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class SqliteHelper extends SQLiteOpenHelper {
-	private static final String DATABASE_NAME = "geofencing.db";
+	private static final String DATABASE_NAME = "attendancetracker.db";
 	private static final int DATABASE_VERSION = 1;
-	public static final String TABLE_EVENTS = "events";
+	public static final String TABLE_TIMEINOUT = "tblTimeInOut";
 	public static final String COLUMN_ID = "_id";
-	public static final String COLUMN_EVENT_DATE = "event_date";
-	public static final String COLUMN_EVENT_TYPE = "event_type";
-	public static final String COLUMN_PLACE_NAME = "place_name";
+	public static final String COLUMN_USERNAME = "username";
+	public static final String COLUMN_CLOCKDATE = "clockDate";
+	public static final String COLUMN_ACTIONTYPE = "actionType";
+	public static final String COLUMN_COMMENTS = "comments";
+	public static final String COLUMN_LATITUDE = "latitude";
+	public static final String COLUMN_LONGITUDE = "longitude";
+	public static final String COLUMN_ACTIONIMAGE = "actionImage";
+	public static final String COLUMN_ISPHUSHED = "isPushed";
+
 	protected SQLiteDatabase database;
 	protected Context context;
 
@@ -27,16 +33,17 @@ public class SqliteHelper extends SQLiteOpenHelper {
 	}
 
 	protected void createEventsTable() {
-		String sql = "CREATE TABLE '" + SqliteHelper.TABLE_EVENTS
+		String sql = "CREATE TABLE '" + SqliteHelper.TABLE_TIMEINOUT
 				+ "' ( '_id' INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ "'event_date' DATETIME," + "'event_type' VARCHAR ( 200 ),"
-				+ "'place_name' VARCHAR ( 200 ))";
+				+ "'"+COLUMN_CLOCKDATE+"' DATETIME," + "'"+COLUMN_USERNAME+"' VARCHAR ( 100 ),'"+COLUMN_ACTIONTYPE+"' VARCHAR ( 100 ),"
+				+ "'"+COLUMN_COMMENTS+"' VARCHAR ( 100 ), '"+COLUMN_LATITUDE+"' VARCHAR ( 100 )," + "'"+COLUMN_LONGITUDE+"' VARCHAR ( 100 ),"
+				+ "'"+COLUMN_ACTIONIMAGE+"' VARCHAR ( 100 ), '"+COLUMN_ISPHUSHED+"' VARCHAR ( 100 ))";
 		database.execSQL(sql);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENTS);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_TIMEINOUT);
 		onCreate(db);
 	}
 }

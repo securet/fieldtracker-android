@@ -6,12 +6,16 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.oppo.sfamanagement.model.TimeInOutDetails;
+
 import java.util.ArrayList;
 
 public class EventDataSource {
 	private String[] allColumns = { SqliteHelper.COLUMN_ID,
-			SqliteHelper.COLUMN_EVENT_TYPE, SqliteHelper.COLUMN_EVENT_DATE,
-			SqliteHelper.COLUMN_PLACE_NAME, };
+			SqliteHelper.COLUMN_USERNAME, SqliteHelper.COLUMN_CLOCKDATE,
+			SqliteHelper.COLUMN_ACTIONTYPE, SqliteHelper.COLUMN_COMMENTS,
+			SqliteHelper.COLUMN_LATITUDE, SqliteHelper.COLUMN_LONGITUDE,
+			SqliteHelper.COLUMN_ACTIONIMAGE,SqliteHelper.COLUMN_ISPHUSHED, };
 	private Context context;
 	protected SQLiteDatabase database;
 	protected SqliteHelper dbHelper;
@@ -35,22 +39,27 @@ public class EventDataSource {
 		dbHelper.close();
 	}
 
-	public void create(String type, String date, String placeName) {
+	public void insertTimeInOutDetails(TimeInOutDetails data) {
 		ContentValues values = new ContentValues();
-		values.put(SqliteHelper.COLUMN_EVENT_TYPE, type);
-		values.put(SqliteHelper.COLUMN_EVENT_DATE, date);
-		values.put(SqliteHelper.COLUMN_PLACE_NAME, placeName);
-		database.insert(SqliteHelper.TABLE_EVENTS, null, values);
+		values.put(SqliteHelper.COLUMN_USERNAME, data.getUsername());
+		values.put(SqliteHelper.COLUMN_CLOCKDATE, data.getClockDate());
+		values.put(SqliteHelper.COLUMN_ACTIONTYPE, data.getActionType());
+		values.put(SqliteHelper.COLUMN_COMMENTS, data.getComments());
+		values.put(SqliteHelper.COLUMN_LATITUDE, data.getLatitude());
+		values.put(SqliteHelper.COLUMN_LONGITUDE, data.getLongitude());
+		values.put(SqliteHelper.COLUMN_ACTIONIMAGE, data.getActionImage());
+		values.put(SqliteHelper.COLUMN_ISPHUSHED, data.getIsPushed());
+		database.insert(SqliteHelper.TABLE_TIMEINOUT, null, values);
 	}
 
-	public ArrayList<Event> getEvents() {
-		ArrayList<Event> list = new ArrayList<Event>();
-		String orderBy = SqliteHelper.COLUMN_EVENT_DATE + " DESC";
-		Cursor cursor = database.query(SqliteHelper.TABLE_EVENTS, allColumns,
+	public ArrayList<TimeInOutDetails> getTimeInOutDetails() {
+		ArrayList<TimeInOutDetails> list = new ArrayList<TimeInOutDetails>();
+		String orderBy = SqliteHelper.COLUMN_CLOCKDATE + " ASC";
+		Cursor cursor = database.query(SqliteHelper.TABLE_TIMEINOUT, allColumns,
 				null, null, null, null, orderBy);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-//			list.add(Event.fromCursor(cursor));
+			list.add(TimeInOutDetails.fromCursor(cursor));
 			cursor.moveToNext();
 		}
 		// make sure to close the cursor

@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,7 +21,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appdatasearch.GetRecentContextCall;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -49,14 +48,12 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.oppo.sfamanagement.database.API;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.CalenderUtils;
-import com.oppo.sfamanagement.database.EventDataSource;
-import com.oppo.sfamanagement.database.MultipartUtility;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.database.ShiftTimeView;
 import com.oppo.sfamanagement.database.StringUtils;
+import com.oppo.sfamanagement.model.Response;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
 import com.oppo.sfamanagement.webmethods.LoaderMethod;
 import com.oppo.sfamanagement.webmethods.LoaderServices;
@@ -64,10 +61,7 @@ import com.oppo.sfamanagement.webmethods.ParameterBuilder;
 import com.oppo.sfamanagement.webmethods.Services;
 import com.oppo.sfamanagement.webmethods.UrlBuilder;
 
-import org.json.JSONObject;
-
 import java.io.File;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,6 +94,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		buildGoogleApiClient();
 
 		((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, ""); // value to store
+		((MainActivity) getActivity()).preferences.saveBoolean(Preferences.INLOCATION, isUserInLoacation());
 		((MainActivity) getActivity()).preferences.commit();
 		tvTimeInOut = (TextView) rootView.findViewById(R.id.tvTimeInOut);
 		tvTimeInOutLocation = (TextView) rootView.findViewById(R.id.tvTimeInOutLocation);
@@ -151,34 +146,57 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		}
 	}
 
+	private double distance(double lat1, double lon1, double lat2, double lon2) {
+		double theta = lon1 - lon2;
+		double dist = Math.sin(deg2rad(lat1))
+				* Math.sin(deg2rad(lat2))
+				+ Math.cos(deg2rad(lat1))
+				* Math.cos(deg2rad(lat2))
+				* Math.cos(deg2rad(theta));
+		dist = Math.acos(dist);
+		dist = rad2deg(dist);
+		dist = dist * 60 * 1.1515;
+		return (dist);
+	}
+
+	private double deg2rad(double deg) {
+		return (deg * Math.PI / 180.0);
+	}
+
+	private double rad2deg(double rad) {
+		return (rad * 180.0 / Math.PI);
+	}
+	private boolean isUserInLoacation(){
+		double lat1 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.USERLATITUDE,""));
+		double lon1 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.USERLONGITUDE,""));
+		double lat2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LATITUDE,""));
+		double lon2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LONGITUDE,""));
+		Double distance = distance(lat1, lon1, lat2, lon2);
+		int DistanceInRadius ;
+		DistanceInRadius  = (int)deg2rad(distance)*1000;
+		return DistanceInRadius<=StringUtils.getInt(((MainActivity) getActivity()).preferences.getString(Preferences.SITE_RADIUS,""));
+
+	}
 	@Override
 	public void onLoadFinished(Loader loader, Object data) {
-		((MainActivity)getActivity()).showHideProgressForLoder(true);
-		if(TextUtils.isEmpty(((MainActivity)getActivity()).preferences.getString(Preferences.LOCATIONSTATUS, "")))
-		{
-			if (((MainActivity) getActivity()).preferences.getBoolean(Preferences.INLOCATION, false) ) {
-				tvTimeInOutLocation.setText("at " + ((MainActivity) getActivity()).preferences.getString(Preferences.SITENAME, ""));
-				((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "False"); // value to store
-				((MainActivity) getActivity()).preferences.commit();
-				UpdateTimeInOut("");
-			} else {
-				tvTimeInOutLocation.setText("(Not at location)");
-				((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "True"); // value to store
-				((MainActivity) getActivity()).preferences.commit();
-				UpdateTimeInOut("");
+		((MainActivity) getActivity()).showHideProgressForLoder(true);
+		switch (loader.getId()) {
+			case LoaderConstant.TIMEINOUT:
+				if (data != null && data instanceof Response) {
+					String strDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
+					if (((Response) data).getResponce().equalsIgnoreCase("Time In")) {
+						((MainActivity)getActivity()).preferences.saveString(Preferences.TIMEINOUTSTATUS,strDate+"TimeIn");
+					}else if (((Response) data).getResponce().equalsIgnoreCase("Time Out")) {
+						((MainActivity)getActivity()).preferences.saveString(Preferences.TIMEINOUTSTATUS,strDate+"TimeOut");
+					}
+					((MainActivity)getActivity()).preferences.commit();
+				}
+				UpdateLoginLogOut();
+				Toast.makeText(getActivity(),((Response) data).getResponceMessage(),Toast.LENGTH_LONG).show();
+				break;
 			}
-		}
 
-			String strDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
-			if(((MainActivity)getActivity()).preferences.getString(Preferences.TIMEINOUTSTATUS,strDate+"Pending").equalsIgnoreCase(strDate+"TimeIn")) {
-				tvTimeInOut.setText("Time Out");
-			}else{
-				tvTimeInOut.setText("Time In");
-			}
-		UpdateLoginLogOut();
-		if (isAdded()) {
 			getLoaderManager().destroyLoader(loader.getId());
-		}
 	}
 
 	@Override
@@ -438,20 +456,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		startActivityForResult(i,REQ_CAMERA);
 	}
 	private final static int REQ_CAMERA =1003;
-	private File getOutputPhotoFile()
-	{
-		File directory = new File(Environment.getExternalStoragePublicDirectory(
-				Environment.DIRECTORY_PICTURES), getContext().getPackageName());
-		if (!directory.exists())
-		{
-			if (!directory.mkdirs())
-			{
-				return null;
-			}
-		}
-
-		return new File(directory.getPath() + File.separator + "IMG_"+ System.currentTimeMillis() + ".jpg");
-	}
 	private boolean checkCameraPermission() {
 		// Ask for permission if it wasn't granted yet
 		return (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.CAMERA)
@@ -496,9 +500,11 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 			strComments = "Time In";
 		}
 		if(!TextUtils.isEmpty(strActionType)) {
+
 			Bundle b = new Bundle();
 			b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.TIME_IN_OUT));
 			b.putString(AppsConstant.METHOD, AppsConstant.POST);
+			b.putString(AppsConstant.REASON, strComments);
 			b.putString(AppsConstant.PARAMS, ParameterBuilder.getTimeinOut(((MainActivity) getActivity()).preferences, strComments, strActionType, strFile));
 			getActivity().getLoaderManager().initLoader(LoaderConstant.TIMEINOUT, b, MapFragment.this).forceLoad();
 		}
@@ -610,109 +616,4 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 	}
 
-
-
-	private class UserLoginTask extends AsyncTask<String, Void, String> {
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			((MainActivity)getActivity()).pd.show();
-		};
-
-		@Override
-		protected String doInBackground(String... params) {
-			String response = "";
-			try {
-				MultipartUtility multipart ;
-
-				// In your case you are not adding form data so ignore this
-                /*This is to add parameter values */
-
-//				if(TextUtils.isEmpty( ((MainActivity)getActivity()).preferences.getString("TokenCode", ""))){
-//					// Login
-//					multipart= new MultipartUtility(API.GetLoginRest(params[0], params[1]), "UTF-8");
-//					multipart.addFormField("site.siteId",((MainActivity) getActivity()).preferences.getString("siteId","21364"));
-//					multipart.addFormField("serviceType.serviceTypeId","16");
-//					multipart.addFormField("description","Time In");
-//					multipart.addFormField("issueType.issueTypeId","29");
-//					multipart.addFormField("latitude",((MainActivity)getActivity()).preferences.getString("userlat",""));
-//					multipart.addFormField("longitude",((MainActivity)getActivity()).preferences.getString("userlong",""));
-//					multipart.addFormField("severity.enumerationId","MAJOR");
-//				}else{
-//					// logout
-//					multipart= new MultipartUtility(API.GetLogOutRest(params[0], params[1]), "UTF-8");
-//					multipart.addFormField("ticketId",((MainActivity)getActivity()).preferences.getString("TokenCode",""));
-//					multipart.addFormField("status.enumerationId","CLOSED");
-//					multipart.addFormField("description","Time Out");
-//				}
-//
-//
-//
-//                /*This is to add file content*/
-////				for (int i = 0; i < myFileArray.size(); i++) {
-//					multipart.addFilePart("ticketAttachments",new File(strFile));
-////				}
-//
-//				for (String line : multipart.finish()) {
-//					response = line;
-//				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				response = "";
-			}
-			return response;
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			((MainActivity)getActivity()).pd.dismiss();
-			if(API.DEBUG)
-				System.out.println("The Message Is: " + result);
-			if (!(result.equals("No Internet")) || !(result.equals(""))) {
-				try {
-					String strDate = "";
-					if(result.toString().contains("status") && (new JSONObject(result).getString("status").toString().equals("success")))
-					{
-						String ticketId = "";
-						String transitionName = "Time Out";
-						if(TextUtils.isEmpty( ((MainActivity)getActivity()).preferences.getString("TokenCode", ""))) {
-							// Login
-							JSONObject data = new JSONObject(result);
-							JSONObject obj = data.getJSONObject("data");
-							ticketId = obj.getString("ticketId");
-							transitionName = "Time In";
-							strDate = DateFormat.format("dd/M/yyyy HH:mm:ss",new Date()).toString();
-						}
-						((MainActivity) getActivity()).preferences.saveString("TokenCode", ticketId); // value to store
-						((MainActivity) getActivity()).preferences.commit();
-						((MainActivity) getActivity()).preferences.saveString("LoginDate", strDate); // value to store
-						((MainActivity) getActivity()).preferences.commit();
-						String date = DateFormat.format("yyyy-MM-dd HH:mm:ss",new Date()).toString();
-						EventDataSource eds = new EventDataSource(getActivity());
-						eds.create(transitionName, date,  ((MainActivity)getActivity()).preferences.getString("SiteName", ""));
-						eds.close();
-					}else{
-						Toast.makeText(getActivity(), ""+new JSONObject(result).getString("messages").toString(), Toast.LENGTH_SHORT).show();
-					}
-
-
-
-				} catch (Exception e) {
-					if(API.DEBUG){
-						e.printStackTrace();
-					}
-
-					Toast.makeText(getActivity(),
-							"Error in response. Please try again.",
-							Toast.LENGTH_SHORT).show();
-				}
-			} else {
-				Toast.makeText(getActivity(),
-						"Error in response. Please try again.",
-						Toast.LENGTH_SHORT).show();
-			}
-			UpdateLoginLogOut();
-		}
-
-	}
 }
