@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 	static public boolean geofencesAlreadyRegistered = false;
 	public Preferences preferences;
-	ProgressDialog pd;
 	public final static int  MAP =0,LIST=1,MORE=2;
 	public int openPage = MAP;
 	LinearLayout llAttendance,llHistory,llMore;
@@ -58,9 +57,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			actionBar.hide();
 		}
 		preferences = new Preferences(MainActivity.this);
-		pd = new ProgressDialog(MainActivity.this);
-		pd.setMessage("Please wait...");
-		pd.setCancelable(false);
 
 		Bundle b = new Bundle();
 		b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails(Services.STORE_DETAIL,preferences.getString(Preferences.PARTYID,"")));
@@ -189,85 +185,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		}
 	}
 
-//
-//	private class UserSiteTask extends AsyncTask<String, Void, String> {
-//		@Override
-//		protected void onPreExecute() {
-//			super.onPreExecute();
-//			pd.show();
-//		}
-//
-//		@Override
-//		protected String doInBackground(String... params) {
-//			String response = "";
-//			try {
-//				response = API.GetSitesRest(params[0], params[1]);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				response = "";
-//			}
-//			return response;
-//		}
-//
-//		@Override
-//		protected void onPostExecute(String result) {
-//			pd.dismiss();
-//			if(API.DEBUG)
-//				System.out.println("The Message Is: " + result);
-//			if (!(result.equals("No Internet")) || !(result.equals(""))) {
-//				try {
-//
-//					if(result.toString().contains("status") && (new JSONObject(result).getString("status").toString().equals("success")))
-//					{
-//						JSONObject data = new JSONObject(result);
-//
-//						JSONArray objArray = data.getJSONArray("data");
-//						for(int i=0;i<objArray.length();i++)
-//						{
-//							JSONObject obj = objArray.getJSONObject(i);
-//							String siteId = obj.getString("siteId");
-//							String name = obj.getString("name");
-//							String latitude = obj.getString("latitude");
-//							String longitude = obj.getString("longitude");
-//
-//							preferences.saveString(Preferences.SITEID, siteId); // value to store
-//							preferences.commit();
-//							preferences.saveString(Preferences.SITENAME, name); // value to store
-//							preferences.commit();
-//							//17.464755, 78.481333
-//							preferences.saveString(Preferences.LATITUDE, latitude); // value to store
-//							preferences.commit();
-//							preferences.saveString(Preferences.LONGITUDE, longitude); // value to store
-//							preferences.commit();
-//						}
-//					}else{
-//						Toast.makeText(getApplicationContext(), ""+new JSONObject(result).getString("messages").toString(), Toast.LENGTH_SHORT).show();
-//					}
-//
-//
-//
-//				} catch (Exception e) {
-//					if(API.DEBUG){
-//						e.printStackTrace();
-//					}
-//
-//					Toast.makeText(getApplicationContext(),
-//							"Error in response. Please try again.",
-//							Toast.LENGTH_SHORT).show();
-//				}
-//			} else {
-//				Toast.makeText(getApplicationContext(),
-//						"Error in response. Please try again.",
-//						Toast.LENGTH_SHORT).show();
-//			}
-//			tvSiteName.setText(preferences.getString(Preferences.SITENAME,""));
-//			Fragment f = new MapFragment();
-//			FragmentManager fragmentManager = getSupportFragmentManager();
-//			fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
-//			fragmentManager.executePendingTransactions();
-//		}
-//
-//	}
 	public void Logout()
 	{
 		preferences.saveBoolean(Preferences.ISLOGIN, false); // value to store

@@ -26,6 +26,9 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.oppo.sfamanagement.database.AppsConstant;
+import com.oppo.sfamanagement.database.Preferences;
+import com.oppo.sfamanagement.database.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,9 +65,10 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 		}
 
 		Log.d(MainActivity.TAG, "Registering Geofences");
-
+		Preferences preferences = new Preferences(this);
 		HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore
-				.getInstance("All Smart TechnoSolution", 17.464343, 78.481538,60).getSimpleGeofences();
+				.getInstance(preferences.getString(Preferences.SITENAME,""), StringUtils.getDouble(preferences.getString(Preferences.LATITUDE,""))
+						, StringUtils.getDouble(preferences.getString(Preferences.LONGITUDE,"")),StringUtils.getInt(preferences.getString(Preferences.SITE_RADIUS, AppsConstant.DEFAULTRADIUS))).getSimpleGeofences();
 
 		GeofencingRequest.Builder geofencingRequestBuilder = new GeofencingRequest.Builder();
 		for (Map.Entry<String, SimpleGeofence> item : geofences.entrySet()) {
@@ -112,17 +116,6 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 		// Ask for permission if it wasn't granted yet
 		return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED );
 	}
-//	private final int REQ_PERMISSION = 1000;
-
-	// Asks for permission
-//	private void askPermission() {
-//		Log.d(MainActivity.TAG, "askPermission()");
-//		ActivityCompat.requestPermissions(
-//				getApplicationContext(),
-//				new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
-//				REQ_PERMISSION
-//		);
-//	}
 
 	protected void startLocationUpdates() {
 		if ( checkPermission() ) {
