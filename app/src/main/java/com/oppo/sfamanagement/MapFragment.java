@@ -451,7 +451,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	}
 	private void OpenCamera(){
 		Intent i = new Intent(getActivity(), CameraActivity.class);
-		i.putExtra("camera_key",1);
+		i.putExtra("camera_key",AppsConstant.FRONT_CAMREA_OPEN);
 		i.putExtra("purpose","For Photo");
 		startActivityForResult(i,REQ_CAMERA);
 	}
@@ -469,7 +469,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 			if (requestCode == REQ_CAMERA)
 			{
 				String strFile = data.getStringExtra("image_photo");
-				if(!strFile.equals(null) && !strFile.equals("cancel")) {
+				if(strFile.length() != 0) {
 					Toast.makeText(getContext(),strFile,Toast.LENGTH_SHORT).show();
 					Log.d("path",strFile);
 					UpdateTimeInOut(strFile);

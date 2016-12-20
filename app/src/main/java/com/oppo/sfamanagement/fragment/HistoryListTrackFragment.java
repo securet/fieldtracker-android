@@ -51,12 +51,15 @@ public class HistoryListTrackFragment extends Fragment {
         timeIn.setText(historyNew.getTimeIn());
         timeOut.setText(historyNew.getTimeOut());
         hour.setText(historyNew.getHours());
-        ArrayList<HistoryChild> historyChildList = historyNew.getHistoryChildren();
+       /* ArrayList<HistoryChild> historyChildList = historyNew.getHistoryChildren();
         System.out.println(historyChildList);
         int position = getArguments().getInt("position");
         HistoryChild historyChild = historyChildList.get(position);
+        System.out.println(historyChild);
         HistoryChild historyChild2 = historyChildList.get(position+1);
+        System.out.println(historyChild2);
         HistoryChild historyChild3 = historyChildList.get(position+2);
+        System.out.println(historyChild3);
         TextView tv = (TextView) view.findViewById(R.id.tvVerticleLine);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout l1 = (LinearLayout) view.findViewById(R.id.redItem1);
@@ -72,10 +75,10 @@ public class HistoryListTrackFragment extends Fragment {
         layoutParams2.setMargins(30,DynamicElement.findMarginTop(historyChild2.getFromDate(),historyChild3.getFromDate()),0,0);
         l2.setLayoutParams(layoutParams2);
 
-        LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        *//*LinearLayout.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout l3 = (LinearLayout) view.findViewById(R.id.redItem2);
         layoutParams3.setMargins(30,DynamicElement.findMarginTop("11:56","03:01"),0,0);
-        l3.setLayoutParams(layoutParams3);
+        l3.setLayoutParams(layoutParams3);*//*
 
         LinearLayout.LayoutParams layoutParams4 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout l4 = (LinearLayout) view.findViewById(R.id.greenItem2);
@@ -84,11 +87,11 @@ public class HistoryListTrackFragment extends Fragment {
         layoutParams4.setMargins(30,DynamicElement.findMarginTop(historyChild3.getFromDate(),historyNew.getTimeOut()),0,0);
         l4.setLayoutParams(layoutParams4);
 
-        LinearLayout.LayoutParams layoutParams5 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+       *//* LinearLayout.LayoutParams layoutParams5 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         LinearLayout l5 = (LinearLayout) view.findViewById(R.id.grayItem);
         layoutParams5.setMargins(30,DynamicElement.findMarginTop("03:23","06:41"),0,0);
         l5.setLayoutParams(layoutParams5);
         height = DynamicElement.findMarginTop("10:45","11:32") + DynamicElement.findMarginTop("11:32","11:56") + DynamicElement.findMarginTop("11:56","03:01") + DynamicElement.findMarginTop("03:01","03:23" + 80                                     );
-        return view;
+        */return view;
     }
 }

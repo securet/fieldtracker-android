@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -64,11 +66,12 @@ public class RetakeFragment extends Fragment {
                 bundle.putString(AppsConstant.FILE, imagePath);
                 bundle.putString(AppsConstant.FILEPURPOSE,imagePurpose);
                 getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,RetakeFragment.this).forceLoad();*/
-                Intent i = new Intent();
-                i.putExtra("response",imagePath);
-                i.putExtra("image_purpose",imagePurpose);
-                getActivity().setResult(Activity.RESULT_OK,i);
-                getActivity().finish();
+                        Intent i = new Intent();
+                        i.putExtra("response",imagePath);
+                        i.putExtra("image_purpose",imagePurpose);
+                        getActivity().setResult(Activity.RESULT_OK,i);
+                        getActivity().finish();
+
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +87,8 @@ public class RetakeFragment extends Fragment {
         });
         return view;
     }
+
+
 
     private Bitmap rotateBmpBack(Bitmap bitmap) {
         Matrix m = new Matrix();

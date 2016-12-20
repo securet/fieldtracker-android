@@ -24,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import static com.oppo.sfamanagement.database.AppsConstant.FRONT_CAMREA_OPEN;
+
 /**
  * Created by allsmartlt218 on 13-12-2016.
  */
@@ -45,12 +47,12 @@ public class CameraFragment extends Fragment{
         View view = inflater.inflate(R.layout.camera_fragment,container,false);
         surfaceView = (FrameLayout) view.findViewById(R.id.flLivePreview);
         imageButton = (ImageButton) view.findViewById(R.id.ibPhotoCapture);
-        final int cameraForB = getActivity().getIntent().getIntExtra("camera_key",AddPromoterFragment.FRONT_CAMREA_OPEN);
+        final int cameraForB = getActivity().getIntent().getIntExtra("camera_key",FRONT_CAMREA_OPEN);
         final String purpose = getActivity().getIntent().getStringExtra("purpose");
         pictureCallback = new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-                if (cameraForB == AddPromoterFragment.FRONT_CAMREA_OPEN) {
+                if (cameraForB == FRONT_CAMREA_OPEN) {
                     pic = getOutputMediaFile(MEDIA_TYPE_IMAGE_FRONT);
                     if (pic != null) {
                         try {
@@ -107,7 +109,7 @@ public class CameraFragment extends Fragment{
             }
         });
         if (hasCamera(getContext())) {
-            if(cameraForB == AddPromoterFragment.FRONT_CAMREA_OPEN) {
+            if(cameraForB == FRONT_CAMREA_OPEN) {
                 camera = getCameraInstace();
             } else {
                 camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);

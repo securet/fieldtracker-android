@@ -5,6 +5,8 @@ import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -33,17 +35,19 @@ import com.oppo.sfamanagement.webmethods.UrlBuilder;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+import static com.oppo.sfamanagement.database.AppsConstant.BACK_CAMREA_OPEN;
+
 /**
  * Created by allsmartlt218 on 02-12-2016.
  */
 
 public class AddPromoterFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Object> {
     EditText fN,lN,ph,eAdd,address;
-    public static final int FRONT_CAMREA_OPEN = 1;
-    public static final int BACK_CAMREA_OPEN = 2;
     ImageView ivPhoto,ivAdhar,ivAddressProof;
     TextView tvStoreAssignment,seAssignment;
     int storeId ;
+    Handler handler;
     Preferences preferences;
     ArrayList<Store> list;
     private int i = 0;
@@ -61,6 +65,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
         View view = inflater.inflate(R.layout.fragment_add_promoter,container,false);
         ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
         ivAdhar = (ImageView) view.findViewById(R.id.ivAadhar);
+        handler = new Handler(Looper.getMainLooper());
         ivAddressProof = (ImageView) view.findViewById(R.id.ivAddressProof);
         fN = (EditText) view.findViewById(R.id.etPFN);
         lN = (EditText) view.findViewById(R.id.etPLN);
@@ -132,7 +137,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             if (requestCode == AppsConstant.IMAGE_PHOTO) {
                 String responseValue = data.getStringExtra("response");
                 String purpose = data.getStringExtra("image_purpose");
@@ -143,38 +148,48 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                     bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
                     bundle.putString(AppsConstant.FILE, responseValue);
                     bundle.putString(AppsConstant.FILEPURPOSE,purpose);
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
-                    image[0] = responseValue;
+                    getActivity().getLoaderManager().restartLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
+                   // image[0] = responseValue;
                     ivPhoto.setImageResource(R.drawable.photo_tick);
                     ivPhoto.setEnabled(false);
                 }
             } else if (requestCode == AppsConstant.IMAGE_AADHAR) {
-                String responseValue = data.getStringExtra("response");
-                String purpose = data.getStringExtra("image_purpose");
+                final String responseValue = data.getStringExtra("response");
+                final String purpose = data.getStringExtra("image_purpose");
                 if (!responseValue.equals(null)) {
                     /*Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
                     Log.d("path", responseValue);*/
-                    Bundle bundle = new Bundle();
-                    bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
-                    bundle.putString(AppsConstant.FILE, responseValue);
-                    bundle.putString(AppsConstant.FILEPURPOSE,purpose);
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
-                    image[1] = responseValue;
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
+                            bundle.putString(AppsConstant.FILE, responseValue);
+                            bundle.putString(AppsConstant.FILEPURPOSE,purpose);
+                            getActivity().getLoaderManager().restartLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
+                        }
+                    });
+                  //  image[1] = responseValue;
                     ivAdhar.setImageResource(R.drawable.aadhartick);
                     ivAdhar.setEnabled(false);
                 }
             } else if (requestCode == AppsConstant.IMAGE_ADDRESS_PROOF) {
-                String responseValue = data.getStringExtra("response");
-                String purpose = data.getStringExtra("image_purpose");
+                final String responseValue = data.getStringExtra("response");
+                final String purpose = data.getStringExtra("image_purpose");
                 if (!responseValue.equals(null)) {
                     /*Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
                     Log.d("path", responseValue);*/
-                    Bundle bundle = new Bundle();
-                    bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
-                    bundle.putString(AppsConstant.FILE, responseValue);
-                    bundle.putString(AppsConstant.FILEPURPOSE,purpose);
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
-                    image[2] = responseValue;
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
+                            bundle.putString(AppsConstant.FILE, responseValue);
+                            bundle.putString(AppsConstant.FILEPURPOSE,purpose);
+                            getActivity().getLoaderManager().restartLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
+                        }
+                    });
+                  //  image[2] = responseValue;
                     ivAddressProof.setImageResource(R.drawable.id_card_tick);
                     ivAddressProof.setEnabled(false);
                 }
@@ -191,7 +206,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 bundle.putInt("camera_key",FRONT_CAMREA_OPEN);
                 bundle.putString("purpose","For Photo"); */
                 Intent i = new Intent(getActivity(), CameraActivity.class);
-                i.putExtra("camera_key",FRONT_CAMREA_OPEN);
+                i.putExtra("camera_key",AppsConstant.FRONT_CAMREA_OPEN);
                 i.putExtra("purpose","For Photo");
                 startActivityForResult(i,AppsConstant.IMAGE_PHOTO);
                 //((Activity) getActivity()).overridePendingTransition(0,0);
@@ -260,9 +275,8 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 break;
         }
 
-        if (isAdded()) {
             getLoaderManager().destroyLoader(loader.getId());
-        }
+
     }
 
     @Override

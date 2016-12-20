@@ -49,6 +49,7 @@ import android.widget.Toast;
 
 import com.oppo.sfamanagement.AutoFitTextureView;
 import com.oppo.sfamanagement.R;
+import com.oppo.sfamanagement.database.AppsConstant;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -423,7 +424,7 @@ public class CameraFragment2 extends Fragment implements View.OnClickListener, A
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
-        cameraForB = getActivity().getIntent().getIntExtra("camera_key",AddPromoterFragment.FRONT_CAMREA_OPEN);
+        cameraForB = getActivity().getIntent().getIntExtra("camera_key", AppsConstant.FRONT_CAMREA_OPEN);
         purpose = getActivity().getIntent().getStringExtra("purpose");
     }
 
@@ -585,7 +586,7 @@ public class CameraFragment2 extends Fragment implements View.OnClickListener, A
                 // Check if the flash is supported.
                 Boolean available = characteristics.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
                 mFlashSupported = available == null ? false : available;
-                if(cameraForB == AddPromoterFragment.FRONT_CAMREA_OPEN) {
+                if(cameraForB == AppsConstant.FRONT_CAMREA_OPEN) {
                     mCameraId = manager.getCameraIdList()[1];
                 } else {
                     mCameraId = manager.getCameraIdList()[0];
@@ -769,7 +770,7 @@ public class CameraFragment2 extends Fragment implements View.OnClickListener, A
      * Initiate a still image capture.
      */
     private void takePicture() {
-        if(cameraForB == AddPromoterFragment.FRONT_CAMREA_OPEN) {
+        if(cameraForB == AppsConstant.FRONT_CAMREA_OPEN) {
             captureStillPicture();
         } else {
             lockFocus();
