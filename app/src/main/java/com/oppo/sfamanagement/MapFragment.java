@@ -180,10 +180,12 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	@Override
 	public void onLoadFinished(Loader loader, Object data) {
 		((MainActivity) getActivity()).showHideProgressForLoder(true);
+		Response response = null;
 		switch (loader.getId()) {
 			case LoaderConstant.TIMEINOUT:
 				if (data != null && data instanceof Response) {
 					String strDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
+					response= (Response) data;
 					if (((Response) data).getResponce().equalsIgnoreCase("Time In")) {
 						((MainActivity)getActivity()).preferences.saveString(Preferences.TIMEINOUTSTATUS,strDate+"TimeIn");
 					}else if (((Response) data).getResponce().equalsIgnoreCase("Time Out")) {
@@ -192,7 +194,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 					((MainActivity)getActivity()).preferences.commit();
 				}
 				UpdateLoginLogOut();
-				Toast.makeText(getActivity(),((Response) data).getResponceMessage(),Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(),response.getResponceMessage(),Toast.LENGTH_LONG).show();
 				break;
 			}
 
@@ -468,7 +470,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQ_CAMERA)
 			{
-				String strFile = data.getStringExtra("image_photo");
+				String strFile = data.getStringExtra("response");
 				if(strFile.length() != 0) {
 					Toast.makeText(getContext(),strFile,Toast.LENGTH_SHORT).show();
 					Log.d("path",strFile);

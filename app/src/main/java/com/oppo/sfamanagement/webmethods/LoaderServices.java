@@ -15,6 +15,7 @@ import com.oppo.sfamanagement.parsers.PromoterUpdateParser;
 import com.oppo.sfamanagement.parsers.StoreDetailParser;
 import com.oppo.sfamanagement.parsers.StoreListParser;
 import com.oppo.sfamanagement.parsers.StoreUpdateParser;
+import com.oppo.sfamanagement.parsers.TimeInOutParser;
 import com.oppo.sfamanagement.parsers.UserDetailParser;
 import com.oppo.sfamanagement.parsers.UserStoreDetailParser;
 
@@ -75,6 +76,9 @@ public class LoaderServices extends CustomAsyncTask
                 return new ImageUploadParser(response).Parse();
             case HISTORY_LIST:
                 return new HistoryListParser(response).Parse();
+            case TIMEINOUT:
+                return new TimeInOutParser(response,AppsConstant.REASON);
+
             default:
                 return  null;
 
