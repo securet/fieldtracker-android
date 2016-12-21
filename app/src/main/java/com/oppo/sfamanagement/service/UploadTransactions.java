@@ -2,7 +2,23 @@ package com.oppo.sfamanagement.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.database.Cursor;
 import android.preference.Preference;
+
+import com.oppo.sfamanagement.database.AppsConstant;
+import com.oppo.sfamanagement.database.EventDataSource;
+import com.oppo.sfamanagement.database.NetworkUtils;
+import com.oppo.sfamanagement.database.Preferences;
+import com.oppo.sfamanagement.database.SqliteHelper;
+import com.oppo.sfamanagement.model.Response;
+import com.oppo.sfamanagement.model.TimeInOutDetails;
+import com.oppo.sfamanagement.parsers.TimeInOutParser;
+import com.oppo.sfamanagement.webmethods.ParameterBuilder;
+import com.oppo.sfamanagement.webmethods.RestHelper;
+import com.oppo.sfamanagement.webmethods.Services;
+import com.oppo.sfamanagement.webmethods.UrlBuilder;
+
+import java.util.ArrayList;
 
 /**
  * Created by allsmartlt218 on 20-12-2016.
@@ -10,15 +26,15 @@ import android.preference.Preference;
 
 public class UploadTransactions extends IntentService {
 
-    private Preference preference;
+    private Preferences preference;
     private static TransactionProcessListner transactionProcessListner;
     private static Transactions currentTransaction=Transactions.NONE;
     private static TransactionSatus currentTransactionSatus=TransactionSatus.NONE;
-    private String date = "";
+    private String response = "";
 
     public enum Transactions{
         NONE,
-        TIMEINOUT
+        TIMEINOUT,
     }
 
     public enum TransactionSatus{
@@ -81,11 +97,46 @@ public class UploadTransactions extends IntentService {
     }
 
     private void uploadTimeInOut() {
+        String result = "";
+        TimeInOutDetails details = null;
+        // get data base
+        EventDataSource dataSource = new EventDataSource(UploadTransactions.this);
+        ArrayList<TimeInOutDetails> detailsArrayList = dataSource.getTimeInOutDetails();
+
+        // upload to server // Asc time // first success than second
+        if(detailsArrayList != (null) && detailsArrayList.size() > 0) {
+            for (TimeInOutDetails d : detailsArrayList) {
+                response = new RestHelper().makeRestCallAndGetResponse(UrlBuilder.getUrl(Services.TIME_IN_OUT),AppsConstant.POST, ParameterBuilder.getTimeinOut(preference,d),preference);
+                Response responseMsg = new TimeInOutParser(response,d.getComments()).Parse();
+                if(responseMsg.getResponceCode().equals("200")) {
+                    dataSource.updateIsPushed(d);
+                } else {
+                    break;
+                }
+            }
+
+        }
+        // update database
 
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        preference = new Preferences(this);
 
+        if(NetworkUtils.isNetworkConnectionAvailable(this)){
+            currentTransaction=Transactions.NONE;
+            currentTransactionSatus=TransactionSatus.START;
+            updateTransactionStatus();
+            uploadTransaction(Transactions.TIMEINOUT);
+            //uploadTransaction(Transactions.BUTTON_UPDATE);
+            currentTransaction=Transactions.NONE;
+            currentTransactionSatus=TransactionSatus.END;
+            updateTransactionStatus();
+        }else{
+
+            if(transactionProcessListner!=null)
+                transactionProcessListner.error(TransactionSatus.ERROR_NO_INTERNETCONNECTION);
+        }
     }
 }

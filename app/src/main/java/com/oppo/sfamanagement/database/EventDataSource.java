@@ -5,10 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.format.DateFormat;
 
 import com.oppo.sfamanagement.model.TimeInOutDetails;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class EventDataSource {
 	private String[] allColumns = { SqliteHelper.COLUMN_ID,
@@ -52,11 +55,14 @@ public class EventDataSource {
 		database.insert(SqliteHelper.TABLE_TIMEINOUT, null, values);
 	}
 
+
 	public ArrayList<TimeInOutDetails> getTimeInOutDetails() {
 		ArrayList<TimeInOutDetails> list = new ArrayList<TimeInOutDetails>();
 		String orderBy = SqliteHelper.COLUMN_CLOCKDATE + " ASC";
+
+		String where = SqliteHelper.COLUMN_ISPHUSHED + " =false";
 		Cursor cursor = database.query(SqliteHelper.TABLE_TIMEINOUT, allColumns,
-				null, null, null, null, orderBy);
+				where, null, null, null, orderBy);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			list.add(TimeInOutDetails.fromCursor(cursor));
@@ -66,4 +72,24 @@ public class EventDataSource {
 		cursor.close();
 		return list;
 	}
+    public void updateIsPushed(TimeInOutDetails d){
+        String where = SqliteHelper.COLUMN_ID + " =" + d.getId();
+        ContentValues values = new ContentValues();
+        values.put(SqliteHelper.COLUMN_ISPHUSHED,"true");
+        database.update(SqliteHelper.TABLE_TIMEINOUT,values,where,null);
+    }
+    public TimeInOutDetails getToday(){
+        Date date = new Date();
+        //SimpleDateFormat format = new SimpleDateFormat();
+        Calendar mCalendar = Calendar.getInstance();
+        mCalendar.setTime(date);
+        String sDate = (String) DateFormat.format("yyyy-MM-dd",mCalendar);
+        String where = "date('" + SqliteHelper.COLUMN_CLOCKDATE + "')" + " = '" +sDate+"'" ;
+        String orderBy = SqliteHelper.COLUMN_CLOCKDATE + " DESC";
+        String limit = " 1";
+        Cursor cursor = database.query(SqliteHelper.TABLE_TIMEINOUT,allColumns,where,null,null,null,orderBy,limit);
+        TimeInOutDetails details = TimeInOutDetails.fromCursor(cursor);
+        cursor.close();
+        return details;
+    }
 }

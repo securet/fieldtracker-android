@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,6 +23,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.appdatasearch.GetRecentContextCall;
+import com.google.android.gms.awareness.snapshot.internal.NetworkStateImpl;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -50,10 +54,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.CalenderUtils;
+import com.oppo.sfamanagement.database.EventDataSource;
+import com.oppo.sfamanagement.database.NetworkUtils;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.database.ShiftTimeView;
 import com.oppo.sfamanagement.database.StringUtils;
 import com.oppo.sfamanagement.model.Response;
+import com.oppo.sfamanagement.model.TimeInOutDetails;
+import com.oppo.sfamanagement.service.UploadTransactions;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
 import com.oppo.sfamanagement.webmethods.LoaderMethod;
 import com.oppo.sfamanagement.webmethods.LoaderServices;
@@ -62,6 +70,11 @@ import com.oppo.sfamanagement.webmethods.Services;
 import com.oppo.sfamanagement.webmethods.UrlBuilder;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,7 +82,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		GoogleApiClient.OnConnectionFailedListener,LocationListener, ResultCallback<Status>, LoaderManager.LoaderCallbacks {
 	protected SupportMapFragment mapFragment;
 	protected GoogleMap map;
+    private Preferences preferences;
 	protected Marker myPositionMarker;
+    protected EventDataSource dataSource;
 	private GoogleApiClient mGoogleApiClient;
 	public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
 	public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 5;
@@ -88,6 +103,8 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
 		View rootView = inflater.inflate(R.layout.fragment_map, container,false);
 		mapFragment = SupportMapFragment.newInstance();
+        dataSource = new EventDataSource(getContext());
+        preferences = new Preferences(getContext());
 		FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 		fragmentTransaction.add(R.id.map_container, mapFragment);
 		fragmentTransaction.commit();
@@ -101,6 +118,17 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		ShiftTimeView stvShiftTime = (ShiftTimeView) rootView.findViewById(R.id.stvShiftTime);
 		llShiftTime = (LinearLayout) rootView.findViewById(R.id.llShiftTime);
 		llLogin_Logout = (LinearLayout) rootView.findViewById(R.id.llLogin_Logout);
+
+        TimeInOutDetails today = dataSource.getToday();
+        if(!today.equals(null)) {
+            String time = getTime(today.getClockDate());
+                if (TextUtils.isEmpty(time)  && time.equalsIgnoreCase(Preferences.TIMEINOUTSTATUS)) {
+                    tvTimeInOut.setText("Time In");
+                } else if(time.equalsIgnoreCase(Preferences.INLOCATION) && !time.equalsIgnoreCase(Preferences.INLOCATION) && !time.equalsIgnoreCase(Preferences.TIMEINOUTSTATUS)){
+                    tvTimeInOut.setText("Time Out");
+                }
+        }
+
 		llLogin_Logout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -134,6 +162,19 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		UpdateLocationStatus();
 		return rootView;
 	}
+    public String getTime(String stamp) {
+        SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        Calendar mCalendar = Calendar.getInstance();
+        try {
+            date = mFormat.parse(stamp);
+            mCalendar.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return (String) DateFormat.format("hh:mm",mCalendar);
+
+    }
 
 	@Override
 	public Loader onCreateLoader(int id, Bundle args) {
@@ -502,16 +543,38 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 			strComments = "Time In";
 		}
 		if(!TextUtils.isEmpty(strActionType)) {
-
-			Bundle b = new Bundle();
+            dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,strActionType,strFile,"false"));
+            uploadData();
+			/*Bundle b = new Bundle();
 			b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.TIME_IN_OUT));
 			b.putString(AppsConstant.METHOD, AppsConstant.POST);
 			b.putString(AppsConstant.REASON, strComments);
 			b.putString(AppsConstant.PARAMS, ParameterBuilder.getTimeinOut(((MainActivity) getActivity()).preferences, strComments, strActionType, strFile));
-			getActivity().getLoaderManager().initLoader(LoaderConstant.TIMEINOUT, b, MapFragment.this).forceLoad();
+			getActivity().getLoaderManager().initLoader(LoaderConstant.TIMEINOUT, b, MapFragment.this).forceLoad();*/
 		}
 	}
-	private boolean checkStoragePermission() {
+    public void uploadData()
+    {
+        if(NetworkUtils.isNetworkConnectionAvailable(getContext()))
+        {
+            Intent uploadTraIntent=new Intent(getContext(),UploadTransactions.class);
+            getContext().startService(uploadTraIntent);
+        }
+    }
+    private TimeInOutDetails getTimeInOutDetails(String strComments,String strType, String strImage,String isPushed) {
+        String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateFormate);
+        TimeInOutDetails details = new TimeInOutDetails();
+        details.setUsername(preferences.getString(Preferences.USERNAME,""));
+        details.setClockDate(clockDate);
+        details.setActionType(strType);
+        details.setComments(strComments);
+        details.setLatitude(preferences.getString(Preferences.USERLATITUDE,""));
+        details.setLongitude(preferences.getString(Preferences.USERLONGITUDE,""));
+        details.setActionImage(strImage);
+        details.setIsPushed(isPushed);
+        return details;
+    }
+    private boolean checkStoragePermission() {
 		// Ask for permission if it wasn't granted yet
 		return (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.READ_EXTERNAL_STORAGE)
 				== PackageManager.PERMISSION_GRANTED );

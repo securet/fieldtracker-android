@@ -1,8 +1,11 @@
 package com.oppo.sfamanagement.webmethods;
 
+import android.preference.Preference;
+
 import com.oppo.sfamanagement.database.CalenderUtils;
 import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
+import com.oppo.sfamanagement.model.TimeInOutDetails;
 
 import java.net.URL;
 import java.net.URLEncoder;
@@ -96,6 +99,29 @@ public class ParameterBuilder {
                     "&productStoreId=" + URLEncoder.encode(preferences.getString(Preferences.SITEID,""),"UTF-8") +
                     "&actionType=" + URLEncoder.encode(actionType,"UTF-8") +
                     "&actionImage=" + URLEncoder.encode(actionImage,"UTF-8") +
+                    "&latitude=" + URLEncoder.encode(preferences.getString(Preferences.USERLATITUDE,""),"UTF-8") +
+                    "&longitude=" + URLEncoder.encode(preferences.getString(Preferences.USERLONGITUDE,""),"UTF-8");
+
+
+        } catch (Exception e) {
+            Logger.e("Log",e);
+        }finally {
+            return url;
+        }
+    }
+
+    public static String getTimeinOut(Preferences preferences, TimeInOutDetails details) {
+        String url = "";
+        try {
+            String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateFormate);
+            url = "username=" + URLEncoder.encode(preferences.getString(Preferences.USERNAME,""),"UTF-8") +
+                    "&workEffortTypeEnumId=" + URLEncoder.encode("WetAvailable","UTF-8") +
+                    "&clockDate=" + URLEncoder.encode(clockDate,"UTF-8") +
+                    "&purposeEnumId=" + URLEncoder.encode("WepAttendance","UTF-8") +
+                    "&comments=" + URLEncoder.encode(details.getComments(),"UTF-8") +
+                    "&productStoreId=" + URLEncoder.encode(preferences.getString(Preferences.SITEID,""),"UTF-8") +
+                    "&actionType=" + URLEncoder.encode(details.getActionType(),"UTF-8") +
+                    "&actionImage=" + URLEncoder.encode(details.getActionImage(),"UTF-8") +
                     "&latitude=" + URLEncoder.encode(preferences.getString(Preferences.USERLATITUDE,""),"UTF-8") +
                     "&longitude=" + URLEncoder.encode(preferences.getString(Preferences.USERLONGITUDE,""),"UTF-8");
 

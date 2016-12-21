@@ -11,6 +11,7 @@ public class AppsConstant {
     public static boolean isDebug=false;
     public static final int FRONT_CAMREA_OPEN = 1;
     public static final int BACK_CAMREA_OPEN = 2;
+    public static String DATE_KEY = "DATE_KEY";
     public static int DEVICE_DISPLAY_HEIGHT_DEFAULT = 800;
     public static int DEVICE_DISPLAY_WIDTH_DEFAULT = 400;
     public static String DEFAULTRADIUS = "50";

@@ -14,6 +14,7 @@ public class TimeInOutParser {
     Response result ;
     String reason="";
 
+
     public TimeInOutParser(String response,String reason) {
         this.response = response;
         this.reason = reason;
@@ -26,8 +27,10 @@ public class TimeInOutParser {
             JSONObject parentObject = new JSONObject(response);
             if(parentObject.has("messages")){
                 result.setResponceMessage(parentObject.getString("messages"));
+                result.setResponceCode("200");
             }else if(parentObject.has("errors")){
                 result.setResponceMessage(parentObject.getString("errors"));
+                result.setResponceCode("400");
             }else {
                 result.setResponceMessage("Unbale To parse Data");
             }

@@ -40,7 +40,7 @@ import com.oppo.sfamanagement.webmethods.UrlBuilder;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 	public static String TAG = "lstech.aos.debug";
 
-	static public boolean geofencesAlreadyRegistered = false;
+	public static boolean geofencesAlreadyRegistered = false;
 	public Preferences preferences;
 	public final static int  MAP =0,LIST=1,MORE=2;
 	public int openPage = MAP;

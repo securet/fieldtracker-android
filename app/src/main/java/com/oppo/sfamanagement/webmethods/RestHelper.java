@@ -2,6 +2,7 @@ package com.oppo.sfamanagement.webmethods;
 
 import android.content.Context;
 import android.net.Uri;
+import android.preference.Preference;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -43,7 +44,7 @@ import javax.net.ssl.X509TrustManager;
 public class RestHelper
 {
 
-    public String makeRestCallAndGetResponse(String strUrl, String method, String parameters,Preferences preferences) {
+    public String makeRestCallAndGetResponse(String strUrl, String method, String parameters, Preferences preferences) {
         return makeRestCallAndGetResponse(strUrl, method, parameters,preferences, 0);
     }
 
