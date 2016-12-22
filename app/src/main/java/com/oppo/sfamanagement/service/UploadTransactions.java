@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.database.Cursor;
 import android.preference.Preference;
+import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.EventDataSource;
@@ -12,6 +14,7 @@ import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.database.SqliteHelper;
 import com.oppo.sfamanagement.model.Response;
 import com.oppo.sfamanagement.model.TimeInOutDetails;
+import com.oppo.sfamanagement.parsers.ImageUploadParser;
 import com.oppo.sfamanagement.parsers.TimeInOutParser;
 import com.oppo.sfamanagement.webmethods.ParameterBuilder;
 import com.oppo.sfamanagement.webmethods.RestHelper;
@@ -97,8 +100,7 @@ public class UploadTransactions extends IntentService {
     }
 
     private void uploadTimeInOut() {
-        String result = "";
-        TimeInOutDetails details = null;
+
         // get data base
         EventDataSource dataSource = new EventDataSource(UploadTransactions.this);
         ArrayList<TimeInOutDetails> detailsArrayList = dataSource.getTimeInOutDetails();
@@ -106,20 +108,37 @@ public class UploadTransactions extends IntentService {
         // upload to server // Asc time // first success than second
         if(detailsArrayList != (null) && detailsArrayList.size() > 0) {
             for (TimeInOutDetails d : detailsArrayList) {
-                response = new RestHelper().makeRestCallAndGetResponse(UrlBuilder.getUrl(Services.TIME_IN_OUT),AppsConstant.POST, ParameterBuilder.getTimeinOut(preference,d),preference);
-                Response responseMsg = new TimeInOutParser(response,d.getComments()).Parse();
-                if(responseMsg.getResponceCode().equals("200")) {
-                    dataSource.updateIsPushed(d);
-                } else {
-                    break;
+                // imgae server server path
+                String imagePath = uploadImage(d.getActionImage());
+                if((!TextUtils.isEmpty(d.getActionImage()) && !TextUtils.isEmpty(imagePath)) || TextUtils.isEmpty(imagePath)) {
+                    response = new RestHelper().makeRestCallAndGetResponse(UrlBuilder.getUrl(Services.TIME_IN_OUT), AppsConstant.POST, ParameterBuilder.getTimeinOut(preference, d, imagePath), preference);
+                    Response responseMsg = new TimeInOutParser(response, d.getComments()).Parse();
+                    if (responseMsg.getResponceCode().equals("200")) {
+                        dataSource.updateIsPushed(d);
+                    } else {
+                        break;
+                    }
                 }
+                /*else {
+                    Toast.makeText(getApplicationContext(),"Failed to upload",Toast.LENGTH_SHORT).show();
+                    break;
+                }*/
             }
 
         }
         // update database
 
     }
-
+    public String uploadImage(String imgPath) {
+        if (!TextUtils.isEmpty(imgPath)) {
+            String imageResponse = new RestHelper().makeRestCallAndGetResponse(UrlBuilder.getUrl(Services.DomainUrlImage), imgPath, "For Photo", preference);
+            String serverPath = new ImageUploadParser(imageResponse).Parse();
+            return serverPath;
+        }
+        else {
+            return "";
+        }
+    }
     @Override
     protected void onHandleIntent(Intent intent) {
         preference = new Preferences(this);

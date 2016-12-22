@@ -110,7 +110,7 @@ public class ParameterBuilder {
         }
     }
 
-    public static String getTimeinOut(Preferences preferences, TimeInOutDetails details) {
+    public static String getTimeinOut(Preferences preferences, TimeInOutDetails details, String imagePath) {
         String url = "";
         try {
             String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateFormate);
@@ -121,7 +121,7 @@ public class ParameterBuilder {
                     "&comments=" + URLEncoder.encode(details.getComments(),"UTF-8") +
                     "&productStoreId=" + URLEncoder.encode(preferences.getString(Preferences.SITEID,""),"UTF-8") +
                     "&actionType=" + URLEncoder.encode(details.getActionType(),"UTF-8") +
-                    "&actionImage=" + URLEncoder.encode(details.getActionImage(),"UTF-8") +
+                    "&actionImage=" + URLEncoder.encode(imagePath,"UTF-8") +
                     "&latitude=" + URLEncoder.encode(preferences.getString(Preferences.USERLATITUDE,""),"UTF-8") +
                     "&longitude=" + URLEncoder.encode(preferences.getString(Preferences.USERLONGITUDE,""),"UTF-8");
 

@@ -22,6 +22,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <application
         android:name="com.oppo.sfamanagement.database.MyApplication"
@@ -47,6 +49,15 @@
             android:theme="@style/AppTheme">
 
         </activity>
+        
+        <receiver android:name=".broadcasters.NetworkBroadcaster">
+            <intent-filter>
+   <!--             <action android:name="android.net.wifi.supplicant.CONNECTION_CHANGE" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />    -->
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        <service android:name=".service.UploadTransactions"/>
         <activity
             android:name=".CameraActivity"
             android:screenOrientation="portrait"
