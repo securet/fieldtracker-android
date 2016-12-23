@@ -41,13 +41,9 @@ public class GeofenceReceiver extends IntentService {
         details.setIsPushed("false");
         return details;
     }
-    public void uploadData()
-    {
-        if(NetworkUtils.isNetworkConnectionAvailable(getApplicationContext()))
-        {
-            Intent uploadTraIntent=new Intent(this,UploadTransactions.class);
-            this.startService(uploadTraIntent);
-        }
+    public void uploadData() {
+        Intent uploadTraIntent=new Intent(this,UploadTransactions.class);
+        this.startService(uploadTraIntent);
     }
 	@Override
 	protected void onHandleIntent(Intent intent) {
@@ -80,8 +76,21 @@ public class GeofenceReceiver extends IntentService {
 						break;
 				}
 				if(!TextUtils.isEmpty(clockType)) {
-					dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,clockType));
+					///*dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,clockType));
+                    String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
+                    TimeInOutDetails details = dataSource.getToday();
+                    String lastDate = CalenderUtils.getDateMethod(details.getClockDate(),CalenderUtils.DateMonthDashedFormate);
+
+                    if (clockDate.equalsIgnoreCase(lastDate)) {
+                        if(strComments.equalsIgnoreCase("InLocation")){
+                            dataSource.insertTimeInOutDetails(getTimeInOutDetails("InLocation","clockIn"));
+                        } else if (strComments.equalsIgnoreCase("OutLocation")) {
+                            dataSource.insertTimeInOutDetails(getTimeInOutDetails("OutLocation","clockOut"));
+                        }
+                    }
+
                     uploadData();
+
 				}
 				preferences.commit();
 			}

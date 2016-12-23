@@ -1,5 +1,8 @@
 package com.oppo.sfamanagement.database;
 
+import android.text.format.DateFormat;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -107,5 +110,18 @@ public class CalenderUtils {
         SimpleDateFormat df = new SimpleDateFormat(formate);
         String formattedDate = df.format(c.getTime());
         return formattedDate;
+    }
+
+    public static String getDateMethod(String timeStamp, String formate){
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        try {
+            date = simpleDateFormat.parse(timeStamp);
+            calendar.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return (String) DateFormat.format(formate,calendar);
     }
 }

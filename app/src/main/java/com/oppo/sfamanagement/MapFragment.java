@@ -107,20 +107,24 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TimeInOutDetails today = dataSource.getToday();
-        if(!today.equals(null)) {
-            String actionType = today.getComments();
-            // String time = getTime(today.getClockDate());
+        String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
+        TimeInOutDetails details = dataSource.getToday();
+        String lastDate = CalenderUtils.getDateMethod(details.getClockDate(),CalenderUtils.DateMonthDashedFormate);
+        if(!details.equals(null)) {
+            if(clockDate.equalsIgnoreCase(lastDate)) {
+                String actionType = details.getComments();
+                // String time = getTime(today.getClockDate());
 
-            if (TextUtils.isEmpty(actionType)  || actionType.equalsIgnoreCase("TimeOut")) {
-                Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,""));
-                tvTimeInOut.setText("Time In");
-   //             tvTimeInOutLocation.setText("Time In at " + getCurrentTime(new Date()));
-            } else if(actionType.equalsIgnoreCase("OutLocation") || actionType.equalsIgnoreCase("InLocation") || actionType.equalsIgnoreCase("TimeIn")){
-                tvTimeInOut.setText("Time Out");
-                tvTimeInOutLocation.setText(preferences.getString(Preferences.SITENAME,""));
-            } else {
+                if (TextUtils.isEmpty(actionType)  || actionType.equalsIgnoreCase("TimeOut")) {
+                    Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,""));
+                    tvTimeInOut.setText("Time In");
+                    //             tvTimeInOutLocation.setText("Time In at " + getCurrentTime(new Date()));
+                } else if(actionType.equalsIgnoreCase("OutLocation") || actionType.equalsIgnoreCase("InLocation") || actionType.equalsIgnoreCase("TimeIn")){
+                    tvTimeInOut.setText("Time Out");
+                    tvTimeInOutLocation.setText(preferences.getString(Preferences.SITENAME,""));
+                } else {
 
+                }
             }
         }
     }
@@ -634,6 +638,16 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		}
 	}
 
+    public void uploadData()
+    {
+        if(NetworkUtils.isNetworkConnectionAvailable(getContext()))
+        {
+            Intent uploadTraIntent=new Intent(getContext(),UploadTransactions.class);
+            getActivity().startService(uploadTraIntent);
+        }
+
+    }
+
 	private void UpdateTimeInOut(String strFile){
 		String strDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
 		String strActionType = "";
@@ -656,25 +670,23 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 			strComments = "TimeIn";
 		}
 		if(!TextUtils.isEmpty(strActionType)) {
-            dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,strActionType,strFile,"false"));
-            uploadData();
-            // update button
-            TimeInOutDetails today = dataSource.getToday();
-            if(!today.equals(null)) {
-                String comments = today.getComments();
-                Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,"") + " " + comments);
-               // String time = getTime(today.getClockDate());
-                if (TextUtils.isEmpty(comments)  || comments.equalsIgnoreCase("TimeOut")) {
-                    Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,""));
-                    tvTimeInOut.setText("Time In");
-                    tvTimeInOutLocation.setText("Time In at " + getCurrentTime(new Date()));
-                } else if(comments.equalsIgnoreCase("OutLocation") || comments.equalsIgnoreCase("InLocation") || comments.equalsIgnoreCase("TimeIn")){
-                    tvTimeInOut.setText("Time Out");
-                    tvTimeInOutLocation.setText(preferences.getString(Preferences.SITENAME,""));
-                } else {
+           /* dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,strActionType,strFile,"false"));*/
+            //uploadData(strFile);
+            String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
+            TimeInOutDetails details = dataSource.getToday();
+            String lastDate = CalenderUtils.getDateMethod(details.getClockDate(),CalenderUtils.DateMonthDashedFormate);
 
+            if (clockDate.equalsIgnoreCase(lastDate)) {
+                if(TextUtils.isEmpty(strComments) || strComments.equalsIgnoreCase("TimeOut")){
+                    dataSource.insertTimeInOutDetails(getTimeInOutDetails("TimeOut","clockOut",strFile,"false"));
+                    tvTimeInOut.setText("Time In");
+                } else if (strComments.equalsIgnoreCase("OutLocation") || strComments.equalsIgnoreCase("InLocation") || strComments.equalsIgnoreCase("TimeIn")) {
+                    dataSource.insertTimeInOutDetails(getTimeInOutDetails("TimeIn","clockIn",strFile,"false"));
+                    tvTimeInOut.setText("Time Out");
                 }
             }
+            uploadData();
+
 			/*Bundle b = new Bundle();
 			b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.TIME_IN_OUT));
 			b.putString(AppsConstant.METHOD, AppsConstant.POST);
@@ -683,14 +695,14 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 			getActivity().getLoaderManager().initLoader(LoaderConstant.TIMEINOUT, b, MapFragment.this).forceLoad();*/
 		}
 	}
-    public void uploadData()
+    /*public void uploadData()
     {
         if(NetworkUtils.isNetworkConnectionAvailable(getContext()))
         {
             Intent uploadTraIntent=new Intent(getContext(),UploadTransactions.class);
             getContext().startService(uploadTraIntent);
         }
-    }
+    }*/
     private TimeInOutDetails getTimeInOutDetails(String strComments,String strType, String strImage,String isPushed) {
         String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateFormate);
         TimeInOutDetails details = new TimeInOutDetails();
