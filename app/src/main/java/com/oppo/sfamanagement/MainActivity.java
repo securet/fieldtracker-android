@@ -69,13 +69,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 		preferences.saveBoolean(Preferences.INLOCATION, false);
 		preferences.commit();
-		ivCurrentLocation= (ImageView) findViewById(R.id.ivCurrentLocation);
+		/*ivCurrentLocation= (ImageView) findViewById(R.id.ivCurrentLocation);*/
 		tvSiteName = (TextView) findViewById(R.id.tvSiteName);
 		tvUserName = (TextView) findViewById(R.id.tvUserName);
 		tvUserSerName = (TextView) findViewById(R.id.tvUserSerName);
 		dtcLoginTime = (DigitalClockView) findViewById(R.id.dtcLoginTime);
 
-		ivCurrentLocation.setOnClickListener(new View.OnClickListener() {
+		/*ivCurrentLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 					}
 				}
 			}
-		});
+		});*/
 		tvUserName.setText(preferences.getString(Preferences.USERFIRSTNAME,""));
 		tvUserSerName.setText(preferences.getString(Preferences.USERLASTNAME,""));
 		llAttendance = (LinearLayout) findViewById(R.id.llAttendance);
@@ -172,15 +172,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		switch (openPage){
 			case MORE:
 				llMore.setAlpha(1.0f);
-				ivCurrentLocation.setVisibility(View.GONE);
+//				ivCurrentLocation.setVisibility(View.GONE);
 				break;
 			case MAP:
 				llAttendance.setAlpha(1.0f);
-				ivCurrentLocation.setVisibility(View.VISIBLE);
+//				ivCurrentLocation.setVisibility(View.VISIBLE);
 				break;
 			case LIST:
 				llHistory.setAlpha(1.0f);
-				ivCurrentLocation.setVisibility(View.GONE);
+//				ivCurrentLocation.setVisibility(View.GONE);
 				break;
 		}
 	}

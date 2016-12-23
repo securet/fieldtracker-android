@@ -12,11 +12,13 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,6 +31,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,7 +83,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
-		GoogleApiClient.OnConnectionFailedListener,LocationListener, ResultCallback<Status>, LoaderManager.LoaderCallbacks {
+		GoogleApiClient.OnConnectionFailedListener,LocationListener, ResultCallback<Status>/*, LoaderManager.LoaderCallbacks*/ {
 	protected SupportMapFragment mapFragment;
 	protected GoogleMap map;
     private Preferences preferences;
@@ -98,6 +101,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	}
 	LinearLayout llLogin_Logout,llShiftTime;
 	TextView tvTimeInOut,tvTimeInOutLocation;
+    ImageView ivCurrentLocation;
 
 
     @Override
@@ -105,13 +109,14 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         super.onViewCreated(view, savedInstanceState);
         TimeInOutDetails today = dataSource.getToday();
         if(!today.equals(null)) {
-            String comments = today.getComments();
+            String actionType = today.getComments();
             // String time = getTime(today.getClockDate());
-            if (TextUtils.isEmpty(comments)  || comments.equalsIgnoreCase("TimeOut")) {
+
+            if (TextUtils.isEmpty(actionType)  || actionType.equalsIgnoreCase("TimeOut")) {
                 Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,""));
                 tvTimeInOut.setText("Time In");
-                tvTimeInOutLocation.setText("Time In at " + getCurrentTime(new Date()));
-            } else if(comments.equalsIgnoreCase("OutLocation") || comments.equalsIgnoreCase("InLocation") || comments.equalsIgnoreCase("TimeIn")){
+   //             tvTimeInOutLocation.setText("Time In at " + getCurrentTime(new Date()));
+            } else if(actionType.equalsIgnoreCase("OutLocation") || actionType.equalsIgnoreCase("InLocation") || actionType.equalsIgnoreCase("TimeIn")){
                 tvTimeInOut.setText("Time Out");
                 tvTimeInOutLocation.setText(preferences.getString(Preferences.SITENAME,""));
             } else {
@@ -136,13 +141,58 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		((MainActivity) getActivity()).preferences.saveBoolean(Preferences.INLOCATION, isUserInLoacation());
 		((MainActivity) getActivity()).preferences.commit();
 		tvTimeInOut = (TextView) rootView.findViewById(R.id.tvTimeInOut);
-
+        ivCurrentLocation= (ImageView) rootView.findViewById(R.id.ivCurrentLocation);
+        //tvTimeInOut.setText("Time Out");
 		tvTimeInOutLocation = (TextView) rootView.findViewById(R.id.tvTimeInOutLocation);
 		ShiftTimeView stvShiftTime = (ShiftTimeView) rootView.findViewById(R.id.stvShiftTime);
 		llShiftTime = (LinearLayout) rootView.findViewById(R.id.llShiftTime);
 		llLogin_Logout = (LinearLayout) rootView.findViewById(R.id.llLogin_Logout);
 
-        TimeInOutDetails today = dataSource.getToday();
+        ivCurrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LocationManager lm = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+                boolean gps_enabled = false;
+                boolean network_enabled = false;
+
+                try {
+                    gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                } catch(Exception ex) {}
+
+                try {
+                    network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+                } catch(Exception ex) {}
+
+                if(!gps_enabled && !network_enabled) {
+                    // notify user
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                    dialog.setMessage("Location is not enabled !");
+                    dialog.setPositiveButton("Open setting", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                            // TODO Auto-generated method stub
+                            Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            startActivity(myIntent);
+                            //get gps
+                        }
+                    });
+                    dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                            // TODO Auto-generated method stub
+
+                        }
+                    });
+                    dialog.show();
+                }else {
+                    Fragment f = getFragmentManager().findFragmentById(R.id.flMiddle);
+                    if (f instanceof MapFragment) {
+                        ((MapFragment) f).moveToCurentLocation();
+                    }
+                }
+            }
+        });
     /*    if(!today.equals(null)) {
             String comments = today.getComments();
             // String time = getTime(today.getClockDate());
@@ -205,7 +255,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
     }
 
-	@Override
+	/*@Override
 	public Loader onCreateLoader(int id, Bundle args) {
 		((MainActivity)getActivity()).showHideProgressForLoder(false);
 		switch (id) {
@@ -214,7 +264,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 			default:
 				return null;
 		}
-	}
+	}*/
 
 	private double distance(double lat1, double lon1, double lat2, double lon2) {
 		double theta = lon1 - lon2;
@@ -247,7 +297,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		return DistanceInRadius<=StringUtils.getInt(((MainActivity) getActivity()).preferences.getString(Preferences.SITE_RADIUS,""));
 
 	}
-	@Override
+	/*@Override
 	public void onLoadFinished(Loader loader, Object data) {
 		((MainActivity) getActivity()).showHideProgressForLoder(true);
 		Response response = null;
@@ -269,12 +319,12 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 			}
 
 			getLoaderManager().destroyLoader(loader.getId());
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public void onLoaderReset(Loader loader) {
 
-	}
+	}*/
 	public void moveToCurentLocation()
 	{
 		if(checkPermission()) {
@@ -315,6 +365,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	}
 	public void UpdateLoginLogOut()
 	{
+        Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,""));
 		String strDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
 		if(((MainActivity)getActivity()).preferences.getString(Preferences.TIMEINOUTSTATUS,strDate+"Pending").equalsIgnoreCase(strDate+"TimeIn")) {
 			llShiftTime.setVisibility(View.VISIBLE);
@@ -611,6 +662,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             TimeInOutDetails today = dataSource.getToday();
             if(!today.equals(null)) {
                 String comments = today.getComments();
+                Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,"") + " " + comments);
                // String time = getTime(today.getClockDate());
                 if (TextUtils.isEmpty(comments)  || comments.equalsIgnoreCase("TimeOut")) {
                     Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,""));

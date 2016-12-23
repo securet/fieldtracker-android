@@ -115,7 +115,7 @@ public class UploadTransactions extends IntentService {
                     Response responseMsg = new TimeInOutParser(response, d.getComments()).Parse();
                     if (responseMsg.getResponceCode().equals("200")) {
                         dataSource.updateIsPushed(d);
-                    } else {
+                        Toast.makeText(getApplicationContext(),"200",Toast.LENGTH_SHORT).show();
                         break;
                     }
                 }
@@ -125,13 +125,15 @@ public class UploadTransactions extends IntentService {
                 }*/
             }
 
+        } else {
+            Toast.makeText(getApplicationContext(),"Failed to upload",Toast.LENGTH_SHORT).show();
         }
         // update database
 
     }
     public String uploadImage(String imgPath) {
         if (!TextUtils.isEmpty(imgPath)) {
-            String imageResponse = new RestHelper().makeRestCallAndGetResponse(UrlBuilder.getUrl(Services.DomainUrlImage), imgPath, "For Photo", preference);
+            String imageResponse = new RestHelper().makeRestCallAndGetResponseImageUpload(Services.DomainUrlImage, imgPath, "For Photo", preference);
             String serverPath = new ImageUploadParser(imageResponse).Parse();
             return serverPath;
         }

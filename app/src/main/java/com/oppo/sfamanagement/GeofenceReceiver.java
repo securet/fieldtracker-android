@@ -68,13 +68,13 @@ public class GeofenceReceiver extends IntentService {
 				switch (transitionType) {
 
 					case Geofence.GEOFENCE_TRANSITION_ENTER:
-						strComments = "In Location";
+						strComments = "InLocation";
 						clockType = "clockIn";
 						preferences.saveBoolean(Preferences.INLOCATION, true);
 						break;
 
 					case Geofence.GEOFENCE_TRANSITION_EXIT:
-						strComments = "Out Location";
+						strComments = "OutLocation";
 						clockType = "clockOut";
 						preferences.saveBoolean(Preferences.INLOCATION, false);
 						break;

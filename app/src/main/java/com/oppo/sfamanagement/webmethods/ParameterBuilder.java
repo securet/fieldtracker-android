@@ -114,16 +114,16 @@ public class ParameterBuilder {
         String url = "";
         try {
             String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateFormate);
-            url = "username=" + URLEncoder.encode(preferences.getString(Preferences.USERNAME,""),"UTF-8") +
+            url = "username=" + URLEncoder.encode(details.getUsername(),"UTF-8") +
                     "&workEffortTypeEnumId=" + URLEncoder.encode("WetAvailable","UTF-8") +
-                    "&clockDate=" + URLEncoder.encode(clockDate,"UTF-8") +
+                    "&clockDate=" + URLEncoder.encode(details.getClockDate(),"UTF-8") +
                     "&purposeEnumId=" + URLEncoder.encode("WepAttendance","UTF-8") +
                     "&comments=" + URLEncoder.encode(details.getComments(),"UTF-8") +
                     "&productStoreId=" + URLEncoder.encode(preferences.getString(Preferences.SITEID,""),"UTF-8") +
                     "&actionType=" + URLEncoder.encode(details.getActionType(),"UTF-8") +
                     "&actionImage=" + URLEncoder.encode(imagePath,"UTF-8") +
-                    "&latitude=" + URLEncoder.encode(preferences.getString(Preferences.USERLATITUDE,""),"UTF-8") +
-                    "&longitude=" + URLEncoder.encode(preferences.getString(Preferences.USERLONGITUDE,""),"UTF-8");
+                    "&latitude=" + URLEncoder.encode(details.getLatitude(),"UTF-8") +
+                    "&longitude=" + URLEncoder.encode(details.getLongitude(),"UTF-8");
 
 
         } catch (Exception e) {

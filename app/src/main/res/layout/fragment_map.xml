@@ -71,7 +71,19 @@
                 android:layout_marginRight="10dp"
                 android:src="@drawable/user_time_in" />
         </LinearLayout>
-
+        <ImageView
+            android:visibility="visible"
+            android:contentDescription="@string/gps_yellow_icon"
+            android:id="@+id/ivCurrentLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="80dp"
+            android:layout_gravity="start|left|bottom"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/right_arrow" />
         <LinearLayout
             android:id="@+id/llLogin_Logout"
             android:layout_width="match_parent"
