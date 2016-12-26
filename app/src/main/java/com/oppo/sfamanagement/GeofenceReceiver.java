@@ -80,18 +80,21 @@ public class GeofenceReceiver extends IntentService {
                     String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
                     TimeInOutDetails details = dataSource.getToday();
                     String lastDate = CalenderUtils.getDateMethod(details.getClockDate(),CalenderUtils.DateMonthDashedFormate);
-
+					String comments = details.getComments();
                     if (clockDate.equalsIgnoreCase(lastDate)) {
                         if(strComments.equalsIgnoreCase("InLocation")){
-                            dataSource.insertTimeInOutDetails(getTimeInOutDetails("InLocation","clockIn"));
+							if (comments.equalsIgnoreCase("OutLocation")) {
+								dataSource.insertTimeInOutDetails(getTimeInOutDetails("InLocation", "clockIn"));
+								uploadData();
+							}
                         } else if (strComments.equalsIgnoreCase("OutLocation")) {
-                            dataSource.insertTimeInOutDetails(getTimeInOutDetails("OutLocation","clockOut"));
-                        }
+							if(comments.equalsIgnoreCase("TimeIn") || comments.equalsIgnoreCase("InLocation")) {
+                            	dataSource.insertTimeInOutDetails(getTimeInOutDetails("OutLocation","clockOut"));
+								uploadData();
+                        	}
+						}
                     }
-
-                    uploadData();
-
-				}
+            	}
 				preferences.commit();
 			}
 		}

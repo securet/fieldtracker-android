@@ -83,6 +83,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 				FragmentManager fm = getFragmentManager();
                 Bundle b = new Bundle();
                 HistoryNew hn = list.get(position);
+			//	System.out.println(hn.getHistoryChildren());
                 b.putParcelable("sub_history",hn);
                 b.putInt("position",position);
                 f.setArguments(b);
@@ -286,6 +287,8 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 		((MainActivity)getActivity()).showHideProgressForLoder(true);
 		if(data != null && data instanceof ArrayList) {
 			list = (ArrayList<HistoryNew>) data;
+			System.out.println(list.size()   +  "   After Loader");
+            //System.out.println(list.get(7).getHistoryChildren().toString());
 			adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,list);
 			listView.setAdapter(adapter);
 			listView.setOnItemClickListener(this);

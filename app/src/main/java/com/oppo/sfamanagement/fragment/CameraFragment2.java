@@ -73,12 +73,12 @@ public class CameraFragment2 extends Fragment implements View.OnClickListener, A
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
 
-    static {
+    /*static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
         ORIENTATIONS.append(Surface.ROTATION_180, 270);
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
-    }
+    }*/
     private int cameraForB;
     private String purpose="";
     /**

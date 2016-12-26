@@ -7,6 +7,7 @@ import android.content.Loader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -29,6 +30,8 @@ import com.oppo.sfamanagement.webmethods.LoaderMethod;
 import com.oppo.sfamanagement.webmethods.LoaderServices;
 import com.oppo.sfamanagement.webmethods.Services;
 
+import java.io.IOException;
+
 /**
  * Created by allsmartlt218 on 13-12-2016.
  */
@@ -50,12 +53,38 @@ public class RetakeFragment extends Fragment {
         imageView = (ImageView) view.findViewById(R.id.ivRetake);
         imagePath = getArguments().getString("image_taken");
         imagePurpose = getArguments().getString("image_purpose");
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
         if(imagePurpose.equals("For Photo")) {
             bmp = rotateBmpFront(BitmapFactory.decodeFile(imagePath));
         } else {
             bmp = rotateBmpBack(BitmapFactory.decodeFile(imagePath));
         }
-      //  bmp = BitmapFactory.decodeFile(imagePath);
+        /*try {
+            ExifInterface ei = new ExifInterface(imagePath);
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_UNDEFINED);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    bmp = rotateImage(bitmap, -90);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    bmp = rotateImage(bitmap, 180);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    bmp = rotateImage(bitmap, 270);
+                    break;
+
+                case ExifInterface.ORIENTATION_NORMAL:
+
+                default:
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        //  bmp = BitmapFactory.decodeFile(imagePath);
         imageView.setImageBitmap(bmp);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +116,13 @@ public class RetakeFragment extends Fragment {
         });
         return view;
     }
-
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        source = Bitmap.createScaledBitmap(source,640,480,true);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
 
 
     private Bitmap rotateBmpBack(Bitmap bitmap) {

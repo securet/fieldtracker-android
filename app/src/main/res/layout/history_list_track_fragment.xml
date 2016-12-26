@@ -55,15 +55,25 @@
         android:layout_marginRight="20dp"
         android:text="9h 10m"
         android:textSize="25sp" />
-    <ScrollView
+    <!--<ScrollView
         android:layout_marginTop="10dp"
         android:layout_below="@id/linearHistory"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <FrameLayout
+        android:layout_height="match_parent">-->
+    <ListView
+        android:id="@+id/lvHistorySub"
+        android:layout_below="@id/linearHistory"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+        <!--<FrameLayout
+            android:id="@+id/flHistoryTimeLine"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
+            android:layout_height="wrap_content">-->
+            <!--<TextView
                 android:id="@+id/tvVerticleLine"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
@@ -295,8 +305,8 @@
 
             </LinearLayout>
 
-        </LinearLayout>
+        </LinearLayout>-->
 
-        </FrameLayout>
-    </ScrollView>
+       <!-- </FrameLayout>-->
+ <!--   </ScrollView>-->
 </RelativeLayout>

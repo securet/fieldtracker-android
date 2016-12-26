@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class HistoryChild {
     private String comments;
     private String fromDate;
+    private int background;
 
     public String getComments() {
         return comments;
@@ -29,5 +30,13 @@ public class HistoryChild {
     @Override
     public String toString() {
         return this.fromDate + " " + this.comments;
+    }
+
+    public int getBackground() {
+        return background;
+    }
+
+    public void setBackground(int background) {
+        this.background = background;
     }
 }

@@ -1,26 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:layout_marginTop="10dp"
-    android:layout_marginStart="20dp"
-    android:layout_marginLeft="20dp"
-    android:layout_marginBottom="20dp"
+    android:layout_marginStart="40dp"
+    android:layout_marginLeft="40dp"
+    android:layout_marginBottom="10dp"
+    android:layout_gravity="center_vertical|center_horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
     <TextView
+        android:layout_marginTop="10dp"
         android:id="@+id/tvColor"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/history_time_in_element"/>
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10:45am"
         android:textSize="18sp"
+        android:text="10:45 am"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="18dp"
         android:layout_toRightOf="@id/tvColor"/>
 
     <TextView
@@ -28,8 +33,9 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:layout_toRightOf="@id/tvTime"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
         android:text="|"/>
 
     <TextView
@@ -38,8 +44,8 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:layout_toRightOf="@id/tvTime"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="18dp"
         android:layout_marginLeft="40dp"
         android:text="Time In"/>
 
-</RelativeLayout>
+</LinearLayout>
