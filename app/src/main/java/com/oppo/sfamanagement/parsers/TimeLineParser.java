@@ -3,6 +3,7 @@ package com.oppo.sfamanagement.parsers;
 import android.text.format.DateFormat;
 
 import com.oppo.sfamanagement.database.Preferences;
+import com.oppo.sfamanagement.fragment.DynamicElement;
 import com.oppo.sfamanagement.model.TimeLine;
 
 import org.json.JSONArray;
@@ -67,8 +68,11 @@ public class TimeLineParser {
                                                     TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(count)),
                                             TimeUnit.MILLISECONDS.toSeconds(count) -
                                                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(count)));
-                                    TimeLine tl = new TimeLine(DateFormat.format("hh:mm",mCalendar).toString(),DateFormat.format("hh:mm",mCalendar2).toString());
+                                    TimeLine tl = new TimeLine();
+                                    tl.setFromDate(DateFormat.format("hh:mm",mCalendar).toString());
+                                    tl.setThruDate(DateFormat.format("hh:mm",mCalendar2).toString());
                                     tl.setDifferenceMill(millis);
+                                    tl.setTimeSpace(DynamicElement.findMarginTop(tl.getFromDate(),tl.getThruDate()));
                                     if(j == childArray.length()-1) {
                                         preferences.saveString(Preferences.SHIFTTIME,timeShiftTotal);
                                         preferences.commit();

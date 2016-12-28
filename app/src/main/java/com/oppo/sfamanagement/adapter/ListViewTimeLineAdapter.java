@@ -55,33 +55,13 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-       // LinearLayout layoutFrom,layoutThru;
-      //  LinearLayout.LayoutParams params;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         View view = convertView;
         TimeLine tl = getItem(position);
         if(view == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.timeline_list_item,parent,false);
-            /*layoutFrom = (LinearLayout) view.findViewById(R.id.llFromDate);
-            layoutThru = (LinearLayout) view.findViewById(R.id.llThruDate);*/
-           /* *//*view.setTag(R.id.llFromDate,layoutFrom);
-            //view.setTag(R.id.llThruDate,layoutThru);
-            params  = (LinearLayout.LayoutParams) layoutFrom.getLayoutParams();
-            int s = DynamicElement.findMarginTop(tl.getFromDate(),tl.getThruDate());
-            view.setTag(1,s);
-            Log.d("margin",s + "margin top");
-
-            params.bottomMargin = s;*//*
-
-            layoutFrom.setLayoutParams(params);*/
-        } /*else {
-            layoutFrom = (LinearLayout) view.getTag(R.id.llFromDate);*/
-            /*//layoutThru = (LinearLayout) view.getTag(R.id.llThruDate);
-            params  = (LinearLayout.LayoutParams) layoutFrom.getLayoutParams();
-            params.bottomMargin = (Integer) view.getTag(1);*/
-      //  }
-
-
+        }
         TextView timeF = (TextView) view.findViewById(R.id.tvTimeFrom);
         TextView timeT = (TextView) view.findViewById(R.id.tvTimeThru);
         TextView tvColor1 = (TextView) view.findViewById(R.id.tvColor1);
@@ -157,17 +137,12 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
         }
 
         LinearLayout.LayoutParams params  = (LinearLayout.LayoutParams) layoutFrom.getLayoutParams();
-        int s = DynamicElement.findMarginTop(tl.getFromDate(),tl.getThruDate());
-        Log.d("margin",s + "margin top");
-
-        params.bottomMargin = s;
-
+        params.bottomMargin = tl.getTimeSpace();
         layoutFrom.setLayoutParams(params);
         timeF.setText(tl.getFromDate());
         timeT.setText(tl.getThruDate());
         String time = preferences.getString(Preferences.SHIFTTIME,"");
         System.out.print(time);
-       // timeShift.setText(time);
         return view;
     }
 
