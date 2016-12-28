@@ -51,13 +51,6 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_promoters,container,false);
-   /*     ArrayList<String> promoterList = new ArrayList<>();
-        promoterList.add("Rahul Kumar");
-        promoterList.add("Abhishek Lal");
-        promoterList.add("Aditya Sharma");
-        promoterList.add("Amith Shah");
-        promoterList.add("Mahesh Jai");
-        promoterList.add("Rohith Pai"); */
 
         listView = (ListView) view.findViewById(R.id.lvPromotersList);
         btAddPromoter = (Button) view.findViewById(R.id.btAddPromoter);

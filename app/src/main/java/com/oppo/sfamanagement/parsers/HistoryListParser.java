@@ -2,6 +2,7 @@ package com.oppo.sfamanagement.parsers;
 
 import android.text.format.DateFormat;
 
+import com.oppo.sfamanagement.fragment.DynamicElement;
 import com.oppo.sfamanagement.model.HistoryChild;
 import com.oppo.sfamanagement.model.HistoryNew;
 
@@ -96,10 +97,9 @@ public class HistoryListParser {
                                             c2.setTime(tDate);
                                             historyChild.setFromDate(DateFormat.format("hh:mm", c1).toString());
                                             historyChild.setThruDate(DateFormat.format("hh:mm", c2).toString());
-                                            /*if (childObject2.has("comments")) {
-                                                historyChild.setComments(childObject2.getString("comments"));*/
-                                                childArrayList.add(historyChild);
-                                           // }
+                                            historyChild.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm", c1).toString(),DateFormat.format("hh:mm", c2).toString()));
+                                            childArrayList.add(historyChild);
+
                                         }
 
                                     }

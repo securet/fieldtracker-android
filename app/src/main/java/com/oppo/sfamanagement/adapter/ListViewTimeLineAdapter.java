@@ -68,7 +68,6 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
         TextView tvLocationStatus1 = (TextView) view.findViewById(R.id.tvLocationStatus1);
         TextView tvLocationStatus2 = (TextView) view.findViewById(R.id.tvLocationStatus2);
         TextView tvColor2 = (TextView) view.findViewById(R.id.tvColor2);
-        TextView timeShift = (TextView) view.findViewById(R.id.stvShiftTime);
         LinearLayout layoutFrom = (LinearLayout) view.findViewById(R.id.llFromDate);
         LinearLayout layoutThru = (LinearLayout) view.findViewById(R.id.llThruDate);
 
@@ -84,7 +83,7 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
                 redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red);
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 tvColor1.setBackground(blueBackground);
             }
 
@@ -141,8 +140,6 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
         layoutFrom.setLayoutParams(params);
         timeF.setText(tl.getFromDate());
         timeT.setText(tl.getThruDate());
-        String time = preferences.getString(Preferences.SHIFTTIME,"");
-        System.out.print(time);
         return view;
     }
 

@@ -11,6 +11,15 @@ public class HistoryChild {
     private String fromDate;
     private String thruDate;
     private int background;
+    private int timeSpace;
+
+    public int getTimeSpace() {
+        return timeSpace;
+    }
+
+    public void setTimeSpace(int timeSpace) {
+        this.timeSpace = timeSpace;
+    }
 
     public String getThruDate() {
         return thruDate;

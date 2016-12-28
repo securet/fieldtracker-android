@@ -130,9 +130,7 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter {
 
         }
         LinearLayout.LayoutParams params  = (LinearLayout.LayoutParams) layoutFrom.getLayoutParams();
-        int s = DynamicElement.findMarginTop(c.getFromDate(),c.getThruDate());
-        Log.d("margin",s + "margin bottom");
-        params.bottomMargin = s;
+        params.bottomMargin = c.getTimeSpace();
         layoutFrom.setLayoutParams(params);
         timeF.setText(c.getFromDate());
         timeT.setText(c.getThruDate());
