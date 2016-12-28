@@ -9,7 +9,16 @@ import java.util.ArrayList;
 public class HistoryChild {
     private String comments;
     private String fromDate;
+    private String thruDate;
     private int background;
+
+    public String getThruDate() {
+        return thruDate;
+    }
+
+    public void setThruDate(String thruDate) {
+        this.thruDate = thruDate;
+    }
 
     public String getComments() {
         return comments;

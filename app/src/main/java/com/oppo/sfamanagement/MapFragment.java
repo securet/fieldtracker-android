@@ -22,6 +22,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -63,6 +64,7 @@ import com.oppo.sfamanagement.database.NetworkUtils;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.database.ShiftTimeView;
 import com.oppo.sfamanagement.database.StringUtils;
+import com.oppo.sfamanagement.fragment.TimeLineFragment;
 import com.oppo.sfamanagement.model.Response;
 import com.oppo.sfamanagement.model.TimeInOutDetails;
 import com.oppo.sfamanagement.service.UploadTransactions;
@@ -101,7 +103,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	}
 	LinearLayout llLogin_Logout,llShiftTime;
 	TextView tvTimeInOut,tvTimeInOutLocation;
-    ImageView ivCurrentLocation;
+    ImageView ivCurrentLocation,ivTimeLineExpand;
 
 
     @Override
@@ -110,7 +112,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
         TimeInOutDetails details = dataSource.getToday();
         String lastDate = CalenderUtils.getDateMethod(details.getClockDate(),CalenderUtils.DateMonthDashedFormate);
-
+        if(!details.equals(null)) {
             if(clockDate.equalsIgnoreCase(lastDate)) {
                 String actionType = details.getComments();
                 // String time = getTime(today.getClockDate());
@@ -119,7 +121,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                     Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,""));
                     tvTimeInOut.setText("Time In");
                     //             tvTimeInOutLocation.setText("Time In at " + getCurrentTime(new Date()));
-                } else if(actionType.equalsIgnoreCase("OutLocation") || actionType.equalsIgnoreCase("InLocation") || actionType.equalsIgnoreCase("TimeIn")){
+                } else if(/*actionType.equalsIgnoreCase("OutLocation") || actionType.equalsIgnoreCase("InLocation") ||*/ actionType.equalsIgnoreCase("TimeIn")){
                     tvTimeInOut.setText("Time Out");
                     tvTimeInOutLocation.setText(preferences.getString(Preferences.SITENAME,""));
                 } else {
@@ -135,13 +137,14 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                     tvTimeInOutLocation.setText(preferences.getString(Preferences.SITENAME,""));
                 }
             }*/
-
+        }
     }
 
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.fragment_map, container,false);
+        ivTimeLineExpand = (ImageView) rootView.findViewById(R.id.ivTimeLineExapand);
 		mapFragment = SupportMapFragment.newInstance();
         dataSource = new EventDataSource(getContext());
         preferences = new Preferences(getContext());
@@ -160,6 +163,16 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		ShiftTimeView stvShiftTime = (ShiftTimeView) rootView.findViewById(R.id.stvShiftTime);
 		llShiftTime = (LinearLayout) rootView.findViewById(R.id.llShiftTime);
 		llLogin_Logout = (LinearLayout) rootView.findViewById(R.id.llLogin_Logout);
+
+        ivTimeLineExpand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment f = new TimeLineFragment();
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
+                fm.beginTransaction();
+            }
+        });
 
         ivCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -647,7 +660,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		}
 	}
 
-    /*public void uploadData(String strImage)
+   /* public void uploadData(String strImage)
     {
         String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
         TimeInOutDetails details = dataSource.getToday();
@@ -659,7 +672,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                     Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,""));
                     tvTimeInOut.setText("Time In");
                     tvTimeInOutLocation.setText(preferences.getString(Preferences.SITENAME,""));
-                    dataSource.insertTimeInOutDetails(getTimeInOutDetails("TimeOut","clockOut",strImage,"false"));
+                    dataSource.insertTimeInOutDetails(getTimeInOutDetails("TimeIn","clockIn",strImage,"false"));
                     if(NetworkUtils.isNetworkConnectionAvailable(getContext()))
                     {
                         Intent uploadTraIntent=new Intent(getContext(),UploadTransactions.class);
@@ -669,7 +682,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 } else if(comments.equalsIgnoreCase("OutLocation") || comments.equalsIgnoreCase("InLocation") || comments.equalsIgnoreCase("TimeIn")){
                     tvTimeInOut.setText("Time Out");
                     tvTimeInOutLocation.setText("Time In at " + getCurrentTime(new Date()));
-                    dataSource.insertTimeInOutDetails(getTimeInOutDetails("TimeIn","clockIn",strImage,"false"));
+                    dataSource.insertTimeInOutDetails(getTimeInOutDetails("TimeOut","clockOut",strImage,"false"));
                     if(NetworkUtils.isNetworkConnectionAvailable(getContext()))
                     {
                         Intent uploadTraIntent=new Intent(getContext(),UploadTransactions.class);
@@ -718,43 +731,48 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		}
 		if(!TextUtils.isEmpty(strActionType)) {
            /* dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,strActionType,strFile,"false"));*/
-            //uploadData(strFile);
+           // uploadData(strFile);
             // update button
             TimeInOutDetails today = dataSource.getToday();
-            String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
-            TimeInOutDetails details = dataSource.getToday();
-            String lastDate = CalenderUtils.getDateMethod(details.getClockDate(),CalenderUtils.DateMonthDashedFormate);
-                if(lastDate.equalsIgnoreCase(clockDate)) {
-                    String comments = details.getComments();
-                    if (TextUtils.isEmpty(comments) || comments.equalsIgnoreCase("TimeOut")) {
-                        tvTimeInOut.setText("Time In");
-                       // tvTimeInOutLocation.setText(preferences.getString(Preferences.SITENAME,""));
-                        dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,strActionType,strFile,"false"));
-                        if(NetworkUtils.isNetworkConnectionAvailable(getContext()))
-                        {
-                            Intent uploadTraIntent=new Intent(getContext(),UploadTransactions.class);
-                            getActivity().startService(uploadTraIntent);
-                        }
-                    } else if (comments.equalsIgnoreCase("OutLocation") || comments.equalsIgnoreCase("InLocation") || comments.equalsIgnoreCase("TimeIn")) {
-                        tvTimeInOut.setText("Time Out");
-                        tvTimeInOutLocation.setText("Time In at " + getCurrentTime(new Date()));
-                        dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,strActionType,strFile,"false"));
-                        if(NetworkUtils.isNetworkConnectionAvailable(getContext()))
-                        {
-                            Intent uploadTraIntent=new Intent(getContext(),UploadTransactions.class);
-                            getActivity().startService(uploadTraIntent);
-                        }
-                    } else {
-
+            if(!today.equals(null)) {
+                String comments = today.getComments();
+                Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,"") + " " + comments);
+               // String time = getTime(today.getClockDate());
+                if (TextUtils.isEmpty(comments)  || comments.equalsIgnoreCase("TimeOut")) {
+                    Log.d("TIMEIN",preferences.getString(Preferences.TIMEINOUTSTATUS,""));
+                    tvTimeInOut.setText("Time In");
+                    tvTimeInOutLocation.setText(preferences.getString(Preferences.SITENAME,""));
+                    dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,strActionType,strFile,"false"));
+                    if(NetworkUtils.isNetworkConnectionAvailable(getContext()))
+                    {
+                        Intent uploadTraIntent=new Intent(getContext(),UploadTransactions.class);
+                        getActivity().startService(uploadTraIntent);
                     }
-                }
 
+                } else if(comments.equalsIgnoreCase("OutLocation") || comments.equalsIgnoreCase("InLocation") || comments.equalsIgnoreCase("TimeIn")){
+                    tvTimeInOut.setText("Time Out");
+                    tvTimeInOutLocation.setText("Time In at " + getCurrentTime(new Date()));
+
+                    dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,strActionType,strFile,"false"));
+                    if(NetworkUtils.isNetworkConnectionAvailable(getContext()))
+                    {
+                        Intent uploadTraIntent=new Intent(getContext(),UploadTransactions.class);
+                        getActivity().startService(uploadTraIntent);
+                    }
+                } else {
+
+                }
+            }
 			/*Bundle b = new Bundle();
 			b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.TIME_IN_OUT));
 			b.putString(AppsConstant.METHOD, AppsConstant.POST);
 			b.putString(AppsConstant.REASON, strComments);
 			b.putString(AppsConstant.PARAMS, ParameterBuilder.getTimeinOut(((MainActivity) getActivity()).preferences, strComments, strActionType, strFile));
 			getActivity().getLoaderManager().initLoader(LoaderConstant.TIMEINOUT, b, MapFragment.this).forceLoad();*/
+
+
+
+            llShiftTime.setVisibility(View.VISIBLE);
 		}
 	}
     /*public void uploadData()

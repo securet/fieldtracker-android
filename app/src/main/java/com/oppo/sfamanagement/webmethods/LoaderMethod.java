@@ -17,6 +17,7 @@ public enum LoaderMethod
     UPDATE_PROMOTER,
     ADD_PROMOTER,
     TIMEINOUT,
-    HISTORY_LIST
+    HISTORY_LIST,
+    TIMELINE_LIST
 
 }

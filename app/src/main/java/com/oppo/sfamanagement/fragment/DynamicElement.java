@@ -8,6 +8,7 @@ package com.oppo.sfamanagement.fragment;
 public class DynamicElement {
     private static int totalMin ;
     private static double dp ;
+    private static int timeShift = 0;
     public static int findMarginTop(String timeIn,String timeOut) {
         if(timeIn.length() == 5) {
             if (timeIn.length() == timeOut.length()) {
@@ -23,7 +24,7 @@ public class DynamicElement {
                     totalMin = timeOutMins - timeInMins;
                 } else if(timeInHour == timeOutHour) {
                     if (timeInMin == timeOutMin) {
-                        totalMin = 12 * 60;
+                        totalMin = 0;
                     } else if(timeInMin > timeOutMin) {
                         totalMin = timeInMin + 12 * 60;
                     } else {
@@ -49,7 +50,7 @@ public class DynamicElement {
             }
         }
         if (totalMin != 0 ) {
-            dp =  (double) totalMin * 60 / 60;
+            dp =  (double) totalMin * 20 / 60;
         }
         return (int)Math.round(dp);
     }

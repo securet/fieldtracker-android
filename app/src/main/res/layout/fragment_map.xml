@@ -20,8 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
+            android:paddingStart="25dp"
+            android:paddingLeft="25dp"
             android:layout_marginTop="5dip"
-            android:background="#ccffffff"
+            android:background="#bbffffff"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -65,10 +67,12 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/ivTimeLineExapand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
                 android:src="@drawable/user_time_in" />
         </LinearLayout>
         <ImageView

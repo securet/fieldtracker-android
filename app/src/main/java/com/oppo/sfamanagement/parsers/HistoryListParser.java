@@ -22,16 +22,16 @@ import java.util.concurrent.TimeUnit;
 public class HistoryListParser {
     private String result = "";
     private String response = "";
-    private HistoryNew history;
+    //private HistoryNew history;
     private ArrayList<HistoryNew> parentArraylist = new ArrayList<>();
     private ArrayList<HistoryChild> childArrayList = new ArrayList<>();
-    private HistoryChild historyChild;
+    //private HistoryChild historyChild;
 
     public HistoryListParser(String response) {
         this.response = response;
     }
 
-    public ArrayList Parse() {
+    public ArrayList<HistoryNew> Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
             if(parentObject.has("userTimeLog")){
@@ -40,7 +40,7 @@ public class HistoryListParser {
                     System.out.println(arrayParent.length() + "     main array        "   + i);
                     JSONObject childOject = arrayParent.getJSONObject(i);
                     if (childOject.has("estimatedStartDate")) {
-                        history = new HistoryNew();
+                        HistoryNew history = new HistoryNew();
                         Date timeIn = null;
                         SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
@@ -54,7 +54,7 @@ public class HistoryListParser {
                         }
                         mCalendar.setTime(timeIn);
                         history.setDate(DateFormat.format("dd-MMM-yy", mCalendar).toString());
-                        history.setTimeIn(DateFormat.format("h:mm",mCalendar).toString());
+                        history.setTimeIn(DateFormat.format("hh:mm",mCalendar).toString());
 
                        // history.setStartDate(childOject.getString("estimatedStartDate"));
                         if (childOject.has("estimatedCompletionDate")) {
@@ -78,23 +78,30 @@ public class HistoryListParser {
                                     System.out.println(childArray.length()  + "  sub array" + j);
                                     JSONObject childObject2 = childArray.getJSONObject(j);
                                     if (childObject2.has("fromDate")) {
-                                        historyChild = new HistoryChild();
-                                        String fromDate = childObject2.getString("fromDate");
-                                        Date fDate = null;
-                                        Calendar c2 = Calendar.getInstance();
-                                        try {
-                                            fDate = simpleDateFormat.parse(fromDate.replaceAll("Z$","+0000"));
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
+                                        if (childObject2.has("thruDate")) {
+                                            HistoryChild historyChild = new HistoryChild();
+                                            String fromDate = childObject2.getString("fromDate");
+                                            String thruDate = childObject2.getString("thruDate");
+                                            Date fDate = null;
+                                            Date tDate = null;
+                                            Calendar c1 = Calendar.getInstance();
+                                            Calendar c2 = Calendar.getInstance();
+                                            try {
+                                                fDate = simpleDateFormat.parse(fromDate.replaceAll("Z$", "+0000"));
+                                                tDate = simpleDateFormat.parse(thruDate.replaceAll("Z$", "+0000"));
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                            c1.setTime(fDate);
+                                            c2.setTime(tDate);
+                                            historyChild.setFromDate(DateFormat.format("hh:mm", c1).toString());
+                                            historyChild.setThruDate(DateFormat.format("hh:mm", c2).toString());
+                                            /*if (childObject2.has("comments")) {
+                                                historyChild.setComments(childObject2.getString("comments"));*/
+                                                childArrayList.add(historyChild);
+                                           // }
                                         }
-                                        c2.setTime(fDate);
-                                        historyChild.setFromDate(DateFormat.format("hh:mm",c2).toString());
-                                        //historyChild.setFromDate(childObject2.getString("fromDate"));
-                                        if(childObject2.has("comments")) {
-                                            historyChild.setComments(childObject2.getString("comments"));
-                                            childArrayList.add(historyChild);
-                                        }
-                                       // childArrayList.add(historyChild);
+
                                     }
 
                                 }

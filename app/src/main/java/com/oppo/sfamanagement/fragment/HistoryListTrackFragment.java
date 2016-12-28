@@ -26,10 +26,9 @@ import java.util.ArrayList;
 
 public class HistoryListTrackFragment extends Fragment {
 
-    private HistoryNew historyNew;
+    //private HistoryNew historyNew;
     private TextView date,timeIn,timeOut,hour,tvTime;
     private ListView listView;
-    private ListViewHistorySublistAdapter adapter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,13 +51,15 @@ public class HistoryListTrackFragment extends Fragment {
         fromDate3 = (TextView) view.findViewById(R.id.tvTimeInTimeGreen2);
         comment3 = (TextView) view.findViewById(R.id.tvCommentGreen2);*/
 
-        historyNew = getArguments().getParcelable("sub_history");
+        HistoryNew historyNew = getArguments().getParcelable("sub_history");
         date.setText(historyNew.getDate());
         timeIn.setText(historyNew.getTimeIn());
         timeOut.setText(historyNew.getTimeOut());
         hour.setText(historyNew.getHours());
-        adapter = new ListViewHistorySublistAdapter(getContext(),R.layout.history_tracking_item,historyNew.getHistoryChildren());
+
+        ListViewHistorySublistAdapter adapter = new ListViewHistorySublistAdapter(getContext(),R.layout.history_tracking_item,historyNew.getHistoryChildren());
         listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         return view;
     }
 
