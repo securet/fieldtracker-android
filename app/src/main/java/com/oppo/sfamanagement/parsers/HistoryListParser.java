@@ -35,6 +35,7 @@ public class HistoryListParser {
     public ArrayList<HistoryNew> Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
+            // size 0 or <10 make  IsLast = true
             if(parentObject.has("userTimeLog")){
                 JSONArray arrayParent = parentObject.getJSONArray("userTimeLog");
                 for (int i = 0 ; i < arrayParent.length() ; i++) {

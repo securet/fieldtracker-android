@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -37,19 +38,47 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_events, container,false);
-		return rootView;
-	}
+		listView = (ListView) rootView.findViewById(R.id.expandableList);
+		adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,new ArrayList<HistoryNew>());
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(this);
+		listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(AbsListView absListView, int i) {
 
-	@Override
-	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-		listView = (ListView) view.findViewById(R.id.expandableList);
+			}
 
+			@Override
+			public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+//				if(!isLoading && (i+i1 >=i2-3)&& !isLast){
+//					isLoading = true;
+//					increase Page Index;
+//					Call ApI
+//				}
+
+			}
+		});
+
+		// Page index = 0
+		// isLastPage = false
 		Bundle bundle = new Bundle();
 		bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"anand@securet.in","0","10"));
 		bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
 		getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST,bundle,EventsFragment.this);
+		return rootView;
 	}
+
+//	@Override
+//	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+//		super.onViewCreated(view, savedInstanceState);
+//		listView = (ListView) view.findViewById(R.id.expandableList);
+//
+//		Bundle bundle = new Bundle();
+//		bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"anand@securet.in","0","10"));
+//		bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
+//		getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST,bundle,EventsFragment.this);
+//	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -80,13 +109,14 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	@Override
 	public void onLoadFinished(Loader<Object> loader, Object data) {
 		((MainActivity)getActivity()).showHideProgressForLoder(true);
-		if(data != null && data instanceof ArrayList) {
-			list = (ArrayList<HistoryNew>) data;
-			System.out.println(list.size()   +  "   After Loader");
-            //System.out.println(list.get(7).getHistoryChildren().toString());
-			adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,list);
-			listView.setAdapter(adapter);
-			listView.setOnItemClickListener(this);
+		if(data != null && data instanceof ArrayList)
+		{
+			if(list == null) {
+				list = (ArrayList<HistoryNew>) data;
+			}else{
+				list.addAll((ArrayList<HistoryNew>) data);
+			}
+			adapter.Refresh(list);
 		}
 		getLoaderManager().destroyLoader(loader.getId());
 	}

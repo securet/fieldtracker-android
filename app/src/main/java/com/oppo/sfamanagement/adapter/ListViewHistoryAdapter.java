@@ -30,6 +30,10 @@ public class ListViewHistoryAdapter extends ArrayAdapter<HistoryNew>{
         this.resourceId = resource;
         this.list = list;
     }
+    public void  Refresh( ArrayList<HistoryNew> list) {
+        this.list = list;
+        this.notifyDataSetChanged();
+    }
 
     @Nullable
     public HistoryNew getItem(int position) {
