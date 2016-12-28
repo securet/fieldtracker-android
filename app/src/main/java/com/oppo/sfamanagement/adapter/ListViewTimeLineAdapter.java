@@ -1,6 +1,7 @@
 package com.oppo.sfamanagement.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -93,27 +94,66 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
 
 
         if(position == 0) {
+            Drawable blueBackground = null;
+            Drawable redBackground = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                tvColor1.setBackground(context.getResources().getDrawable(R.drawable.history_time_in_element,null));
-                tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_time_in_element_red,null));
-                tvLocationStatus1.setText("Time In");
-                tvLocationStatus2.setText("Out of Location");
+                 blueBackground = context.getResources().getDrawable(R.drawable.history_time_in_element,null);
+                 redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red,null);
+            } else {
+                blueBackground = context.getResources().getDrawable(R.drawable.history_time_in_element);
+                redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red);
             }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                tvColor1.setBackground(blueBackground);
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                tvColor2.setBackground(redBackground);
+            }
+            tvLocationStatus1.setText("Time In");
+            tvLocationStatus2.setText("Out of Location");
         }
         else if (position == list.size()-1) {
+            Drawable blueBackground = null;
+            Drawable redBackground = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                tvColor1.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_green,null));
-                tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_gray,null));
-                tvLocationStatus2.setText("Time Out");
-                tvLocationStatus1.setText("In Location");
+                blueBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_green,null);
+                redBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_gray,null);
+            } else {
+                blueBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_green);
+                redBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_gray);
             }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                tvColor1.setBackground(blueBackground);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                tvColor2.setBackground(redBackground);
+            }
+
+            tvLocationStatus2.setText("Time Out");
+            tvLocationStatus1.setText("In Location");
+
         } else {
+            Drawable blueBackground = null;
+            Drawable redBackground = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_time_in_element_red,null));
-                tvColor1.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_green,null));
-                tvLocationStatus1.setText("In Location");
-                tvLocationStatus2.setText("Out of Location");
+                blueBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_green,null);
+                redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red,null);
+            } else {
+                blueBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_green);
+                redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red);
             }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                tvColor1.setBackground(blueBackground);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                tvColor2.setBackground(redBackground);
+            }
+
+            tvLocationStatus1.setText("In Location");
+            tvLocationStatus2.setText("Out of Location");
+
         }
 
         LinearLayout.LayoutParams params  = (LinearLayout.LayoutParams) layoutFrom.getLayoutParams();

@@ -83,7 +83,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 				FragmentManager fm = getFragmentManager();
                 Bundle b = new Bundle();
                 HistoryNew hn = list.get(position);
-			//	System.out.println(hn.getHistoryChildren());
+				System.out.println(hn.getHistoryChildren().size() + "size of corresponding position");
                 b.putParcelable("sub_history",hn);
                 b.putInt("position",position);
                 f.setArguments(b);

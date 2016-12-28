@@ -44,14 +44,10 @@ public class HistoryListTrackFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.lvHistorySub);
         hour = (TextView) view.findViewById(R.id.tvHistoryTime);
 
-        /*fromDate = (TextView) view.findViewById(R.id.tvTimeInTimeBlue) ;
-        comment = (TextView) view.findViewById(R.id.tvComment1);
-        fromDate2 = (TextView) view.findViewById(R.id.tvTimeInGreen1);
-        comment2 = (TextView) view.findViewById(R.id.tvCommentGreen1);
-        fromDate3 = (TextView) view.findViewById(R.id.tvTimeInTimeGreen2);
-        comment3 = (TextView) view.findViewById(R.id.tvCommentGreen2);*/
 
         HistoryNew historyNew = getArguments().getParcelable("sub_history");
+        ArrayList<HistoryChild> list = historyNew.getHistoryChildren();
+        System.out.println(list.size() + " list size providing");
         date.setText(historyNew.getDate());
         timeIn.setText(historyNew.getTimeIn());
         timeOut.setText(historyNew.getTimeOut());
@@ -63,10 +59,4 @@ public class HistoryListTrackFragment extends Fragment {
         return view;
     }
 
-    /*@Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ArrayList<HistoryChild> child = historyNew.getHistoryChildren();
-
-    }*/
 }
