@@ -18,6 +18,16 @@ public class TimeLine {
         this.differenceMill = differenceMill;
     }
 
+
+    private int timeSpace;
+
+    public int getTimeSpace() {
+        return timeSpace;
+    }
+
+    public void setTimeSpace(int timeSpace) {
+        this.timeSpace = timeSpace;
+    }
     public String getDifference() {
 
         return difference;
@@ -30,10 +40,10 @@ public class TimeLine {
     public  TimeLine() {
 
     }
-    public TimeLine(String fromDate, String thruDate) {
-        this.fromDate = fromDate;
-        this.thruDate = thruDate;
-    }
+//    public TimeLine(String fromDate, String thruDate) {
+//        this.fromDate = fromDate;
+//        this.thruDate = thruDate;
+//    }
 
     public String getThruDate() {
         return thruDate;
@@ -44,7 +54,6 @@ public class TimeLine {
     }
 
     public String getFromDate() {
-
         return fromDate;
     }
 

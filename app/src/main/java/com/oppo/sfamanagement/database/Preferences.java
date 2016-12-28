@@ -13,6 +13,7 @@ public class Preferences
     private SharedPreferences.Editor edit;
     public static String INLOCATION = "InLocation";
     public static String TIMEINOUTSTATUS = "TimeInOutStatus";
+    public static String TIMEINTIME = "TimeInTime";
     public static String USERLATITUDE = "UserLatitude";
     public static String USERLONGITUDE = "UserLongitude";
     public static String LOCATIONSTATUS = "LocationStatus";

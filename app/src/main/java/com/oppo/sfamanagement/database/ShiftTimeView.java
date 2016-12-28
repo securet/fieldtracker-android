@@ -29,10 +29,9 @@ public class ShiftTimeView extends TextView {
     private final static String m12 = "HH:mm:ss";
     private final static String m24 = "k:mm";
     private FormatChangeObserver mFormatChangeObserver;
-
+    private Preferences preferences;
     private Runnable mTicker;
     private Handler mHandler;
-    private SharedPreferences myPrefs;
     private boolean mTickerStopped = false;
 
     String mFormat;
@@ -53,7 +52,7 @@ public class ShiftTimeView extends TextView {
         if (mCalendar == null) {
             mCalendar = Calendar.getInstance();
         }
-        myPrefs = context.getSharedPreferences("myPrefs", MODE_PRIVATE);
+        preferences = new Preferences(getContext());
         mFormatChangeObserver = new FormatChangeObserver();
         getContext().getContentResolver().registerContentObserver(
                 Settings.System.CONTENT_URI, true, mFormatChangeObserver);
@@ -74,22 +73,21 @@ public class ShiftTimeView extends TextView {
             public void run() {
                 if (mTickerStopped) return;
 
-                if(!TextUtils.isEmpty(myPrefs.getString("LoginDate",""))){
-                    SimpleDateFormat simpleDateFormat =new SimpleDateFormat("dd/M/yyyy HH:mm:ss");
+                if(!TextUtils.isEmpty(preferences.getString(Preferences.TIMEINTIME,"2010/10/2010 10:10:10"))){
+                    SimpleDateFormat simpleDateFormat =new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                     Date loginDate = new Date();
                     try {
-                         loginDate = simpleDateFormat.parse(myPrefs.getString("LoginDate", ""));
+                         loginDate = simpleDateFormat.parse(preferences.getString(Preferences.TIMEINTIME,"2010/10/2010 10:10:10"));
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                     Date curentDate = new Date();
-//                    mCalendar.setTimeInMillis(curentDate.getTime()-loginDate.getTime());
-//                    setText(DateFormat.format(mFormat, mCalendar).toString().toUpperCase());
+                    mCalendar.setTimeInMillis(curentDate.getTime()-loginDate.getTime());
+                    setText(DateFormat.format(mFormat, mCalendar).toString().toUpperCase());
                     long millis = curentDate.getTime()-loginDate.getTime();
                     setText(String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
                             TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)),
                             TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis))));
-
                 }
 
                 invalidate();
