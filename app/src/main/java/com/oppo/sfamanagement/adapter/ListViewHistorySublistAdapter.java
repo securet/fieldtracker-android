@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -104,8 +105,12 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 tvColor2.setBackground(redBackground);
             }
-
-            tvLocationStatus2.setText("Time Out");
+            if(TextUtils.isEmpty(c.getThruDate())){
+                layoutThru.setVisibility(View.GONE);
+            }else{
+                layoutThru.setVisibility(View.VISIBLE);
+                tvLocationStatus2.setText("Time Out");
+            }
             tvLocationStatus1.setText("In Location");
 
         } else {
@@ -133,8 +138,9 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter {
         params.bottomMargin = c.getTimeSpace();
         layoutFrom.setLayoutParams(params);
         timeF.setText(c.getFromDate());
-        timeT.setText(c.getThruDate());
-
+        if(!TextUtils.isEmpty(c.getThruDate())){
+            timeT.setText(c.getThruDate());
+        }
         return view;
     }
 }

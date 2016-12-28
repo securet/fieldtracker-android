@@ -1,5 +1,6 @@
 package com.oppo.sfamanagement.parsers;
 
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 
 import com.oppo.sfamanagement.fragment.DynamicElement;
@@ -89,17 +90,28 @@ public class HistoryListParser {
                                             Calendar c2 = Calendar.getInstance();
                                             try {
                                                 fDate = simpleDateFormat.parse(fromDate.replaceAll("Z$", "+0000"));
-                                                tDate = simpleDateFormat.parse(thruDate.replaceAll("Z$", "+0000"));
+                                                if(!TextUtils.isEmpty(thruDate)&&!thruDate.equalsIgnoreCase("null")) {
+                                                    tDate = simpleDateFormat.parse(thruDate.replaceAll("Z$", "+0000"));
+                                                }
                                             } catch (Exception e) {
                                                 e.printStackTrace();
                                             }
                                             c1.setTime(fDate);
-                                            c2.setTime(tDate);
                                             historyChild.setFromDate(DateFormat.format("hh:mm", c1).toString());
-                                            historyChild.setThruDate(DateFormat.format("hh:mm", c2).toString());
-                                            historyChild.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm", c1).toString(),DateFormat.format("hh:mm", c2).toString()));
-                                            childArrayList.add(historyChild);
+                                            if(tDate!=null) {
+                                                c2.setTime(tDate);
+                                                historyChild.setThruDate(DateFormat.format("hh:mm", c2).toString());
+                                                historyChild.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm", c1).toString(),DateFormat.format("hh:mm", c2).toString()));
+                                            }else{
+                                                historyChild.setThruDate("");
+                                                historyChild.setTimeSpace(0);
+                                            }
 
+
+                                            /*if (childObject2.has("comments")) {
+                                                historyChild.setComments(childObject2.getString("comments"));*/
+                                                childArrayList.add(historyChild);
+                                           // }
                                         }
 
                                     }
