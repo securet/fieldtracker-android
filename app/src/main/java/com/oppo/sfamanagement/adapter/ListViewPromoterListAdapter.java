@@ -60,4 +60,9 @@ public class ListViewPromoterListAdapter extends BaseAdapter {
         tvPromoter.setText(p.getFirstName() + " " + p.getLastName());
         return view;
     }
+
+    public void refresh(ArrayList<Promoter> list) {
+        this.list = list;
+        this.notifyDataSetChanged();
+    }
 }

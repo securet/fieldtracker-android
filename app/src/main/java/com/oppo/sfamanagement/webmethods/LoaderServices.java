@@ -68,7 +68,7 @@ public class LoaderServices extends CustomAsyncTask
             case ADD_STORE:
                 return new AddStoreParser(response).Parse();
             case PROMOTER_LIST:
-                return new PromoterListParser(response).Parse();
+                return new PromoterListParser(response,preferences).Parse();
             case ADD_PROMOTER:
                 return new AddPromoterParser(response).Parse();
             case UPDATE_PROMOTER:
@@ -76,7 +76,7 @@ public class LoaderServices extends CustomAsyncTask
             case IMAGE_UPLOAD:
                 return new ImageUploadParser(response).Parse();
             case HISTORY_LIST:
-                return new HistoryListParser(response).Parse();
+                return new HistoryListParser(response,preferences).Parse();
             case TIMEINOUT:
                 return new TimeInOutParser(response,AppsConstant.REASON).Parse();
             case TIMELINE_LIST:

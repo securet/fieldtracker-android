@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.oppo.sfamanagement.adapter.ListViewHistoryAdapter;
 import com.oppo.sfamanagement.database.AppsConstant;
+import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.fragment.HistoryListTrackFragment;
 import com.oppo.sfamanagement.model.HistoryNew;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
@@ -29,6 +30,9 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	protected ListViewHistoryAdapter adapter;
 	protected ListView listView;
 	ArrayList<HistoryNew> list;
+    private int pageIndex;
+    private boolean isLoading = false;
+    private Preferences preferences;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_events, container,false);
 		listView = (ListView) rootView.findViewById(R.id.expandableList);
+        preferences = new Preferences(getContext());
 		adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,new ArrayList<HistoryNew>());
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(this);
@@ -50,12 +55,27 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 
 			@Override
 			public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-
+                boolean isLast = preferences.getBoolean(Preferences.ISLAST,false);
 //				if(!isLoading && (i+i1 >=i2-3)&& !isLast){
 //					isLoading = true;
 //					increase Page Index;
 //					Call ApI
 //				}
+
+
+                if ((i+i1 >= i2) && !isLast) {
+                    //isLoading = true;
+                    preferences.saveBoolean(Preferences.ISLAST,true);
+                    preferences.commit();
+                    pageIndex++;
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST, "anand@securet.in", String.valueOf(pageIndex), "10"));
+                    bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST, bundle, EventsFragment.this);
+
+                }
+
 
 			}
 		});

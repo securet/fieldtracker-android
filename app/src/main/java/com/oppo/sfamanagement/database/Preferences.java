@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.oppo.sfamanagement.model.Promoter;
+
 /**
  * Created by Admin on 7/17/2016.
  */
@@ -37,6 +39,8 @@ public class Preferences
     public static String ROLETYPEID = "roleTypeId";
     public static String PARTYID = "partyId";
     public static String SHIFTTIME = "ShiftTime";
+    public static String ISLAST = "isLast";
+    public static String PROMOTERISLAST= "promoterIsLast";
     public Preferences(Context context)
     {
         preferences = context.getSharedPreferences("AttendanceTracker", context.MODE_PRIVATE);
