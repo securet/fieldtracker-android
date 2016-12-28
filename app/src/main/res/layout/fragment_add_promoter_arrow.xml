@@ -49,12 +49,13 @@
         android:layout_height="wrap_content"
         android:text="@string/weekly_off"/>
     <LinearLayout
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="74dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginStart="7dp"
+        android:layout_gravity="center_horizontal|center"
         android:layout_marginBottom="10dp"
-        android:gravity="center_horizontal"
+        android:gravity="center_horizontal|center"
         android:orientation="horizontal">
         <LinearLayout
             android:layout_width="45dp"
