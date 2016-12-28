@@ -24,9 +24,8 @@ public class HistoryListParser {
     private String response = "";
     //private HistoryNew history;
     private ArrayList<HistoryNew> parentArraylist = new ArrayList<>();
-    private ArrayList<HistoryChild> childArrayList = new ArrayList<>();
     //private HistoryChild historyChild;
-
+//    private ArrayList<HistoryChild> childArrayList = new ArrayList<>();
     public HistoryListParser(String response) {
         this.response = response;
     }
@@ -72,6 +71,7 @@ public class HistoryListParser {
                             history.setHours(String.format("%02dh %02dm", TimeUnit.MILLISECONDS.toHours(millis),
                                     TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))));
                            // history.setEndDate(childOject.getString("estimatedCompletionDate"));
+                            ArrayList<HistoryChild> childArrayList = new ArrayList<>();
                             if (childOject.has("timeEntryList")) {
                                 JSONArray childArray = childOject.getJSONArray("timeEntryList");
                                 for (int j = 0 ; j < childArray.length() ; j++) {
