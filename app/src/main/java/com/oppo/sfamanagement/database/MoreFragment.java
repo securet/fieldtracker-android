@@ -13,11 +13,13 @@ import com.oppo.sfamanagement.LeaveFragment;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.MapFragment;
 import com.oppo.sfamanagement.R;
+import com.oppo.sfamanagement.fragment.PromotersFragment;
 import com.oppo.sfamanagement.fragment.StoreListFragment;
 
 public class MoreFragment extends Fragment {
 
-    TextView store;
+    private TextView store,promoter;
+    private Preferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class MoreFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.more_option, container, false);
         TextView tvLogout = (TextView) rootView.findViewById(R.id.tvLogout);
+        preferences = new Preferences(getContext());
         tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,6 +43,26 @@ public class MoreFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new StoreListFragment();
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
+                fm.executePendingTransactions();
+            }
+        });
+
+        promoter = (TextView) rootView.findViewById(R.id.tvPromoter);
+        /*if(preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExecutiveOnPremise") &&
+                preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExectiveOffPremise")) {
+            promoter.setVisibility(View.GONE);
+            store.setVisibility(View.GONE);
+        }
+        else {
+            promoter.setVisibility(View.VISIBLE);
+            store.setVisibility(View.VISIBLE);
+        }*/
+        promoter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment =(Fragment) new PromotersFragment();
                 FragmentManager fm = getFragmentManager();
                 fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
                 fm.executePendingTransactions();

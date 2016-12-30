@@ -2,6 +2,7 @@ package com.oppo.sfamanagement.fragment;
 
 import android.app.LoaderManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,9 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,13 +50,18 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     ListViewPromoterListAdapter adapter;
     Button btAddPromoter;
     ListView listView;
-    ArrayList<Promoter> list;
-    ProgressDialog pd;
-    private int preLast;
+    ArrayList<Promoter> list,listBackUp;
+    private Promoter promoter = new Promoter();
+    ImageView ivLoader;
+    private LinearLayout layout;
     Preferences preferences;
-    private int pageIndex = 0;
+    private int pageIndex = -1;
     private int pageSize = 10;
+    private int count = 0;
     private boolean isLoading = false;
+    private View footerView;
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,11 +71,17 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_promoters,container,false);
         preferences = new Preferences(getContext());
         listView = (ListView) view.findViewById(R.id.lvPromotersList);
         btAddPromoter = (Button) view.findViewById(R.id.btAddPromoter);
 
+        footerView = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_view,null,false);
+        layout = (LinearLayout)footerView.findViewById(R.id.footer_layout) ;
+        ivLoader = (ImageView) footerView.findViewById(R.id.footer_1);
+        layout.setVisibility(View.INVISIBLE);
+        footerView.setVisibility(View.INVISIBLE);
         btAddPromoter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,16 +91,21 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
                 fm.executePendingTransactions();
             }
         });
-        pd = new ProgressDialog(getContext());
-        pd.setMessage("Please wait...");
-        pd.setCancelable(false);
-        adapter = new ListViewPromoterListAdapter(getActivity(), R.layout.promoter_list_item,new ArrayList<Promoter>());
+        listBackUp = promoter.getPromoterArrayList();
+        if(listBackUp != null) {
+            adapter = new ListViewPromoterListAdapter(getActivity(), R.layout.promoter_list_item,listBackUp);
+        } else {
+            adapter = new ListViewPromoterListAdapter(getActivity(), R.layout.promoter_list_item, new ArrayList<Promoter>());
+        }
         listView.setAdapter(adapter);
+        listView.addFooterView(layout);
         listView.setOnItemClickListener(this);
         listView.setOnScrollListener(this);
-
+        hideloader();
+        pageIndex = 0;
+        System.out.println(pageIndex + "  before scroll");
         Bundle b = new Bundle();
-        b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,String.valueOf(pageIndex),String.valueOf(pageSize)));
+        b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,pageIndex+"",String.valueOf(pageSize)));
         b.putString(AppsConstant.METHOD, AppsConstant.GET);
         getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST,b,PromotersFragment.this).forceLoad();
         return view;
@@ -91,7 +113,13 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
-        ((MainActivity)getActivity()).showHideProgressForLoder(false);
+            if (pageIndex == 0 && count == 0) {
+                count++;
+                ((MainActivity) getActivity()).showHideProgressForLoder(false);
+
+            }else{
+                showLoader();
+            }
         switch (id) {
             case LoaderConstant.PROMOTER_LIST:
                 return new LoaderServices(getContext(), LoaderMethod.PROMOTER_LIST,args);
@@ -103,7 +131,12 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
-        ((MainActivity)getActivity()).showHideProgressForLoder(true);
+        if(pageIndex==0 ){
+            ((MainActivity)getActivity()).showHideProgressForLoder(true);
+        }else{
+            hideloader();
+        }
+
         if(data != null && data instanceof ArrayList){
 
         }  else {
@@ -116,11 +149,29 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
             list = (ArrayList<Promoter>)data;
         } else {
             list.addAll((ArrayList<Promoter>) data);
+            promoter.setPromoterArrayList(list);
         }
+        isLoading = false;
         adapter.refresh(list);
+
+
 
         getActivity().getLoaderManager().destroyLoader(loader.getId());
 
+    }
+    public void showLoader() {
+
+            Animation rotateXaxis = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_x_axis);
+            rotateXaxis.setInterpolator(new LinearInterpolator());
+            ivLoader.setAnimation(rotateXaxis);
+            footerView.setVisibility(View.VISIBLE);
+            layout.setVisibility(View.VISIBLE);
+
+    }
+    public void hideloader() {
+
+        layout.setVisibility(View.GONE);
+        footerView.setVisibility(View.GONE);
     }
 
     @Override
@@ -132,13 +183,26 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Promoter p = list.get(position);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("promoter",p);
+        bundle.putParcelable("promoter", p);
         FragmentManager fm = getFragmentManager();
-        Fragment fragment = new EditPromoterFragment();
-        fragment.setArguments(bundle);
-        fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
-        fm.executePendingTransactions();
+        if (!p.getStatusId().equals(null) &&
+                !preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExecutiveOnPremise") &&
+                !preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExectiveOffPremise") &&
+                !p.getStatusId().equalsIgnoreCase("ReqCompleted")) {
+
+            Fragment fragment = new EditPromoterFragment();
+            fragment.setArguments(bundle);
+            fm.beginTransaction().replace(R.id.flMiddle, fragment).addToBackStack(null).commit();
+            //fm.executePendingTransactions();
+        } else {
+            Fragment fragment = new FieldExecutivePromoterFragment();
+            fragment.setArguments(bundle);
+            fm.beginTransaction().replace(R.id.flMiddle, fragment).addToBackStack(null).commit();
+            //fm.executePendingTransactions();
+        }
     }
+
+
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -155,17 +219,12 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
 
                 final int lastItem = firstVisibleItem + visibleItemCount;
                 boolean isLast = preferences.getBoolean(Preferences.PROMOTERISLAST,false);
-
-                if(lastItem == totalItemCount && !isLast)
+                if(!isLoading && (lastItem >= totalItemCount-3) && !isLast)
                 {
+
+                    isLoading = true;
                     preferences.saveBoolean(Preferences.PROMOTERISLAST,true);
                     preferences.commit();
-
-//				if(!isLoading && (i+i1 >=i2-3)&& !isLast){
-//					isLoading = true;
-//					increase Page Index;
-//					Call ApI
-//				}
                         pageIndex++;
                         System.out.println("index   "  + pageIndex);
                         Bundle b = new Bundle();

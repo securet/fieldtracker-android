@@ -32,6 +32,11 @@ public class UrlBuilder {
         b.append(Services.DomainUrl).append(strService).append("/" + requestId);
         return b.toString();
     }
+    public static String getServerImage(String serverImagePath) {
+        StringBuilder b = new StringBuilder();
+        b.append(Services.DomainUrlServerImage).append(serverImagePath);
+        return b.toString();
+    }
 
     public static String getImageUrl(String strService) {
         StringBuilder b = new StringBuilder();

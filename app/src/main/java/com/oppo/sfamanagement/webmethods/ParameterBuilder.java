@@ -63,10 +63,11 @@ public class ParameterBuilder {
         }
     }
 
-    public static String getAddPromoter(String rqtAddPromoter, String fName, String lName, String sPh, String email, String sAdd, String s, String reqSubmitted, String addPromoter, String s1, String s2, String s3) {
+    public static String getAddPromoter(String rqtAddPromoter,String description, String fName, String lName, String sPh, String email, String sAdd, String s, String reqSubmitted, String addPromoter, String s1, String s2, String s3) {
         String url = "";
         try {
             url = "requestType=" + URLEncoder.encode(rqtAddPromoter,"UTF-8") +
+                    "&description=" + URLEncoder.encode(description,"UTF-8") +
                     "&firstName=" + URLEncoder.encode(fName,"UTF-8") +
                     "&lastName=" + URLEncoder.encode(lName,"UTF-8") +
                     "&phone=" + URLEncoder.encode(sPh,"UTF-8") +

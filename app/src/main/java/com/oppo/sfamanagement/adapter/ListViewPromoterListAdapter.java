@@ -56,8 +56,18 @@ public class ListViewPromoterListAdapter extends BaseAdapter {
            view = inflater.inflate(resourceId,parent,false);
         }
         TextView tvPromoter = (TextView) view.findViewById(R.id.tvPromoterItem);
+        TextView tvStatus = (TextView) view.findViewById(R.id.tvStatusId);
         Promoter p = getItem(position);
         tvPromoter.setText(p.getFirstName() + " " + p.getLastName());
+        if(!p.getStatusId().equals(null)) {
+            if(p.getStatusId().equals("ReqCompleted")) {
+                tvStatus.setText("Approved");
+            } else if (p.getStatusId().equals("ReqRejected")) {
+                tvStatus.setText("Rejected");
+            } else {
+                tvStatus.setText("Pending");
+            }
+        }
         return view;
     }
 

@@ -42,6 +42,9 @@ public class PromoterListParser {
                         promoter = new Promoter();
                         promoter.setRequestId(childObject.getString("requestId"));
                     }
+                    if(childObject.has("statusId")) {
+                        promoter.setStatusId(childObject.getString("statusId"));
+                    }
                     if(childObject.has("requestJson")){
                //         JSONObject  object = childObject.getJSONObject("requestJson");
                         String s = childObject.getString("requestJson");
@@ -57,12 +60,17 @@ public class PromoterListParser {
                                 promoter.setPhoneNum(o.getString("phone"));
                                 promoter.setEmailAddress(o.getString("emailId"));
                                 promoter.setAddress(o.getString("address"));
-
+                                promoter.setUserPhoto(o.getString("userPhoto"));
+                                promoter.setAadharIdPath(o.getString("aadharIdPath"));
+                                promoter.setAddressIdPath(o.getString("addressIdPath"));
                                 list.add(promoter);
                             }
                         }
                     }
                 }
+            } else {
+                preferences.saveBoolean(Preferences.PROMOTERISLAST,true);
+                preferences.commit();
             }
         } catch (JSONException e) {
             e.printStackTrace();

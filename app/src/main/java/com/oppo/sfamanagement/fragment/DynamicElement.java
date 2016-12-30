@@ -30,8 +30,7 @@ public class DynamicElement {
                     } else {
                         totalMin =timeOutMin - timeInMin;
                     }
-                }
-                else {
+                } else {
                     if(timeOutMin > timeInMin) {
                         int ansMin = (timeOutMin + 60) - timeInMin;
                         int ansHour = (timeOutHour - 1) - timeInHour;

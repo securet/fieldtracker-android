@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.oppo.sfamanagement.R;
+import com.oppo.sfamanagement.TimeDifferenceCalculator;
+import com.oppo.sfamanagement.model.HistoryChild;
 import com.oppo.sfamanagement.model.HistoryNew;
 
 import java.util.ArrayList;
@@ -62,6 +64,11 @@ public class ListViewHistoryAdapter extends ArrayAdapter<HistoryNew>{
         }
 
         HistoryNew historyNew =  getItem(position);
+        HistoryChild childForFromdate = historyNew.getHistoryChildren().get(0);
+        HistoryChild childForThrudate = historyNew.getHistoryChildren().get(historyNew.getHistoryChildren().size()-1);
+        historyNew.setTimeIn(childForFromdate.getFromDate());
+        historyNew.setTimeOut(childForThrudate.getThruDate());
+        historyNew.setHours(TimeDifferenceCalculator.findMarginTop(childForFromdate.getFromDate(),childForThrudate.getThruDate()));
 
         TextView tvDate = (TextView) rowView.findViewById(R.id.tvHistoryDate);
         TextView tvTimeIn = (TextView) rowView.findViewById(R.id.tvHistoryTimeIn);

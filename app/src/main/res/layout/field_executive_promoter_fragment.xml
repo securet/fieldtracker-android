@@ -8,14 +8,14 @@
         android:layout_height="match_parent">
         <TextView
             android:layout_width="match_parent"
-            android:text="@string/edit_promoter"
+            android:text="@string/promoter_details"
             android:textSize="22sp"
             android:layout_margin="10dp"
             android:padding="10dp"
             android:textColor="@android:color/black"
             android:layout_height="match_parent"
             />
-        <EditText
+        <TextView
             android:id="@+id/etPromoterFN"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -29,7 +29,7 @@
             android:layout_marginBottom="10dp"
             android:textSize="20sp"
             android:hint="First Name"/>
-        <EditText
+        <TextView
             android:id="@+id/etPromoterLN"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -43,7 +43,7 @@
             android:layout_marginBottom="10dp"
             android:textSize="20sp"
             android:hint="Last Name"/>
-        <EditText
+        <TextView
             android:id="@+id/etPromoterPh"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -57,7 +57,7 @@
             android:layout_marginBottom="10dp"
             android:textSize="20sp"
             android:hint="Phone #"/>
-        <EditText
+        <TextView
             android:id="@+id/etPromoterEA"
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -71,7 +71,7 @@
             android:layout_marginBottom="10dp"
             android:textSize="20sp"
             android:hint="Email Address"/>
-        <EditText
+        <TextView
             android:id="@+id/etPromoterAdd"
             android:layout_width="match_parent"
             android:layout_height="80dp"
@@ -151,6 +151,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <CheckBox
+                        android:clickable="false"
                         android:id="@+id/checkboxM"
                         android:layout_width="50dp"
                         android:layout_height="50dp" />
@@ -170,6 +171,7 @@
                     <CheckBox
                         android:id="@+id/checkboxTue"
                         android:layout_width="50dp"
+                        android:clickable="false"
                         android:layout_height="50dp" />
                     <TextView
 
@@ -184,6 +186,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <CheckBox
+                        android:clickable="false"
                         android:id="@+id/checkboxW"
                         android:layout_width="50dp"
                         android:layout_height="50dp" />
@@ -200,6 +203,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <CheckBox
+                        android:clickable="false"
                         android:id="@+id/checkboxThu"
                         android:layout_width="50dp"
                         android:layout_height="50dp" />
@@ -216,6 +220,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <CheckBox
+                        android:clickable="false"
                         android:id="@+id/checkboxF"
                         android:layout_width="50dp"
                         android:layout_height="50dp" />
@@ -232,6 +237,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <CheckBox
+                        android:clickable="false"
                         android:id="@+id/checkboxSat"
                         android:layout_width="50dp"
                         android:layout_height="50dp" />
@@ -248,6 +254,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
                     <CheckBox
+                        android:clickable="false"
                         android:id="@+id/checkboxSun"
                         android:layout_width="50dp"
                         android:layout_height="50dp" />
@@ -301,6 +308,7 @@
 
         </LinearLayout>
         <LinearLayout
+            android:visibility="gone"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
             android:gravity="center_horizontal"

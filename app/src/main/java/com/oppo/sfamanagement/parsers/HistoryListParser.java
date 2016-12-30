@@ -27,6 +27,8 @@ public class HistoryListParser {
     private String result = "";
     private String response = "";
     private Preferences preferences;
+    private long fromDateMill = 0;
+    private long thruDateMill = 0;
     //private HistoryNew history;
     private ArrayList<HistoryNew> parentArraylist = new ArrayList<>();
     //private HistoryChild historyChild;
@@ -42,7 +44,7 @@ public class HistoryListParser {
             // size 0 or <10 make  IsLast = true
             if(parentObject.has("userTimeLog")){
                 JSONArray arrayParent = parentObject.getJSONArray("userTimeLog");
-                Log.d("a",String.valueOf(arrayParent.length()));
+                //Log.d("a",String.valueOf(arrayParent.length()));
                 if (arrayParent.length() == 0 || arrayParent.length() < 10) {
                     preferences.saveBoolean(Preferences.ISLAST, true);
                     preferences.commit();
@@ -51,7 +53,7 @@ public class HistoryListParser {
                     preferences.commit();
                 }
                     for (int i = 0; i < arrayParent.length(); i++) {
-                        System.out.println(arrayParent.length() + "     main array        " + i);
+                       // System.out.println(arrayParent.length() + "     main array        " + i);
                         JSONObject childOject = arrayParent.getJSONObject(i);
                         if (childOject.has("estimatedStartDate")) {
                             HistoryNew history = new HistoryNew();
@@ -67,31 +69,33 @@ public class HistoryListParser {
                             }
                             mCalendar.setTime(timeIn);
                             history.setDate(DateFormat.format("dd-MMM-yy", mCalendar).toString());
-                            history.setTimeIn(DateFormat.format("hh:mm", mCalendar).toString());
+                           // history.setTimeIn(DateFormat.format("hh:mm", mCalendar).toString());
 
                             // history.setStartDate(childOject.getString("estimatedStartDate"));
                             if (childOject.has("estimatedCompletionDate")) {
-                                String lastUpdatedTimestamp = childOject.getString("estimatedCompletionDate");
+                               /* String lastUpdatedTimestamp = childOject.getString("estimatedCompletionDate");
                                 Date timeOut = null;
                                 try {
                                     timeOut = simpleDateFormat.parse(lastUpdatedTimestamp.replaceAll("$", ""));
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                }
-                                mCalendar.setTime(timeOut);
-                                history.setTimeOut(DateFormat.format("hh:mm", mCalendar).toString());
-                                long millis = timeOut.getTime() - timeIn.getTime();
+                                }*/
+                                //mCalendar.setTime(timeOut);
+                              //  history.setTimeOut(DateFormat.format("hh:mm", mCalendar).toString());
+                                /*long millis = timeOut.getTime() - timeIn.getTime();
                                 history.setHours(String.format("%02dh %02dm", TimeUnit.MILLISECONDS.toHours(millis),
-                                        TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))));
+                                        TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))));*/
                                 // history.setEndDate(childOject.getString("estimatedCompletionDate"));
                                 ArrayList<HistoryChild> childArrayList = new ArrayList<>();
                                 if (childOject.has("timeEntryList")) {
                                     JSONArray childArray = childOject.getJSONArray("timeEntryList");
                                     for (int j = 0; j < childArray.length(); j++) {
-                                        System.out.println(childArray.length() + "  sub array" + j);
+
                                         JSONObject childObject2 = childArray.getJSONObject(j);
+
                                         if (childObject2.has("fromDate")) {
                                             if (childObject2.has("thruDate")) {
+
                                                 HistoryChild historyChild = new HistoryChild();
                                                 String fromDate = childObject2.getString("fromDate");
                                                 String thruDate = childObject2.getString("thruDate");
@@ -109,26 +113,38 @@ public class HistoryListParser {
                                                 }
                                                 c1.setTime(fDate);
                                                 historyChild.setFromDate(DateFormat.format("hh:mm", c1).toString());
+                                                if (i == 0) {
+                                                    fromDateMill = fDate.getTime();
+                                                }
                                                 if (tDate != null) {
                                                     c2.setTime(tDate);
+                                                    if (i == arrayParent.length()-1) {
+                                                        thruDateMill = tDate.getTime();
+                                                    }
+
                                                     historyChild.setThruDate(DateFormat.format("hh:mm", c2).toString());
                                                     historyChild.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm", c1).toString(), DateFormat.format("hh:mm", c2).toString()));
                                                 } else {
                                                     historyChild.setThruDate("");
+                                                    history.setHours("-:-");
                                                     historyChild.setTimeSpace(0);
                                                 }
 
 
-                                            /*if (childObject2.has("comments")) {
-                                                historyChild.setComments(childObject2.getString("comments"));*/
+
                                                 childArrayList.add(historyChild);
+                                                /*if ()
+                                                long millis = tDate.getTime() - fDate.getTime();
+                                                history.setHours(String.format("%02dh %02dm", TimeUnit.MILLISECONDS.toHours(millis),
+                                                        TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))));*/
+                                                history.setHistoryChildren(childArrayList);
                                                 // }
                                             }
 
                                         }
 
                                     }
-                                    history.setHistoryChildren(childArrayList);
+
                                     parentArraylist.add(history);
                                 }
                             }
@@ -136,6 +152,9 @@ public class HistoryListParser {
 
 
                 }
+            } else {
+                preferences.saveBoolean(Preferences.ISLAST, true);
+                preferences.commit();
             }
         } catch (JSONException e) {
             e.printStackTrace();

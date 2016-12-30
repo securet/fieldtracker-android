@@ -193,13 +193,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		startActivity(new Intent(MainActivity.this, LoginActivity.class));
 	}
 
-	public void onPromotersClick(View view) {
-		Fragment fragment =(Fragment) new PromotersFragment();
-		FragmentManager fm = getSupportFragmentManager();
-		fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
-		fm.executePendingTransactions();
-	}
-
 	public void onLeavesClick(View view) {
 		Fragment fragment = new LeaveStatusFragment();
 		FragmentManager fm = getSupportFragmentManager();
@@ -288,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		{
 			try
 			{
+
 				if(dialog == null|| (dialog != null && !dialog.isShowing()))
 				{
 					dialog = new Dialog(MainActivity.this, R.style.Theme_Dialog_Translucent);

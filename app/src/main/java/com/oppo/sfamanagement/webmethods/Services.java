@@ -11,6 +11,7 @@ public class Services{
     public static String domain= AppsConstant.isProduction?"ft.allsmart.in":"ft.allsmart.in";
     public static String DomainUrl = "http://"+domain+"/rest/s1/ft/";
     public static String DomainUrlImage = "http://"+domain+"/apps/ft/Requests/uploadImage";
+    public static String DomainUrlServerImage = "http://ft.allsmart.in/uploads/uid/";
 
     public static String USER_LOGIN	 = "user";
     public static String STORE_DETAIL	 = "stores";

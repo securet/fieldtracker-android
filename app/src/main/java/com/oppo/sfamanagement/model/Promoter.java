@@ -3,6 +3,8 @@ package com.oppo.sfamanagement.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by allsmartlt218 on 02-12-2016.
  */
@@ -15,9 +17,13 @@ public class Promoter implements Parcelable{
     private String phoneNum;
     private String emailAddress;
     private String address;
+    private String statusId;
     private String seAssignment;
     private String storeAssignment;
-
+    private String userPhoto;
+    private String addressIdPath;
+    private String aadharIdPath;
+    private ArrayList<Promoter> promoterArrayList;
     public Promoter() {
 
     }
@@ -30,8 +36,13 @@ public class Promoter implements Parcelable{
         phoneNum = in.readString();
         emailAddress = in.readString();
         address = in.readString();
+        statusId = in.readString();
         seAssignment = in.readString();
         storeAssignment = in.readString();
+        userPhoto = in.readString();
+        addressIdPath = in.readString();
+        aadharIdPath = in.readString();
+        promoterArrayList = in.createTypedArrayList(Promoter.CREATOR);
     }
 
     public static final Creator<Promoter> CREATOR = new Creator<Promoter>() {
@@ -54,52 +65,12 @@ public class Promoter implements Parcelable{
         this.firstName = firstName;
     }
 
-    public String getStoreAssignment() {
-        return storeAssignment;
+    public String getRequestId() {
+        return requestId;
     }
 
-    public void setStoreAssignment(String storeAssignment) {
-        this.storeAssignment = storeAssignment;
-    }
-
-    public String getSeAssignment() {
-        return seAssignment;
-    }
-
-    public void setSeAssignment(String seAssignment) {
-        this.seAssignment = seAssignment;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-    public String getPhoneNum() {
-        return phoneNum;
-    }
-
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 
     public String getRequestType() {
@@ -110,12 +81,92 @@ public class Promoter implements Parcelable{
         this.requestType = requestType;
     }
 
-    public String getRequestId() {
-        return requestId;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(String statusId) {
+        this.statusId = statusId;
+    }
+
+    public String getSeAssignment() {
+        return seAssignment;
+    }
+
+    public void setSeAssignment(String seAssignment) {
+        this.seAssignment = seAssignment;
+    }
+
+    public String getStoreAssignment() {
+        return storeAssignment;
+    }
+
+    public void setStoreAssignment(String storeAssignment) {
+        this.storeAssignment = storeAssignment;
+    }
+
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public void setUserPhoto(String userPhoto) {
+        this.userPhoto = userPhoto;
+    }
+
+    public String getAddressIdPath() {
+        return addressIdPath;
+    }
+
+    public void setAddressIdPath(String addressIdPath) {
+        this.addressIdPath = addressIdPath;
+    }
+
+    public String getAadharIdPath() {
+        return aadharIdPath;
+    }
+
+    public void setAadharIdPath(String aadharIdPath) {
+        this.aadharIdPath = aadharIdPath;
+    }
+
+    public ArrayList<Promoter> getPromoterArrayList() {
+        return promoterArrayList;
+    }
+
+    public void setPromoterArrayList(ArrayList<Promoter> promoterArrayList) {
+        this.promoterArrayList = promoterArrayList;
     }
 
     @Override
@@ -132,7 +183,12 @@ public class Promoter implements Parcelable{
         dest.writeString(phoneNum);
         dest.writeString(emailAddress);
         dest.writeString(address);
+        dest.writeString(statusId);
         dest.writeString(seAssignment);
         dest.writeString(storeAssignment);
+        dest.writeString(userPhoto);
+        dest.writeString(addressIdPath);
+        dest.writeString(aadharIdPath);
+        dest.writeTypedList(promoterArrayList);
     }
 }

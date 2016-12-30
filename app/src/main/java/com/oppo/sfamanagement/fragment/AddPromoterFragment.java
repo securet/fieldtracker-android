@@ -122,7 +122,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 Bundle b = new Bundle();
                 b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.ADD_PROMOTER));
                 b.putString(AppsConstant.METHOD, AppsConstant.POST);
-                b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddPromoter("RqtAddPromoter",fName,lName,sPh,email,sAdd,
+                b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddPromoter("RqtAddPromoter","Yeh hai description",fName,lName,sPh,email,sAdd,
                         String.valueOf(storeId),"ReqSubmitted","RqtAddPromoter",image[0],image[1],image[2]));
                 getActivity().getLoaderManager().initLoader(LoaderConstant.ADD_PROMOTER,b,AddPromoterFragment.this).forceLoad();
             }
@@ -148,7 +148,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                     bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
                     bundle.putString(AppsConstant.FILE, responseValue);
                     bundle.putString(AppsConstant.FILEPURPOSE,purpose);
-                    getActivity().getLoaderManager().restartLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
                    // image[0] = responseValue;
                     ivPhoto.setImageResource(R.drawable.photo_tick);
                     ivPhoto.setEnabled(false);
@@ -159,17 +159,12 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 if (!responseValue.equals(null)) {
                     /*Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
                     Log.d("path", responseValue);*/
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
+
                             Bundle bundle = new Bundle();
                             bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
                             bundle.putString(AppsConstant.FILE, responseValue);
                             bundle.putString(AppsConstant.FILEPURPOSE,purpose);
-                            getActivity().getLoaderManager().restartLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
-                        }
-                    });
-                  //  image[1] = responseValue;
+                            getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
                     ivAdhar.setImageResource(R.drawable.aadhartick);
                     ivAdhar.setEnabled(false);
                 }
@@ -186,7 +181,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                             bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
                             bundle.putString(AppsConstant.FILE, responseValue);
                             bundle.putString(AppsConstant.FILEPURPOSE,purpose);
-                            getActivity().getLoaderManager().restartLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
+                            getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
                         }
                     });
                   //  image[2] = responseValue;
@@ -275,7 +270,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 break;
         }
 
-            getLoaderManager().destroyLoader(loader.getId());
+            getActivity().getLoaderManager().destroyLoader(loader.getId());
 
     }
 
