@@ -43,7 +43,7 @@ public class CameraActivity extends AppCompatActivity{
         tvUserSername.setText(preferences.getString(Preferences.USERLASTNAME,"lastname"));
         tvSiteName.setText(preferences.getString(Preferences.SITENAME,"sitename"));
         //FrameLayout fl = (FrameLayout) findViewById(R.id.flCapture);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= 22) {
             Fragment fragment = new CameraFragment2();
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.flCapture,fragment).commit();

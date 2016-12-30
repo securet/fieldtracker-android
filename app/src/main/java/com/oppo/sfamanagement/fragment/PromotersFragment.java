@@ -90,8 +90,8 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
                 fm.executePendingTransactions();
             }
         });
-        adapter = new ListViewPromoterListAdapter(getActivity(), R.layout.promoter_list_item, new ArrayList<Promoter>());
 
+        adapter = new ListViewPromoterListAdapter(getActivity(), R.layout.promoter_list_item, new ArrayList<Promoter>());
         listView.setAdapter(adapter);
         listView.addFooterView(layout);
         listView.setOnItemClickListener(this);
@@ -100,7 +100,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
         pageIndex = 0;
         System.out.println(pageIndex + "  before scroll");
         Bundle b = new Bundle();
-        b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,pageIndex+"0",String.valueOf(pageSize)));
+        b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,pageIndex+"",String.valueOf(pageSize)));
         b.putString(AppsConstant.METHOD, AppsConstant.GET);
         getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST,b,PromotersFragment.this).forceLoad();
         return view;
