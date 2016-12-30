@@ -51,7 +51,6 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     Button btAddPromoter;
     ListView listView;
     ArrayList<Promoter> list,listBackUp;
-    private Promoter promoter = new Promoter();
     ImageView ivLoader;
     private LinearLayout layout;
     Preferences preferences;
@@ -91,12 +90,8 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
                 fm.executePendingTransactions();
             }
         });
-        listBackUp = promoter.getPromoterArrayList();
-        if(listBackUp != null) {
-            adapter = new ListViewPromoterListAdapter(getActivity(), R.layout.promoter_list_item,listBackUp);
-        } else {
-            adapter = new ListViewPromoterListAdapter(getActivity(), R.layout.promoter_list_item, new ArrayList<Promoter>());
-        }
+        adapter = new ListViewPromoterListAdapter(getActivity(), R.layout.promoter_list_item, new ArrayList<Promoter>());
+
         listView.setAdapter(adapter);
         listView.addFooterView(layout);
         listView.setOnItemClickListener(this);
@@ -105,7 +100,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
         pageIndex = 0;
         System.out.println(pageIndex + "  before scroll");
         Bundle b = new Bundle();
-        b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,pageIndex+"",String.valueOf(pageSize)));
+        b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,pageIndex+"0",String.valueOf(pageSize)));
         b.putString(AppsConstant.METHOD, AppsConstant.GET);
         getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST,b,PromotersFragment.this).forceLoad();
         return view;
@@ -149,7 +144,6 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
             list = (ArrayList<Promoter>)data;
         } else {
             list.addAll((ArrayList<Promoter>) data);
-            promoter.setPromoterArrayList(list);
         }
         isLoading = false;
         adapter.refresh(list);
@@ -193,12 +187,12 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
             Fragment fragment = new EditPromoterFragment();
             fragment.setArguments(bundle);
             fm.beginTransaction().replace(R.id.flMiddle, fragment).addToBackStack(null).commit();
-            //fm.executePendingTransactions();
+            fm.executePendingTransactions();
         } else {
             Fragment fragment = new FieldExecutivePromoterFragment();
             fragment.setArguments(bundle);
             fm.beginTransaction().replace(R.id.flMiddle, fragment).addToBackStack(null).commit();
-            //fm.executePendingTransactions();
+            fm.executePendingTransactions();
         }
     }
 

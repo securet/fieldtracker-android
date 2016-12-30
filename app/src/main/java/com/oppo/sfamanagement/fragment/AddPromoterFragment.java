@@ -268,6 +268,14 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case LoaderConstant.ADD_PROMOTER:
+                if (data != null ) {
+
+                } else {
+                    Toast.makeText(getContext(),
+                            "Error in response. Please try again.",
+                            Toast.LENGTH_SHORT).show();
+                }
         }
 
             getActivity().getLoaderManager().destroyLoader(loader.getId());
