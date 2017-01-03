@@ -2,6 +2,9 @@ package com.oppo.sfamanagement.webmethods;
 
 import android.net.Uri;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * Created by AllSmart-LT008 on 8/5/2016.
  */
@@ -33,9 +36,11 @@ public class UrlBuilder {
         return b.toString();
     }
     public static String getServerImage(String serverImagePath) {
-        StringBuilder b = new StringBuilder();
-        b.append(Services.DomainUrlServerImage).append(serverImagePath);
+        Uri.Builder b = Uri.parse(Services.DomainUrlServerImage).buildUpon();
+        b.appendPath(serverImagePath);
+        b.build();
         return b.toString();
+
     }
 
     public static String getImageUrl(String strService) {
