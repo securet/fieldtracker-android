@@ -76,7 +76,7 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                 Bundle b = new Bundle();
                 b.putString(AppsConstant.URL, UrlBuilder.getStoreUpdate(Services.STORE_UPDATE,String.valueOf(storeId)));
                 b.putString(AppsConstant.METHOD, AppsConstant.PUT );
-                b.putString(AppsConstant.PARAMS, ParameterBuilder.getStoreUpdate(String.valueOf(storeId),sName,sAddress,sLattitude,sLongitude));
+                b.putString(AppsConstant.PARAMS, ParameterBuilder.getStoreUpdate(String.valueOf(storeId),sAddress));
                 getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_UPDATE,b, EditStoreFragment.this).forceLoad();
                 break;
             case R.id.btCancel:

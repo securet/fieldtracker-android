@@ -32,14 +32,14 @@ public class ParameterBuilder {
         }
     }
 
-    public static String getStoreUpdate(String storeId, String storeName, String storeAddress, String lattitude, String longitude) {
+    public static String getStoreUpdate(String storeId,String storeAddress) {
         String url = "" ;
         try {
             url = "productStoreId=" + URLEncoder.encode(storeId,"UTF-8") +
-                    "&storeName=" + URLEncoder.encode(storeName,"UTF-8") +
-                    "&address=" + URLEncoder.encode(storeAddress, "UTF-8") +
-                    "&latitude=" + URLEncoder.encode(lattitude, "UTF-8") +
-                    "&longitude=" + URLEncoder.encode(longitude, "UTF-8");
+                  //  "&storeName=" + URLEncoder.encode(storeName,"UTF-8") +
+                    "&address=" + URLEncoder.encode(storeAddress, "UTF-8") ;
+                  //  "&latitude=" + URLEncoder.encode(lattitude, "UTF-8") +
+                  //  "&longitude=" + URLEncoder.encode(longitude, "UTF-8");
 
         } catch (Exception e) {
             Logger.e("Log",e);
@@ -54,7 +54,8 @@ public class ParameterBuilder {
             url = "storeName=" + URLEncoder.encode(storeName,"UTF-8") +
                     "&address=" + URLEncoder.encode(storeAddress,"UTF-8") +
                     "&latitude=" + URLEncoder.encode(latitude,"UTF-8") +
-                    "&longitude=" + URLEncoder.encode(longitude,"UTF-8");
+                    "&longitude=" + URLEncoder.encode(longitude,"UTF-8")+
+                    "&proximityRadius=" + URLEncoder.encode(200+"","UTF-8");
 
         } catch (Exception e) {
             Logger.e("Log",e);

@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.oppo.sfamanagement.LoginActivity;
@@ -169,6 +170,13 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
         ((MainActivity)getActivity()).showHideProgressForLoder(true);
+        if (data != null && data instanceof String) {
+
+        } else {
+            Toast.makeText(getContext(),
+                    "Error in response. Please try again.",
+                    Toast.LENGTH_SHORT).show();
+        }
         if (isAdded()) {
             getLoaderManager().destroyLoader(loader.getId());
         }
