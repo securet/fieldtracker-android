@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class EventsFragment extends Fragment implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Object>, AbsListView.OnScrollListener {
 	protected ListViewHistoryAdapter adapter;
 	protected ListView listView;
-	ArrayList<HistoryNew> list;
+	ArrayList<HistoryNew> list= new ArrayList<>();
     private int pageIndex = -1;
     ImageView ivLoader;
     private LinearLayout layout;
@@ -47,6 +47,12 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        pageIndex = 0;
+        Bundle bundle = new Bundle();
+        System.out.println(pageIndex);
+        bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"anand@securet.in","0","10"));
+        bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
+        getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST,bundle,EventsFragment.this);
 	}
 
 	@Override
@@ -60,18 +66,13 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
         layout.setVisibility(View.INVISIBLE);
         footerView.setVisibility(View.INVISIBLE);
 
-		adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,new ArrayList<HistoryNew>());
+		adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,list);
 		listView.setAdapter(adapter);
         listView.addFooterView(layout);
 		listView.setOnItemClickListener(this);
         hideloader();
 		listView.setOnScrollListener(this);
-        pageIndex = 0;
-        Bundle bundle = new Bundle();
-        System.out.println(pageIndex);
-        bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"anand@securet.in","0","10"));
-        bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
-        getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST,bundle,EventsFragment.this);
+
 		// Page index = 0
 		// isLastPage = false
 
@@ -96,6 +97,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	}
 	@Override
 	public Loader<Object> onCreateLoader(int id, Bundle args) {
+        isLoading = true;
         if (pageIndex == 0 ) {
             ((MainActivity) getActivity()).showHideProgressForLoder(false);
         }else{
@@ -131,7 +133,6 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 			}
             isLoading = false;
 			adapter.Refresh(list);
-
 		getActivity().getLoaderManager().destroyLoader(loader.getId());
 	}
 
@@ -171,10 +172,8 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 //				}
 
 
-        if (!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3) && !isLast) {
+        if (totalItemCount>0 &&!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3) && !isLast) {
             isLoading = true;
-            preferences.saveBoolean(Preferences.ISLAST,true);
-            preferences.commit();
             pageIndex++;
             System.out.println(pageIndex + "   onScroll");
             Bundle bundle = new Bundle();

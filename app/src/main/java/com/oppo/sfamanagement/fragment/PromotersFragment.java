@@ -50,13 +50,12 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     ListViewPromoterListAdapter adapter;
     Button btAddPromoter;
     ListView listView;
-    ArrayList<Promoter> list,listBackUp;
+    ArrayList<Promoter> list = new ArrayList<>();
     ImageView ivLoader;
     private LinearLayout layout;
     Preferences preferences;
     private int pageIndex = -1;
     private int pageSize = 10;
-    private int count = 0;
     private boolean isLoading = false;
     private View footerView;
 
@@ -65,6 +64,12 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pageIndex = 0;
+        System.out.println(pageIndex + "  before scroll");
+        Bundle b = new Bundle();
+        b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,pageIndex+"",String.valueOf(pageSize)));
+        b.putString(AppsConstant.METHOD, AppsConstant.GET);
+        getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST,b,PromotersFragment.this).forceLoad();
     }
 
     @Nullable
@@ -91,27 +96,19 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
             }
         });
 
-        adapter = new ListViewPromoterListAdapter(getActivity(), R.layout.promoter_list_item, new ArrayList<Promoter>());
+        adapter = new ListViewPromoterListAdapter(getActivity(), R.layout.promoter_list_item,list);
         listView.setAdapter(adapter);
         listView.addFooterView(layout);
         listView.setOnItemClickListener(this);
         listView.setOnScrollListener(this);
-        hideloader();
-        pageIndex = 0;
-        System.out.println(pageIndex + "  before scroll");
-        Bundle b = new Bundle();
-        b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,pageIndex+"",String.valueOf(pageSize)));
-        b.putString(AppsConstant.METHOD, AppsConstant.GET);
-        getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST,b,PromotersFragment.this).forceLoad();
         return view;
     }
 
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
-            if (pageIndex == 0 && count == 0) {
-                count++;
+        isLoading = true;
+            if (pageIndex == 0 ) {
                 ((MainActivity) getActivity()).showHideProgressForLoder(false);
-
             }else{
                 showLoader();
             }
@@ -133,23 +130,19 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
         }
 
         if(data != null && data instanceof ArrayList){
-
+            if (list == null) {
+                list = (ArrayList<Promoter>)data;
+            } else {
+                list.addAll((ArrayList<Promoter>) data);
+            }
         }  else {
 
             Toast.makeText(getContext(),
                     "Error in response. Please try again.",
                     Toast.LENGTH_SHORT).show();
         }
-        if (list == null) {
-            list = (ArrayList<Promoter>)data;
-        } else {
-            list.addAll((ArrayList<Promoter>) data);
-        }
         isLoading = false;
         adapter.refresh(list);
-
-
-
         getActivity().getLoaderManager().destroyLoader(loader.getId());
 
     }
@@ -213,19 +206,15 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
 
                 final int lastItem = firstVisibleItem + visibleItemCount;
                 boolean isLast = preferences.getBoolean(Preferences.PROMOTERISLAST,false);
-                if(!isLoading && (lastItem >= totalItemCount-3) && !isLast)
+                if(totalItemCount>0 && !isLoading && (lastItem >= totalItemCount-3) && !isLast)
                 {
-
                     isLoading = true;
-                    preferences.saveBoolean(Preferences.PROMOTERISLAST,true);
-                    preferences.commit();
-                        pageIndex++;
-                        System.out.println("index   "  + pageIndex);
-                        Bundle b = new Bundle();
-                        b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,String.valueOf(pageIndex),String.valueOf(pageSize)));
-                        b.putString(AppsConstant.METHOD, AppsConstant.GET);
-                        getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST,b,PromotersFragment.this).forceLoad();
-
+                    pageIndex++;
+                    System.out.println("index   "  + pageIndex);
+                    Bundle b = new Bundle();
+                    b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,String.valueOf(pageIndex),String.valueOf(pageSize)));
+                    b.putString(AppsConstant.METHOD, AppsConstant.GET);
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST,b,PromotersFragment.this).forceLoad();
                 }
         }
     }
