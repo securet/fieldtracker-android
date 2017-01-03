@@ -2,15 +2,19 @@ package com.oppo.sfamanagement.fragment;
 
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,7 +34,17 @@ import com.oppo.sfamanagement.webmethods.LoaderMethod;
 import com.oppo.sfamanagement.webmethods.LoaderServices;
 import com.oppo.sfamanagement.webmethods.Services;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import id.zelory.compressor.Compressor;
+
+import static android.R.attr.path;
 
 /**
  * Created by allsmartlt218 on 13-12-2016.
@@ -53,11 +67,11 @@ public class RetakeFragment extends Fragment {
         imageView = (ImageView) view.findViewById(R.id.ivRetake);
         imagePath = getArguments().getString("image_taken");
         imagePurpose = getArguments().getString("image_purpose");
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-        if(imagePurpose.equals("For Photo")) {
-            bmp = rotateBmpFront(BitmapFactory.decodeFile(imagePath));
+        final File path = new File(imagePath);
+        if(!imagePurpose.equals(null) && imagePurpose.equals("ForPhoto")) {
+            bmp = rotateBmpFront(path);
         } else {
-            bmp = rotateBmpBack(BitmapFactory.decodeFile(imagePath));
+            bmp = rotateBmpBack(path);
         }
         /*try {
             ExifInterface ei = new ExifInterface(imagePath);
@@ -90,16 +104,12 @@ public class RetakeFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                /*Bundle bundle = new Bundle();
-                bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
-                bundle.putString(AppsConstant.FILE, imagePath);
-                bundle.putString(AppsConstant.FILEPURPOSE,imagePurpose);
-                getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,RetakeFragment.this).forceLoad();*/
-                        Intent i = new Intent();
-                        i.putExtra("response",imagePath);
-                        i.putExtra("image_purpose",imagePurpose);
-                        getActivity().setResult(Activity.RESULT_OK,i);
-                        getActivity().finish();
+                String sImagePath = persistImage(bmp,imagePurpose);
+                Intent i = new Intent();
+                i.putExtra("response", sImagePath);
+                i.putExtra("image_purpose", imagePurpose);
+                getActivity().setResult(Activity.RESULT_OK, i);
+                getActivity().finish();
 
             }
         });
@@ -116,30 +126,55 @@ public class RetakeFragment extends Fragment {
         });
         return view;
     }
-    public static Bitmap rotateImage(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        source = Bitmap.createScaledBitmap(source,640,480,true);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
-                matrix, true);
-    }
 
-
-    private Bitmap rotateBmpBack(Bitmap bitmap) {
+    private Bitmap rotateBmpBack(File path) {
         Matrix m = new Matrix();
         m.postRotate(90);
         //bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth()/2, bitmap.getHeight()/2, m, true);
-         bitmap = Bitmap.createScaledBitmap(bitmap,640,480,true);
+        Bitmap bitmap = new Compressor.Builder(getContext()).setQuality(60)
+                .setCompressFormat(Bitmap.CompressFormat.JPEG).setMaxWidth(480)
+                .setMaxHeight(640).build().compressToBitmap(path);
+
+       // bitmap = Bitmap.createScaledBitmap(bitmap,640,480,true);
         bmp = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),m,true);
+
         return bmp;
     }
+    private String persistImage(Bitmap bitmap, String name) {
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "Oppo");
+        File imageFile = new File(mediaStorageDir, name + ".jpg");
 
-    public Bitmap rotateBmpFront(Bitmap bitmap){
+        OutputStream os = null;
+        try {
+            os = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return imageFile.getAbsolutePath();
+        }
+    }
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 60, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage,null, null);
+        return Uri.parse(path);
+    }
+
+    public Bitmap rotateBmpFront(File path){
         Matrix matrix = new Matrix();
         //set image rotation value to 90 degrees in matrix.
         matrix.postRotate(270);
         //supply the original width and height, if you don't want to change the height and width of bitmap.
+        /*Bitmap bitmap = Compressor.getDefault(getContext()).compressToBitmap(path);
         bitmap = Bitmap.createScaledBitmap(bitmap,640,480,true);
+        bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);*/
+        Bitmap bitmap = new Compressor.Builder(getContext()).setQuality(60)
+                .setCompressFormat(Bitmap.CompressFormat.JPEG).setMaxWidth(480)
+                .setMaxHeight(640).build().compressToBitmap(path);
         bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
        // Bitmap bmp2 = Bitmap.createScaledBitmap(bmp,480,640,true);
         return bmp;

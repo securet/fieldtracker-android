@@ -33,6 +33,7 @@ import com.oppo.sfamanagement.webmethods.LoaderServices;
 import com.oppo.sfamanagement.webmethods.ParameterBuilder;
 import com.oppo.sfamanagement.webmethods.Services;
 import com.oppo.sfamanagement.webmethods.UrlBuilder;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -50,9 +51,10 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
     ImageView ivPhoto,ivAadhar,ivAddress;
     private TextView tvStore,tvSE;
     private ArrayList<Store> list;
-    private String[] image;
+    private String[] image = new String[3];
     private int i = 0;
-    Preferences preferences;
+    private Promoter promoter;
+    private Preferences preferences;
     private int storeId;
     @Nullable
     @Override
@@ -68,7 +70,10 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
         tvStore = (TextView) view.findViewById(R.id.tvStoreAssignment);
         tvSE = (TextView) view.findViewById(R.id.tvSEAssignment);
         Address = (EditText) view.findViewById(R.id.etPromoterAdd);
-        final Promoter promoter = getArguments().getParcelable("promoter");
+        promoter = getArguments().getParcelable("promoter");
+        final String photo  = promoter.getUserPhoto();
+        final String adhar  = promoter.getAadharIdPath();
+        final String address = promoter.getAddressIdPath();
         firstName.setText(promoter.getFirstName());
         lastName.setText(promoter.getLastName());
         phone.setText(promoter.getPhoneNum());
@@ -79,6 +84,10 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
         ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
         ivAddress = (ImageView) view.findViewById(R.id.ivAddressProof);
         ivAadhar = (ImageView) view.findViewById(R.id.ivAadhar);
+        System.out.println(photo + "     " + adhar + "           " + address);
+        Picasso.with(getContext()).load(UrlBuilder.getServerImage(photo)).placeholder(R.drawable.photo).fit().into(ivPhoto);
+        Picasso.with(getContext()).load(UrlBuilder.getServerImage(adhar)).placeholder(R.drawable.aadhar).fit().into(ivAadhar);
+        Picasso.with(getContext()).load(UrlBuilder.getServerImage(address)).placeholder(R.drawable.id_card).fit().into(ivAddress);
         ivPhoto.setOnClickListener(this);
         ivAadhar.setOnClickListener(this);
         ivAddress.setOnClickListener(this);
@@ -118,10 +127,15 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                     Bundle b = new Bundle();
                     b.putString(AppsConstant.URL,UrlBuilder.getUpdatePromoter(Services.UPDATE_PROMOTER,promoter.getRequestId()));
                     b.putString(AppsConstant.METHOD,AppsConstant.PUT);
-                    b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterUpdate(promoter.getRequestId(),promoter.getRequestType(),firstName.getText().toString(),
-                        lastName.getText().toString(),phone.getText().toString(),Address.getText().toString(),emailAddress.getText().toString(),"100000","ReqSubmitted",
-                        "RqtAddPromoter","description after updation","test_JxpUD2_1479136438674.png","test_JxpUD2_1479136438674.png","test_JxpUD2_1479136438674.png"));
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.UPDATE_PROMOTER,b,EditPromoterFragment.this);
+                if(image != null) {
+                    b.putString(AppsConstant.PARAMS, ParameterBuilder.getPromoterUpdate(promoter.getRequestId(), promoter.getRequestType(), firstName.getText().toString(),
+                            lastName.getText().toString(), phone.getText().toString(), Address.getText().toString(), emailAddress.getText().toString(), storeId + "", "ReqSubmitted",
+                            "RqtAddPromoter", "description after updation", image[0], image[1], image[2]));
+                }else {
+                    b.putString(AppsConstant.PARAMS, ParameterBuilder.getPromoterUpdate(promoter.getRequestId(), promoter.getRequestType(), firstName.getText().toString(),
+                            lastName.getText().toString(), phone.getText().toString(), Address.getText().toString(), emailAddress.getText().toString(), storeId + "", "ReqSubmitted",
+                            "RqtAddPromoter", "description after updation", photo,adhar,address));
+                }getActivity().getLoaderManager().initLoader(LoaderConstant.UPDATE_PROMOTER,b,EditPromoterFragment.this);
                     }
         });
        // } else {
@@ -144,6 +158,8 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
     public Loader<Object> onCreateLoader(int id, Bundle args) {
         ((MainActivity)getActivity()).showHideProgressForLoder(false);
         switch(id) {
+            case  LoaderConstant.IMAGE_UPLOAD:
+                return new LoaderServices(getContext(),LoaderMethod.IMAGE_UPLOAD,args);
             case LoaderConstant.UPDATE_PROMOTER:
                 return new LoaderServices(getContext(), LoaderMethod.UPDATE_PROMOTER,args);
             case LoaderConstant.STORE_LIST:
@@ -169,12 +185,21 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                 break;
             case LoaderConstant.IMAGE_UPLOAD:
                 if (data != null && data instanceof String) {
-                    image[i] = (String) data;
-                    Log.d("IMAGE",image[i]);
-                    i++;
-                    if(i == 3){
+                    if(i == 1) {
+                        //photo
+                        image[0] = (String) data;
+                    }else if(i == 2) {
+                        //aadhar
+                        image[1] = (String) data;
+                    } else if(i == 3) {
+                        //address
+                        image[2] = (String) data;
+                    } else {
+                        //error
                         i = 0;
                     }
+                    //  image[i] = (String) data;
+                    Log.d("IMAGE", (String) data);
 
                 } else {
                     Toast.makeText(getContext(),
@@ -203,12 +228,12 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                 if (!responseValue.equals(null)) {
                     /*Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
                     Log.d("path", responseValue);*/
+                    i = 1;
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
                     bundle.putString(AppsConstant.FILE, responseValue);
                     bundle.putString(AppsConstant.FILEPURPOSE,purpose);
                     getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,EditPromoterFragment.this);
-
                     ivPhoto.setImageResource(R.drawable.photo_tick);
                     ivPhoto.setEnabled(false);
                 }
@@ -218,7 +243,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                 if (!responseValue.equals(null)) {
                     /*Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
                     Log.d("path", responseValue);*/
-
+                    i = 2;
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
                     bundle.putString(AppsConstant.FILE, responseValue);
@@ -239,7 +264,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                             bundle.putString(AppsConstant.FILE, responseValue);
                             bundle.putString(AppsConstant.FILEPURPOSE,purpose);
                             getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,EditPromoterFragment.this).forceLoad();
-
+                    i = 3;
                     //  image[2] = responseValue;
                     ivAddress.setImageResource(R.drawable.id_card_tick);
                     ivAddress.setEnabled(false);
@@ -254,23 +279,37 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ivPhoto:
+                if (!promoter.getStatusId().equals(null) && !promoter.getStatusId().equalsIgnoreCase("ReqCompleted")) {
+                    Intent i = new Intent(getActivity(), CameraActivity.class);
+                    i.putExtra("camera_key",AppsConstant.FRONT_CAMREA_OPEN);
+                    i.putExtra("purpose","ForPhoto");
+                    startActivityForResult(i,AppsConstant.IMAGE_PHOTO);
+                } else {
+                    // just show previous image in new pop up
+                }
 
-                Intent i = new Intent(getActivity(), CameraActivity.class);
-                i.putExtra("camera_key",AppsConstant.FRONT_CAMREA_OPEN);
-                i.putExtra("purpose","For Photo");
-                startActivityForResult(i,AppsConstant.IMAGE_PHOTO);
+
                 break;
             case R.id.ivAadhar:
-                Intent i2 = new Intent(getActivity(),CameraActivity.class);
-                i2.putExtra("camera_key",BACK_CAMREA_OPEN);
-                i2.putExtra("purpose","For Aadhar");
-                startActivityForResult(i2,AppsConstant.IMAGE_AADHAR);
+                if (!promoter.getStatusId().equals(null) && !promoter.getStatusId().equalsIgnoreCase("ReqCompleted")) {
+                    Intent i2 = new Intent(getActivity(),CameraActivity.class);
+                    i2.putExtra("camera_key",BACK_CAMREA_OPEN);
+                    i2.putExtra("purpose","ForAadhar");
+                    startActivityForResult(i2,AppsConstant.IMAGE_AADHAR);
+                } else {
+
+                }
+
                 break;
             case R.id.ivAddressProof:
-                Intent i3 = new Intent(getActivity(),CameraActivity.class);
-                i3.putExtra("camera_key",BACK_CAMREA_OPEN);
-                i3.putExtra("purpose","For Address Proof");
-                startActivityForResult(i3,AppsConstant.IMAGE_ADDRESS_PROOF);
+                if(!promoter.getStatusId().equals(null) && !promoter.getStatusId().equalsIgnoreCase("ReqCompleted")) {
+                    Intent i3 = new Intent(getActivity(),CameraActivity.class);
+                    i3.putExtra("camera_key",BACK_CAMREA_OPEN);
+                    i3.putExtra("purpose","ForAddressProof");
+                    startActivityForResult(i3,AppsConstant.IMAGE_ADDRESS_PROOF);
+                } else {
+
+                }
                 break;
         }
     }

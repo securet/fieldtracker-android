@@ -8,7 +8,8 @@
     android:padding="10dip">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,6 +62,17 @@
         android:text="@string/contact_support"
         android:textColor="@android:color/black"
         android:textSize="20sp" />
+        <TextView
+            android:id="@+id/tvMyAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp"
+            android:padding="10dip"
+            android:text="My Account"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvLogout"

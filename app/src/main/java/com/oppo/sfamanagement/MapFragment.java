@@ -519,7 +519,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	private void OpenCamera(){
 		Intent i = new Intent(getActivity(), CameraActivity.class);
 		i.putExtra("camera_key",AppsConstant.FRONT_CAMREA_OPEN);
-		i.putExtra("purpose","For Photo");
+		i.putExtra("purpose","ForPhoto");
 		startActivityForResult(i,REQ_CAMERA);
 	}
 	private final static int REQ_CAMERA =1003;

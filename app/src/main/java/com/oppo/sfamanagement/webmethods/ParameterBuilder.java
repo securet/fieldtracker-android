@@ -76,8 +76,8 @@ public class ParameterBuilder {
                     "&productStoreId=" + URLEncoder.encode(s,"UTF-8") +
                     "&statusId=" + URLEncoder.encode(reqSubmitted,"UTF-8") +
                     "&requestTypeEnumId=" + URLEncoder.encode(addPromoter,"UTF-8") +
-                    "&aadharIdPath=" + URLEncoder.encode(s1,"UTF-8") +
-                    "&userPhoto=" + URLEncoder.encode(s2,"UTF-8") +
+                    "&aadharIdPath=" + URLEncoder.encode(s2,"UTF-8") +
+                    "&userPhoto=" + URLEncoder.encode(s1,"UTF-8") +
                     "&addressIdPath=" + URLEncoder.encode(s3,"UTF-8");
 
 

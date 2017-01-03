@@ -41,6 +41,7 @@ public class Preferences
     public static String SHIFTTIME = "ShiftTime";
     public static String ISLAST = "isLast";
     public static String PROMOTERISLAST= "promoterIsLast";
+    public static String STOREISLAST = "storeIsLast";
     public Preferences(Context context)
     {
         preferences = context.getSharedPreferences("AttendanceTracker", context.MODE_PRIVATE);
