@@ -47,11 +47,9 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
     private ImageView ivPhoto,ivAdhar,ivAddressProof;
     private TextView tvStoreAssignment,seAssignment;
     int storeId ;
-    Preferences preferences;
+    private Preferences preferences;
     ArrayList<Store> list;
     private int i = 0;
-
- //   protected Preferences preferences;
     String image[] = new String[3];
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
