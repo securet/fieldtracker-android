@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 
@@ -94,7 +95,9 @@ public class CustomDialog extends Dialog
 			if(baseActivity != null && baseActivity.get()!=null && !baseActivity.get().isFinishing())
 				show();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.e("Log",e);
+			Crashlytics.log(1,getClass().getName(),"Error in Custom Dialog");
+			Crashlytics.logException(e);
 		}
 	}
 }

@@ -8,6 +8,7 @@ import android.util.Base64;
 import android.util.Log;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.MainActivity;
 
 import com.oppo.sfamanagement.database.AppsConstant;
@@ -68,6 +69,8 @@ public class RestHelper
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in RestHelper");
+            Crashlytics.logException(e);
         }
         response ="";
         HttpURLConnection connection = null;
@@ -111,8 +114,12 @@ public class RestHelper
 
         } catch (MalformedURLException e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in RestHelper MalformedURL");
+            Crashlytics.logException(e);
         } catch (IOException e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in RestHelper IOException");
+            Crashlytics.logException(e);
         } finally {
             if(connection != null){
                 connection.disconnect();
@@ -123,6 +130,8 @@ public class RestHelper
                 }
             } catch (IOException e) {
                 Logger.e("Log",e);
+                Crashlytics.log(1,getClass().getName(),"Error in RestHelper");
+                Crashlytics.logException(e);
             }
             return response;
         }
@@ -185,8 +194,12 @@ public class RestHelper
             response = buffer.toString();
         } catch (MalformedURLException e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in RestHelper");
+            Crashlytics.logException(e);
         } catch (IOException e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in RestHelper");
+            Crashlytics.logException(e);
         } finally{
             if(connection != null){
                 connection.disconnect();
@@ -197,6 +210,8 @@ public class RestHelper
                 }
             } catch (IOException e) {
                 Logger.e("Log",e);
+                Crashlytics.log(1,getClass().getName(),"Error in RestHelper");
+                Crashlytics.logException(e);
             }
             return response;
         }
@@ -218,6 +233,8 @@ public class RestHelper
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in RestHelper");
+            Crashlytics.logException(e);
         }
         HostnameVerifier allHostsValid = new HostnameVerifier() {
             public boolean verify(String hostname, SSLSession session) {
@@ -294,8 +311,12 @@ public class RestHelper
             response = bufferout.toString();
         } catch (MalformedURLException e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in RestHelper");
+            Crashlytics.logException(e);
         } catch (IOException e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in RestHelper");
+            Crashlytics.logException(e);
         } finally
         {
             if(connection != null){
@@ -307,6 +328,8 @@ public class RestHelper
                 }
             } catch (IOException e) {
                 Logger.e("Log",e);
+                Crashlytics.log(1,getClass().getName(),"Error in RestHelper");
+                Crashlytics.logException(e);
             }
             Log.e("File response",response);
             return response;
@@ -331,8 +354,9 @@ public class RestHelper
                 response += line;
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            response = "";
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in RestHelper" + response);
+            Crashlytics.logException(e);
         }
         return response;
 

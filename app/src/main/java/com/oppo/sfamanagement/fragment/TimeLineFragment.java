@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,7 +64,13 @@ public class TimeLineFragment extends Fragment implements LoaderManager.LoaderCa
         lvTimeLine = (ListView) view.findViewById(R.id.lvTimeLine);
         tvTimeInOutLocation = (TextView) view.findViewById(R.id.tvTimeInOutLocation);
 
-
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                fm.popBackStackImmediate();
+            }
+        });
         String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
         TimeInOutDetails details = dataSource.getToday();
         String lastDate = CalenderUtils.getDateMethod(details.getClockDate(),CalenderUtils.DateMonthDashedFormate);
@@ -114,7 +121,7 @@ public class TimeLineFragment extends Fragment implements LoaderManager.LoaderCa
         }
 
 
-        getLoaderManager().destroyLoader(loader.getId());
+        getActivity().getLoaderManager().destroyLoader(loader.getId());
     }
 
     @Override

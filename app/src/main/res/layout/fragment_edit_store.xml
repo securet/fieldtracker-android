@@ -103,7 +103,7 @@
 
                 <Button
                     android:id="@+id/btEdit"
-                    android:text="Add"
+                    android:text="@string/edit"
                     android:textAllCaps="false"
                     android:textSize="22sp"
                     android:background="@drawable/editstore_edit_button"

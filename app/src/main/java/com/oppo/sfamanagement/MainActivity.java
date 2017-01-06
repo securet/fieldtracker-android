@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.DigitalClockView;
 import com.oppo.sfamanagement.database.Logger;
@@ -37,6 +38,8 @@ import com.oppo.sfamanagement.webmethods.LoaderServices;
 import com.oppo.sfamanagement.webmethods.Services;
 import com.oppo.sfamanagement.webmethods.UrlBuilder;
 
+import io.fabric.sdk.android.Fabric;
+
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 	public static String TAG = "lstech.aos.debug";
 
@@ -44,8 +47,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	public Preferences preferences;
 	public final static int  MAP =0,LIST=1,MORE=2;
 	public int openPage = MAP;
-	LinearLayout llAttendance,llHistory,llMore;
+	LinearLayout llAttendance,llHistory,llMore,footerTabs;
 	ImageView ivCurrentLocation;
+    int flag2 = 0;
 	DigitalClockView dtcLoginTime;
 	TextView tvSiteName,tvUserName,tvUserSerName,store;
 	@Override
@@ -53,13 +57,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		ActionBar actionBar = getSupportActionBar();
+        flag2 = 1 ;
 		if (actionBar != null){
 			actionBar.hide();
 		}
 		preferences = new Preferences(MainActivity.this);
 
 		Bundle b = new Bundle();
-		b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails(Services.STORE_DETAIL,preferences.getString(Preferences.PARTYID,"")));
+		b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails(Services.STORE_DETAIL,preferences.getString(Preferences.SITEID,"")));
 		b.putString(AppsConstant.METHOD, AppsConstant.GET );
 		b.putString(AppsConstant.PASSWORD, "");
 		getLoaderManager().initLoader(LoaderConstant.USER_STORE_DETAIL,b,MainActivity.this).forceLoad();
@@ -74,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		tvUserName = (TextView) findViewById(R.id.tvUserName);
 		tvUserSerName = (TextView) findViewById(R.id.tvUserSerName);
 		dtcLoginTime = (DigitalClockView) findViewById(R.id.dtcLoginTime);
+		footerTabs = (LinearLayout) findViewById(R.id.footerTabs);
 
 		/*ivCurrentLocation.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -128,10 +134,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			public void onClick(View view) {
 				if(openPage!=MAP) {
 					openPage=MAP;
-					Fragment f = new MapFragment();
-					FragmentManager fragmentManager = getSupportFragmentManager();
-					fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
-					UpadateButtonStatus();
+                    if (EventsFragment.flag == 1) {
+                        Fragment f = new MapFragment();
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
+                        UpadateButtonStatus();
+                    }
 				}
 			}
 		});
@@ -154,10 +162,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			public void onClick(View view) {
 				if(openPage!=MORE) {
 					openPage = MORE;
-					Fragment f = new MoreFragment();
-					FragmentManager fragmentManager = getSupportFragmentManager();
-					fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
-					UpadateButtonStatus();
+                    if (EventsFragment.flag == 1 || flag2 == 1) {
+                        if (flag2 == 1) {
+                            flag2 = 0;
+                        }
+                        Fragment f = new MoreFragment();
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
+                        UpadateButtonStatus();
+                    }
 				}
 			}
 		});
@@ -239,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				fragmentManager.executePendingTransactions();
 				break;
 		}
+        footerTabs.setVisibility(View.VISIBLE);
 		getLoaderManager().destroyLoader(loader.getId());
 	}
 	String SHOW_HIDE_LOADER = "SHOW_HIDE_LOADER";
@@ -299,6 +313,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			{
 				dialog = null;
 				Logger.e("Log",e);
+				Crashlytics.log(1,getClass().getName(),"Error in MainActivity while displaying animation loader");
+				Crashlytics.logException(e);
 			}
 		}
 	}

@@ -13,13 +13,14 @@ import com.oppo.sfamanagement.LeaveFragment;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.MapFragment;
 import com.oppo.sfamanagement.R;
+import com.oppo.sfamanagement.fragment.ChangePasswordFragment;
 import com.oppo.sfamanagement.fragment.MyAccountFragment;
 import com.oppo.sfamanagement.fragment.PromotersFragment;
 import com.oppo.sfamanagement.fragment.StoreListFragment;
 
 public class MoreFragment extends Fragment {
 
-    private TextView store,promoter,myAccount;
+    private TextView store,promoter,myAccount,changePassword;
     private Preferences preferences;
 
     @Override
@@ -32,6 +33,7 @@ public class MoreFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.more_option, container, false);
         TextView tvLogout = (TextView) rootView.findViewById(R.id.tvLogout);
         myAccount = (TextView) rootView.findViewById(R.id.tvMyAccount);
+        changePassword = (TextView) rootView.findViewById(R.id.tvChangePassword);
         preferences = new Preferences(getContext());
         tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +90,16 @@ public class MoreFragment extends Fragment {
                 Fragment fragment = new MyAccountFragment();
                 FragmentManager fm = getFragmentManager();
                 fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
+                fm.executePendingTransactions();
+            }
+        });
+
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment f = new ChangePasswordFragment();
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
                 fm.executePendingTransactions();
             }
         });

@@ -19,4 +19,8 @@ public class LoaderConstant {
     public static final int TIMEINOUT = 12;
     public static final int HISTORY_LIST = 13;
     public static final int TIMELINE_LIST = 14;
+    public static final int LEAVE_LIST = 15;
+    public static final int LEAVE_TYPES = 16;
+    public static final int APPLY_LEAVE = 17;
+    public static final int UPDATE_LEAVE = 18;
 }

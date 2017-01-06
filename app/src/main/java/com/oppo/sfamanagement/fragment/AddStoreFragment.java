@@ -147,7 +147,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
                 Bundle b = new Bundle();
                 b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.ADD_STORE));
                 b.putString(AppsConstant.METHOD,AppsConstant.POST);
-                b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddStore(sN,sA,lat,lon));
+                b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddStore(sN,sA,lat,lon,200+""));
                 Log.d("ADD", sN + "  " + sA + "  " + lat + "  " + lon);
                 getActivity().getLoaderManager().initLoader(LoaderConstant.ADD_STORE,b,AddStoreFragment.this).forceLoad();
                 break;

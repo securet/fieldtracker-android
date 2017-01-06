@@ -24,4 +24,8 @@ public class Services{
     public static String ADD_PROMOTER = "request/promoter";
     public static String TIME_IN_OUT = "attendance/log";
     public static String HISTORY_LIST = "attendance/log";
+    public static String LEAVE_LIST = "leaves/my/list";
+    public static String LEAVE_TYPES = "leaves/types";
+    public static String APPLY_LEAVES = "leaves";
+    public static String UPDATE_LEAVES = "leaves";
 }

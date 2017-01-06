@@ -70,7 +70,18 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="10dp"
             android:padding="10dip"
-            android:text="My Account"
+            android:text="@string/my_account"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/tvChangePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp"
+            android:padding="10dip"
+            android:text="@string/change_password"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
 

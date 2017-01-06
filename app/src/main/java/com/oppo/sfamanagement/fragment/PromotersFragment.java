@@ -52,7 +52,6 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     ListView listView;
     ArrayList<Promoter> list = new ArrayList<>();
     ImageView ivLoader;
-    private LinearLayout layout;
     Preferences preferences;
     private int pageIndex = -1;
     private int pageSize = 10;
@@ -81,10 +80,8 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
         listView = (ListView) view.findViewById(R.id.lvPromotersList);
         btAddPromoter = (Button) view.findViewById(R.id.btAddPromoter);
 
-        footerView = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_view,null,false);
-        layout = (LinearLayout)footerView.findViewById(R.id.footer_layout) ;
+        footerView = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_view,null);
         ivLoader = (ImageView) footerView.findViewById(R.id.footer_1);
-        layout.setVisibility(View.INVISIBLE);
         footerView.setVisibility(View.INVISIBLE);
         btAddPromoter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,7 +95,6 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
 
         adapter = new ListViewPromoterListAdapter(getActivity(), R.layout.promoter_list_item,list);
         listView.setAdapter(adapter);
-        listView.addFooterView(layout);
         listView.setOnItemClickListener(this);
         listView.setOnScrollListener(this);
         return view;
@@ -152,12 +148,8 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
             rotateXaxis.setInterpolator(new LinearInterpolator());
             ivLoader.setAnimation(rotateXaxis);
             footerView.setVisibility(View.VISIBLE);
-            layout.setVisibility(View.VISIBLE);
-
     }
     public void hideloader() {
-
-        layout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
     }
 
@@ -172,21 +164,21 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
         Bundle bundle = new Bundle();
         bundle.putParcelable("promoter", p);
         FragmentManager fm = getFragmentManager();
-        if (!p.getStatusId().equals(null) &&
+        /*if (!p.getStatusId().equals(null) &&
                 !preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExecutiveOnPremise") &&
                 !preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExectiveOffPremise") &&
                 !p.getStatusId().equalsIgnoreCase("ReqCompleted")) {
-
+*/
             Fragment fragment = new EditPromoterFragment();
             fragment.setArguments(bundle);
             fm.beginTransaction().replace(R.id.flMiddle, fragment).addToBackStack(null).commit();
             fm.executePendingTransactions();
-        } else {
+        /*} else {
             Fragment fragment = new FieldExecutivePromoterFragment();
             fragment.setArguments(bundle);
             fm.beginTransaction().replace(R.id.flMiddle, fragment).addToBackStack(null).commit();
             fm.executePendingTransactions();
-        }
+        }*/
     }
 
 

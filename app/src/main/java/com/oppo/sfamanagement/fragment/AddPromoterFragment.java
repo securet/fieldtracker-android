@@ -88,7 +88,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 builder.setSingleChoiceItems(list,tvStoreAssignment.getTag(), new CustomBuilder.OnClickListener() {
                     @Override
                     public void onClick(CustomBuilder builder, Object selectedObject) {
-                        tvStoreAssignment.setTag((Store)selectedObject);
+                        tvStoreAssignment.setTag(selectedObject);
                         tvStoreAssignment.setText(((Store) selectedObject).getStoreName());
                         storeId = ((Store) selectedObject).getStoreId();
                         seAssignment.setText(preferences.getString(Preferences.USERFULLNAME,"Full Name"));

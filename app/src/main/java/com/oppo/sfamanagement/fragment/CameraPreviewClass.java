@@ -6,6 +6,9 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.crashlytics.android.Crashlytics;
+import com.oppo.sfamanagement.database.Logger;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -33,7 +36,9 @@ public class CameraPreviewClass extends SurfaceView implements SurfaceHolder.Cal
         try {
             mCamera = Camera.open();
         } catch (RuntimeException e) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in CameraPreview");
+            Crashlytics.logException(e);
         }
 
         Camera.Size previewSize ;
@@ -49,20 +54,12 @@ public class CameraPreviewClass extends SurfaceView implements SurfaceHolder.Cal
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
         }catch(Exception e) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in CameraPreview");
+            Crashlytics.logException(e);
         }
     }
 
-  /*  @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        final int width = resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
-        final int height = resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
-        setMeasuredDimension(width, height);
-
-        if (previewSize != null) {
-            mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, width, height);
-        }
-    }*/
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
@@ -74,7 +71,9 @@ public class CameraPreviewClass extends SurfaceView implements SurfaceHolder.Cal
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
         } catch (IOException e ) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in CameraPreview");
+            Crashlytics.logException(e);
         }
     }
 

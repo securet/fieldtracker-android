@@ -20,13 +20,14 @@ import java.util.ArrayList;
  * Created by allsmartlt218 on 02-12-2016.
  */
 
-public class ListViewPromoterListAdapter extends BaseAdapter {
+public class ListViewPromoterListAdapter extends ArrayAdapter<Promoter> {
 
     protected Activity activity;
     protected int resourceId;
     protected ArrayList<Promoter> list;
 
     public ListViewPromoterListAdapter(Activity activity, int resource, ArrayList<Promoter> list) {
+        super(activity,resource,list);
         this.activity = activity;
         this.resourceId = resource;
         this.list = list;

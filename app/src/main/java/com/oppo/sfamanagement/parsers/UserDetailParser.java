@@ -2,6 +2,7 @@ package com.oppo.sfamanagement.parsers;
 
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
 
@@ -42,7 +43,7 @@ public class UserDetailParser {
                     preferences.saveString(Preferences.USERID, obj.getString("userId"));
                     preferences.saveString(Preferences.USEREMAIL, obj.getString("emailAddress"));
                     preferences.saveString(Preferences.ROLETYPEID, obj.getString("roleTypeId"));
- /*For testing*/  //preferences.saveString(Preferences.ROLETYPEID, "SalesExecutive");
+ /*For testing*/ // preferences.saveString(Preferences.ROLETYPEID, "SalesExecutive");
                     preferences.saveString(Preferences.PARTYID, obj.getString("partyId"));
                     preferences.commit();;
                 }
@@ -51,6 +52,8 @@ public class UserDetailParser {
             }
         } catch (JSONException e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
+            Crashlytics.logException(e);
         } finally {
             return result;
         }

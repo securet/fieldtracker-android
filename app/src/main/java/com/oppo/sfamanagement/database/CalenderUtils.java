@@ -2,6 +2,8 @@ package com.oppo.sfamanagement.database;
 
 import android.text.format.DateFormat;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,7 +31,8 @@ public class CalenderUtils {
             mills = Date1.getTime() - Date2.getTime();
             days = mills / (1000 * 60 * 60 * 24);
         } catch (Exception e) {
-            Logger.e("Log", e);
+            Logger.e("Log",e);
+            Crashlytics.logException(e);
 
         }
         return days;
@@ -43,6 +46,8 @@ public class CalenderUtils {
         try {
             d = sdf.parse(strDate);
         } catch (Exception e) {
+            Logger.e("Log",e);
+            Crashlytics.logException(e);
         }
         sdf.applyPattern("dd");
         int intDay = StringUtils.getInt(sdf.format(d));
@@ -92,7 +97,8 @@ public class CalenderUtils {
             Mins = (mills - (Hours * 1000 * 60 * 60)) / (1000 * 60);
             sec = (mills - (Hours * 1000 * 60 * 60) - (Mins * 1000 * 60)) / (1000);
         } catch (Exception e) {
-            Logger.e("Log", e);
+            Logger.e("Log",e);
+            Crashlytics.logException(e);
         }
 
         if (Hours > 0) {
@@ -120,7 +126,8 @@ public class CalenderUtils {
             date = simpleDateFormat.parse(timeStamp);
             calendar.setTime(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.logException(e);
         }
         return (String) DateFormat.format(formate,calendar);
     }

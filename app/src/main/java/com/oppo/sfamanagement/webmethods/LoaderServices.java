@@ -10,6 +10,9 @@ import com.oppo.sfamanagement.parsers.AddPromoterParser;
 import com.oppo.sfamanagement.parsers.AddStoreParser;
 import com.oppo.sfamanagement.parsers.HistoryListParser;
 import com.oppo.sfamanagement.parsers.ImageUploadParser;
+import com.oppo.sfamanagement.parsers.LeaveApplyParser;
+import com.oppo.sfamanagement.parsers.LeaveListParser;
+import com.oppo.sfamanagement.parsers.LeaveTypeParser;
 import com.oppo.sfamanagement.parsers.PromoterListParser;
 import com.oppo.sfamanagement.parsers.PromoterUpdateParser;
 import com.oppo.sfamanagement.parsers.StoreDetailParser;
@@ -81,6 +84,12 @@ public class LoaderServices extends CustomAsyncTask
                 return new TimeInOutParser(response,AppsConstant.REASON).Parse();
             case TIMELINE_LIST:
                 return new TimeLineParser(response,preferences).Parse();
+            case LEAVE_LIST:
+                return new LeaveListParser(response).Parse();
+            case LEAVE_TYPES:
+                return new LeaveTypeParser(response).Parse();
+            case APLLY_LEAVES:
+                return new LeaveApplyParser(response).Parse();
 
             default:
                 return  null;

@@ -58,7 +58,6 @@ public class ListViewStoreListAdapter extends BaseAdapter {
         if(rowView == null) {
             rowView = inflater.inflate(resourceId,parent,false);
         }
-      //  Store store = new Store();
         TextView tvStoreList = (TextView)rowView.findViewById(R.id.tvStoreItem);
         Store store = getItem(position);
         tvStoreList.setText(store.getStoreName());

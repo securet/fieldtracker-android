@@ -32,6 +32,22 @@ public class ParameterBuilder {
         }
     }
 
+    public static String getApplyLeave(String leaveTypeEnumId, String leaveReasonEnumId, String description, String fromDate, String thruDate, String organizationId) {
+        String urlParameters = "";
+        try {
+            urlParameters = "leaveTypeEnumId=" + URLEncoder.encode(leaveTypeEnumId,"UTF-8") +
+                    "&leaveReasonEnumId=" + URLEncoder.encode(leaveReasonEnumId, "UTF-8") +
+                    "&description=" + URLEncoder.encode(description, "UTF-8") +
+                    "&fromDate=" + URLEncoder.encode(fromDate, "UTF-8") +
+                    "&thruDate=" + URLEncoder.encode(thruDate, "UTF-8") +
+                    "&organizationId=" + URLEncoder.encode(organizationId, "UTF-8");
+        } catch (Exception e) {
+            Logger.e("Log", e);
+        } finally {
+            return urlParameters;
+        }
+    }
+
     public static String getStoreUpdate(String storeId,String storeAddress) {
         String url = "" ;
         try {
@@ -48,14 +64,14 @@ public class ParameterBuilder {
         }
     }
 
-    public static String getAddStore(String storeName, String storeAddress,String latitude,String longitude) {
+    public static String getAddStore(String storeName, String storeAddress, String latitude, String longitude, String proximity) {
         String url = "";
         try {
             url = "storeName=" + URLEncoder.encode(storeName,"UTF-8") +
                     "&address=" + URLEncoder.encode(storeAddress,"UTF-8") +
                     "&latitude=" + URLEncoder.encode(latitude,"UTF-8") +
                     "&longitude=" + URLEncoder.encode(longitude,"UTF-8")+
-                    "&proximityRadius=" + URLEncoder.encode(200+"","UTF-8");
+                    "&proximityRadius=" + URLEncoder.encode(proximity+"","UTF-8");
 
         } catch (Exception e) {
             Logger.e("Log",e);

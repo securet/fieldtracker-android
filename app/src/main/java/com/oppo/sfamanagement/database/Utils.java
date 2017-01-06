@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.util.DisplayMetrics;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.R;
 
 import java.io.InputStream;
@@ -32,7 +33,11 @@ public class Utils {
               os.write(bytes, 0, count);
             }
         }
-        catch(Exception ex){}
+        catch(Exception e){
+            Logger.e("Log",e);
+            Crashlytics.logException(e);
+
+        }
     }
 
     public static int dpToPix(DisplayMetrics metrics, int dp) {

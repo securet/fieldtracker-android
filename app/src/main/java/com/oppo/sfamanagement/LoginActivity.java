@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
@@ -29,6 +30,8 @@ import com.oppo.sfamanagement.webmethods.LoaderMethod;
 import com.oppo.sfamanagement.webmethods.LoaderServices;
 import com.oppo.sfamanagement.webmethods.Services;
 import com.oppo.sfamanagement.webmethods.UrlBuilder;
+
+import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends Activity implements LoaderManager.LoaderCallbacks , View.OnClickListener {
 
@@ -40,6 +43,7 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_login);
         preferences = new Preferences(LoginActivity.this);
         isLogin = preferences.getBoolean(Preferences.ISLOGIN, false);

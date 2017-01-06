@@ -2,6 +2,7 @@ package com.oppo.sfamanagement.parsers;
 
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
 
@@ -41,6 +42,8 @@ public class StoreDetailParser {
             }
         } catch (JSONException e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
+            Crashlytics.logException(e);
         } finally {
             return null;
         }

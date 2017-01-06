@@ -53,5 +53,12 @@
     <string name="request_permission">This sample needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="promoter_details">Promoter Details</string>
+    <string name="change_password">Change Password</string>
+    <string name="my_account">My Account</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="current_password">Current Password</string>
+    <string name="change">Change</string>
+    <string name="submit">Submit</string>
 
 </resources>

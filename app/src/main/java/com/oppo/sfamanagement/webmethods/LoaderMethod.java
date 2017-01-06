@@ -18,6 +18,10 @@ public enum LoaderMethod
     ADD_PROMOTER,
     TIMEINOUT,
     HISTORY_LIST,
-    TIMELINE_LIST
+    LEAVE_LIST,
+    TIMELINE_LIST,
+    LEAVE_TYPES,
+    APLLY_LEAVES,
+    UPDATE_LEAVES
 
 }

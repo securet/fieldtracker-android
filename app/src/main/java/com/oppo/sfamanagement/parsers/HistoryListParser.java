@@ -4,6 +4,8 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.fragment.DynamicElement;
 import com.oppo.sfamanagement.model.HistoryChild;
@@ -157,7 +159,9 @@ public class HistoryListParser {
                 preferences.commit();
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
+            Crashlytics.logException(e);
         } finally {
             return parentArraylist;
         }

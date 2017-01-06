@@ -98,6 +98,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		preferences = new Preferences(getContext());
 		setRetainInstance(true);
 		super.onCreate(savedInstanceState);
 	}
@@ -105,20 +106,14 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	TextView tvTimeInOut,tvTimeInOutLocation;
     ImageView ivCurrentLocation,ivTimeLineExpand;
 
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.fragment_map, container,false);
         ivTimeLineExpand = (ImageView) rootView.findViewById(R.id.ivTimeLineExapand);
+
 		mapFragment = SupportMapFragment.newInstance();
         dataSource = new EventDataSource(getContext());
-        preferences = new Preferences(getContext());
 		FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 		fragmentTransaction.add(R.id.map_container, mapFragment);
 		fragmentTransaction.commit();
@@ -193,7 +188,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		llLogin_Logout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if(((MainActivity)getActivity()).preferences.getBoolean(Preferences.INLOCATION, false)){
+				if(/*((MainActivity)getActivity()).preferences.getBoolean(Preferences.INLOCATION, false)*/isUserInLoacation()){
 
 						if(checkCameraPermission()){
 							if(checkStoragePermission())
@@ -257,15 +252,20 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		return (rad * 180.0 / Math.PI);
 	}
 	private boolean isUserInLoacation(){
+        float[] result = new float[1];
 		double lat1 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.USERLATITUDE,""));
 		double lon1 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.USERLONGITUDE,""));
 		double lat2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LATITUDE,""));
 		double lon2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LONGITUDE,""));
-		Double distance = distance(lat1, lon1, lat2, lon2);
-		int DistanceInRadius ;
+		//Double distance = distance(lat1, lon1, lat2, lon2);
+        int siteRadius = Integer.parseInt(preferences.getString(Preferences.SITE_RADIUS,""));
+        Location.distanceBetween(lat1,lon1,lat2,lon2,result);
+        float distance = result[0];
+        return distance<=siteRadius;
+		/*int DistanceInRadius ;
 		DistanceInRadius  = (int)deg2rad(distance)*1000;
 		return DistanceInRadius<=StringUtils.getInt(((MainActivity) getActivity()).preferences.getString(Preferences.SITE_RADIUS,""));
-
+*/
 	}
 	public void moveToCurentLocation()
 	{

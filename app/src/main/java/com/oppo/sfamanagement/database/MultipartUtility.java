@@ -1,5 +1,7 @@
 package com.oppo.sfamanagement.database;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,7 +61,9 @@ public class MultipartUtility {
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in MultipartUtility");
+            Crashlytics.logException(e);
         }
 
         HostnameVerifier allHostsValid = new HostnameVerifier() {
@@ -117,16 +121,6 @@ public class MultipartUtility {
         writer.append(LINE_FEED);
         writer.flush();
 
-//        FileInputStream inputStream = new FileInputStream();
-//        byte[] buffer = new byte[4096];
-//        int bytesRead = -1;
-//        while ((bytesRead = inputStream.read(buffer)) != -1) {
-//            outputStream.write(buffer, 0, bytesRead);
-//        }
-//        outputStream.flush();
-//        inputStream.close();
-//        writer.append(LINE_FEED);
-//        writer.flush();
     }
 
     /**

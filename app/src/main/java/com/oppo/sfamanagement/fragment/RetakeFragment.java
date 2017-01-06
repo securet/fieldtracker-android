@@ -26,9 +26,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.CameraActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
+import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
 import com.oppo.sfamanagement.webmethods.LoaderMethod;
 import com.oppo.sfamanagement.webmethods.LoaderServices;
@@ -73,32 +75,6 @@ public class RetakeFragment extends Fragment {
         } else {
             bmp = rotateBmpBack(path);
         }
-        /*try {
-            ExifInterface ei = new ExifInterface(imagePath);
-            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_UNDEFINED);
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    bmp = rotateImage(bitmap, -90);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    bmp = rotateImage(bitmap, 180);
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    bmp = rotateImage(bitmap, 270);
-                    break;
-
-                case ExifInterface.ORIENTATION_NORMAL:
-
-                default:
-                    break;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-        //  bmp = BitmapFactory.decodeFile(imagePath);
         imageView.setImageBitmap(bmp);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,12 +106,9 @@ public class RetakeFragment extends Fragment {
     private Bitmap rotateBmpBack(File path) {
         Matrix m = new Matrix();
         m.postRotate(90);
-        //bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth()/2, bitmap.getHeight()/2, m, true);
         Bitmap bitmap = new Compressor.Builder(getContext()).setQuality(60)
                 .setCompressFormat(Bitmap.CompressFormat.JPEG).setMaxWidth(480)
                 .setMaxHeight(640).build().compressToBitmap(path);
-
-       // bitmap = Bitmap.createScaledBitmap(bitmap,640,480,true);
         bmp = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),m,true);
 
         return bmp;
@@ -152,7 +125,9 @@ public class RetakeFragment extends Fragment {
             os.flush();
             os.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in Writing image file to local device");
+            Crashlytics.logException(e);
         } finally {
             return imageFile.getAbsolutePath();
         }
@@ -166,51 +141,12 @@ public class RetakeFragment extends Fragment {
 
     public Bitmap rotateBmpFront(File path){
         Matrix matrix = new Matrix();
-        //set image rotation value to 90 degrees in matrix.
         matrix.postRotate(270);
-        //supply the original width and height, if you don't want to change the height and width of bitmap.
-        /*Bitmap bitmap = Compressor.getDefault(getContext()).compressToBitmap(path);
-        bitmap = Bitmap.createScaledBitmap(bitmap,640,480,true);
-        bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);*/
         Bitmap bitmap = new Compressor.Builder(getContext()).setQuality(60)
                 .setCompressFormat(Bitmap.CompressFormat.JPEG).setMaxWidth(480)
                 .setMaxHeight(640).build().compressToBitmap(path);
         bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-       // Bitmap bmp2 = Bitmap.createScaledBitmap(bmp,480,640,true);
         return bmp;
     }
 
-    /*@Override
-    public Loader<Object> onCreateLoader(int id, Bundle args) {
-        ((CameraActivity)getActivity()).showHideProgressForLoder(false);
-        switch (id) {
-            case LoaderConstant.IMAGE_UPLOAD:
-                return new LoaderServices(getContext(), LoaderMethod.IMAGE_UPLOAD,args);
-            default:
-                return null;
-        }
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Object> loader, Object data) {
-        ((CameraActivity)getActivity()).showHideProgressForLoder(true);
-        String imagePath = (String) data;
-        Log.d("SERVERPATH",imagePath);
-        Intent i = new Intent();
-        i.putExtra("image_photo",imagePath);
-        if (imagePurpose.equals("For Photo")) {
-            getActivity().setResult(Activity.RESULT_OK,i);
-        } else if (imagePurpose.equals("For Aadhar")) {
-            getActivity().setResult(Activity.RESULT_OK,i);
-        } else if(imagePurpose.equals("For Address Proof")) {
-            getActivity().setResult(Activity.RESULT_OK,i);
-        }
-        getLoaderManager().destroyLoader(loader.getId());
-        getActivity().finish();
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Object> loader) {
-
-    }*/
 }

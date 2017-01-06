@@ -12,6 +12,8 @@ import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -79,7 +81,10 @@ public class ShiftTimeView extends TextView {
                     try {
                          loginDate = simpleDateFormat.parse(preferences.getString(Preferences.TIMEINTIME,"2010/10/2010 10:10:10"));
                     }catch (Exception e){
-                        e.printStackTrace();
+                        Logger.e("Log",e);
+                        Crashlytics.log(1,getClass().getName(),"Error in ShiftTimeView");
+                        Crashlytics.logException(e);
+
                     }
                     Date curentDate = new Date();
                     mCalendar.setTimeInMillis(curentDate.getTime()-loginDate.getTime());

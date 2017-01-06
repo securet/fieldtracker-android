@@ -3,6 +3,8 @@ package com.oppo.sfamanagement.database;
 import android.text.Html;
 import android.text.TextUtils;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -20,7 +22,9 @@ public class StringUtils {
         }
         catch ( Exception e)
         {
-//            Logger.e("Log",e);
+            Logger.e("Log",e);
+            Crashlytics.logException(e);
+
         }
         finally {
             return reqInteger;
@@ -37,7 +41,9 @@ public class StringUtils {
         }
         catch (Exception e)
         {
-//            Logger.e("Log",e);
+            Logger.e("Log",e);
+            Crashlytics.logException(e);
+
         }
 
 

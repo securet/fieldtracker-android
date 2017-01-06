@@ -154,7 +154,8 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:text="Submit"
+                    android:id="@+id/btSubmit"
+                    android:text="@string/submit"
                     android:textAllCaps="false"
                     android:background="@drawable/editstore_edit_button"
                     android:textSize="22sp"
@@ -164,7 +165,8 @@
                     android:layout_marginEnd="5dp"
                     android:layout_height="wrap_content" />
                 <Button
-                    android:text="Cancel"
+                    android:id="@+id/btnCancel"
+                    android:text="@string/cancel"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
                     android:textAllCaps="false"

@@ -17,7 +17,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.R;
+import com.oppo.sfamanagement.database.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,9 +62,15 @@ public class CameraFragment extends Fragment{
                             fos.write(data);
                             fos.close();
                         } catch (FileNotFoundException e) {
-                            e.printStackTrace();
+                            Logger.e("Log",e);
+                            Crashlytics.log(1,getClass().getName(),"Error in CameraFragment");
+                            Crashlytics.logException(e);
+
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            Logger.e("Log",e);
+                            Crashlytics.log(1,getClass().getName(),"Error in CameraFragment");
+                            Crashlytics.logException(e);
+
                         }
                     }
 
@@ -86,9 +94,13 @@ public class CameraFragment extends Fragment{
                             fos.write(data);
                             fos.close();
                         } catch (FileNotFoundException e) {
-                            e.printStackTrace();
+                            Logger.e("Log",e);
+                            Crashlytics.log(1,getClass().getName(),"Error in CameraFragment");
+                            Crashlytics.logException(e);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            Logger.e("Log",e);
+                            Crashlytics.log(1,getClass().getName(),"Error in CameraFragment");
+                            Crashlytics.logException(e);
                         }
                     }
                     FragmentManager fm = getFragmentManager();
@@ -138,7 +150,9 @@ public class CameraFragment extends Fragment{
                 c = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in CameraFragment");
+            Crashlytics.logException(e);
         }
         return c;
     }

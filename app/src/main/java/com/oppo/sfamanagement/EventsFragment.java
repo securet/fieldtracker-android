@@ -38,9 +38,9 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	protected ListView listView;
 	ArrayList<HistoryNew> list= new ArrayList<>();
     private int pageIndex = -1;
-    ImageView ivLoader;
-    private LinearLayout layout;
+    private ImageView ivLoader;
     private View footerView;
+    public static int flag = 0;
     private boolean isLoading = false;
     private Preferences preferences;
 
@@ -48,6 +48,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         pageIndex = 0;
+        flag = 0;
         Bundle bundle = new Bundle();
         System.out.println(pageIndex);
         bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"anand@securet.in","0","10"));
@@ -60,15 +61,13 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 		View rootView = inflater.inflate(R.layout.fragment_events, container,false);
 		listView = (ListView) rootView.findViewById(R.id.expandableList);
         preferences = new Preferences(getContext());
-        footerView = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_view,null,false);
-        layout = (LinearLayout)footerView.findViewById(R.id.footer_layout) ;
+        footerView = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_view,null);
         ivLoader = (ImageView) footerView.findViewById(R.id.footer_1);
-        layout.setVisibility(View.INVISIBLE);
         footerView.setVisibility(View.INVISIBLE);
 
 		adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,list);
 		listView.setAdapter(adapter);
-        listView.addFooterView(layout);
+        listView.addFooterView(footerView);
 		listView.setOnItemClickListener(this);
         hideloader();
 		listView.setOnScrollListener(this);
@@ -97,6 +96,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	}
 	@Override
 	public Loader<Object> onCreateLoader(int id, Bundle args) {
+        flag = 0;
         isLoading = true;
         if (pageIndex == 0 ) {
             ((MainActivity) getActivity()).showHideProgressForLoder(false);
@@ -112,6 +112,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	}
 	@Override
 	public void onLoadFinished(Loader<Object> loader, Object data) {
+        flag = 1;
         if(pageIndex==0 ){
             ((MainActivity)getActivity()).showHideProgressForLoder(true);
         }else{
@@ -133,7 +134,9 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 			}
             isLoading = false;
 			adapter.Refresh(list);
-		getActivity().getLoaderManager().destroyLoader(loader.getId());
+
+		    getActivity().getLoaderManager().destroyLoader(loader.getId());
+
 	}
 
 	@Override
@@ -147,12 +150,9 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
         rotateXaxis.setInterpolator(new LinearInterpolator());
         ivLoader.setAnimation(rotateXaxis);
         footerView.setVisibility(View.VISIBLE);
-        layout.setVisibility(View.VISIBLE);
 
     }
     public void hideloader() {
-
-        layout.setVisibility(View.GONE);
         footerView.setVisibility(View.GONE);
     }
 
@@ -173,11 +173,12 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 
 
         if (totalItemCount>0 &&!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3) && !isLast) {
+            flag = 0;
             isLoading = true;
             pageIndex++;
             System.out.println(pageIndex + "   onScroll");
             Bundle bundle = new Bundle();
-            bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST, "anand@securet.in",pageIndex+"", "10"));
+            bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,preferences.getString(Preferences.USERNAME,""),pageIndex+"", "10"));
             bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
             getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST, bundle, EventsFragment.this);
 

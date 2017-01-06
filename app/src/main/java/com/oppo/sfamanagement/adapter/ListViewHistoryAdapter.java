@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.TimeDifferenceCalculator;
@@ -24,11 +25,11 @@ public class ListViewHistoryAdapter extends ArrayAdapter<HistoryNew>{
 
     protected ArrayList<HistoryNew> list;
     protected int resourceId;
-    protected Activity activity;
+    protected Context context;
 
-    public ListViewHistoryAdapter(Activity activity, int resource, ArrayList<HistoryNew> list) {
-        super(activity,resource,list);
-        this.activity = activity;
+    public ListViewHistoryAdapter(Context context, int resource, ArrayList<HistoryNew> list) {
+        super(context,resource,list);
+        this.context = context;
         this.resourceId = resource;
         this.list = list;
     }
@@ -51,13 +52,13 @@ public class ListViewHistoryAdapter extends ArrayAdapter<HistoryNew>{
     @Override
     public long getItemId(int position) {
 
-        return super.getItemId(position);
+        return position;
     }
 
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = LayoutInflater.from(context);
         View rowView = convertView;
         if (rowView == null) {
             rowView = inflater.inflate(resourceId,parent,false);

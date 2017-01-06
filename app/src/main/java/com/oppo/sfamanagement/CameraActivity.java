@@ -15,11 +15,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.fragment.CameraFragment;
 import com.oppo.sfamanagement.fragment.CameraFragment2;
+
+import io.fabric.sdk.android.Fabric;
 
 
 /**
@@ -34,6 +37,7 @@ public class CameraActivity extends AppCompatActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.camera_activity);
         preferences = new Preferences(CameraActivity.this);
         tvUser = (TextView) findViewById(R.id.tvUserName);

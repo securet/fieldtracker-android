@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,13 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
     private Promoter promoter;
     private Preferences preferences;
     private int storeId;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        promoter = getArguments().getParcelable("promoter");
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -66,24 +74,39 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
         lastName = (EditText) view.findViewById(R.id.etPromoterLN);
         phone = (EditText) view.findViewById(R.id.etPromoterPh);
         emailAddress = (EditText) view.findViewById(R.id.etPromoterEA);
-
         tvStore = (TextView) view.findViewById(R.id.tvStoreAssignment);
         tvSE = (TextView) view.findViewById(R.id.tvSEAssignment);
         Address = (EditText) view.findViewById(R.id.etPromoterAdd);
-        promoter = getArguments().getParcelable("promoter");
+        ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
+        ivAddress = (ImageView) view.findViewById(R.id.ivAddressProof);
+        ivAadhar = (ImageView) view.findViewById(R.id.ivAadhar);
+
+        preferences = new Preferences(getContext());
+
+
         final String photo  = promoter.getUserPhoto();
         final String adhar  = promoter.getAadharIdPath();
         final String address = promoter.getAddressIdPath();
+
         firstName.setText(promoter.getFirstName());
         lastName.setText(promoter.getLastName());
         phone.setText(promoter.getPhoneNum());
         emailAddress.setText(promoter.getEmailAddress());
         Address.setText(promoter.getAddress());
-        preferences = new Preferences(getContext());
+        if (isApproved()) {
+            firstName.setEnabled(false);
+            lastName.setEnabled(false);
+            phone.setEnabled(false);
+            emailAddress.setEnabled(false);
+            Address.setEnabled(false);
+            tvStore.setEnabled(false);
+            tvSE.setEnabled(false);
+            edit.setVisibility(View.GONE);
+            cancel.setVisibility(View.GONE);
+        }
 
-        ivPhoto = (ImageView) view.findViewById(R.id.ivPhoto);
-        ivAddress = (ImageView) view.findViewById(R.id.ivAddressProof);
-        ivAadhar = (ImageView) view.findViewById(R.id.ivAadhar);
+
+
         System.out.println(photo + "     " + adhar + "           " + address);
         Picasso.with(getContext()).load(UrlBuilder.getServerImage(photo)).placeholder(R.drawable.photo).fit().into(ivPhoto);
         Picasso.with(getContext()).load(UrlBuilder.getServerImage(adhar)).placeholder(R.drawable.aadhar).fit().into(ivAadhar);
@@ -92,10 +115,12 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
         ivAadhar.setOnClickListener(this);
         ivAddress.setOnClickListener(this);
         tvStore.setTag(new Store());
-        Bundle b = new Bundle();
-        b.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.STORE_LIST));
-        b.putString(AppsConstant.METHOD,AppsConstant.GET);
-        getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_LIST,b,EditPromoterFragment.this).forceLoad();
+        if (!isApproved()) {
+            Bundle b = new Bundle();
+            b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.STORE_LIST));
+            b.putString(AppsConstant.METHOD, AppsConstant.GET);
+            getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_LIST, b, EditPromoterFragment.this).forceLoad();
+        }
         tvStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,18 +163,6 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                 }getActivity().getLoaderManager().initLoader(LoaderConstant.UPDATE_PROMOTER,b,EditPromoterFragment.this);
                     }
         });
-       // } else {
-            /*edit.setEnabled(false);
-            int drawable;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                drawable = getResources().getColor(R.color.colorLightGray,null);
-            } else {
-                drawable = getResources().getColor(R.color.colorLightGray);
-            }
-            edit.setBackgroundColor(drawable);*/
-
-      //  }
-
 
         return view;
     }
@@ -167,6 +180,17 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
             default:
                 return null;
         }
+    }
+
+    private boolean isFieldExecutive() {
+        if(preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExecutiveOnPremise") ||
+                preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExecutiveOffPremise") ) {
+           return true;
+        } else {
+            return false;
+        }
+
+
     }
 
     @Override
@@ -216,6 +240,14 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoaderReset(Loader<Object> loader) {
 
+    }
+    private boolean isApproved() {
+        String statusId = promoter.getStatusId();
+        if(!TextUtils.isEmpty(statusId) && statusId.equalsIgnoreCase("ReqCompleted")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

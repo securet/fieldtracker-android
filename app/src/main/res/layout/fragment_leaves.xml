@@ -4,104 +4,79 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-
-
-    <TextView
-        android:id="@+id/tvReason"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dip"
-        android:layout_marginRight="20dip"
-        android:background="@drawable/grey_border1"
-        android:editable="false"
-        android:hint="Reason"
-        android:padding="5dip"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/tvFromDate"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dip"
-        android:layout_marginRight="20dip"
-        android:background="@drawable/grey_border1"
-        android:editable="false"
-        android:hint="From Date"
-        android:padding="5dip"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/tvTodate"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dip"
-        android:layout_marginRight="20dip"
-        android:background="@drawable/grey_border1"
-        android:editable="false"
-        android:hint="To Date"
-        android:padding="5dip"
-        android:textSize="18sp" />
-
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+    <ImageView
+        android:layout_width="175dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="20dip"
-        android:layout_marginRight="20dip"
-        android:layout_marginTop="10dip"
-        android:background="#f37f0a"
-        android:padding="10dip"
-        android:text="Request"
-        android:textColor="#ffffff"
-        android:textSize="18sp" />
-
-    <LinearLayout
-        android:layout_width="fill_parent"
+        android:background="@color/colorLoginButton"
+        android:src="@drawable/allsmartmainlogo"
+        android:paddingLeft="10dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dip">
-
-
+        android:paddingBottom="10dp">
+    <TextView
+        android:id="@+id/tvEmail"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"
+        android:text="Email:"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp" />
         <TextView
-            android:layout_width="80dip"
+            android:layout_toRightOf="@id/tvEmail"
+            android:id="@+id/tvContactEmail"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="15dp"
+            android:textSize="20sp"
+            android:autoLink="email"
+            android:linksClickable="true"
+            android:text="oppo_support@allsmart.in"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|left"
-            android:text="Date"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-
+            android:layout_marginLeft="5dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
         <TextView
-            android:layout_width="100dp"
+            android:id="@+id/tvPhone"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="3dp"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"
+            android:text="Phone:"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical|left"
-            android:text="Site"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-
+            android:layout_marginLeft="15dp" />
         <TextView
-            android:layout_width="0dip"
+            android:layout_toRightOf="@id/tvPhone"
+            android:id="@+id/tvContactPhone"
+            android:layout_marginStart="3dp"
+            android:textSize="20sp"
+            android:autoLink="phone"
+            android:linksClickable="true"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:text="+91 9885449490"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center_vertical|left"
-            android:maxLines="1"
-            android:text="Desc"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-
-        <TextView
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|right"
-            android:text="Status"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+            android:layout_marginLeft="3dp" />
+    </RelativeLayout>
 </LinearLayout>

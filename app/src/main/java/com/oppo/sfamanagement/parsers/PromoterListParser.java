@@ -1,5 +1,7 @@
 package com.oppo.sfamanagement.parsers;
 
+import com.crashlytics.android.Crashlytics;
+import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.model.Promoter;
 
@@ -73,7 +75,9 @@ public class PromoterListParser {
                 preferences.commit();
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
+            Crashlytics.logException(e);
         } finally {
             return list;
         }

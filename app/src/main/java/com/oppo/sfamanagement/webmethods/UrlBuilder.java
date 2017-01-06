@@ -65,4 +65,12 @@ public class UrlBuilder {
         b.build();
         return  b.toString();
     }
+    public static String getLeaveList(String strServices, String pageIndex, String pageSize)
+    {
+        Uri.Builder b = Uri.parse(getUrl(strServices)).buildUpon();
+        b.appendQueryParameter("pageIndex", pageIndex);
+        b.appendQueryParameter("pageSize",pageSize);
+        b.build();
+        return  b.toString();
+    }
 }

@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 
 import com.oppo.sfamanagement.R;
+import com.oppo.sfamanagement.model.LeaveType;
 import com.oppo.sfamanagement.model.Store;
 
 import java.util.ArrayList;
@@ -235,6 +236,11 @@ public class CustomBuilder
 							if (field.toLowerCase().contains(s.toString().toLowerCase())) {
                                 vecTemp.add(vecData.get(i));
 							}
+						} else if (obj instanceof LeaveType) {
+							field = ((LeaveType) obj).getDescription();
+							if (field.toLowerCase().contains(s.toString().toLowerCase())) {
+
+							}
 						}
 
 
@@ -341,7 +347,10 @@ public class CustomBuilder
                     isShowAsSelected = true;
                 }*/
 
-            }
+            } else if (obj instanceof LeaveType){
+				name = ((LeaveType) obj).getDescription();
+				ivSelected.setVisibility(View.VISIBLE);
+			}
 			tvSelectUrCountry.setText(name);
 			if(isShowAsSelected)
 				ivSelected.setBackgroundResource(R.drawable.radio_checked);

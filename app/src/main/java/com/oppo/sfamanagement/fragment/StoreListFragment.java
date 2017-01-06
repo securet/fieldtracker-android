@@ -45,7 +45,6 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
     protected Button btnAddStore;
     private ProgressDialog pd;
     ImageView ivLoader;
-    private LinearLayout layout;
     private Preferences preferences;
     private ListView listView;
     private boolean isLoading = false;
@@ -65,9 +64,7 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
         btnAddStore = (Button)view.findViewById(R.id.btAddStore);
         listView = (ListView) view.findViewById(R.id.lvStoreList);
         footerView = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_view,null,false);
-        layout = (LinearLayout)footerView.findViewById(R.id.footer_layout) ;
         ivLoader = (ImageView) footerView.findViewById(R.id.footer_1);
-        layout.setVisibility(View.INVISIBLE);
         footerView.setVisibility(View.INVISIBLE);
 
 
@@ -108,12 +105,6 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
         fragment.setArguments(b);
         fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
         fm.executePendingTransactions();
-
-
-    }
-
-    public void displayMessage(String s) {
-        Toast.makeText(getActivity(),s,Toast.LENGTH_SHORT).show();
     }
 
     @Override

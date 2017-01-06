@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,12 +26,12 @@ import java.util.ArrayList;
  * Created by allsmartlt218 on 26-12-2016.
  */
 
-public class ListViewHistorySublistAdapter extends ArrayAdapter {
+public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
     private Context context;
     private int resource;
     private ArrayList<HistoryChild> list;
     public ListViewHistorySublistAdapter(Context context, int resource,ArrayList<HistoryChild> list) {
-        super(context, resource,list);
+        super(context,resource,list );
         this.context = context;
         this.list = list;
         this.resource = resource;
@@ -50,16 +51,18 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter {
 
     @Override
     public long getItemId(int position) {
-        return super.getItemId(position);
+        return position;
     }
 
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = convertView;
-        if(view == null) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view;
+        if(convertView == null) {
             view = inflater.inflate(R.layout.history_tracking_item,parent,false);
+        } else {
+            view = convertView;
         }
         HistoryChild c = getItem(position);
         TextView timeF = (TextView) view.findViewById(R.id.tvTimeFrom);
