@@ -60,5 +60,6 @@
     <string name="current_password">Current Password</string>
     <string name="change">Change</string>
     <string name="submit">Submit</string>
+    <string name="reason">Reason</string>
 
 </resources>

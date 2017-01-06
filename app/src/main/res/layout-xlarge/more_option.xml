@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="10dip">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/store"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:padding="10dip"
+            android:layout_marginBottom="10dp"
+            android:text="@string/store"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvPromoter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:padding="10dip"
+        android:onClick="onPromotersClick"
+        android:layout_marginBottom="10dp"
+        android:text="@string/promoters"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:padding="10dip"
+        android:layout_marginBottom="10dp"
+        android:text="@string/leaves"
+        android:onClick="onLeavesClick"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvLeaveRequest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="10dp"
+        android:padding="10dip"
+        android:text="@string/contact_support"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/tvMyAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp"
+            android:padding="10dip"
+            android:text="@string/my_account"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/tvChangePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp"
+            android:padding="10dip"
+            android:text="@string/change_password"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="10dp"
+        android:padding="10dip"
+        android:text="@string/log_off"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

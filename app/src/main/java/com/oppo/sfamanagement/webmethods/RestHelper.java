@@ -102,6 +102,8 @@ public class RestHelper
                 os.close();
             }
             connection.connect();
+            System.out.println(connection.getResponseCode() + "This is response code " + connection.getResponseMessage() + "params " + parameters);
+
             InputStream stream = connection.getInputStream();
             reader = new BufferedReader(new InputStreamReader(stream));
             StringBuilder buffer = new StringBuilder();

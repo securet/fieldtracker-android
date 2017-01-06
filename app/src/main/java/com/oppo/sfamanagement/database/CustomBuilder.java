@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 
 import com.oppo.sfamanagement.R;
+import com.oppo.sfamanagement.model.LeaveReason;
 import com.oppo.sfamanagement.model.LeaveType;
 import com.oppo.sfamanagement.model.Store;
 
@@ -237,11 +238,13 @@ public class CustomBuilder
                                 vecTemp.add(vecData.get(i));
 							}
 						} else if (obj instanceof LeaveType) {
-							field = ((LeaveType) obj).getDescription();
+							field = ((LeaveType) obj).getTypeDescription();
 							if (field.toLowerCase().contains(s.toString().toLowerCase())) {
 
 							}
-						}
+						} else if (obj instanceof LeaveReason) {
+                            field = ((LeaveReason) obj).getReasonDescription();
+                        }
 
 
 					}
@@ -348,9 +351,12 @@ public class CustomBuilder
                 }*/
 
             } else if (obj instanceof LeaveType){
-				name = ((LeaveType) obj).getDescription();
+				name = ((LeaveType) obj).getTypeDescription();
 				ivSelected.setVisibility(View.VISIBLE);
-			}
+			} else if (obj instanceof LeaveReason){
+                name = ((LeaveReason) obj).getReasonDescription();
+                ivSelected.setVisibility(View.VISIBLE);
+            }
 			tvSelectUrCountry.setText(name);
 			if(isShowAsSelected)
 				ivSelected.setBackgroundResource(R.drawable.radio_checked);

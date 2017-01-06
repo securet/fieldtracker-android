@@ -7,31 +7,25 @@ import java.util.ArrayList;
  */
 
 public class LeaveType {
-    private String description;
-    private String enumId;
-    private String enumTypeId;
 
-    public String getDescription() {
-        return description;
+    private String typeDescription;
+    private String enumType;
+
+
+    public String getTypeDescription() {
+        return typeDescription;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTypeDescription(String typeDescription) {
+        this.typeDescription = typeDescription;
     }
 
-    public String getEnumTypeId() {
-        return enumTypeId;
+    public String getEnumType() {
+        return enumType;
     }
 
-    public void setEnumTypeId(String enumTypeId) {
-        this.enumTypeId = enumTypeId;
+    public void setEnumType(String enumType) {
+        this.enumType = enumType;
     }
 
-    public String getEnumId() {
-        return enumId;
-    }
-
-    public void setEnumId(String enumId) {
-        this.enumId = enumId;
-    }
 }

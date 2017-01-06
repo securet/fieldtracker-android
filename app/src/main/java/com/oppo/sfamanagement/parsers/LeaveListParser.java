@@ -1,5 +1,7 @@
 package com.oppo.sfamanagement.parsers;
 
+import android.text.TextUtils;
+
 import com.oppo.sfamanagement.model.Leave;
 
 import org.json.JSONException;
@@ -10,18 +12,21 @@ import org.json.JSONObject;
  */
 
 public class LeaveListParser {
-    private String response;
+    private String response = "";
+    private String result = "";
 
     public LeaveListParser(String response) {
         this.response = response;
     }
-    public Leave Parse() {
+    public String Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
+
         } catch (JSONException e) {
             e.printStackTrace();
+            result = "failed";
         } finally {
-            return null;
+            return result;
         }
     }
 }

@@ -19,10 +19,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oppo.sfamanagement.LeaveFragment;
+import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.CustomBuilder;
 import com.oppo.sfamanagement.database.Preferences;
+import com.oppo.sfamanagement.model.LeaveReason;
+import com.oppo.sfamanagement.model.LeaveReasonApply;
 import com.oppo.sfamanagement.model.LeaveType;
 import com.oppo.sfamanagement.model.Store;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
@@ -42,10 +45,14 @@ import java.util.Calendar;
 
 public class LeaveRequestFragment extends Fragment implements View.OnClickListener , DatePickerDialog.OnDateSetListener, LoaderManager.LoaderCallbacks<Object> {
 
-    private TextView etStart,etEnd,etType;
+    private TextView etStart,etEnd,etType,tvReasonType;
     private ImageView ivStart,ivEnd;
     private Button submit,cancel;
+    private String enumTypeId="";
+    private String enumReasonId="";
+    private EditText etReason;
     private ArrayList<LeaveType> leaveTypeList;
+    private ArrayList<LeaveReason> leaveReasonList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,11 +66,13 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_leave_request,container,false);
         etStart = (TextView) view.findViewById(R.id.etStartDate);
         etEnd = (TextView) view.findViewById(R.id.etEndDate);
+        etReason = (EditText) view.findViewById(R.id.etReason);
         etType = (TextView) view.findViewById(R.id.etType);
         ivStart = (ImageView) view.findViewById(R.id.ivDatePicker);
         ivEnd = (ImageView) view.findViewById(R.id.ivDatePicker2);
         submit = (Button) view.findViewById(R.id.btSubmit);
         cancel = (Button) view.findViewById(R.id.btnCancel);
+        tvReasonType = (TextView) view.findViewById(R.id.etTypeReason);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,11 +81,13 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
                 String leaveTypeEnumId = etType.getText().toString();
                 String leaveReasonId ;
 
-                Bundle bundle = new Bundle();
-                bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
-                bundle.putString(AppsConstant.METHOD, AppsConstant.POST);
-                bundle.putString(AppsConstant.PARAMS,ParameterBuilder.getApplyLeave(leaveTypeEnumId,"leaveTypeEnumId","description",fromDate,thruDate,"OPPO_ORG"));
-                getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,LeaveRequestFragment.this).forceLoad();
+                if (!TextUtils.isEmpty(enumReasonId) && !TextUtils.isEmpty(enumTypeId)) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
+                    bundle.putString(AppsConstant.METHOD, AppsConstant.POST);
+                    bundle.putString(AppsConstant.PARAMS,ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,etReason.getText().toString(),fromDate,thruDate,"ORG_OPPO"));
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,LeaveRequestFragment.this).forceLoad();
+                }
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +103,29 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
         ivStart.setOnClickListener(this);
         ivEnd.setOnClickListener(this);
         etType.setTag(new LeaveType());
+        tvReasonType.setTag(new LeaveReason());
+        tvReasonType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomBuilder builder = new CustomBuilder(getContext(),"Select Reason",true);
+                builder.setSingleChoiceItems(leaveReasonList,tvReasonType.getTag(), new CustomBuilder.OnClickListener() {
+                    @Override
+                    public void onClick(CustomBuilder builder, Object selectedObject) {
+                        tvReasonType.setTag(selectedObject);
+                        tvReasonType.setText(((LeaveReason) selectedObject).getReasonDescription());
+                        enumReasonId = ((LeaveReason) selectedObject).getEnumTypeReason();
+                        builder.dismiss();
+                    }
+                });
+                builder.setCancelListener(new CustomBuilder.OnCancelListener() {
+                    @Override
+                    public void onCancel() {
 
+                    }
+                });
+                builder.show();
+            }
+        });
         Bundle b = new Bundle();
         b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.LEAVE_TYPES));
         b.putString(AppsConstant.METHOD,AppsConstant.GET);
@@ -153,8 +186,8 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
                @Override
                public void onClick(CustomBuilder builder, Object selectedObject) {
                    etType.setTag(selectedObject);
-                   etType.setText(((LeaveType) selectedObject).getDescription());
-
+                   etType.setText(((LeaveType) selectedObject).getTypeDescription());
+                    enumTypeId = ((LeaveType) selectedObject).getEnumType();
                    builder.dismiss();
                }
            });
@@ -177,18 +210,19 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
             frommonth =monthOfYear;
             fromDay =dayOfMonth;
             monthOfYear = monthOfYear + 1;
-            String selDate = (dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth) + "-" + (monthOfYear < 10 ? "0" + (monthOfYear) : monthOfYear) + "-" + year;
+            String selDate = year + "-" + (monthOfYear < 10 ? "0" + (monthOfYear) : monthOfYear) + "-" + (dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth);
             etStart.setText(selDate);
             //etEnd.setText("");
         }else{
             monthOfYear = monthOfYear + 1;
-            String selDate = (dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth) + "-" + (monthOfYear < 10 ? "0" + (monthOfYear) : monthOfYear) + "-" + year;
+            String selDate = year + "-" + (monthOfYear < 10 ? "0" + (monthOfYear) : monthOfYear) + "-" + (dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth);
             etEnd.setText(selDate);
         }
     }
 
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
+        ((MainActivity)getActivity()).showHideProgressForLoder(false);
         switch (id) {
             case LoaderConstant.LEAVE_TYPES:
                 return new LoaderServices(getContext(), LoaderMethod.LEAVE_TYPES,args);
@@ -201,6 +235,7 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
+        ((MainActivity)getActivity()).showHideProgressForLoder(true);
 
         switch (loader.getId()) {
             case LoaderConstant.LEAVE_TYPES:
@@ -209,7 +244,20 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
                 } else {
 
                 }
-                leaveTypeList = (ArrayList<LeaveType>) data;
+                ArrayList<LeaveReasonApply> arrayList = (ArrayList<LeaveReasonApply>) data;
+                LeaveReasonApply reasonApply = arrayList.get(0);
+                leaveTypeList = reasonApply.getTypeList();
+                leaveReasonList = reasonApply.getReasonList();
+                break;
+            case LoaderConstant.APPLY_LEAVE:
+                if(data != null && data instanceof String) {
+                    if (data!=null && data.equals("success")) {
+
+                    }
+                } else {
+
+                }
+
 
         }
         getActivity().getLoaderManager().destroyLoader(loader.getId());
