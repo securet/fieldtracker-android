@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.adapter.ListViewLeaveStatusListAdapter;
 import com.oppo.sfamanagement.database.AppsConstant;
@@ -34,6 +35,8 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
     private Button btLeaveRequest;
     private int pageIndex = -1;
     private int pageSize = 10;
+    private ListViewLeaveStatusListAdapter adapter;
+    private ListView lvLeave;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,12 +52,10 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.leave_status_list,container,false);
-        ListView lvLeave = (ListView) view.findViewById(R.id.lvLeaveStatus);
+        lvLeave = (ListView) view.findViewById(R.id.lvLeaveStatus);
         btLeaveRequest = (Button) view.findViewById(R.id.btLeaveRequest);
-        list = new ArrayList<>();
-        hardCodeDataForLeaveStatus(list);
-        ListViewLeaveStatusListAdapter adapter = new ListViewLeaveStatusListAdapter(getActivity(),R.layout.leave_status_list_item,list);
-        lvLeave.setAdapter(adapter);
+
+
         btLeaveRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,32 +68,9 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
         return view;
     }
 
-    public void hardCodeDataForLeaveStatus(ArrayList<Leave> list) {
-        Leave a = new Leave();
-        Leave b = new Leave();
-        Leave c = new Leave();
-        a.setDays("4 Days");
-        a.setFromDate("11/10/2016");
-        a.setToDate("14/10/2016");
-        a.setStatus("Pending");
-        a.setReason("Casual Leave");
-        list.add(a);
-        b.setDays("1 Day");
-        b.setFromDate("26/09/2016");
-        b.setToDate("26/09/2016");
-        b.setStatus("Approved");
-        b.setReason("Sick Leave");
-        list.add(b);
-        c.setDays("3 Days");
-        c.setFromDate("16/06/2016");
-        c.setToDate("18/06/2016");
-        c.setStatus("Rejected");
-        c.setReason("Casual Leave");
-        list.add(c);
-    }
-
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
+        ((MainActivity)getActivity()).showHideProgressForLoder(false);
         switch (id) {
             case LoaderConstant.LEAVE_LIST:
                 return new LoaderServices(getContext(), LoaderMethod.LEAVE_LIST,args);
@@ -103,6 +81,20 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
+        ((MainActivity)getActivity()).showHideProgressForLoder(true);
+        switch (loader.getId()) {
+            case LoaderConstant.LEAVE_LIST:
+                if (data != null && data instanceof ArrayList) {
+
+                } else {
+
+                }
+                list = (ArrayList<Leave>) data;
+                adapter = new ListViewLeaveStatusListAdapter(getActivity(),R.layout.leave_status_list_item,list);
+                lvLeave.setAdapter(adapter);
+                break;
+        }
+        getActivity().getLoaderManager().destroyLoader(loader.getId());
 
     }
 

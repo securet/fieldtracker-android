@@ -120,7 +120,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		buildGoogleApiClient();
 
 		((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, ""); // value to store
-		((MainActivity) getActivity()).preferences.saveBoolean(Preferences.INLOCATION, isUserInLoacation());
+//		((MainActivity) getActivity()).preferences.saveBoolean(Preferences.INLOCATION, isUserInLoacation());
 		((MainActivity) getActivity()).preferences.commit();
 		tvTimeInOut = (TextView) rootView.findViewById(R.id.tvTimeInOut);
         ivCurrentLocation= (ImageView) rootView.findViewById(R.id.ivCurrentLocation);
@@ -258,7 +258,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		double lat2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LATITUDE,""));
 		double lon2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LONGITUDE,""));
 		//Double distance = distance(lat1, lon1, lat2, lon2);
-        int siteRadius = Integer.parseInt(preferences.getString(Preferences.SITE_RADIUS,""));
+        int siteRadius = Integer.parseInt(/*preferences.getString(Preferences.SITE_RADIUS,"")*/ "100");
         Location.distanceBetween(lat1,lon1,lat2,lon2,result);
         float distance = result[0];
         return distance<=siteRadius;

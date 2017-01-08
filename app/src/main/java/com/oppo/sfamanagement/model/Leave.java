@@ -17,7 +17,7 @@ public class Leave {
 
     public void setDays(String days) {
 
-        this.days = days;
+        this.days = days + " days";
     }
 
     public String getReason() {
