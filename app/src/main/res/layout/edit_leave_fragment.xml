@@ -183,7 +183,7 @@
 
                 <Button
                     android:id="@+id/btSubmit"
-                    android:text="@string/submit"
+                    android:text="@string/edit"
                     android:textAllCaps="false"
                     android:background="@drawable/editstore_edit_button"
                     android:textSize="22sp"

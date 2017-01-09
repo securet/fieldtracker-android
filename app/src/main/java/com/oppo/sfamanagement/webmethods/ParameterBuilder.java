@@ -47,6 +47,21 @@ public class ParameterBuilder {
             return urlParameters;
         }
     }
+    public static String getUpdateLeave(String leaveTypeEnumId, String leaveReasonEnumId, String description, String fromDate, String thruDate, String partyRelationshipId) {
+        String urlParameters = "";
+        try {
+            urlParameters = "leaveTypeEnumId=" + URLEncoder.encode(leaveTypeEnumId,"UTF-8") +
+                    "&leaveReasonEnumId=" + URLEncoder.encode(leaveReasonEnumId, "UTF-8") +
+                    "&description=" + URLEncoder.encode(description, "UTF-8") +
+                    "&fromDate=" + URLEncoder.encode(fromDate, "UTF-8") +
+                    "&thruDate=" + URLEncoder.encode(thruDate, "UTF-8") +
+                    "&partyRelationshipId=" + URLEncoder.encode(partyRelationshipId, "UTF-8");
+        } catch (Exception e) {
+            Logger.e("Log", e);
+        } finally {
+            return urlParameters;
+        }
+    }
 
     public static String getStoreUpdate(String storeId,String storeAddress) {
         String url = "" ;

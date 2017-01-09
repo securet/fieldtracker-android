@@ -18,6 +18,7 @@ import com.oppo.sfamanagement.LoginActivity;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
+import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.model.Store;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
 import com.oppo.sfamanagement.webmethods.LoaderMethod;
@@ -35,11 +36,13 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
     protected EditText storeName,address;
     protected TextView lattitude,longitude;
     protected Button btEdit,btCancel;
+    private Preferences preferences;
     private int storeId;
     protected ProgressDialog pd;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferences = new Preferences(getContext());
     }
 
     @Nullable
@@ -104,7 +107,7 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
     public void onLoadFinished(android.content.Loader loader, Object data) {
         ((MainActivity)getActivity()).showHideProgressForLoder(true);
         if (isAdded()) {
-            getLoaderManager().destroyLoader(loader.getId());
+            getActivity().getLoaderManager().destroyLoader(loader.getId());
         }
     }
 

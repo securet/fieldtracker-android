@@ -3,6 +3,7 @@ package com.oppo.sfamanagement.parsers;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 
+import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.model.Leave;
 
 import org.json.JSONArray;
@@ -21,17 +22,27 @@ import java.util.Date;
 public class LeaveListParser {
     private String response = "";
     private String result = "";
+    private Preferences preferences;
     private Leave leave;
     private ArrayList<Leave> list = new ArrayList<>();
 
-    public LeaveListParser(String response) {
+    public LeaveListParser(String response, Preferences preferences) {
+        this.preferences = preferences;
         this.response = response;
     }
     public ArrayList<Leave> Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
             if(parentObject.has("employeeLeavesList")) {
+
                 JSONArray parentArray = parentObject.getJSONArray("employeeLeavesList");
+                if (parentArray.length() == 0 || parentArray.length() < 10) {
+                    preferences.saveBoolean(Preferences.LEAVEISLAST,true);
+                    preferences.commit();
+                } else {
+                    preferences.saveBoolean(Preferences.LEAVEISLAST,false);
+                    preferences.commit();
+                }
                 for(int i = 0 ; i < parentArray.length() ; i++) {
                     JSONObject childObject = parentArray.getJSONObject(i);
                     if(childObject.has("fromDate")) {
@@ -60,17 +71,20 @@ public class LeaveListParser {
 
                             }
                             if(childObject.has("description")) {
-                                leave.setReason(childObject.getString("description"));
-                                if(childObject.has("leaveApproved")) {
-                                    String approve = childObject.getString("leaveApproved");
-                                    if (approve.equals("null")) {
-                                        leave.setStatus("Pending");
-                                    } else if (approve.equalsIgnoreCase("Y")){
-                                        leave.setStatus("Approved");
-                                    } else {
-                                        leave.setStatus("Rejected");
+                                if (childObject.has("partyRelationshipId")) {
+                                    leave.setPartyRelationShipId(childObject.getString("partyRelationshipId"));
+                                    leave.setReason(childObject.getString("description"));
+                                    if (childObject.has("leaveApproved")) {
+                                        String approve = childObject.getString("leaveApproved");
+                                        if (approve.equals("null")) {
+                                            leave.setStatus("Pending");
+                                        } else if (approve.equalsIgnoreCase("Y")) {
+                                            leave.setStatus("Approved");
+                                        } else {
+                                            leave.setStatus("Rejected");
+                                        }
+                                        list.add(leave);
                                     }
-                                    list.add(leave);
                                 }
                             }
                         }

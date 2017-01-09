@@ -85,7 +85,7 @@ public class LoaderServices extends CustomAsyncTask
             case TIMELINE_LIST:
                 return new TimeLineParser(response,preferences).Parse();
             case LEAVE_LIST:
-                return new LeaveListParser(response).Parse();
+                return new LeaveListParser(response,preferences).Parse();
             case LEAVE_TYPES:
                 return new LeaveTypeParser(response).Parse();
             case APLLY_LEAVES:

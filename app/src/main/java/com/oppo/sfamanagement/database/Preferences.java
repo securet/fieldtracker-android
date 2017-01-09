@@ -42,6 +42,7 @@ public class Preferences
     public static String ISLAST = "isLast";
     public static String PROMOTERISLAST= "promoterIsLast";
     public static String STOREISLAST = "storeIsLast";
+    public static String LEAVEISLAST = "leaveIsLast";
     public Preferences(Context context)
     {
         preferences = context.getSharedPreferences("AttendanceTracker", context.MODE_PRIVATE);

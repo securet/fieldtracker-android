@@ -30,6 +30,10 @@ public class ListViewLeaveStatusListAdapter extends ArrayAdapter<Leave> {
         this.list = list;
     }
 
+    public void refresh(ArrayList<Leave> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
     @Override
     public int getCount() {
         return list.size();

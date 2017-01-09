@@ -114,7 +114,6 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
             default:
                 return null;
         }
-       // listView.addFooterView();
     }
 
     @Override
@@ -147,9 +146,11 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
             Animation rotateXaxis = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_x_axis);
             rotateXaxis.setInterpolator(new LinearInterpolator());
             ivLoader.setAnimation(rotateXaxis);
+            listView.addFooterView(footerView);
             footerView.setVisibility(View.VISIBLE);
     }
     public void hideloader() {
+        listView.removeFooterView(footerView);
         footerView.setVisibility(View.GONE);
     }
 

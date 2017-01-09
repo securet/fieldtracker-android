@@ -25,6 +25,13 @@ public class LeaveApplyParser {
             JSONObject parentObject = new JSONObject(response);
             if(!TextUtils.isEmpty(response)){
                 result = "success";
+                /*if (parentObject.has("employeeLeave")) {
+                    JSONObject employeeLeave = parentObject.getJSONObject("employeeLeave");
+                    if(employeeLeave.has("partyRelationshipId")) {
+                        String party = employeeLeave.getString("partyRelationshipId");
+                        result = party;
+                    }
+                }*/
             } else {
                 result = "failed";
             }

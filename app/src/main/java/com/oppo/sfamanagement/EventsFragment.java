@@ -67,7 +67,6 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 
 		adapter = new ListViewHistoryAdapter(getActivity(),R.layout.history_list_item,list);
 		listView.setAdapter(adapter);
-        listView.addFooterView(footerView);
 		listView.setOnItemClickListener(this);
         hideloader();
 		listView.setOnScrollListener(this);
@@ -149,10 +148,12 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
         Animation rotateXaxis = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_x_axis);
         rotateXaxis.setInterpolator(new LinearInterpolator());
         ivLoader.setAnimation(rotateXaxis);
+        listView.addFooterView(footerView);
         footerView.setVisibility(View.VISIBLE);
 
     }
     public void hideloader() {
+        listView.removeFooterView(footerView);
         footerView.setVisibility(View.GONE);
     }
 

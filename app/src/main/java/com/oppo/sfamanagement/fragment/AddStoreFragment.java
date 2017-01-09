@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,7 +47,7 @@ import java.util.ArrayList;
 
 public class AddStoreFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Object>, LocationListener {
 
-    EditText storeName, storeAddress;
+    EditText storeName, storeAddress, siteRadius;
     Button getCurrentLocation, btAdd, btCancel;
     TextView latitude, longitude;
     String lat = "";
@@ -63,6 +64,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
         View view = inflater.inflate(R.layout.add_store_fragment, container, false);
         storeName = (EditText) view.findViewById(R.id.etStoreName);
         storeAddress = (EditText) view.findViewById(R.id.etAddress);
+        siteRadius = (EditText) view.findViewById(R.id.etStoreRadius);
         getCurrentLocation = (Button) view.findViewById(R.id.btGetLocation);
         btAdd = (Button) view.findViewById(R.id.btAdd);
         btAdd.setOnClickListener(this);
@@ -91,9 +93,9 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
                             if (s.length() == 0) {
                                 btAdd.setEnabled(false);
                             } else {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                                     btAdd.setBackground(getResources().getDrawable(R.drawable.editstore_edit_button));
-                                }
+                                }*/
                                 btAdd.setEnabled(true);
                             }
                         }
@@ -143,13 +145,18 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
             case R.id.btAdd:
                 String sN = storeName.getText().toString();
                 String sA = storeAddress.getText().toString();
+                String sRadius = siteRadius.getText().toString();
 
-                Bundle b = new Bundle();
-                b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.ADD_STORE));
-                b.putString(AppsConstant.METHOD,AppsConstant.POST);
-                b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddStore(sN,sA,lat,lon,200+""));
-                Log.d("ADD", sN + "  " + sA + "  " + lat + "  " + lon);
-                getActivity().getLoaderManager().initLoader(LoaderConstant.ADD_STORE,b,AddStoreFragment.this).forceLoad();
+                if(!TextUtils.isEmpty(sN) && !TextUtils.isEmpty(sA) && !TextUtils.isEmpty(sRadius) ) {
+                    Bundle b = new Bundle();
+                    b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.ADD_STORE));
+                    b.putString(AppsConstant.METHOD,AppsConstant.POST);
+                    b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddStore(sN,sA,lat,lon, sRadius));
+                    Log.d("ADD", sN + "  " + sA + "  " + lat + "  " + lon);
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.ADD_STORE,b,AddStoreFragment.this).forceLoad();
+                } else {
+                    Toast.makeText(getContext(),"Fields cannot be empty",Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btCancel:
                 break;
