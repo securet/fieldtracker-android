@@ -129,7 +129,7 @@ public class ParameterBuilder {
                     "&clockDate=" + URLEncoder.encode(clockDate,"UTF-8") +
                     "&purposeEnumId=" + URLEncoder.encode("WepAttendance","UTF-8") +
                     "&comments=" + URLEncoder.encode(comments,"UTF-8") +
-                    "&productStoreId=" + URLEncoder.encode(preferences.getString(Preferences.SITEID,""),"UTF-8") +
+                    "&productStoreId=" + URLEncoder.encode(preferences.getString(Preferences.PARTYID,""),"UTF-8") +
                     "&actionType=" + URLEncoder.encode(actionType,"UTF-8") +
                     "&actionImage=" + URLEncoder.encode(actionImage,"UTF-8") +
                     "&latitude=" + URLEncoder.encode(preferences.getString(Preferences.USERLATITUDE,""),"UTF-8") +
@@ -152,7 +152,7 @@ public class ParameterBuilder {
                     "&clockDate=" + URLEncoder.encode(details.getClockDate(),"UTF-8") +
                     "&purposeEnumId=" + URLEncoder.encode("WepAttendance","UTF-8") +
                     "&comments=" + URLEncoder.encode(details.getComments(),"UTF-8") +
-                    "&productStoreId=" + URLEncoder.encode(preferences.getString(Preferences.SITEID,""),"UTF-8") +
+                    "&productStoreId=" + URLEncoder.encode(preferences.getString(Preferences.PARTYID,""),"UTF-8") +
                     "&actionType=" + URLEncoder.encode(details.getActionType(),"UTF-8") +
                     "&actionImage=" + URLEncoder.encode(imagePath,"UTF-8") +
                     "&latitude=" + URLEncoder.encode(details.getLatitude(),"UTF-8") +

@@ -15,6 +15,7 @@ public class UrlBuilder {
         Uri.Builder b = Uri.parse(getUrl(strServices)).buildUpon();
         b.appendPath(Storeid);
         b.build();
+
         return b.toString();
     }
 

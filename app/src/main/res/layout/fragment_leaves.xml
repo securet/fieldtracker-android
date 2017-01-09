@@ -22,9 +22,9 @@
         android:paddingBottom="10dp">
     <TextView
         android:id="@+id/tvEmail"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="15dp"
         android:layout_marginEnd="5dp"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_gravity="center_horizontal"
         android:text="Email:"
         android:layout_marginRight="5dp"
@@ -37,7 +37,7 @@
             android:id="@+id/tvContactEmail"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="15dp"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:autoLink="email"
             android:linksClickable="true"
             android:text="oppo_support@allsmart.in"
@@ -54,9 +54,9 @@
         android:paddingBottom="10dp">
         <TextView
             android:id="@+id/tvPhone"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="15dp"
             android:layout_marginEnd="3dp"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:layout_gravity="center_horizontal"
             android:text="Phone:"
             android:layout_marginRight="3dp"
@@ -68,7 +68,7 @@
             android:layout_toRightOf="@id/tvPhone"
             android:id="@+id/tvContactPhone"
             android:layout_marginStart="3dp"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:autoLink="phone"
             android:linksClickable="true"
             android:gravity="center_horizontal"

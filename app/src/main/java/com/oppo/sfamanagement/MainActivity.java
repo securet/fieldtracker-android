@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		preferences = new Preferences(MainActivity.this);
 
 		Bundle b = new Bundle();
-		b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails(Services.STORE_DETAIL,preferences.getString(Preferences.SITEID,"")));
+		b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails(Services.STORE_DETAIL,preferences.getString(Preferences.PARTYID,"")));
 		b.putString(AppsConstant.METHOD, AppsConstant.GET );
 		b.putString(AppsConstant.PASSWORD, "");
 		getLoaderManager().initLoader(LoaderConstant.USER_STORE_DETAIL,b,MainActivity.this).forceLoad();

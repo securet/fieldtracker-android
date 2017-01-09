@@ -19,7 +19,7 @@ public class Preferences
     public static String USERLATITUDE = "UserLatitude";
     public static String USERLONGITUDE = "UserLongitude";
     public static String LOCATIONSTATUS = "LocationStatus";
-    public static String SITEID = "SiteId";
+//    public static String SITEID = "SiteId";
     public static String SITENAME = "SiteName";
     public static String LATITUDE = "Latitude";
     public static String LONGITUDE = "Longitude";

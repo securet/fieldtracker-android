@@ -32,7 +32,7 @@ public class UserStoreDetailParser {
                     preferences.saveString(Preferences.LATITUDE, parentobject.getDouble("latitude")+"");
                     preferences.saveString(Preferences.SITE_ENTITY, parentobject.getString("_entity"));
                     preferences.saveString(Preferences.SITENAME, parentobject.getString("storeName"));
-                    preferences.saveString(Preferences.SITEID, parentobject.getString("productStoreId"));
+                    preferences.saveString(Preferences.PARTYID, parentobject.getString("productStoreId"));
                     preferences.saveString(Preferences.LONGITUDE, parentobject.getDouble("longitude")+"");
                     preferences.saveString(Preferences.SITE_RADIUS,parentobject.getInt("proximityRadius")+"");
                     preferences.commit();

@@ -42,8 +42,8 @@ public class UserDetailParser {
                     preferences.saveString(Preferences.USERLASTNAME, obj.getString("lastName"));
                     preferences.saveString(Preferences.USERID, obj.getString("userId"));
                     preferences.saveString(Preferences.USEREMAIL, obj.getString("emailAddress"));
-               //     preferences.saveString(Preferences.ROLETYPEID, obj.getString("roleTypeId"));
- /*For testing*/  preferences.saveString(Preferences.ROLETYPEID, "SalesExecutive");
+                    preferences.saveString(Preferences.ROLETYPEID, obj.getString("roleTypeId"));
+ /*For testing*///  preferences.saveString(Preferences.ROLETYPEID, "SalesExecutive");
                     preferences.saveString(Preferences.PARTYID, obj.getString("partyId"));
                     preferences.commit();;
                 }

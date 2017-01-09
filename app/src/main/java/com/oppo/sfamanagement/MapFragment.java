@@ -214,9 +214,10 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 				}
 			}
 		});
+		isUserInLoacation();
 		SetLoginLogOut();
 		UpdateLocationStatus();
-		isUserInLoacation();
+
 		return rootView;
 	}
     public String getTime(String stamp) {
@@ -259,7 +260,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		double lat2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LATITUDE,""));
 		double lon2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LONGITUDE,""));
 		//Double distance = distance(lat1, lon1, lat2, lon2);
-        int siteRadius = Integer.parseInt(/*preferences.getString(Preferences.SITE_RADIUS,"")*/ "100");
+        int siteRadius = Integer.parseInt(preferences.getString(Preferences.SITE_RADIUS,""));
         Location.distanceBetween(lat1,lon1,lat2,lon2,result);
         float distance = result[0];
 		Boolean isInLocation = distance<=siteRadius;
@@ -302,14 +303,14 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 				((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "True"); // value to store
 				((MainActivity) getActivity()).preferences.commit();
 			}
-		}else if (((MainActivity) getActivity()).preferences.getBoolean(Preferences.INLOCATION, false) && !((MainActivity) getActivity()).preferences.getString(Preferences.LOCATIONSTATUS, "").equalsIgnoreCase("False")) {
+		}else if (((MainActivity) getActivity()).preferences.getBoolean(Preferences.INLOCATION, false) && !((MainActivity) getActivity()).preferences.getString(Preferences.LOCATIONSTATUS, "").equalsIgnoreCase("True")) {
 			tvTimeInOutLocation.setText("at " + ((MainActivity) getActivity()).preferences.getString(Preferences.SITENAME, ""));
-			((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "False"); // value to store
+			((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "True"); // value to store
 			((MainActivity) getActivity()).preferences.commit();
 		} else if (!((MainActivity) getActivity()).preferences.getBoolean(Preferences.INLOCATION, false)
-				&& !((MainActivity) getActivity()).preferences.getString(Preferences.LOCATIONSTATUS, "").equalsIgnoreCase("True")) {
+				&& !((MainActivity) getActivity()).preferences.getString(Preferences.LOCATIONSTATUS, "").equalsIgnoreCase("False")) {
 			tvTimeInOutLocation.setText("(Not at location)");
-			((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "True"); // value to store
+			((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "False"); // value to store
 			((MainActivity) getActivity()).preferences.commit();
 		}
 	}
