@@ -216,6 +216,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		});
 		SetLoginLogOut();
 		UpdateLocationStatus();
+		isUserInLoacation();
 		return rootView;
 	}
     public String getTime(String stamp) {
@@ -261,7 +262,18 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         int siteRadius = Integer.parseInt(/*preferences.getString(Preferences.SITE_RADIUS,"")*/ "100");
         Location.distanceBetween(lat1,lon1,lat2,lon2,result);
         float distance = result[0];
-        return distance<=siteRadius;
+		Boolean isInLocation = distance<=siteRadius;
+
+		if(isInLocation){
+			((MainActivity) getActivity()).preferences.saveBoolean(Preferences.INLOCATION, true);
+			((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "False");
+		}else{
+			((MainActivity) getActivity()).preferences.saveBoolean(Preferences.INLOCATION, false);
+			((MainActivity) getActivity()).preferences.saveString(Preferences.LOCATIONSTATUS, "True");
+		}
+		((MainActivity) getActivity()).preferences.commit();
+
+		return isInLocation;
 		/*int DistanceInRadius ;
 		DistanceInRadius  = (int)deg2rad(distance)*1000;
 		return DistanceInRadius<=StringUtils.getInt(((MainActivity) getActivity()).preferences.getString(Preferences.SITE_RADIUS,""));
