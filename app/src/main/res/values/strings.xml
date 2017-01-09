@@ -61,5 +61,6 @@
     <string name="change">Change</string>
     <string name="submit">Submit</string>
     <string name="reason">Reason</string>
+    <string name="site_radius">Site Radius</string>
 
 </resources>

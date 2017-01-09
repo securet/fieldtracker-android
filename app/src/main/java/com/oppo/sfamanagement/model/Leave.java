@@ -1,31 +1,71 @@
 package com.oppo.sfamanagement.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by allsmartlt218 on 02-12-2016.
  */
 
-public class Leave {
+public class Leave implements Parcelable {
     private String days;
     private String fromDate;
     private String toDate;
     private String status;
     private String reason;
+    private String partyRelationShipId;
+
+    public Leave(){
+
+    }
+
+    protected Leave(Parcel in) {
+        days = in.readString();
+        fromDate = in.readString();
+        toDate = in.readString();
+        status = in.readString();
+        reason = in.readString();
+        partyRelationShipId = in.readString();
+    }
+
+    public static final Creator<Leave> CREATOR = new Creator<Leave>() {
+        @Override
+        public Leave createFromParcel(Parcel in) {
+            return new Leave(in);
+        }
+
+        @Override
+        public Leave[] newArray(int size) {
+            return new Leave[size];
+        }
+    };
 
     public String getDays() {
         return days;
     }
 
     public void setDays(String days) {
-
-        this.days = days + " days";
+        if (Integer.parseInt(days) == 1) {
+            this.days = days + " Day";
+        } else {
+        this.days = days + " Days";
+        }
     }
 
-    public String getReason() {
-        return reason;
+    public String getFromDate() {
+        return fromDate;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setFromDate(String fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
     }
 
     public String getStatus() {
@@ -36,21 +76,34 @@ public class Leave {
         this.status = status;
     }
 
-    public String getToDate() {
-        return toDate;
+    public String getReason() {
+        return reason;
     }
 
-    public void setToDate(String toDate) {
-        String to = "To: " + toDate;
-        this.toDate = to;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
-    public String getFromDate() {
-        return fromDate;
+    public String getPartyRelationShipId() {
+        return partyRelationShipId;
     }
 
-    public void setFromDate(String fromDate) {
-        String from = "From: " + fromDate;
-        this.fromDate = from;
+    public void setPartyRelationShipId(String partyRelationShipId) {
+        this.partyRelationShipId = partyRelationShipId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(days);
+        dest.writeString(fromDate);
+        dest.writeString(toDate);
+        dest.writeString(status);
+        dest.writeString(reason);
+        dest.writeString(partyRelationShipId);
     }
 }

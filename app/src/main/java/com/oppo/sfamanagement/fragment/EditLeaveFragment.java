@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
@@ -18,16 +17,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.oppo.sfamanagement.LeaveFragment;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.CustomBuilder;
-import com.oppo.sfamanagement.database.Preferences;
+import com.oppo.sfamanagement.model.Leave;
 import com.oppo.sfamanagement.model.LeaveReason;
 import com.oppo.sfamanagement.model.LeaveReasonApply;
 import com.oppo.sfamanagement.model.LeaveType;
-import com.oppo.sfamanagement.model.Store;
 import com.oppo.sfamanagement.webmethods.LoaderConstant;
 import com.oppo.sfamanagement.webmethods.LoaderMethod;
 import com.oppo.sfamanagement.webmethods.LoaderServices;
@@ -40,10 +37,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- * Created by allsmartlt218 on 02-12-2016.
+ * Created by allsmartlt218 on 09-01-2017.
  */
 
-public class LeaveRequestFragment extends Fragment implements View.OnClickListener , DatePickerDialog.OnDateSetListener, LoaderManager.LoaderCallbacks<Object> {
+public class EditLeaveFragment  extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Object>, DatePickerDialog.OnDateSetListener {
 
     private TextView etStart,etEnd,etType,tvReasonType,tvDays;
     private ImageView ivStart,ivEnd;
@@ -56,17 +53,10 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
     private ArrayList<LeaveReason> leaveReasonList;
     private boolean isFrom = false, isTo = false;
     private int fromyear = 0,frommonth = 0,fromDay = 0;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_leave_request,container,false);
+        View view = inflater.inflate(R.layout.edit_leave_fragment,container,false);
         etStart = (TextView) view.findViewById(R.id.etStartDate);
         etEnd = (TextView) view.findViewById(R.id.etEndDate);
         etReason = (EditText) view.findViewById(R.id.etReason);
@@ -77,20 +67,29 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
         cancel = (Button) view.findViewById(R.id.btnCancel);
         tvDays = (TextView) view.findViewById(R.id.tvLeaveDays);
         tvReasonType = (TextView) view.findViewById(R.id.etTypeReason);
+
+        final Leave leave = getArguments().getParcelable("leave_key");
+        if(null != leave) {
+            etStart.setText(leave.getFromDate());
+            etEnd.setText(leave.getToDate());
+            tvDays.setText(leave.getDays().replaceAll("[^0-9]", ""));
+            etReason.setText(leave.getReason());
+        }
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String fromDate = etStart.getText().toString();
                 String thruDate = etEnd.getText().toString();
-                String leaveTypeEnumId = etType.getText().toString();
 
 
-                if (!TextUtils.isEmpty(enumReasonId) && !TextUtils.isEmpty(enumTypeId) && !TextUtils.isEmpty(leaveReasonId)) {
+
+                if (!TextUtils.isEmpty(enumReasonId) && !TextUtils.isEmpty(enumTypeId) && !TextUtils.isEmpty(leaveReasonId) && !TextUtils.isEmpty(leave.getPartyRelationShipId())) {
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
-                    bundle.putString(AppsConstant.METHOD, AppsConstant.POST);
-                    bundle.putString(AppsConstant.PARAMS,ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,leaveReasonId,fromDate,thruDate,"ORG_OPPO"));
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,LeaveRequestFragment.this).forceLoad();
+                    bundle.putString(AppsConstant.METHOD, AppsConstant.PUT);
+                    bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,leaveReasonId,fromDate,thruDate,leave.getPartyRelationShipId()));
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,EditLeaveFragment.this).forceLoad();
                 }
             }
         });
@@ -155,14 +154,13 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
         Bundle b = new Bundle();
         b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.LEAVE_TYPES));
         b.putString(AppsConstant.METHOD,AppsConstant.GET);
-        getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_TYPES,b,LeaveRequestFragment.this).forceLoad();
+        getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_TYPES,b,EditLeaveFragment.this).forceLoad();
 
         return view;
     }
 
     @Override
     public void onClick(View v) {
-
         if(v.getId() == R.id.etStartDate || v.getId() == R.id.ivDatePicker) {
             isFrom = true;
             Calendar now = Calendar.getInstance();
@@ -213,8 +211,6 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
         }
     }
 
-
-
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
         ((MainActivity)getActivity()).showHideProgressForLoder(false);
@@ -256,7 +252,6 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
 
         }
         getActivity().getLoaderManager().destroyLoader(loader.getId());
-
     }
 
     @Override
@@ -283,7 +278,6 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-
         if(isFrom){
             fromyear =year;
             frommonth =monthOfYear;

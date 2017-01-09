@@ -10,7 +10,7 @@
             </item>
         </layer-list>
     </item>
-    <item android:bottom="2dp" android:left="2dp">
+    <item android:bottom="5dp" android:left="5dp">
         <shape>
             <gradient android:angle="270"
                 android:endColor="#E2E2E2" android:startColor="#BABABA" />
