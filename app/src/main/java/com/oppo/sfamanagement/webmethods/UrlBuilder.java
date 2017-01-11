@@ -12,10 +12,8 @@ public class UrlBuilder {
 
 
     public static String getStoreDetails(String strServices, String Storeid) {
-        Uri.Builder b = Uri.parse(getUrl(strServices)).buildUpon();
-        b.appendPath(Storeid);
-        b.build();
-
+        StringBuilder b = new StringBuilder();
+        b.append(Services.DomainUrl).append(strServices).append("/" + Storeid);
         return b.toString();
     }
 

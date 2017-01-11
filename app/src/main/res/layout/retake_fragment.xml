@@ -9,18 +9,18 @@
 
     <ImageView
         android:id="@+id/ivRetake"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/margin_15"
         android:layout_gravity="center_horizontal"
         android:layout_width="match_parent"
-        android:layout_marginRight="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginRight="@dimen/margin_15"
+        android:layout_marginEnd="@dimen/margin_15"
+        android:layout_marginLeft="@dimen/margin_15"
+        android:layout_marginStart="@dimen/margin_15"
         android:layout_weight="1"
         android:layout_height="0dp" />
     <LinearLayout
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_20"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center_horizontal"
@@ -28,20 +28,20 @@
         <Button
             android:background="@drawable/editstore_edit_button"
             android:id="@+id/btConfirm"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_18"
             android:textColor="@color/colorWhite"
             android:layout_width="wrap_content"
-            android:text="Confirm"
-            android:layout_marginRight="5dp"
+            android:text="@string/confirm"
+            android:layout_marginRight="@dimen/margin_5"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/btRetake"
             android:background="@drawable/editstore_cancel_button"
-            android:layout_marginLeft="5dp"
-            android:textSize="18sp"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:textSize="@dimen/text_18"
             android:textColor="@color/colorWhite"
             android:layout_width="wrap_content"
-            android:text="Retake"
+            android:text="@string/retake"
             android:layout_height="wrap_content" />
     </LinearLayout>
 

@@ -32,6 +32,7 @@ public class CalenderUtils {
             days = mills / (1000 * 60 * 60 * 24);
         } catch (Exception e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,"CalenderUtils","CalenderUtils");
             Crashlytics.logException(e);
 
         }

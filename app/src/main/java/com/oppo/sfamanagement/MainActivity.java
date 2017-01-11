@@ -37,6 +37,7 @@ import com.oppo.sfamanagement.webmethods.LoaderMethod;
 import com.oppo.sfamanagement.webmethods.LoaderServices;
 import com.oppo.sfamanagement.webmethods.Services;
 import com.oppo.sfamanagement.webmethods.UrlBuilder;
+import com.squareup.picasso.Picasso;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -47,8 +48,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	public Preferences preferences;
 	public final static int  MAP =0,LIST=1,MORE=2;
 	public int openPage = MAP;
+
 	LinearLayout llAttendance,llHistory,llMore,footerTabs;
-	ImageView ivCurrentLocation;
+	ImageView ivCurrentLocation,ivPhoto;
     int flag2 = 0;
 	DigitalClockView dtcLoginTime;
 	TextView tvSiteName,tvUserName,tvUserSerName,store;
@@ -57,14 +59,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		ActionBar actionBar = getSupportActionBar();
+		ivPhoto = (ImageView) findViewById(R.id.ivUserPhoto);
         flag2 = 1 ;
 		if (actionBar != null){
 			actionBar.hide();
 		}
 		preferences = new Preferences(MainActivity.this);
 
+		if(!preferences.getString(Preferences.USER_PHOTO,"").equals(null)) {
+			Picasso.with(getApplicationContext()).load(UrlBuilder.getServerImage(preferences.getString(Preferences.USER_PHOTO,""))).placeholder(R.drawable.usericon).fit().into(ivPhoto);
+		}
+
 		Bundle b = new Bundle();
-		b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails(Services.STORE_DETAIL,preferences.getString(Preferences.PARTYID,"")));
+		b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails(Services.STORE_DETAIL,preferences.getString(Preferences.PARTYID,"100051")));
 		b.putString(AppsConstant.METHOD, AppsConstant.GET );
 		b.putString(AppsConstant.PASSWORD, "");
 		getLoaderManager().initLoader(LoaderConstant.USER_STORE_DETAIL,b,MainActivity.this).forceLoad();
@@ -81,51 +88,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		dtcLoginTime = (DigitalClockView) findViewById(R.id.dtcLoginTime);
 		footerTabs = (LinearLayout) findViewById(R.id.footerTabs);
 
-		/*ivCurrentLocation.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-				boolean gps_enabled = false;
-				boolean network_enabled = false;
-
-				try {
-					gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-				} catch(Exception ex) {}
-
-				try {
-					network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-				} catch(Exception ex) {}
-
-				if(!gps_enabled && !network_enabled) {
-					// notify user
-					AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-					dialog.setMessage("Location is not enabled !");
-					dialog.setPositiveButton("Open setting", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-							// TODO Auto-generated method stub
-							Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-							startActivity(myIntent);
-							//get gps
-						}
-					});
-					dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-							// TODO Auto-generated method stub
-
-						}
-					});
-					dialog.show();
-				}else {
-					Fragment f = getSupportFragmentManager().findFragmentById(R.id.flMiddle);
-					if (f instanceof MapFragment) {
-						((MapFragment) f).moveToCurentLocation();
-					}
-				}
-			}
-		});*/
 		tvUserName.setText(preferences.getString(Preferences.USERFIRSTNAME,""));
 		tvUserSerName.setText(preferences.getString(Preferences.USERLASTNAME,""));
 		llAttendance = (LinearLayout) findViewById(R.id.llAttendance);
@@ -250,10 +212,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				FragmentManager fragmentManager = getSupportFragmentManager();
 				fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
 				fragmentManager.executePendingTransactions();
+
 				break;
 		}
+        getLoaderManager().destroyLoader(loader.getId());
         footerTabs.setVisibility(View.VISIBLE);
-		getLoaderManager().destroyLoader(loader.getId());
 	}
 	String SHOW_HIDE_LOADER = "SHOW_HIDE_LOADER";
 	public void showHideProgressForLoder(boolean isForHide)

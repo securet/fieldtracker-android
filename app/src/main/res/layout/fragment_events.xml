@@ -6,8 +6,7 @@
     android:orientation="vertical">
 
     <ListView
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="@dimen/margin_10"
         android:dividerHeight="0dp"
         android:id="@+id/expandableList"
         android:layout_width="match_parent"

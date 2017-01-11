@@ -29,15 +29,22 @@ public class PromoterListParser {
     public ArrayList<Promoter> Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
+
             if(parentObject.has("requestList")) {
+                if(parentObject.has("totalEntries")) {
+                    int count = parentObject.getInt("totalEntries");
+                    preferences.saveInt(Preferences.PROMOTER_COUNT,count);
+                    preferences.commit();
+                }
+
                 JSONArray jsonArray = parentObject.getJSONArray("requestList");
-                if (jsonArray.length() == 0 || jsonArray.length() < 10) {
+                /*if (jsonArray.length() == 0 || jsonArray.length() < 10) {
                     preferences.saveBoolean(Preferences.PROMOTERISLAST,true);
                     preferences.commit();
                 } else {
                     preferences.saveBoolean(Preferences.PROMOTERISLAST,false);
                     preferences.commit();
-                }
+                }*/
                 for(int i = 0 ; i < jsonArray.length() ; i++) {
                     JSONObject childObject = jsonArray.getJSONObject(i);
                     if(childObject.has("requestId")) {

@@ -45,15 +45,20 @@ public class HistoryListParser {
             JSONObject parentObject = new JSONObject(response);
             // size 0 or <10 make  IsLast = true
             if(parentObject.has("userTimeLog")){
+                if(parentObject.has("totalEntries")) {
+                    int count = parentObject.getInt("totalEntries");
+                    preferences.saveInt(Preferences.HISTORY_COUNT,count);
+                    preferences.commit();
+                }
                 JSONArray arrayParent = parentObject.getJSONArray("userTimeLog");
                 //Log.d("a",String.valueOf(arrayParent.length()));
-                if (arrayParent.length() == 0 || arrayParent.length() < 10) {
+                /*if (arrayParent.length() == 0 || arrayParent.length() < 10) {
                     preferences.saveBoolean(Preferences.ISLAST, true);
                     preferences.commit();
                 }else {
                     preferences.saveBoolean(Preferences.ISLAST, false);
                     preferences.commit();
-                }
+                }*/
                     for (int i = 0; i < arrayParent.length(); i++) {
                        // System.out.println(arrayParent.length() + "     main array        " + i);
                         JSONObject childOject = arrayParent.getJSONObject(i);

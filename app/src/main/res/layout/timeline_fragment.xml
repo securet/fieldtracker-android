@@ -8,9 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:paddingStart="30dp"
-        android:paddingLeft="30dp"
-        android:layout_marginTop="5dip"
+        android:paddingStart="@dimen/margin_25"
+        android:paddingLeft="@dimen/margin_25"
+        android:layout_marginTop="@dimen/margin_5"
         android:background="#bbffffff"
         android:orientation="horizontal">
 
@@ -26,48 +26,49 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/margin_10"
                 android:gravity="center"
                 android:text="Shift Time"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="18sp" />
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_18" />
 
             <com.oppo.sfamanagement.database.ShiftTimeView
                 android:id="@+id/stvShiftTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/margin_10"
                 android:gravity="center"
                 android:text="05:12:11"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="32sp" />
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_32" />
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/margin_10"
                 android:gravity="center"
                 android:text="hh:mm:ss"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="13sp" />
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_14" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/ivCloseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/margin_35"
+            android:layout_height="@dimen/margin_35"
             android:layout_gravity="center"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
             android:src="@drawable/close_icon" />
     </LinearLayout>
     <ListView
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/margin_5"
         android:id="@+id/lvTimeLine"
-        android:paddingLeft="15dp"
-        android:paddingStart="15dp"
+        android:paddingLeft="@dimen/margin_15"
+        android:paddingStart="@dimen/margin_15"
         android:divider="@null"
         android:layout_weight="1"
         android:layout_width="match_parent"
@@ -77,17 +78,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_margin="10dip"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginEnd="@dimen/margin_20"
+        android:layout_marginRight="@dimen/margin_20"
         android:background="@drawable/bluerectagleborder"
         android:orientation="horizontal"
-        android:padding="10dip">
+        android:padding="@dimen/margin_5">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/margin_35"
+            android:layout_height="@dimen/margin_35"
             android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/time_in_out_icon" />
+            android:layout_marginRight="@dimen/margin_10"
+            android:src="@drawable/timeinouticon" />
 
         <LinearLayout
             android:layout_width="0dip"
@@ -102,31 +107,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|left"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/margin_10"
                 android:gravity="center|left"
                 android:text="Time In"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="@dimen/text_20" />
 
             <TextView
                 android:id="@+id/tvTimeInOutLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|left"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/margin_10"
                 android:gravity="center|left"
                 android:text=""
                 android:textColor="@android:color/white"
-                android:textSize="16sp" />
+                android:textSize="@dimen/text_16" />
 
+            </LinearLayout>
         </LinearLayout>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/time_in_out_right" />
-    </LinearLayout>
 
 </LinearLayout>

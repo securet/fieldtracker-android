@@ -3,6 +3,8 @@ package com.oppo.sfamanagement.parsers;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 
+import com.crashlytics.android.Crashlytics;
+import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.model.Leave;
 
@@ -35,14 +37,20 @@ public class LeaveListParser {
             JSONObject parentObject = new JSONObject(response);
             if(parentObject.has("employeeLeavesList")) {
 
+                if(parentObject.has("totalEntries")) {
+                    int count = parentObject.getInt("totalEntries");
+                    preferences.saveInt(Preferences.LEAVE_COUNT,count);
+                    preferences.commit();
+                }
+
                 JSONArray parentArray = parentObject.getJSONArray("employeeLeavesList");
-                if (parentArray.length() == 0 || parentArray.length() < 10) {
+                /*if (parentArray.length() == 0 || parentArray.length() < 10) {
                     preferences.saveBoolean(Preferences.LEAVEISLAST,true);
                     preferences.commit();
                 } else {
                     preferences.saveBoolean(Preferences.LEAVEISLAST,false);
                     preferences.commit();
-                }
+                }*/
                 for(int i = 0 ; i < parentArray.length() ; i++) {
                     JSONObject childObject = parentArray.getJSONObject(i);
                     if(childObject.has("fromDate")) {
@@ -93,7 +101,9 @@ public class LeaveListParser {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
+            Crashlytics.logException(e);
         } finally {
             return list;
         }

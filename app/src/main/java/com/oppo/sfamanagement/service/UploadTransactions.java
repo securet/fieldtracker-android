@@ -7,8 +7,10 @@ import android.preference.Preference;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.EventDataSource;
+import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.NetworkUtils;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.database.SqliteHelper;
@@ -79,7 +81,9 @@ public class UploadTransactions extends IntentService {
                 transactionProcessListner.transactionStatus(currentTransaction, currentTransactionSatus);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,"UploadTransaction","UploadTransaction");
+            Crashlytics.logException(e);
         }
     }
 

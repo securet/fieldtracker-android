@@ -7,14 +7,14 @@
         android:id="@+id/tvPickADate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:layout_margin="15dp"
+        android:textSize="@dimen/text_22"
+        android:layout_margin="@dimen/margin_15"
         android:textColor="@android:color/black"
         android:text="Pick a Start Date"/>
     <CalendarView
         android:id="@+id/calenderView"
         android:layout_width="match_parent"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="@dimen/margin_5"
         android:layout_height="match_parent">
 
     </CalendarView>

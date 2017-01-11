@@ -2,6 +2,7 @@ package com.oppo.sfamanagement.webmethods;
 
 import android.preference.Preference;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.database.CalenderUtils;
 import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
@@ -26,7 +27,9 @@ public class ParameterBuilder {
                     "&signUpPassword=" + URLEncoder.encode(strPassWord, "UTF-8") +
                     "&CUSTOMER_MOBILE_CONTACT=" + URLEncoder.encode(strUserMobile, "UTF-8");
         } catch (Exception e) {
-            Logger.e("Log", e);
+            Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
         } finally {
             return urlParameters;
         }
@@ -42,7 +45,9 @@ public class ParameterBuilder {
                     "&thruDate=" + URLEncoder.encode(thruDate, "UTF-8") +
                     "&organizationId=" + URLEncoder.encode(organizationId, "UTF-8");
         } catch (Exception e) {
-            Logger.e("Log", e);
+            Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
         } finally {
             return urlParameters;
         }
@@ -57,7 +62,9 @@ public class ParameterBuilder {
                     "&thruDate=" + URLEncoder.encode(thruDate, "UTF-8") +
                     "&partyRelationshipId=" + URLEncoder.encode(partyRelationshipId, "UTF-8");
         } catch (Exception e) {
-            Logger.e("Log", e);
+            Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
         } finally {
             return urlParameters;
         }
@@ -74,6 +81,8 @@ public class ParameterBuilder {
 
         } catch (Exception e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
         }finally {
             return url;
         }
@@ -90,6 +99,8 @@ public class ParameterBuilder {
 
         } catch (Exception e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
         } finally {
             return url;
         }
@@ -115,6 +126,8 @@ public class ParameterBuilder {
 
         } catch (Exception e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
         }finally {
             return url;
         }
@@ -138,6 +151,8 @@ public class ParameterBuilder {
 
         } catch (Exception e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
         }finally {
             return url;
         }
@@ -161,6 +176,8 @@ public class ParameterBuilder {
 
         } catch (Exception e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
         }finally {
             return url;
         }
@@ -172,6 +189,8 @@ public class ParameterBuilder {
             url = "snapShotFile=" + URLEncoder.encode(snapShotFile, "UTF-8");
         } catch (Exception e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
         } finally {
             return url;
         }
@@ -199,6 +218,8 @@ public class ParameterBuilder {
                     "&addressIdPath=" + URLEncoder.encode(addressIdPath,"UTF-8") ;
         } catch (Exception e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
         } finally {
             return url;
         }

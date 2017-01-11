@@ -165,15 +165,26 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-        boolean isLast = preferences.getBoolean(Preferences.ISLAST,true);
+        int count = preferences.getInt(Preferences.HISTORY_COUNT,0);
+        //System.out.println(count + "   count onScroll");
 //				if(!isLoading && (i+i1 >=i2-3)&& !isLast){
 //					isLoading = true;
 //					increase Page Index;
 //					Call ApI
 //				}
-
-
-        if (totalItemCount>0 &&!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3) && !isLast) {
+            if(totalItemCount>0 &&!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3)) {
+                if(count > pageIndex) {
+                flag = 0;
+                isLoading = true;
+                pageIndex++;
+                System.out.println(pageIndex + "   onScroll");
+                Bundle bundle = new Bundle();
+                bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST, preferences.getString(Preferences.USERNAME, ""), pageIndex + "", "10"));
+                bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
+                getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST, bundle, EventsFragment.this);
+            }
+        }
+        /*if (totalItemCount>0 &&!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3) && !isLast) {
             flag = 0;
             isLoading = true;
             pageIndex++;
@@ -183,7 +194,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
             bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
             getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST, bundle, EventsFragment.this);
 
-        }
+        }*/
 
     }
 }

@@ -43,9 +43,9 @@ public class CameraActivity extends AppCompatActivity{
         tvUser = (TextView) findViewById(R.id.tvUserName);
         tvUserSername = (TextView) findViewById(R.id.tvUserSerName);
         tvSiteName = (TextView) findViewById(R.id.tvSiteName);
-        tvUser.setText(preferences.getString(Preferences.USERFIRSTNAME,"username"));
-        tvUserSername.setText(preferences.getString(Preferences.USERLASTNAME,"lastname"));
-        tvSiteName.setText(preferences.getString(Preferences.SITENAME,"sitename"));
+        tvUser.setText(preferences.getString(Preferences.USERFIRSTNAME,""));
+        tvUserSername.setText(preferences.getString(Preferences.USERLASTNAME,""));
+        tvSiteName.setText(preferences.getString(Preferences.SITENAME,""));
         //FrameLayout fl = (FrameLayout) findViewById(R.id.flCapture);
         if (Build.VERSION.SDK_INT >= 22) {
             Fragment fragment = new CameraFragment2();
@@ -115,6 +115,8 @@ public class CameraActivity extends AppCompatActivity{
             {
                 dialog = null;
                 Logger.e("Log",e);
+                Crashlytics.log(1,getClass().getName(),"Error in CameraActivity");
+                Crashlytics.logException(e);
             }
         }
     }

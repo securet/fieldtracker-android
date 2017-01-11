@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.appdatasearch.GetRecentContextCall;
 import com.google.android.gms.awareness.snapshot.internal.NetworkStateImpl;
 import com.google.android.gms.common.ConnectionResult;
@@ -60,6 +61,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.CalenderUtils;
 import com.oppo.sfamanagement.database.EventDataSource;
+import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.NetworkUtils;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.database.ShiftTimeView;
@@ -149,11 +151,19 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
                 try {
                     gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                } catch(Exception ex) {}
+                } catch(Exception e) {
+					Logger.e("Log",e);
+					Crashlytics.log(1,getClass().getName(),"Error in Map Fragment");
+					Crashlytics.logException(e);
+				}
 
                 try {
                     network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-                } catch(Exception ex) {}
+                } catch(Exception e) {
+					Logger.e("Log",e);
+					Crashlytics.log(1,getClass().getName(),"Error in Map Fragment");
+					Crashlytics.logException(e);
+				}
 
                 if(!gps_enabled && !network_enabled) {
                     // notify user
@@ -220,39 +230,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
 		return rootView;
 	}
-    public String getTime(String stamp) {
-        SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = null;
-        Calendar mCalendar = Calendar.getInstance();
-        try {
-            date = mFormat.parse(stamp);
-            mCalendar.setTime(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return (String) DateFormat.format("hh:mm",mCalendar);
 
-    }
-	private double distance(double lat1, double lon1, double lat2, double lon2) {
-		double theta = lon1 - lon2;
-		double dist = Math.sin(deg2rad(lat1))
-				* Math.sin(deg2rad(lat2))
-				+ Math.cos(deg2rad(lat1))
-				* Math.cos(deg2rad(lat2))
-				* Math.cos(deg2rad(theta));
-		dist = Math.acos(dist);
-		dist = rad2deg(dist);
-		dist = dist * 60 * 1.1515;
-		return (dist);
-	}
-
-	private double deg2rad(double deg) {
-		return (deg * Math.PI / 180.0);
-	}
-
-	private double rad2deg(double rad) {
-		return (rad * 180.0 / Math.PI);
-	}
 	private boolean isUserInLoacation(){
         float[] result = new float[1];
 		double lat1 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.USERLATITUDE,""));
@@ -260,7 +238,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		double lat2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LATITUDE,""));
 		double lon2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LONGITUDE,""));
 		//Double distance = distance(lat1, lon1, lat2, lon2);
-        int siteRadius = Integer.parseInt(preferences.getString(Preferences.SITE_RADIUS,""));
+        int siteRadius = Integer.parseInt(preferences.getString(Preferences.SITE_RADIUS,"0"));
         Location.distanceBetween(lat1,lon1,lat2,lon2,result);
         float distance = result[0];
 		Boolean isInLocation = distance<=siteRadius;
@@ -275,10 +253,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		((MainActivity) getActivity()).preferences.commit();
 
 		return isInLocation;
-		/*int DistanceInRadius ;
-		DistanceInRadius  = (int)deg2rad(distance)*1000;
-		return DistanceInRadius<=StringUtils.getInt(((MainActivity) getActivity()).preferences.getString(Preferences.SITE_RADIUS,""));
-*/
 	}
 	public void moveToCurentLocation()
 	{
@@ -370,16 +344,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		}
 	}
 	public void broadcastLocationFound(Location location) {
-
-//		Double latitude = bundle.getDouble("latitude");
-//		Double longitude = bundle.getDouble("longitude");
 		updateMarker(location.getLatitude(), location.getLongitude());
-//		Intent intent = new Intent("com.oppo.sfamanagement.geolocation.service");
-//		intent.putExtra("latitude", location.getLatitude());
-//		intent.putExtra("longitude", location.getLongitude());
-//		intent.putExtra("done", 1);
-
-//		getActivity().sendBroadcast(intent);
 	}
 	protected void registerGeofences() {
 		if (MainActivity.geofencesAlreadyRegistered) {
@@ -556,7 +521,12 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 				final String strFile = data.getStringExtra("response");
 				if(!TextUtils.isEmpty(strFile)) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                    dialog.setTitle("Confirm Time In");
+                    if(!tvTimeInOut.getText().toString().equals(null) && !TextUtils.isEmpty(tvTimeInOut.getText().toString()) && tvTimeInOut.getText().toString().equalsIgnoreCase("Time In")) {
+                        dialog.setTitle("Confirm Time In");
+                    } else {
+                        dialog.setTitle("Confirm Time Out");
+                    }
+
                     dialog.setMessage("You are currently at " + preferences.getString(Preferences.SITENAME,""));
                     dialog.setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
                         @Override
@@ -608,14 +578,6 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		preferences.commit();
 		SetLoginLogOut();
 	}
-    /*public void uploadData()
-    {
-        if(NetworkUtils.isNetworkConnectionAvailable(getContext()))
-        {
-            Intent uploadTraIntent=new Intent(getContext(),UploadTransactions.class);
-            getContext().startService(uploadTraIntent);
-        }
-    }*/
     private TimeInOutDetails getTimeInOutDetails(String strComments,String strType, String strImage,String isPushed) {
         String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateFormate);
         TimeInOutDetails details = new TimeInOutDetails();

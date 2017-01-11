@@ -56,18 +56,4 @@ public class Event {
 		this.placeName = placeName;
 	}
 
-//	static public Event fromCursor(Cursor cursor) {
-//		if (cursor != null && cursor.getCount() != 0) {
-//			Event e = new Event();
-//			e.setId(cursor.getInt(cursor.getColumnIndex(SqliteHelper.COLUMN_ID)));
-//			e.setType(cursor.getString(cursor
-//					.getColumnIndex(SqliteHelper.COLUMN_EVENT_TYPE)));
-//			e.setDate(cursor.getString(cursor
-//					.getColumnIndex(SqliteHelper.COLUMN_EVENT_DATE)));
-//			e.setPlaceName(cursor.getString(cursor
-//					.getColumnIndex(SqliteHelper.COLUMN_PLACE_NAME)));
-//			return e;
-//		}
-//		return null;
-//	}
 }

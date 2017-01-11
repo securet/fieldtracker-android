@@ -193,6 +193,8 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
             {
                 dialog = null;
                 Logger.e("Log",e);
+                Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
+                Crashlytics.logException(e);
             }
         }
     }

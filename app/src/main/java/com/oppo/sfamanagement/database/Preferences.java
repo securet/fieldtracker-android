@@ -11,8 +11,11 @@ import com.oppo.sfamanagement.model.Promoter;
  */
 public class Preferences
 {
+    public static String LEAVE_COUNT = "LeaveCount";
+    public static String PROMOTER_COUNT = "PromoterCount";
     private SharedPreferences preferences;
     private SharedPreferences.Editor edit;
+    public static String USER_PHOTO = "userPhoto";
     public static String INLOCATION = "InLocation";
     public static String TIMEINOUTSTATUS = "TimeInOutStatus";
     public static String TIMEINTIME = "TimeInTime";
@@ -20,6 +23,7 @@ public class Preferences
     public static String USERLONGITUDE = "UserLongitude";
     public static String LOCATIONSTATUS = "LocationStatus";
 //    public static String SITEID = "SiteId";
+    public static String HISTORY_COUNT = "HistoryCount";
     public static String SITENAME = "SiteName";
     public static String LATITUDE = "Latitude";
     public static String LONGITUDE = "Longitude";

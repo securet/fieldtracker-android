@@ -13,154 +13,154 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="22sp"
+                android:textSize="@dimen/text_22"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="20dp"
-                android:text="Leave Request"/>
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:text="@string/leave_request"/>
             <RelativeLayout
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginLeft="@dimen/margin_30"
+                android:layout_marginRight="@dimen/margin_30"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/tvStart"
                     android:layout_width="wrap_content"
-                    android:text="Start"
-                    android:layout_marginTop="2dp"
-                    android:textSize="20sp"
+                    android:text="@string/start"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:textSize="@dimen/text_20"
                     android:layout_height="wrap_content" />
                 <ImageView
                     android:src="@drawable/datepicker"
                     android:id="@+id/ivDatePicker"
                     android:layout_alignParentRight="true"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" />
+                    android:layout_width="@dimen/margin_30"
+                    android:layout_height="@dimen/margin_30" />
                 <TextView
                     android:id="@+id/etStartDate"
                     android:layout_width="wrap_content"
-                    android:paddingTop="3dp"
-                    android:textSize="20sp"
-                    android:paddingRight="25dp"
-                    android:paddingBottom="3dp"
-                    android:text="11/10/2016"
+                    android:paddingTop="@dimen/margin_3"
+                    android:textSize="@dimen/text_20"
+                    android:paddingRight="@dimen/margin_25"
+                    android:paddingBottom="@dimen/margin_3"
+                    android:text="--/--/----"
                     android:layout_toLeftOf="@id/ivDatePicker"
                     android:background="@drawable/leave_request_edittext"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
             <RelativeLayout
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginLeft="@dimen/margin_30"
+                android:layout_marginRight="@dimen/margin_30"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/tvEnd"
                     android:layout_width="wrap_content"
-                    android:text="End"
-                    android:layout_marginTop="2dp"
-                    android:textSize="20sp"
+                    android:text="@string/end"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:textSize="@dimen/text_20"
                     android:layout_height="wrap_content" />
                 <ImageView
                     android:src="@drawable/datepicker"
                     android:id="@+id/ivDatePicker2"
                     android:layout_alignParentRight="true"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp" />
+                    android:layout_width="@dimen/margin_30"
+                    android:layout_height="@dimen/margin_30" />
                 <TextView
                     android:id="@+id/etEndDate"
                     android:layout_width="wrap_content"
-                    android:paddingTop="3dp"
-                    android:textSize="20sp"
-                    android:paddingRight="25dp"
-                    android:paddingBottom="3dp"
-                    android:text="11/10/2016"
+                    android:paddingTop="@dimen/margin_3"
+                    android:textSize="@dimen/text_20"
+                    android:paddingRight="@dimen/margin_25"
+                    android:paddingBottom="@dimen/margin_3"
+                    android:text="--/--/----"
                     android:layout_toLeftOf="@id/ivDatePicker2"
                     android:background="@drawable/leave_request_edittext"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
             <RelativeLayout
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginLeft="@dimen/margin_30"
+                android:layout_marginRight="@dimen/margin_30"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/tvDays"
                     android:layout_width="wrap_content"
-                    android:text="Day(s)"
+                    android:text="@string/day_s"
 
-                    android:layout_marginTop="2dp"
-                    android:textSize="20sp"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:textSize="@dimen/text_20"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/tvLeaveDays"
                     android:text="0"
-                    android:textSize="23sp"
-                    android:paddingRight="165dp"
+                    android:textSize="@dimen/text_23"
+                    android:paddingRight="@dimen/days_padding"
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
             <RelativeLayout
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginLeft="@dimen/margin_30"
+                android:layout_marginRight="@dimen/margin_30"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/tvType"
                     android:layout_width="wrap_content"
-                    android:text="Type"
-                    android:layout_marginTop="2dp"
-                    android:textSize="20sp"
+                    android:text="@string/type"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:textSize="@dimen/text_20"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/etType"
-                    android:layout_width="178dp"
-                    android:paddingTop="3dp"
-                    android:paddingRight="2dp"
+                    android:layout_width="@dimen/type_width"
+                    android:paddingTop="@dimen/margin_3"
+                    android:paddingRight="@dimen/margin_2"
                     android:drawableRight="@android:drawable/arrow_down_float"
-                    android:paddingBottom="3dp"
-                    android:textSize="20sp"
-                    android:text="Casual"
+                    android:paddingBottom="@dimen/margin_3"
+                    android:textSize="@dimen/text_20"
+                    android:text="@string/casual"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/leave_request_edittext"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
             <RelativeLayout
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginLeft="@dimen/margin_30"
+                android:layout_marginRight="@dimen/margin_30"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/tvTypeReason"
                     android:layout_width="wrap_content"
                     android:text="@string/reason"
-                    android:layout_marginTop="2dp"
-                    android:textSize="20sp"
+                    android:layout_marginTop="@dimen/margin_2"
+                    android:textSize="@dimen/text_20"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/etTypeReason"
-                    android:layout_width="178dp"
-                    android:paddingTop="3dp"
-                    android:paddingRight="2dp"
+                    android:layout_width="@dimen/type_width"
+                    android:paddingTop="@dimen/margin_3"
+                    android:paddingRight="@dimen/margin_2"
                     android:drawableRight="@android:drawable/arrow_down_float"
-                    android:paddingBottom="3dp"
-                    android:textSize="20sp"
+                    android:paddingBottom="@dimen/margin_3"
+                    android:textSize="@dimen/text_20"
                     android:text="Personal"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/leave_request_edittext"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
             <RelativeLayout
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginLeft="@dimen/margin_30"
+                android:layout_marginRight="@dimen/margin_30"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -168,15 +168,16 @@
                 <EditText
                     android:id="@+id/etReason"
                     android:layout_width="match_parent"
-                    android:hint="Description"
+                    android:hint="@string/description"
                     android:textStyle="italic"
                     android:layout_alignParentRight="true"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
             <LinearLayout
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="@dimen/margin_15"
+                android:paddingBottom="@dimen/margin_10"
                 android:gravity="center_horizontal"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -186,21 +187,29 @@
                     android:text="@string/submit"
                     android:textAllCaps="false"
                     android:background="@drawable/editstore_edit_button"
-                    android:textSize="22sp"
+                    android:textSize="@dimen/text_22"
+                    android:paddingLeft="@dimen/margin_20"
+                    android:paddingStart="@dimen/margin_20"
+                    android:paddingEnd="@dimen/margin_20"
+                    android:paddingRight="@dimen/margin_20"
                     android:textColor="@color/colorWhite"
                     android:layout_width="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginRight="@dimen/margin_5"
+                    android:layout_marginEnd="@dimen/margin_5"
                     android:layout_height="wrap_content" />
                 <Button
                     android:id="@+id/btnCancel"
                     android:text="@string/cancel"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
+                    android:paddingLeft="@dimen/margin_20"
+                    android:paddingStart="@dimen/margin_20"
+                    android:paddingEnd="@dimen/margin_20"
+                    android:paddingRight="@dimen/margin_20"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_marginStart="@dimen/margin_5"
                     android:textAllCaps="false"
                     android:background="@drawable/editstore_cancel_button"
                     android:textColor="@color/colorWhite"
-                    android:textSize="22sp"
+                    android:textSize="@dimen/text_22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 

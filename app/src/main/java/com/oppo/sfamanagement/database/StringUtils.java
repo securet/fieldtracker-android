@@ -23,6 +23,7 @@ public class StringUtils {
         catch ( Exception e)
         {
             Logger.e("Log",e);
+            Crashlytics.log(1,"StringUtils","StringUtils");
             Crashlytics.logException(e);
 
         }
@@ -42,8 +43,8 @@ public class StringUtils {
         catch (Exception e)
         {
             Logger.e("Log",e);
+            Crashlytics.log(1,"StringUtils","StringUtils");
             Crashlytics.logException(e);
-
         }
 
 

@@ -165,16 +165,18 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
             case R.id.lvLeaveStatus:
 
                 final int lastItem = firstVisibleItem + visibleItemCount;
-                boolean isLast = preferences.getBoolean(Preferences.LEAVEISLAST,false);
-                if(totalItemCount>0 && !isLoading && (lastItem >= totalItemCount-3) && !isLast)
+                int count = preferences.getInt(Preferences.LEAVE_COUNT,0);
+                if(totalItemCount>0 && !isLoading && (lastItem >= totalItemCount-3) )
                 {
-                    isLoading = true;
-                    pageIndex++;
-                    System.out.println("index   "  + pageIndex);
-                    Bundle b = new Bundle();
-                    b.putString(AppsConstant.URL, UrlBuilder.getLeaveList(Services.LEAVE_LIST,String.valueOf(pageIndex),String.valueOf(pageSize)));
-                    b.putString(AppsConstant.METHOD, AppsConstant.GET);
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_LIST,b,LeaveStatusFragment.this).forceLoad();
+                    if(count > pageIndex) {
+                        isLoading = true;
+                        pageIndex++;
+                        System.out.println("index   " + pageIndex);
+                        Bundle b = new Bundle();
+                        b.putString(AppsConstant.URL, UrlBuilder.getLeaveList(Services.LEAVE_LIST, String.valueOf(pageIndex), String.valueOf(pageSize)));
+                        b.putString(AppsConstant.METHOD, AppsConstant.GET);
+                        getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_LIST, b, LeaveStatusFragment.this).forceLoad();
+                    }
                 }
         }
     }

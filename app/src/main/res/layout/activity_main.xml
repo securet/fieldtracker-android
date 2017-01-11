@@ -8,37 +8,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#426b8b"
+        android:background="#1e4e76"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="10dip">
+        android:padding="@dimen/margin_3"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="#426b8b"
+            android:background="#1e4e76"
             android:gravity="center"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/margin_35"
+                android:layout_height="@dimen/margin_35"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/margin_10"
                 android:src="@drawable/applogo" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
                 android:gravity="center"
                 android:text="@string/attendence_tracker"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_20" />
         </LinearLayout>
 
 
@@ -57,15 +57,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_10"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingLeft="20dip">
+            android:paddingLeft="@dimen/margin_20"
+            android:paddingStart="@dimen/margin_20">
 
             <LinearLayout
-                android:layout_marginRight="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginEnd="@dimen/margin_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
@@ -76,35 +77,37 @@
                     android:id="@+id/dtcLoginTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DigitalClock"
+                    android:text=""
                     android:textColor="@android:color/white"
-                    android:textSize="32sp" />
+                    android:textSize="@dimen/text_32" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
+                android:layout_marginBottom="@dimen/margin_5"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/margin_12"
+                    android:layout_height="@dimen/margin_12"
                     android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/location" />
+                    android:layout_marginRight="@dimen/margin_5"
+                    android:src="@drawable/locationon" />
 
                 <TextView
                     android:id="@+id/tvSiteName"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/margin_10"
                     android:gravity="center"
-                    android:text="Off Site"
+                    android:text="@string/off_site"
                     android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_14" />
             </LinearLayout>
         </LinearLayout>
 
@@ -117,34 +120,35 @@
 
             <TextView
                 android:id="@+id/tvUserName"
-                android:paddingLeft="5dp"
-                android:paddingStart="5dp"
+                android:paddingLeft="@dimen/margin_5"
+                android:paddingStart="@dimen/margin_5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="@dimen/margin_5"
                 android:gravity="center"
                 android:text="Sharman"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="@dimen/text_20" />
 
             <TextView
                 android:id="@+id/tvUserSerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/margin_10"
                 android:gravity="center"
                 android:text="Joshi"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_18" />
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/ivUserPhoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="@dimen/margin_10"
             android:src="@drawable/usericon" />
     </LinearLayout>
 
@@ -162,12 +166,8 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="horizontal"
-        android:paddingTop="5dip"
-        android:paddingBottom="5dp"
-        android:paddingRight="10dp"
-        android:paddingEnd="10dp"
-        android:paddingLeft="10dp"
-        android:paddingStart="10dp">
+        android:paddingTop="@dimen/margin_5"
+        android:paddingBottom="@dimen/margin_5">
 
         <LinearLayout
             android:id="@+id/llAttendance"
@@ -179,8 +179,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/margin_40"
+                android:layout_height="@dimen/margin_40"
                 android:layout_gravity="center"
                 android:src="@drawable/attendanceoff" />
 
@@ -189,9 +189,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Attendance"
+                android:text="@string/attendance"
                 android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_14" />
         </LinearLayout>
 
         <LinearLayout
@@ -204,8 +204,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/margin_40"
+                android:layout_height="@dimen/margin_40"
                 android:layout_gravity="center"
                 android:src="@drawable/historyoff" />
 
@@ -214,9 +214,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="History"
+                android:text="@string/history"
                 android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_14" />
         </LinearLayout>
 
         <LinearLayout
@@ -229,9 +229,9 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_width="@dimen/margin_40"
+                android:layout_height="@dimen/margin_40"
+                android:layout_marginBottom="@dimen/margin_2"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:src="@drawable/moreoff" />
 
@@ -240,9 +240,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="More"
+                android:text="@string/more"
                 android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_14" />
         </LinearLayout>
 
     </LinearLayout>

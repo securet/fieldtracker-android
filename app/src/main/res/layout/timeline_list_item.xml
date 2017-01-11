@@ -7,46 +7,46 @@
     <LinearLayout
         android:orientation="horizontal"
         android:id="@+id/llFromDate"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_10"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/margin_10"
             android:id="@+id/tvColor1"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_10"
             android:background="@drawable/history_time_in_element"/>
         <TextView
             android:id="@+id/tvTimeFrom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_18"
             android:text="10:45 am"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="18dp" />
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_18" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginTop="18dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
+            android:textSize="@dimen/text_18"
+            android:layout_marginTop="@dimen/margin_18"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
             android:text="|"/>
 
         <TextView
             android:id="@+id/tvLocationStatus1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginTop="18dp"
-            android:layout_marginLeft="20dp"
+            android:textSize="@dimen/text_18"
+            android:layout_marginTop="@dimen/margin_18"
+            android:layout_marginLeft="@dimen/margin_20"
             android:text="Time In"/>
 
     </LinearLayout>
@@ -54,46 +54,46 @@
     <LinearLayout
         android:id="@+id/llThruDate"
         android:orientation="horizontal"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_10"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/margin_10"
             android:id="@+id/tvColor2"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_10"
             android:background="@drawable/history_time_in_element"/>
         <TextView
             android:id="@+id/tvTimeThru"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_18"
             android:text="10:45 am"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="18dp" />
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_18" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginTop="18dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
+            android:textSize="@dimen/text_18"
+            android:layout_marginTop="@dimen/margin_18"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
             android:text="|"/>
 
         <TextView
             android:id="@+id/tvLocationStatus2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginTop="18dp"
-            android:layout_marginLeft="20dp"
+            android:textSize="@dimen/text_18"
+            android:layout_marginTop="@dimen/text_18"
+            android:layout_marginLeft="@dimen/margin_20"
             android:text="Time In"/>
 
     </LinearLayout>

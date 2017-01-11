@@ -155,6 +155,8 @@ public class RestHelper
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
             Logger.e("Log",e);
+            Crashlytics.log(1,"RestHelper","RestHelper");
+            Crashlytics.logException(e);
         }
 
         HostnameVerifier allHostsValid = new HostnameVerifier() {

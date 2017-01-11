@@ -35,6 +35,7 @@ public class Utils {
         }
         catch(Exception e){
             Logger.e("Log",e);
+            Crashlytics.log(1,"Utils","Utils");
             Crashlytics.logException(e);
 
         }
@@ -94,6 +95,19 @@ public class Utils {
         }
     }
 
+    public static String getAppVersion(Activity activity) {
+        Context applicationContext =  activity.getApplicationContext();
+        PackageManager packageManager = applicationContext.getPackageManager();
+        String curVersion = null;
+        try {
+            curVersion = packageManager.getPackageInfo(applicationContext.getPackageName(), PackageManager.GET_UNINSTALLED_PACKAGES).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            Logger.e("Log",e);
+            Crashlytics.log(1,"Utils","Utils");
+            Crashlytics.logException(e);
+        }
+        return curVersion;
+    }
     public static void setAppVersion(Activity activity) {
 //        TextView appVersionView = (TextView) activity.findViewById(R.id.appVersion);
 //        Context applicationContext =  activity.getApplicationContext();
@@ -104,17 +118,6 @@ public class Utils {
 //        } catch (PackageManager.NameNotFoundException e) {
 //        }
 //        appVersionView.setText("v"+curVersion);
-    }
-
-    public static String getAppVersion(Activity activity) {
-        Context applicationContext =  activity.getApplicationContext();
-        PackageManager packageManager = applicationContext.getPackageManager();
-        String curVersion = null;
-        try {
-            curVersion = packageManager.getPackageInfo(applicationContext.getPackageName(), PackageManager.GET_UNINSTALLED_PACKAGES).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-        }
-        return curVersion;
     }
 
 }

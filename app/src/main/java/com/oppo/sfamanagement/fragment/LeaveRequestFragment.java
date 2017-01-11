@@ -184,9 +184,9 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
                     isFrom=false;
                     isTo = true;
                     Calendar now = Calendar.getInstance();
-                    now.set(Calendar.YEAR,fromyear);
+                    /*now.set(Calendar.YEAR,fromyear);
                     now.set(Calendar.MONTH,frommonth);
-                    now.set(Calendar.DAY_OF_MONTH,fromDay);
+                    now.set(Calendar.DAY_OF_MONTH,fromDay);*/
                     DatePickerDialog dpd = DatePickerDialog.newInstance(
                             this,
                             now.get(Calendar.YEAR),

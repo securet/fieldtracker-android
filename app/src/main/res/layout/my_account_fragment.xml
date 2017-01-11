@@ -7,8 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginLeft="@dimen/margin_10"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -17,66 +17,66 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:padding="10dip"
-                android:layout_marginBottom="10dp"
+                android:padding="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
                 android:text="My Account"
                 android:textColor="@android:color/black"
-                android:textSize="23sp" />
+                android:textSize="@dimen/text_23" />
             <TextView
                 android:id="@+id/userName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:padding="10dip"
-                android:layout_marginBottom="10dp"
+                android:padding="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
                 android:text="Manjunath K"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="20sp" />
+                android:textSize="@dimen/text_20" />
             <TextView
                 android:id="@+id/phoneNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:padding="10dip"
-                android:layout_marginBottom="10dp"
+                android:padding="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
                 android:text="1234567890"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="20sp" />
+                android:textSize="@dimen/text_20" />
             <TextView
                 android:id="@+id/emailAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:padding="10dip"
-                android:layout_marginBottom="10dp"
+                android:padding="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
                 android:text="test@com"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="20sp" />
+                android:textSize="@dimen/text_20" />
             <TextView
                 android:id="@+id/Address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:padding="10dip"
-                android:layout_marginBottom="10dp"
+                android:padding="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
                 android:text="Here only"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="20sp" />
+                android:textSize="@dimen/text_20" />
             <TextView
                 android:id="@+id/storeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:padding="10dip"
-                android:layout_marginBottom="10dp"
+                android:padding="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
                 android:text="Oppo Store"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="20sp" />
+                android:textSize="@dimen/text_20" />
         </LinearLayout>
     </ScrollView>
 

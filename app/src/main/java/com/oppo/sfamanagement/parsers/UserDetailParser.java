@@ -41,6 +41,9 @@ public class UserDetailParser {
                     preferences.saveString(Preferences.USERFIRSTNAME, obj.getString("firstName"));
                     preferences.saveString(Preferences.USERLASTNAME, obj.getString("lastName"));
                     preferences.saveString(Preferences.USERID, obj.getString("userId"));
+                    if(obj.has("userPhotoPath")) {
+                        preferences.saveString(Preferences.USER_PHOTO, obj.getString("userPhotoPath"));
+                    }
                     preferences.saveString(Preferences.USEREMAIL, obj.getString("emailAddress"));
                     preferences.saveString(Preferences.ROLETYPEID, obj.getString("roleTypeId"));
  /*For testing*///  preferences.saveString(Preferences.ROLETYPEID, "SalesExecutive");

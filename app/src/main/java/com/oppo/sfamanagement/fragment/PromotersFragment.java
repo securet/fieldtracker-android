@@ -198,16 +198,18 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
             case R.id.lvPromotersList:
 
                 final int lastItem = firstVisibleItem + visibleItemCount;
-                boolean isLast = preferences.getBoolean(Preferences.PROMOTERISLAST,false);
-                if(totalItemCount>0 && !isLoading && (lastItem >= totalItemCount-3) && !isLast)
+                int count = preferences.getInt(Preferences.PROMOTER_COUNT,0);
+                if(totalItemCount>0 && !isLoading && (lastItem >= totalItemCount-3) )
                 {
-                    isLoading = true;
-                    pageIndex++;
-                    System.out.println("index   "  + pageIndex);
-                    Bundle b = new Bundle();
-                    b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,String.valueOf(pageIndex),String.valueOf(pageSize)));
-                    b.putString(AppsConstant.METHOD, AppsConstant.GET);
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST,b,PromotersFragment.this).forceLoad();
+                    if(count > pageIndex) {
+                        isLoading = true;
+                        pageIndex++;
+                        System.out.println("index   " + pageIndex);
+                        Bundle b = new Bundle();
+                        b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST, String.valueOf(pageIndex), String.valueOf(pageSize)));
+                        b.putString(AppsConstant.METHOD, AppsConstant.GET);
+                        getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST, b, PromotersFragment.this).forceLoad();
+                    }
                 }
         }
     }

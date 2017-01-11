@@ -2,7 +2,8 @@ package com.oppo.sfamanagement.parsers;
 
 import android.text.TextUtils;
 
-import com.oppo.sfamanagement.model.LeaveApply;
+import com.crashlytics.android.Crashlytics;
+import com.oppo.sfamanagement.database.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +15,6 @@ import org.json.JSONObject;
 public class LeaveApplyParser {
     private String response = "";
     private String result = "";
-    private LeaveApply leaveApply;
 
     public LeaveApplyParser(String response) {
         this.response = response;
@@ -36,7 +36,9 @@ public class LeaveApplyParser {
                 result = "failed";
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
+            Crashlytics.logException(e);
             result = "failed";
         } finally {
             return result;

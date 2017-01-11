@@ -79,14 +79,8 @@ public class EventDataSource {
         database.update(SqliteHelper.TABLE_TIMEINOUT,values,where,null);
     }
     public TimeInOutDetails getToday(){
-        /*Date date = new Date();
-        //SimpleDateFormat format = new SimpleDateFormat();
-        Calendar mCalendar = Calendar.getInstance();
-        mCalendar.setTime(date);
-        String sDate = (String) DateFormat.format("yyyy-MM-dd",mCalendar);*/
+
         String where = SqliteHelper.COLUMN_ID +" = (select max(" + SqliteHelper.COLUMN_ID + ") from " + SqliteHelper.TABLE_TIMEINOUT + ");" ;
-       // String orderBy = SqliteHelper.COLUMN_CLOCKDATE + " DESC";
-      //  String limit = " 1";
         Cursor cursor = database.query(SqliteHelper.TABLE_TIMEINOUT,allColumns,where,null,null,null,null);
         cursor.moveToFirst();
         TimeInOutDetails details = TimeInOutDetails.fromCursor(cursor);

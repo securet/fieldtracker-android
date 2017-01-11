@@ -47,15 +47,7 @@ public class LeaveFragment extends Fragment{
 		View rootView = inflater.inflate(R.layout.fragment_leaves, container,false);
         email = (TextView) rootView.findViewById(R.id.tvContactEmail);
         phone = (TextView) rootView.findViewById(R.id.tvContactPhone);
-        /*email.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent();
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:0123456789"));
-                startActivity(intent);
-            }
-        });*/
+
         return rootView;
 	}
 }

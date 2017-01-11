@@ -6,7 +6,7 @@
     android:focusableInTouchMode="true"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="@dimen/margin_10">
 
     <LinearLayout
         android:id="@+id/llView"
@@ -15,14 +15,14 @@
         android:background="@drawable/grey_commoborder"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingBottom="5dp">
+        android:paddingBottom="@dimen/margin_5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/holo_green_dark"
             android:orientation="horizontal"
-            android:padding="10dp"
+            android:padding="@dimen/margin_10"
             >
 
             <TextView
@@ -31,10 +31,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
                 android:gravity="center_vertical|left"
-                android:padding="5dip"
+                android:padding="@dimen/margin_5"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_18"
                 />
             <RelativeLayout
                 android:id="@+id/llPopupClose"
@@ -55,7 +55,7 @@
 
         <View
             android:layout_width="fill_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/margin_1"
             android:background="@android:color/white" />
 
         <LinearLayout
@@ -64,11 +64,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:layout_marginTop="5dip"
-            android:paddingBottom="5dip"
-            android:paddingLeft="5dip"
-            android:paddingRight="5dip"
-            android:paddingTop="5dip">
+            android:layout_marginTop="@dimen/margin_5"
+            android:padding="@dimen/margin_5">
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -89,7 +86,7 @@
                     android:hint="Search"
                     android:imeOptions="actionDone"
                     android:singleLine="true"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/text_14" />
 
                 <ImageView
                     android:id="@+id/ivSearchCross"
@@ -100,20 +97,20 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dip"
-                android:paddingLeft="5dip"
-                android:paddingRight="5dip"/>
+                android:layout_height="@dimen/margin_1"
+                android:layout_marginTop="@dimen/margin_5"
+                android:paddingLeft="@dimen/margin_5"
+                android:paddingRight="@dimen/margin_5"/>
         </LinearLayout>
 
         <ListView
             android:id="@+id/lvSelectCountry"
             android:layout_width="fill_parent"
             android:layout_height="0dip"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
-            android:layout_marginTop="5dip"
-            android:layout_marginBottom="5dip"
+            android:layout_marginLeft="@dimen/margin_1"
+            android:layout_marginRight="@dimen/margin_1"
+            android:layout_marginTop="@dimen/margin_5"
+            android:layout_marginBottom="@dimen/margin_5"
             android:layout_weight="1"
             android:cacheColorHint="@null"
             android:scrollbars="none"
@@ -124,10 +121,7 @@
             android:id="@+id/tvNoSearchFound"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginBottom="5dip"
-            android:layout_marginLeft="5dip"
-            android:layout_marginRight="5dip"
-            android:layout_marginTop="5dip"
+            android:layout_margin="@dimen/margin_10"
             android:layout_weight="1"
             android:gravity="center"
             android:text="No_matching_record_found"
