@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 	LinearLayout llAttendance,llHistory,llMore,footerTabs;
 	ImageView ivCurrentLocation,ivPhoto;
-    int flag2 = 0;
+    public boolean isLoading = false;
 	DigitalClockView dtcLoginTime;
 	TextView tvSiteName,tvUserName,tvUserSerName,store;
 	@Override
@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		setContentView(R.layout.activity_main);
 		ActionBar actionBar = getSupportActionBar();
 		ivPhoto = (ImageView) findViewById(R.id.ivUserPhoto);
-        flag2 = 1 ;
 		if (actionBar != null){
 			actionBar.hide();
 		}
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			public void onClick(View view) {
 				if(openPage!=MAP) {
 					openPage=MAP;
-                    if (EventsFragment.flag == 1) {
+					if (!isLoading) {
                         Fragment f = new MapFragment();
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
@@ -111,10 +110,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			public void onClick(View view) {
 				if(openPage!=LIST) {
 					openPage=LIST;
-					Fragment f = new EventsFragment();
-					FragmentManager fragmentManager = getSupportFragmentManager();
-					fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
-					UpadateButtonStatus();
+					if (!isLoading) {
+						Fragment f = new EventsFragment();
+						FragmentManager fragmentManager = getSupportFragmentManager();
+						fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
+						UpadateButtonStatus();
+					}
 				}
 			}
 		});
@@ -124,10 +125,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			public void onClick(View view) {
 				if(openPage!=MORE) {
 					openPage = MORE;
-                    if (EventsFragment.flag == 1 || flag2 == 1) {
-                        if (flag2 == 1) {
-                            flag2 = 0;
-                        }
+                    if (!isLoading) {
                         Fragment f = new MoreFragment();
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();

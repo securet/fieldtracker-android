@@ -33,7 +33,6 @@ import com.oppo.sfamanagement.webmethods.Services;
 import com.oppo.sfamanagement.webmethods.UrlBuilder;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by allsmartlt218 on 02-12-2016.
@@ -92,6 +91,7 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
+        ((MainActivity)getActivity()).isLoading = true;
         isLoading = true;
         if (pageIndex == 0 ) {
             ((MainActivity) getActivity()).showHideProgressForLoder(false);
@@ -128,6 +128,7 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
                             Toast.LENGTH_SHORT).show();
                 }
                 isLoading = false;
+                ((MainActivity)getActivity()).isLoading = false;
                 adapter.refresh(list);
                 break;
 
@@ -166,17 +167,16 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
 
                 final int lastItem = firstVisibleItem + visibleItemCount;
                 int count = preferences.getInt(Preferences.LEAVE_COUNT,0);
-                if(totalItemCount>0 && !isLoading && (lastItem >= totalItemCount-3) )
+                if(count>totalItemCount&& totalItemCount>0 && !isLoading && (lastItem >= totalItemCount-3) )
                 {
-                    if(count > pageIndex) {
-                        isLoading = true;
-                        pageIndex++;
-                        System.out.println("index   " + pageIndex);
-                        Bundle b = new Bundle();
-                        b.putString(AppsConstant.URL, UrlBuilder.getLeaveList(Services.LEAVE_LIST, String.valueOf(pageIndex), String.valueOf(pageSize)));
-                        b.putString(AppsConstant.METHOD, AppsConstant.GET);
-                        getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_LIST, b, LeaveStatusFragment.this).forceLoad();
-                    }
+                    isLoading = true;
+                    ((MainActivity)getActivity()).isLoading = true;
+                    pageIndex++;
+                    System.out.println("index   " + pageIndex);
+                    Bundle b = new Bundle();
+                    b.putString(AppsConstant.URL, UrlBuilder.getLeaveList(Services.LEAVE_LIST, String.valueOf(pageIndex), String.valueOf(pageSize)));
+                    b.putString(AppsConstant.METHOD, AppsConstant.GET);
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_LIST, b, LeaveStatusFragment.this).forceLoad();
                 }
         }
     }

@@ -357,7 +357,7 @@ public class RestHelper
             try {
                 multipart.addFilePart("snapshotFile", new File(strFile));
             } catch (FileNotFoundException e) {
-                multipart.addFilePart("snapshotFile", new File("/storage/emulated/0/Android/data/com.oppo.sfamanagement/files/DCIM/pic.jpg"));
+//                multipart.addFilePart("snapshotFile", new File("/storage/emulated/0/Android/data/com.oppo.sfamanagement/files/DCIM/pic.jpg"));
             }
             for (String line : multipart.finish()) {
                 response += line;

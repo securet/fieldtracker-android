@@ -103,6 +103,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
         isLoading = true;
+        ((MainActivity)getActivity()).isLoading = true;
             if (pageIndex == 0 ) {
                 ((MainActivity) getActivity()).showHideProgressForLoder(false);
             }else{
@@ -137,6 +138,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
                     Toast.LENGTH_SHORT).show();
         }
         isLoading = false;
+        ((MainActivity)getActivity()).isLoading = false;
         adapter.refresh(list);
         getActivity().getLoaderManager().destroyLoader(loader.getId());
 
@@ -199,17 +201,16 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
 
                 final int lastItem = firstVisibleItem + visibleItemCount;
                 int count = preferences.getInt(Preferences.PROMOTER_COUNT,0);
-                if(totalItemCount>0 && !isLoading && (lastItem >= totalItemCount-3) )
+                if(count> totalItemCount && totalItemCount>0 && !isLoading && (lastItem >= totalItemCount-3) )
                 {
-                    if(count > pageIndex) {
-                        isLoading = true;
-                        pageIndex++;
-                        System.out.println("index   " + pageIndex);
-                        Bundle b = new Bundle();
-                        b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST, String.valueOf(pageIndex), String.valueOf(pageSize)));
-                        b.putString(AppsConstant.METHOD, AppsConstant.GET);
-                        getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST, b, PromotersFragment.this).forceLoad();
-                    }
+                    isLoading = true;
+                    ((MainActivity)getActivity()).isLoading = true;
+                    pageIndex++;
+                    System.out.println("index   " + pageIndex);
+                    Bundle b = new Bundle();
+                    b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST, String.valueOf(pageIndex), String.valueOf(pageSize)));
+                    b.putString(AppsConstant.METHOD, AppsConstant.GET);
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST, b, PromotersFragment.this).forceLoad();
                 }
         }
     }

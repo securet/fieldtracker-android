@@ -40,7 +40,6 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
     private int pageIndex = -1;
     private ImageView ivLoader;
     private View footerView;
-    public static int flag = 0;
     private boolean isLoading = false;
     private Preferences preferences;
 
@@ -48,7 +47,6 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         pageIndex = 0;
-        flag = 0;
         Bundle bundle = new Bundle();
         System.out.println(pageIndex);
         bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"anand@securet.in","0","10"));
@@ -95,7 +93,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	}
 	@Override
 	public Loader<Object> onCreateLoader(int id, Bundle args) {
-        flag = 0;
+        ((MainActivity)getActivity()).isLoading = true;
         isLoading = true;
         if (pageIndex == 0 ) {
             ((MainActivity) getActivity()).showHideProgressForLoder(false);
@@ -111,7 +109,6 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	}
 	@Override
 	public void onLoadFinished(Loader<Object> loader, Object data) {
-        flag = 1;
         if(pageIndex==0 ){
             ((MainActivity)getActivity()).showHideProgressForLoder(true);
         }else{
@@ -132,6 +129,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 				list.addAll((ArrayList<HistoryNew>) data);
 			}
             isLoading = false;
+        ((MainActivity)getActivity()).isLoading = false;
 			adapter.Refresh(list);
 
 		    getActivity().getLoaderManager().destroyLoader(loader.getId());
@@ -172,9 +170,8 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 //					increase Page Index;
 //					Call ApI
 //				}
-            if(totalItemCount>0 &&!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3)) {
-                if(count > pageIndex) {
-                flag = 0;
+            if(count > totalItemCount && totalItemCount>0 &&!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3)) {
+                ((MainActivity)getActivity()).isLoading = true;
                 isLoading = true;
                 pageIndex++;
                 System.out.println(pageIndex + "   onScroll");
@@ -182,7 +179,6 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
                 bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST, preferences.getString(Preferences.USERNAME, ""), pageIndex + "", "10"));
                 bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
                 getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST, bundle, EventsFragment.this);
-            }
         }
         /*if (totalItemCount>0 &&!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3) && !isLast) {
             flag = 0;
