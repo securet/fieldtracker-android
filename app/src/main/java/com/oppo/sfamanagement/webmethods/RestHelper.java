@@ -14,6 +14,7 @@ import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.MultipartUtility;
+import com.oppo.sfamanagement.database.MyApplication;
 import com.oppo.sfamanagement.database.Preferences;
 
 import org.json.JSONObject;
@@ -23,6 +24,7 @@ import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -352,8 +354,11 @@ public class RestHelper
             multipart= new MultipartUtility(strUrl, "UTF-8",preferences);
             multipart.addFormField("purpose",strFilePurpse);
                 /*This is to add file content*/
-            multipart.addFilePart("snapshotFile",new File(strFile));
-
+            try {
+                multipart.addFilePart("snapshotFile", new File(strFile));
+            } catch (FileNotFoundException e) {
+                multipart.addFilePart("snapshotFile", new File("/storage/emulated/0/Android/data/com.oppo.sfamanagement/files/DCIM/pic.jpg"));
+            }
             for (String line : multipart.finish()) {
                 response += line;
             }

@@ -89,7 +89,7 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
                     bundle.putString(AppsConstant.METHOD, AppsConstant.POST);
-                    bundle.putString(AppsConstant.PARAMS,ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,leaveReasonId,fromDate,thruDate,"ORG_OPPO"));
+                    bundle.putString(AppsConstant.PARAMS,ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,leaveReasonId,fromDate,thruDate,AppsConstant.ORGANIZATIONID));
                     getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,LeaveRequestFragment.this).forceLoad();
                 }
             }

@@ -13,6 +13,7 @@ public class Preferences
 {
     public static String LEAVE_COUNT = "LeaveCount";
     public static String PROMOTER_COUNT = "PromoterCount";
+    public static String LATITUDE= "Latitude";
     private SharedPreferences preferences;
     private SharedPreferences.Editor edit;
     public static String USER_PHOTO = "userPhoto";
@@ -25,7 +26,7 @@ public class Preferences
 //    public static String SITEID = "SiteId";
     public static String HISTORY_COUNT = "HistoryCount";
     public static String SITENAME = "SiteName";
-    public static String LATITUDE = "Latitude";
+
     public static String LONGITUDE = "Longitude";
     public static String SITE_ADDRESS = "SiteAddress";
     public static String SITE_ENTITY = "SiteEntity";

@@ -79,7 +79,7 @@ public class HistoryListParser {
                            // history.setTimeIn(DateFormat.format("hh:mm", mCalendar).toString());
 
                             // history.setStartDate(childOject.getString("estimatedStartDate"));
-                            if (childOject.has("estimatedCompletionDate")) {
+                        //    if (childOject.has("estimatedCompletionDate")) {
                                /* String lastUpdatedTimestamp = childOject.getString("estimatedCompletionDate");
                                 Date timeOut = null;
                                 try {
@@ -119,7 +119,7 @@ public class HistoryListParser {
                                                     e.printStackTrace();
                                                 }
                                                 c1.setTime(fDate);
-                                                historyChild.setFromDate(DateFormat.format("hh:mm", c1).toString());
+                                                historyChild.setFromDate(DateFormat.format("hh:mm aa", c1).toString());
                                                 if (i == 0) {
                                                     fromDateMill = fDate.getTime();
                                                 }
@@ -127,20 +127,34 @@ public class HistoryListParser {
                                                     c2.setTime(tDate);
                                                     if (i == arrayParent.length()-1) {
                                                         thruDateMill = tDate.getTime();
+                                                        historyChild.setThruDate(DateFormat.format("hh:mm aa", c2).toString());
+                                                        if(thruDateMill>0 && fromDateMill>0) {
+                                                            Calendar hours = Calendar.getInstance();
+
+                                                            hours.setTime(new Date(thruDateMill-fromDateMill));
+                                                            history.setHours(DateFormat.format("h'h' m'm'",hours).toString());
+                                                            System.out.println(DateFormat.format("h'h' m'm'",hours).toString());
+                                                        } else {
+                                                            history.setHours("- : -");
+                                                        }
+                                                        historyChild.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm", c1).toString(), DateFormat.format("hh:mm", c2).toString()));
+                                                    } else {
+                                                        historyChild.setThruDate(DateFormat.format("hh:mm aa", c2).toString());
+                                                        historyChild.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm", c1).toString(), DateFormat.format("hh:mm", c2).toString()));
                                                     }
 
-                                                    historyChild.setThruDate(DateFormat.format("hh:mm", c2).toString());
-                                                    historyChild.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm", c1).toString(), DateFormat.format("hh:mm", c2).toString()));
-                                                } else {
+                                                    } else {
                                                     historyChild.setThruDate("");
-                                                    history.setHours("-:-");
+
                                                     historyChild.setTimeSpace(0);
                                                 }
 
 
 
                                                 childArrayList.add(historyChild);
+
                                                 /*if ()
+
                                                 long millis = tDate.getTime() - fDate.getTime();
                                                 history.setHours(String.format("%02dh %02dm", TimeUnit.MILLISECONDS.toHours(millis),
                                                         TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))));*/
@@ -151,10 +165,19 @@ public class HistoryListParser {
                                         }
 
                                     }
+                                    if(thruDateMill>0 && fromDateMill>0) {
+                                        Calendar hours = Calendar.getInstance();
+
+                                        hours.setTime(new Date(thruDateMill-fromDateMill));
+                                        history.setHours(DateFormat.format("h'h' m'm'",hours).toString());
+                                        System.out.println(DateFormat.format("h'h' m'm'",hours).toString());
+                                    } else {
+                                        history.setHours("- : -");
+                                    }
 
                                     parentArraylist.add(history);
                                 }
-                            }
+
                         }
 
 

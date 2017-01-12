@@ -25,6 +25,7 @@ public class AppsConstant {
     public static String REASON ="REASON";
     public static String PARAMS ="PARAMS";
     public static String GET ="GET";
+    public static String ORGANIZATIONID ="ORG_OPPO";
     public static String PUT = "PUT";
     public static String POST ="POST";
     public static final int IMAGE_PHOTO = 2;

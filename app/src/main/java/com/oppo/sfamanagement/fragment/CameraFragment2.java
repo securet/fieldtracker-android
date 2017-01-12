@@ -30,6 +30,7 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
@@ -420,12 +421,14 @@ public class CameraFragment2 extends Fragment implements View.OnClickListener, A
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.ibPhotoCapture2).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.aftvLivePreview);
+
+
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+        mFile = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DCIM), "pic.jpg");
         cameraForB = getActivity().getIntent().getIntExtra("camera_key", AppsConstant.FRONT_CAMREA_OPEN);
         purpose = getActivity().getIntent().getStringExtra("purpose");
     }
@@ -436,9 +439,13 @@ public class CameraFragment2 extends Fragment implements View.OnClickListener, A
         FragmentManager fm = getFragmentManager();
         Fragment f = new RetakeFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("image_taken",mFile.getAbsolutePath());
-        bundle.putString("image_purpose",purpose);
-        f.setArguments(bundle);
+        if(mFile != null) {
+            bundle.putString("image_taken", mFile.getAbsolutePath());
+            bundle.putString("image_purpose", purpose);
+            f.setArguments(bundle);
+        } else {
+            Toast.makeText(getContext(),"Image not saved",Toast.LENGTH_SHORT).show();
+        }
         fm.beginTransaction().replace(R.id.flCapture,f).addToBackStack(null).commit();
         fm.executePendingTransactions();
     }
@@ -855,6 +862,7 @@ public class CameraFragment2 extends Fragment implements View.OnClickListener, A
                     bundle.putString("image_purpose",purpose);
                     f.setArguments(bundle);
                     fm.beginTransaction().replace(R.id.flCapture,f).addToBackStack(null).commit();
+                    //unlockFocus();
                 }
             };
 

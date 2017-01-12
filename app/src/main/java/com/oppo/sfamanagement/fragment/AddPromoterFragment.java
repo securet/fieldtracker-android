@@ -1,14 +1,17 @@
 package com.oppo.sfamanagement.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +40,7 @@ import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 import static com.oppo.sfamanagement.database.AppsConstant.BACK_CAMREA_OPEN;
+import static com.oppo.sfamanagement.database.AppsConstant.FRONT_CAMREA_OPEN;
 
 /**
  * Created by allsmartlt218 on 02-12-2016.
@@ -118,7 +122,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 Bundle b = new Bundle();
                 b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.ADD_PROMOTER));
                 b.putString(AppsConstant.METHOD, AppsConstant.POST);
-                b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddPromoter("RqtAddPromoter","Yeh hai description",fName,lName,sPh,email,sAdd,
+                b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddPromoter("RqtAddPromoter",AppsConstant.ORGANIZATIONID,"Yeh hai description",fName,lName,sPh,email,sAdd,
                         String.valueOf(storeId),"ReqSubmitted","RqtAddPromoter",image[0],image[1],image[2]));
                 getActivity().getLoaderManager().initLoader(LoaderConstant.ADD_PROMOTER,b,AddPromoterFragment.this).forceLoad();
             }
@@ -178,34 +182,82 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
             }
         }
     }
+    private boolean checkCameraPermission() {
+        // Ask for permission if it wasn't granted yet
+        return (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED );
+    }
+    private void OpenCamera(int camera,int resultCode, String purpose){
+        Intent i = new Intent(getActivity(), CameraActivity.class);
+        i.putExtra("camera_key",camera);
+        i.putExtra("purpose",purpose);
+        startActivityForResult(i,resultCode);
+        //startActivityForResult(i,REQ_CAMERA);
+    }
+    private boolean checkStoragePermission() {
+        // Ask for permission if it wasn't granted yet
+        return (ContextCompat.checkSelfPermission(getActivity(),Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED );
+    }
+    private void askStoragePermission() {
+        this.requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },REQ_Storage_PERMISSION);
+    }
+    private void askCameraPermission() {
+        this.requestPermissions(new String[] { Manifest.permission.CAMERA },REQ_CAMERA_PERMISSION);
+    }
+    private final static int REQ_CAMERA =1003;
+    private final static int REQ_PERMISSION =1001;
+    private final static int REQ_CAMERA_PERMISSION =1002;
+    private final static int REQ_Storage_PERMISSION =1000;
 
+    // Asks for permission
+    private void askPermission() {
+        this.requestPermissions(new String[] { Manifest.permission.ACCESS_FINE_LOCATION },REQ_PERMISSION);
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivPhoto:
+                if(checkCameraPermission()){
+                    if(checkStoragePermission())
+                        OpenCamera(AppsConstant.FRONT_CAMREA_OPEN,AppsConstant.IMAGE_PHOTO,"ForPhoto");
+                    else
+                        askStoragePermission();
+                }else{
+                    askCameraPermission();
+                }
 
-              /*  Bundle bundle = new Bundle();
-                bundle.putInt("camera_key",FRONT_CAMREA_OPEN);
-                bundle.putString("purpose","For Photo"); */
-                Intent i = new Intent(getActivity(), CameraActivity.class);
-                i.putExtra("camera_key",AppsConstant.FRONT_CAMREA_OPEN);
-                i.putExtra("purpose","ForPhoto");
-                startActivityForResult(i,AppsConstant.IMAGE_PHOTO);
-                //((Activity) getActivity()).overridePendingTransition(0,0);
-   //             Fragment fragment = new CameraFragment();
+
+
 
                 break;
             case R.id.ivAadhar:
-                Intent i2 = new Intent(getActivity(),CameraActivity.class);
+                if(checkCameraPermission()){
+                    if(checkStoragePermission())
+                        OpenCamera(BACK_CAMREA_OPEN,AppsConstant.IMAGE_AADHAR,"ForAadhar");
+                    else
+                        askStoragePermission();
+                }else{
+                    askCameraPermission();
+                }
+                /*Intent i2 = new Intent(getActivity(),CameraActivity.class);
                 i2.putExtra("camera_key",BACK_CAMREA_OPEN);
                 i2.putExtra("purpose","ForAadhar");
-                startActivityForResult(i2,AppsConstant.IMAGE_AADHAR);
+                startActivityForResult(i2,AppsConstant.IMAGE_AADHAR);*/
                 break;
             case R.id.ivAddressProof:
-                Intent i3 = new Intent(getActivity(),CameraActivity.class);
+                if(checkCameraPermission()){
+                    if(checkStoragePermission())
+                        OpenCamera(BACK_CAMREA_OPEN,AppsConstant.IMAGE_ADDRESS_PROOF,"ForAddressProof");
+                    else
+                        askStoragePermission();
+                }else{
+                    askCameraPermission();
+                }
+                /*Intent i3 = new Intent(getActivity(),CameraActivity.class);
                 i3.putExtra("camera_key",BACK_CAMREA_OPEN);
                 i3.putExtra("purpose","ForAddressProof");
-                startActivityForResult(i3,AppsConstant.IMAGE_ADDRESS_PROOF);
+                startActivityForResult(i3,AppsConstant.IMAGE_ADDRESS_PROOF);*/
                 break;
         }
     }
