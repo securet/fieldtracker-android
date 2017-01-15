@@ -167,21 +167,11 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
         Bundle bundle = new Bundle();
         bundle.putParcelable("promoter", p);
         FragmentManager fm = getFragmentManager();
-        /*if (!p.getStatusId().equals(null) &&
-                !preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExecutiveOnPremise") &&
-                !preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExectiveOffPremise") &&
-                !p.getStatusId().equalsIgnoreCase("ReqCompleted")) {
-*/
-            Fragment fragment = new EditPromoterFragment();
-            fragment.setArguments(bundle);
-            fm.beginTransaction().replace(R.id.flMiddle, fragment).addToBackStack(null).commit();
-            fm.executePendingTransactions();
-        /*} else {
-            Fragment fragment = new FieldExecutivePromoterFragment();
-            fragment.setArguments(bundle);
-            fm.beginTransaction().replace(R.id.flMiddle, fragment).addToBackStack(null).commit();
-            fm.executePendingTransactions();
-        }*/
+        Fragment fragment = new EditPromoterFragment();
+        fragment.setArguments(bundle);
+        fm.beginTransaction().replace(R.id.flMiddle, fragment).addToBackStack(null).commit();
+        fm.executePendingTransactions();
+
     }
 
 
@@ -195,7 +185,21 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
 
-        switch(view.getId())
+        int lastItem = firstVisibleItem + visibleItemCount;
+        int count = preferences.getInt(Preferences.PROMOTER_COUNT,0);
+        if(count> totalItemCount && totalItemCount>0 && !isLoading && (firstVisibleItem + visibleItemCount >= totalItemCount - 3) )
+        {
+            ((MainActivity)getActivity()).isLoading = true;
+            isLoading = true;
+            pageIndex++;
+            System.out.println("index   " + pageIndex);
+            Bundle b = new Bundle();
+            b.putString(AppsConstant.URL, UrlBuilder.getPromoterList(Services.PROMOTER_LIST,pageIndex+"", pageSize+""));
+            b.putString(AppsConstant.METHOD, AppsConstant.GET);
+            getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST, b, PromotersFragment.this).forceLoad();
+        }
+
+        /*switch(view.getId())
         {
             case R.id.lvPromotersList:
 
@@ -203,8 +207,8 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
                 int count = preferences.getInt(Preferences.PROMOTER_COUNT,0);
                 if(count> totalItemCount && totalItemCount>0 && !isLoading && (lastItem >= totalItemCount-3) )
                 {
-                    isLoading = true;
                     ((MainActivity)getActivity()).isLoading = true;
+                    isLoading = true;
                     pageIndex++;
                     System.out.println("index   " + pageIndex);
                     Bundle b = new Bundle();
@@ -212,6 +216,6 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
                     b.putString(AppsConstant.METHOD, AppsConstant.GET);
                     getActivity().getLoaderManager().initLoader(LoaderConstant.PROMOTER_LIST, b, PromotersFragment.this).forceLoad();
                 }
-        }
+        }*/
     }
 }

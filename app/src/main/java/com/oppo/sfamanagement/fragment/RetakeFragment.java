@@ -82,11 +82,12 @@ public class RetakeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String sImagePath = "";
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    //sImagePath = getImageUri(getContext(),bmp);
+                /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    sImagePath = getImageUri(getContext(),bmp).getPath();
                 }else {
                     sImagePath = persistImage(bmp, imagePurpose);
-                }
+                }*/
+                sImagePath = persistImage(bmp,imagePurpose);
                 Intent i = new Intent();
                 i.putExtra("response", sImagePath);
                 i.putExtra("image_purpose", imagePurpose);
@@ -120,13 +121,12 @@ public class RetakeFragment extends Fragment {
         return bmp;
     }
     private String persistImage(Bitmap bitmap, String name) {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), "Oppo");
-        File imageFile = new File(mediaStorageDir, name + ".jpg");
+        File mediaStorageDir = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DCIM),name + ".jpg");
+     //   File imageFile = new File(mediaStorageDir, name + ".jpg");
 
         OutputStream os = null;
         try {
-            os = new FileOutputStream(imageFile);
+            os = new FileOutputStream(mediaStorageDir);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 60, os);
             os.flush();
             os.close();
@@ -135,7 +135,7 @@ public class RetakeFragment extends Fragment {
             Crashlytics.log(1,getClass().getName(),"Error in Writing image file to local device");
             Crashlytics.logException(e);
         } finally {
-            return imageFile.getAbsolutePath();
+            return mediaStorageDir.getAbsolutePath();
         }
     }
     public Uri getImageUri(Context inContext, Bitmap inImage) {

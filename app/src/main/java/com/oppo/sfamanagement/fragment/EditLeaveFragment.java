@@ -16,11 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.CustomBuilder;
+import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.model.Leave;
 import com.oppo.sfamanagement.model.LeaveReason;
 import com.oppo.sfamanagement.model.LeaveReasonApply;
@@ -35,6 +38,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by allsmartlt218 on 09-01-2017.
@@ -53,6 +57,7 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
     private ArrayList<LeaveReason> leaveReasonList;
     private boolean isFrom = false, isTo = false;
     private int fromyear = 0,frommonth = 0,fromDay = 0;
+    private int[] month31 = {1,3,5,7,8,10,12};
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -74,6 +79,8 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
             etEnd.setText(leave.getToDate());
             tvDays.setText(leave.getDays().replaceAll("[^0-9]", ""));
             etReason.setText(leave.getReason());
+            etType.setText(leave.getEnumType());
+            tvReasonType.setText(leave.getReasonType());
         }
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +97,8 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
                     bundle.putString(AppsConstant.METHOD, AppsConstant.PUT);
                     bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,leaveReasonId,fromDate,thruDate,leave.getPartyRelationShipId()));
                     getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,EditLeaveFragment.this).forceLoad();
+                } else {
+                    Toast.makeText(getContext(),"Please select Leave Type and Reason Type",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -243,10 +252,21 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
             case LoaderConstant.APPLY_LEAVE:
                 if(data != null && data instanceof String) {
                     if (data!=null && data.equals("success")) {
-
+                        Toast.makeText(getContext(),
+                                "Leave Applied Successfully",
+                                Toast.LENGTH_SHORT).show();
+                        Fragment fragment = new LeaveStatusFragment();
+                        FragmentManager fm = getFragmentManager();
+                        fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
+                    }else {
+                        Toast.makeText(getContext(),
+                                "Leave Apply Failed",
+                                Toast.LENGTH_SHORT).show();
                     }
                 } else {
-
+                    Toast.makeText(getContext(),
+                            "Error in Parser",
+                            Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -259,22 +279,74 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
 
     }
 
-    public String getDays(String fromDate,String thruDate) {
-        if(fromDate.length() == thruDate.length() && !TextUtils.isEmpty(fromDate) && !TextUtils.isEmpty(thruDate) && fromDate.length() == 10) {
-            int thru = Integer.parseInt(thruDate.substring(8,10));
-            int from = Integer.parseInt(fromDate.substring(8,10));
-            if (from == thru) {
-                return  "1";
-            } else if((thru-from) < 0) {
-                return "-";
-            } else {
-                return ((thru-from) + 1) + "";
-            }
-
+    private boolean isLeapYear(int year) {
+        GregorianCalendar calender = new GregorianCalendar();
+        if(calender.isLeapYear(year)) {
+            return true;
         } else {
+            return false;
+        }
+    }
+
+    private boolean isMonth31(int fromMonth) {
+        for(int x : month31) {
+            if(x == fromMonth) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getDays(String fromDate, String thruDate) {
+        if (fromDate.length() == thruDate.length() && !TextUtils.isEmpty(fromDate) && !TextUtils.isEmpty(thruDate) && fromDate.length() == 10) {
+            int thru = 0, from = 0, year = 0;
+            try {
+                thru = Integer.parseInt(thruDate.substring(8, 10));
+                from = Integer.parseInt(fromDate.substring(8, 10));
+                year = Integer.parseInt(fromDate.substring(0, 4));
+            } catch (Exception e) {
+                Logger.e("Log", e);
+                Crashlytics.log(1, getClass().getName(), "Error in Leave Request");
+                Crashlytics.logException(e);
+                Toast.makeText(getContext(), "Select Date Properly", Toast.LENGTH_SHORT).show();
+            }
+            if (thru != 0 && from != 0 && year != 0) {
+                if (from == thru) {
+                    return "1";
+                } else if ((thru - from) < 0) {
+                    int thruMonth = Integer.parseInt(thruDate.substring(5, 7));
+                    int fromMonth = Integer.parseInt(fromDate.substring(5, 7));
+                    if (thruMonth > fromMonth) {
+                        if (isMonth31(fromMonth)) {
+                            return (thru + (31 - from) + 1) + "";
+                        } else if (!isMonth31(fromMonth)) {
+                            return (thru + (30 - from) + 1) + "";
+                        } else {
+                            if (isLeapYear(year)) {
+                                return (thru + (29 - from) + 1) + "";
+                            } else {
+                                return (thru + (28 - from) + 1) + "";
+                            }
+                        }
+                    } else {
+                        return "-";
+                    }
+
+                } else {
+                    return ((thru - from) + 1) + "";
+                }
+
+            } else {
+                return "-";
+            }
+        } else {
+            Toast.makeText(getContext(), "Select Date Properly", Toast.LENGTH_SHORT).show();
             return "-";
         }
     }
+
+
+
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
@@ -292,7 +364,8 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
             etEnd.setText(selDate);
         }
         if(isTo) {
-            tvDays.setText(getDays(etStart.getText().toString(),etEnd.getText().toString()));
+            String days = getDays(etStart.getText().toString(), etEnd.getText().toString());
+            tvDays.setText(days);
         }
     }
 }

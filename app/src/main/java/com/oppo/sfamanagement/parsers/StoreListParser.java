@@ -36,10 +36,13 @@ public class StoreListParser {
                 }
                 for (int i = 0 ; i < array.length() ; i++) {
                     JSONObject obj =  array.getJSONObject(i);
-                    store = new Store(obj.getString("storeName"), obj.getInt("productStoreId"));
+                    store = new Store();
+                    store.setStoreName(obj.getString("storeName"));
+                    store.setStoreId(obj.getInt("productStoreId"));
                     store.setAddress(obj.getString("address"));
                     store.setLattitude(obj.getString("latitude"));
                     store.setLongitude(obj.getString("longitude"));
+                    store.setSiteRadius(obj.getInt("proximityRadius")+"");
                     list.add(store);
                 }
             }

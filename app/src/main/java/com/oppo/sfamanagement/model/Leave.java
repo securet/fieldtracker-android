@@ -13,6 +13,8 @@ public class Leave implements Parcelable {
     private String toDate;
     private String status;
     private String reason;
+    private String enumType;
+    private String reasonType;
     private String partyRelationShipId;
 
     public Leave(){
@@ -25,6 +27,8 @@ public class Leave implements Parcelable {
         toDate = in.readString();
         status = in.readString();
         reason = in.readString();
+        enumType = in.readString();
+        reasonType = in.readString();
         partyRelationShipId = in.readString();
     }
 
@@ -45,11 +49,7 @@ public class Leave implements Parcelable {
     }
 
     public void setDays(String days) {
-        if (Integer.parseInt(days) == 1) {
-            this.days = days + " Day";
-        } else {
-        this.days = days + " Days";
-        }
+        this.days = days;
     }
 
     public String getFromDate() {
@@ -84,6 +84,22 @@ public class Leave implements Parcelable {
         this.reason = reason;
     }
 
+    public String getEnumType() {
+        return enumType;
+    }
+
+    public void setEnumType(String enumType) {
+        this.enumType = enumType;
+    }
+
+    public String getReasonType() {
+        return reasonType;
+    }
+
+    public void setReasonType(String reasonType) {
+        this.reasonType = reasonType;
+    }
+
     public String getPartyRelationShipId() {
         return partyRelationShipId;
     }
@@ -104,6 +120,8 @@ public class Leave implements Parcelable {
         dest.writeString(toDate);
         dest.writeString(status);
         dest.writeString(reason);
+        dest.writeString(enumType);
+        dest.writeString(reasonType);
         dest.writeString(partyRelationShipId);
     }
 }

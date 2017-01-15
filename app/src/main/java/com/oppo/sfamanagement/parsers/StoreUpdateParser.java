@@ -21,9 +21,11 @@ public class StoreUpdateParser {
     public String Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
+            result = "success";
 
         } catch (JSONException e) {
             Logger.e("Log",e);
+            result = "failed";
             Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
             Crashlytics.logException(e);
         } finally {

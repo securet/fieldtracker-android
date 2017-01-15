@@ -17,12 +17,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.LeaveFragment;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.CustomBuilder;
+import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.model.LeaveReason;
 import com.oppo.sfamanagement.model.LeaveReasonApply;
@@ -38,6 +41,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * Created by allsmartlt218 on 02-12-2016.
@@ -56,6 +60,7 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
     private ArrayList<LeaveReason> leaveReasonList;
     private boolean isFrom = false, isTo = false;
     private int fromyear = 0,frommonth = 0,fromDay = 0;
+    private int[] month31 = {1,3,5,7,8,10,12};
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,12 +90,14 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
                 String leaveTypeEnumId = etType.getText().toString();
 
 
-                if (!TextUtils.isEmpty(enumReasonId) && !TextUtils.isEmpty(enumTypeId) && !TextUtils.isEmpty(leaveReasonId)) {
+                if (!TextUtils.isEmpty(enumReasonId) && !TextUtils.isEmpty(enumTypeId)&& !TextUtils.isEmpty(etReason.getText().toString()) && !TextUtils.isEmpty(leaveReasonId)) {
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
                     bundle.putString(AppsConstant.METHOD, AppsConstant.POST);
-                    bundle.putString(AppsConstant.PARAMS,ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,leaveReasonId,fromDate,thruDate,AppsConstant.ORGANIZATIONID));
+                    bundle.putString(AppsConstant.PARAMS,ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,etReason.getText().toString(),fromDate,thruDate,AppsConstant.ORGANIZATIONID));
                     getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,LeaveRequestFragment.this).forceLoad();
+                } else {
+                    Toast.makeText(getContext(),"Please select Leave Type and Reason Type",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -184,9 +191,9 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
                     isFrom=false;
                     isTo = true;
                     Calendar now = Calendar.getInstance();
-                    /*now.set(Calendar.YEAR,fromyear);
+                    now.set(Calendar.YEAR,fromyear);
                     now.set(Calendar.MONTH,frommonth);
-                    now.set(Calendar.DAY_OF_MONTH,fromDay);*/
+                    now.set(Calendar.DAY_OF_MONTH,fromDay);
                     DatePickerDialog dpd = DatePickerDialog.newInstance(
                             this,
                             now.get(Calendar.YEAR),
@@ -247,10 +254,21 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
             case LoaderConstant.APPLY_LEAVE:
                 if(data != null && data instanceof String) {
                     if (data!=null && data.equals("success")) {
-
+                        Toast.makeText(getContext(),
+                                "Leave Applied Successfully",
+                                Toast.LENGTH_SHORT).show();
+                        Fragment fragment = new LeaveStatusFragment();
+                        FragmentManager fm = getFragmentManager();
+                        fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
+                    } else {
+                        Toast.makeText(getContext(),
+                                "Leave Apply Failed",
+                                Toast.LENGTH_SHORT).show();
                     }
                 } else {
-
+                    Toast.makeText(getContext(),
+                            "Error in parser",
+                            Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -264,23 +282,71 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
 
     }
 
-    public String getDays(String fromDate,String thruDate) {
-        if(fromDate.length() == thruDate.length() && !TextUtils.isEmpty(fromDate) && !TextUtils.isEmpty(thruDate) && fromDate.length() == 10) {
-            int thru = Integer.parseInt(thruDate.substring(8,10));
-            int from = Integer.parseInt(fromDate.substring(8,10));
-            if (from == thru) {
-                return  "1";
-            } else if((thru-from) < 0) {
-                return "-";
-            } else {
-                return ((thru-from) + 1) + "";
+    public String getDays(String fromDate, String thruDate) {
+        if (fromDate.length() == thruDate.length() && !TextUtils.isEmpty(fromDate) && !TextUtils.isEmpty(thruDate) && fromDate.length() == 10) {
+            int thru = 0, from = 0, year = 0;
+            try {
+                thru = Integer.parseInt(thruDate.substring(8, 10));
+                from = Integer.parseInt(fromDate.substring(8, 10));
+                year = Integer.parseInt(fromDate.substring(0, 4));
+            } catch (Exception e) {
+                Logger.e("Log", e);
+                Crashlytics.log(1, getClass().getName(), "Error in Leave Request");
+                Crashlytics.logException(e);
+                Toast.makeText(getContext(), "Select Date Properly", Toast.LENGTH_SHORT).show();
             }
+            if (thru != 0 && from != 0 && year != 0) {
+                if (from == thru) {
+                    return "1";
+                } else if ((thru - from) < 0) {
+                    int thruMonth = Integer.parseInt(thruDate.substring(5, 7));
+                    int fromMonth = Integer.parseInt(fromDate.substring(5, 7));
+                    if (thruMonth > fromMonth) {
+                        if (isMonth31(fromMonth)) {
+                            return (thru + (31 - from) + 1) + "";
+                        } else if (!isMonth31(fromMonth)) {
+                            return (thru + (30 - from) + 1) + "";
+                        } else {
+                            if (isLeapYear(year)) {
+                                return (thru + (29 - from) + 1) + "";
+                            } else {
+                                return (thru + (28 - from) + 1) + "";
+                            }
+                        }
+                    } else {
+                        return "-";
+                    }
 
+                } else {
+                    return ((thru - from) + 1) + "";
+                }
+
+            } else {
+                return "-";
+            }
         } else {
+            Toast.makeText(getContext(), "Select Date Properly", Toast.LENGTH_SHORT).show();
             return "-";
         }
     }
 
+    private boolean isLeapYear(int year) {
+        GregorianCalendar calender = new GregorianCalendar();
+        if(calender.isLeapYear(year)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isMonth31(int fromMonth) {
+        for(int x : month31) {
+            if(x == fromMonth) {
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
 
@@ -298,7 +364,8 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
             etEnd.setText(selDate);
         }
         if(isTo) {
-            tvDays.setText(getDays(etStart.getText().toString(),etEnd.getText().toString()));
+            String days = getDays(etStart.getText().toString(), etEnd.getText().toString());
+            tvDays.setText(days);
         }
     }
 }

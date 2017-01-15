@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -52,6 +53,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
     TextView latitude, longitude;
     String lat = "";
     String lon = "";
+    private boolean isClicked = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
         getCurrentLocation = (Button) view.findViewById(R.id.btGetLocation);
         btAdd = (Button) view.findViewById(R.id.btAdd);
         btAdd.setOnClickListener(this);
-        btAdd.setEnabled(false);
+       // btAdd.setEnabled(false);
         btCancel = (Button) view.findViewById(R.id.btCancel);
         latitude = (TextView) view.findViewById(R.id.latitude);
         longitude = (TextView) view.findViewById(R.id.longitude);
@@ -91,7 +93,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
                             if (s.length() == 0) {
-                                btAdd.setEnabled(false);
+                          //      btAdd.setEnabled(false);
                             } else {
                                 /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                                     btAdd.setBackground(getResources().getDrawable(R.drawable.editstore_edit_button));
@@ -140,6 +142,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
                 lon = String.valueOf(location.getLongitude());
                 latitude.setText(lat);
                 longitude.setText(lon);
+                isClicked = true;
                 Log.d("LAT",String.valueOf(location.getLatitude()));
                 break;
             case R.id.btAdd:
@@ -147,18 +150,27 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
                 String sA = storeAddress.getText().toString();
                 String sRadius = siteRadius.getText().toString();
 
-                if(!TextUtils.isEmpty(sN) && !TextUtils.isEmpty(sA) && !TextUtils.isEmpty(sRadius) ) {
-                    Bundle b = new Bundle();
-                    b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.ADD_STORE));
-                    b.putString(AppsConstant.METHOD,AppsConstant.POST);
-                    b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddStore(sN,sA,lat,lon, sRadius));
-                    Log.d("ADD", sN + "  " + sA + "  " + lat + "  " + lon);
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.ADD_STORE,b,AddStoreFragment.this).forceLoad();
-                } else {
-                    Toast.makeText(getContext(),"Fields cannot be empty",Toast.LENGTH_SHORT).show();
-                }
+                    if(!TextUtils.isEmpty(sN) && !TextUtils.isEmpty(sA) && !TextUtils.isEmpty(sRadius) ) {
+                        Bundle b = new Bundle();
+                        b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.ADD_STORE));
+                        b.putString(AppsConstant.METHOD,AppsConstant.POST);
+                        if(isClicked) {
+                            b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddStore(sN, sA, lat, lon, sRadius));
+                            getActivity().getLoaderManager().initLoader(LoaderConstant.ADD_STORE,b,AddStoreFragment.this).forceLoad();
+                        }else {
+                            Toast.makeText(getContext(),"Lat Long empty, Click get Location Button",Toast.LENGTH_SHORT).show();
+                        }
+                        Log.d("ADD", sN + "  " + sA + "  " + lat + "  " + lon);
+
+                    } else {
+                        Toast.makeText(getContext(),"Fields cannot be empty",Toast.LENGTH_SHORT).show();
+                    }
                 break;
             case R.id.btCancel:
+                Fragment fragment = new StoreListFragment();
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
+                fm.executePendingTransactions();
                 break;
         }
     }
@@ -184,8 +196,22 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
                     "Error in response. Please try again.",
                     Toast.LENGTH_SHORT).show();
         }
+        if(data.equals("success")) {
+            Toast.makeText(getContext(),
+                    "Store Added Successfully",
+                    Toast.LENGTH_SHORT).show();
+            Fragment fragment = new StoreListFragment();
+            FragmentManager fm = getFragmentManager();
+            fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
+            fm.executePendingTransactions();
+
+        } else {
+            Toast.makeText(getContext(),
+                    "Failed To Add",
+                    Toast.LENGTH_SHORT).show();
+        }
         if (isAdded()) {
-            getLoaderManager().destroyLoader(loader.getId());
+            getActivity().getLoaderManager().destroyLoader(loader.getId());
         }
     }
 

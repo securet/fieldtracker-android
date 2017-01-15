@@ -88,6 +88,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/lat"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content"
+                    />
+                <TextView
                     android:id="@+id/latitude"
                     android:layout_width="wrap_content"
                     android:textColor="@android:color/black"
@@ -100,6 +106,12 @@
                     android:layout_marginEnd="@dimen/margin_5"
                     android:layout_marginRight="@dimen/margin_5"
                     android:text="|"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="@string/lon"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content"
+                    />
                 <TextView
                     android:id="@+id/longitude"
                     android:textColor="@android:color/black"

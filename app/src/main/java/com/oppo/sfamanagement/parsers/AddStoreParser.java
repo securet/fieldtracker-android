@@ -19,7 +19,9 @@ public class AddStoreParser {
     public String Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
+            result = "success";
         } catch (JSONException e) {
+            result = "error";
             Logger.e("Log",e);
             Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
             Crashlytics.logException(e);

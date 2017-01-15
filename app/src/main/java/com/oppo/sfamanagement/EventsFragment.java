@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,15 +43,22 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
     private View footerView;
     private boolean isLoading = false;
     private Preferences preferences;
+    private String username="";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         pageIndex = 0;
+        preferences = new Preferences(getContext());
         Bundle bundle = new Bundle();
         System.out.println(pageIndex);
-        bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"anand@securet.in","0","10"));
-        bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
+
+        username = preferences.getString(Preferences.USERNAME,"");
+        if(!TextUtils.isEmpty(username)) {
+            bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,preferences.getString(Preferences.USERNAME,""),"0","10"));
+        }else {
+            bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"", "0", "10"));
+        }bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
         getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST,bundle,EventsFragment.this);
 	}
 
@@ -58,7 +66,7 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 	public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_events, container,false);
 		listView = (ListView) rootView.findViewById(R.id.expandableList);
-        preferences = new Preferences(getContext());
+
         footerView = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_view,null);
         ivLoader = (ImageView) footerView.findViewById(R.id.footer_1);
         footerView.setVisibility(View.INVISIBLE);
@@ -170,15 +178,15 @@ public class EventsFragment extends Fragment implements AdapterView.OnItemClickL
 //					increase Page Index;
 //					Call ApI
 //				}
-            if(count > totalItemCount && totalItemCount>0 &&!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3)) {
-                ((MainActivity)getActivity()).isLoading = true;
-                isLoading = true;
-                pageIndex++;
-                System.out.println(pageIndex + "   onScroll");
-                Bundle bundle = new Bundle();
-                bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST, preferences.getString(Preferences.USERNAME, ""), pageIndex + "", "10"));
-                bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
-                getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST, bundle, EventsFragment.this);
+        if (count > totalItemCount && totalItemCount > 0 && !isLoading && (firstVisibleItem + visibleItemCount >= totalItemCount - 3)) {
+            ((MainActivity) getActivity()).isLoading = true;
+            isLoading = true;
+            pageIndex++;
+            System.out.println(pageIndex + "   onScroll");
+            Bundle bundle = new Bundle();
+            bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST, preferences.getString(Preferences.USERNAME, ""), pageIndex + "", "10"));
+            bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
+            getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST, bundle, EventsFragment.this);
         }
         /*if (totalItemCount>0 &&!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3) && !isLast) {
             flag = 0;

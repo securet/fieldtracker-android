@@ -20,9 +20,11 @@ public class PromoterUpdateParser {
         result = "";
         try {
             JSONObject parentObject = new JSONObject(response);
+            result = "success";
 
         } catch (JSONException e) {
             Logger.e("Log",e);
+            result = "error";
             Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
             Crashlytics.logException(e);
         } finally {

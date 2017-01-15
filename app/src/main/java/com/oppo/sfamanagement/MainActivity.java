@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		}
 
 		Bundle b = new Bundle();
-		b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails(Services.STORE_DETAIL,preferences.getString(Preferences.PARTYID,"100051")));
+		b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails(Services.STORE_DETAIL,preferences.getString(Preferences.PARTYID,"")));
 		b.putString(AppsConstant.METHOD, AppsConstant.GET );
 		b.putString(AppsConstant.PASSWORD, "");
 		getLoaderManager().initLoader(LoaderConstant.USER_STORE_DETAIL,b,MainActivity.this).forceLoad();
@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	{
 		preferences.saveBoolean(Preferences.ISLOGIN, false); // value to store
 		preferences.commit();
+	//	preferences.clearPreferences();
 		finish();
 		startActivity(new Intent(MainActivity.this, LoginActivity.class));
 	}

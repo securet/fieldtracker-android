@@ -43,11 +43,17 @@ public class UserDetailParser {
                     preferences.saveString(Preferences.USERID, obj.getString("userId"));
                     if(obj.has("userPhotoPath")) {
                         preferences.saveString(Preferences.USER_PHOTO, obj.getString("userPhotoPath"));
+                    } else {
+                        preferences.saveString(Preferences.USER_PHOTO,"");
                     }
                     preferences.saveString(Preferences.USEREMAIL, obj.getString("emailAddress"));
                     preferences.saveString(Preferences.ROLETYPEID, obj.getString("roleTypeId"));
  /*For testing*///  preferences.saveString(Preferences.ROLETYPEID, "SalesExecutive");
-                    preferences.saveString(Preferences.PARTYID, obj.getString("partyId"));
+                    if(obj.has("productStoreId")) {
+                        preferences.saveString(Preferences.PARTYID, obj.getString("productStoreId"));
+                    } else {
+                        preferences.saveString(Preferences.PARTYID, obj.getString(""));
+                    }
                     preferences.commit();;
                 }
             }else if(parentobject.has("errors")){

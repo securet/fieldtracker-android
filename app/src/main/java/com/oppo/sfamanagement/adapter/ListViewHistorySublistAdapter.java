@@ -143,6 +143,8 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
         timeF.setText(c.getFromDate());
         if(!TextUtils.isEmpty(c.getThruDate())){
             timeT.setText(c.getThruDate());
+        } else{
+            timeT.setText("        -        ");
         }
         return view;
     }

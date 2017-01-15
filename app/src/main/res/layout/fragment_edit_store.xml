@@ -22,7 +22,7 @@
                 android:textColor="@android:color/black"
                 android:text="@string/edit_store"/>
             <EditText
-                android:id="@+id/etStoreName"
+                android:id="@+id/etStName"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_20"
                 android:layout_marginRight="20dp"
+                android:inputType="number"
                 android:gravity="center_vertical"
                 android:hint="Site Radius"
                 android:padding="@dimen/margin_10"
@@ -53,7 +54,7 @@
                 android:layout_marginBottom="@dimen/margin_10"
                 />
             <EditText
-                android:id="@+id/etAddress"
+                android:id="@+id/etStAddress"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_100"
                 android:layout_marginEnd="@dimen/margin_20"
@@ -68,6 +69,7 @@
                 android:layout_marginBottom="@dimen/margin_25"
                 />
             <Button
+                android:id="@+id/getLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/margin_10"
@@ -86,6 +88,12 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
+                    android:text="Lat:"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
                     android:text=""
                     android:id="@+id/tvLattitude"
                     android:textColor="@android:color/black"
@@ -98,6 +106,12 @@
                     android:layout_marginEnd="@dimen/margin_5"
                     android:layout_marginRight="@dimen/margin_5"
                     android:text="|"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Lon:"
+                    android:textColor="@android:color/black"
+                    android:layout_height="wrap_content"
+                    />
                 <TextView
                     android:id="@+id/tvLongitude"
                     android:textColor="@android:color/black"

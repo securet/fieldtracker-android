@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -76,6 +77,15 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
         seAssignment = (TextView) view.findViewById(R.id.tvSEAssignment);
         Button Add = (Button) view.findViewById(R.id.btPAdd);
         Button Cancel = (Button) view.findViewById(R.id.btAddPCancel);
+        Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                Fragment f = new PromotersFragment();
+                fm.beginTransaction().replace(R.id.flMiddle,f).commit();
+                fm.executePendingTransactions();
+            }
+        });
         tvStoreAssignment.setTag(new Store());
         preferences = new Preferences(getActivity());
 
@@ -319,11 +329,24 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 }
                 break;
             case LoaderConstant.ADD_PROMOTER:
-                if (data != null ) {
+                if (data != null && data instanceof String) {
 
                 } else {
                     Toast.makeText(getContext(),
                             "Error in response. Please try again.",
+                            Toast.LENGTH_SHORT).show();
+                }
+                if(data.equals("success")) {
+                    Toast.makeText(getContext(),
+                            "Promoter Added Successfully",
+                            Toast.LENGTH_SHORT).show();
+                    Fragment fragment = new PromotersFragment();
+                    FragmentManager fm = getFragmentManager();
+                    fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
+                    fm.executePendingTransactions();
+                } else {
+                    Toast.makeText(getContext(),
+                            "Failed to upload",
                             Toast.LENGTH_SHORT).show();
                 }
         }

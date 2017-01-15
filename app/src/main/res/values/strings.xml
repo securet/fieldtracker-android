@@ -76,5 +76,8 @@
     <string name="confirm">Confirm</string>
     <string name="retake">Retake</string>
     <string name="description">Description</string>
+    <string name="edit_leave">Edit Leave</string>
+    <string name="lat">Lat:</string>
+    <string name="lon">Lon:</string>
 
 </resources>

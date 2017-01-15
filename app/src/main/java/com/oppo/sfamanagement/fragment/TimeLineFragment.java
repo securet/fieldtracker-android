@@ -92,7 +92,7 @@ public class TimeLineFragment extends Fragment implements LoaderManager.LoaderCa
             }
         }
         Bundle b = new Bundle();
-        b.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"anand@securet.in","0","1"));
+        b.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,preferences.getString(Preferences.USERNAME,""),"0","1"));
         b.putString(AppsConstant.METHOD, AppsConstant.GET);
         getActivity().getLoaderManager().initLoader(LoaderConstant.TIMELINE_LIST,b,TimeLineFragment.this).forceLoad();
     }

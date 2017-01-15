@@ -17,7 +17,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginLeft="@dimen/margin_20"
-                android:text="@string/leave_request"/>
+                android:text="@string/edit_leave"/>
             <RelativeLayout
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginLeft="@dimen/margin_30"
@@ -79,26 +79,22 @@
                     android:layout_toLeftOf="@id/ivDatePicker2"
                     android:background="@drawable/leave_request_edittext"
                     android:layout_height="wrap_content" />
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_marginTop="@dimen/margin_10"
-                android:layout_marginLeft="@dimen/margin_30"
-                android:layout_marginRight="@dimen/margin_30"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/tvDays"
                     android:layout_width="wrap_content"
-                    android:text="Day(s)"
-
-                    android:layout_marginTop="@dimen/margin_2"
+                    android:text="@string/day_s"
+                    android:layout_below="@id/tvEnd"
+                    android:layout_marginTop="@dimen/margin_15"
                     android:textSize="@dimen/text_20"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/tvLeaveDays"
                     android:text="0"
-                    android:textSize="@dimen/text_22"
-                    android:paddingRight="@dimen/days_padding"
+                    android:layout_below="@id/etEndDate"
+                    android:layout_alignLeft="@id/etEndDate"
+                    android:textSize="@dimen/text_23"
+                    android:layout_marginTop="@dimen/margin_10"
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

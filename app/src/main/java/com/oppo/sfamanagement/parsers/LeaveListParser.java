@@ -91,6 +91,28 @@ public class LeaveListParser {
                                         } else {
                                             leave.setStatus("Rejected");
                                         }
+                                        if(childObject.has("leaveTypeEnumId")) {
+                                            String enumType = childObject.getString("leaveTypeEnumId");
+                                            if(enumType.equals("EltLossOfPay")){
+                                                leave.setEnumType("Loss of Pay");
+                                            } else if (enumType.equals("EltHoliday")) {
+                                                leave.setEnumType("Holiday");
+                                            } else if(enumType.equals("EltEarned")) {
+                                                leave.setEnumType("Earned Leave");
+                                            } else if(enumType.equals("EltSpecialDayOff")) {
+                                                leave.setEnumType("Special Day Off");
+                                            } else {
+                                                leave.setEnumType("Casual Leave");
+                                            }
+                                        }
+                                        if(childObject.has("leaveReasonEnumId")) {
+                                            String reasonType = childObject.getString("leaveReasonEnumId");
+                                            if(reasonType.equals("ElrMedical")) {
+                                                leave.setReasonType("Medical");
+                                            } else {
+                                                leave.setReasonType("Personal");
+                                            }
+                                        }
                                         list.add(leave);
                                     }
                                 }

@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -88,6 +89,15 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
         final String adhar  = promoter.getAadharIdPath();
         final String address = promoter.getAddressIdPath();
 
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                Fragment f = new PromotersFragment();
+                fm.beginTransaction().replace(R.id.flMiddle,f).commit();
+                fm.executePendingTransactions();
+            }
+        });
         firstName.setText(promoter.getFirstName());
         lastName.setText(promoter.getLastName());
         phone.setText(promoter.getPhoneNum());
@@ -232,6 +242,21 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                 }
                 break;
             case LoaderConstant.UPDATE_PROMOTER:
+                if(data != null && data instanceof String) {
+                    if (data.equals("success")) {
+                        Toast.makeText(getContext(),
+                                "Promoter Edited Successfully",
+                                Toast.LENGTH_SHORT).show();
+                        Fragment fragment = new PromotersFragment();
+                        FragmentManager fm = getFragmentManager();
+                        fm.beginTransaction().replace(R.id.flMiddle, fragment).commit();
+                    } else {
+                        Toast.makeText(getContext(),
+                                "Failed to edit",
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                }
                 break;
         }
         getActivity().getLoaderManager().destroyLoader(loader.getId());

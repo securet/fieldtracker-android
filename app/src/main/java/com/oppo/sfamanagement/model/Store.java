@@ -13,13 +13,10 @@ public class Store implements Parcelable{
     private String lattitude;
     private String longitude;
     private String address;
+    private String siteRadius;
 
     public Store() {
 
-    }
-    public Store(String storeName, int storeId) {
-        this.storeId = storeId;
-        this.storeName = storeName;
     }
 
     protected Store(Parcel in) {
@@ -28,6 +25,7 @@ public class Store implements Parcelable{
         lattitude = in.readString();
         longitude = in.readString();
         address = in.readString();
+        siteRadius = in.readString();
     }
 
     public static final Creator<Store> CREATOR = new Creator<Store>() {
@@ -50,20 +48,12 @@ public class Store implements Parcelable{
         this.storeId = storeId;
     }
 
-    public String getAddress() {
-        return address;
+    public String getStoreName() {
+        return storeName;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     public String getLattitude() {
@@ -74,12 +64,28 @@ public class Store implements Parcelable{
         this.lattitude = lattitude;
     }
 
-    public String getStoreName() {
-        return storeName;
+    public String getLongitude() {
+        return longitude;
     }
 
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSiteRadius() {
+        return siteRadius;
+    }
+
+    public void setSiteRadius(String siteRadius) {
+        this.siteRadius = siteRadius;
     }
 
     @Override
@@ -94,5 +100,6 @@ public class Store implements Parcelable{
         dest.writeString(lattitude);
         dest.writeString(longitude);
         dest.writeString(address);
+        dest.writeString(siteRadius);
     }
 }
