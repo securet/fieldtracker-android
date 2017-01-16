@@ -47,12 +47,19 @@ public class TimeLineFragment extends Fragment implements LoaderManager.LoaderCa
     private Preferences preferences;
     private EventDataSource dataSource;
     private ListViewTimeLineAdapter adapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        preferences = new Preferences(getContext());
+        dataSource = new EventDataSource(getContext());
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.timeline_fragment,container,false);
-        preferences = new Preferences(getContext());
-        dataSource = new EventDataSource(getContext());
+
         return view;
     }
 

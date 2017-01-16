@@ -161,6 +161,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	public void Logout()
 	{
 		preferences.saveBoolean(Preferences.ISLOGIN, false); // value to store
+
+		preferences.remove(Preferences.SITE_ADDRESS);
+		preferences.remove(Preferences.LATITUDE);
+		preferences.remove(Preferences.SITE_ENTITY);
+		preferences.remove(Preferences.SITENAME);
+		preferences.remove(Preferences.PARTYID);
+
 		preferences.commit();
 	//	preferences.clearPreferences();
 		finish();

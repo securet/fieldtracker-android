@@ -164,9 +164,9 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                     "Failed to Upload",
                     Toast.LENGTH_SHORT).show();
         }
-        if (isAdded()) {
+
             getActivity().getLoaderManager().destroyLoader(loader.getId());
-        }
+
     }
 
     @Override

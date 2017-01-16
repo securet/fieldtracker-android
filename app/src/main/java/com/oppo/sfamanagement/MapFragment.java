@@ -219,7 +219,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		double lat2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LATITUDE,""));
 		double lon2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LONGITUDE,""));
 		//Double distance = distance(lat1, lon1, lat2, lon2);
-        int siteRadius = Integer.parseInt(preferences.getString(Preferences.SITE_RADIUS,"0"));
+        int siteRadius = Integer.parseInt(preferences.getString(Preferences.SITE_RADIUS,AppsConstant.DEFAULTRADIUS));
         Location.distanceBetween(lat1,lon1,lat2,lon2,result);
         float distance = result[0];
 		Boolean isInLocation = distance<=siteRadius;
@@ -328,9 +328,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		updateMarker(location.getLatitude(), location.getLongitude());
 	}
 	protected void registerGeofences() {
-		if (MainActivity.geofencesAlreadyRegistered) {
+		/*if (MainActivity.geofencesAlreadyRegistered) {
 			return;
-		}
+		}*/
 
 		Log.d(MainActivity.TAG, "Registering Geofences");
 

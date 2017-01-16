@@ -149,9 +149,7 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
                 adapter.refresh(list);
                 break;
         }
-        if (isAdded()) {
             getActivity().getLoaderManager().destroyLoader(loader.getId());
-        }
 
     }
 

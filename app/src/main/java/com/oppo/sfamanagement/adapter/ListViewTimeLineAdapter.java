@@ -149,6 +149,8 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
 //        timeT.setText(tl.getThruDate());
         if(!TextUtils.isEmpty(tl.getThruDate())){
             timeT.setText(tl.getThruDate());
+        } else {
+            timeT.setText("        -        ");
         }
         return view;
     }

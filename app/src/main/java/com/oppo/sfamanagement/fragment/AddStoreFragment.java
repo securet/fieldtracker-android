@@ -210,9 +210,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
                     "Failed To Add",
                     Toast.LENGTH_SHORT).show();
         }
-        if (isAdded()) {
             getActivity().getLoaderManager().destroyLoader(loader.getId());
-        }
     }
 
     @Override

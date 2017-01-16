@@ -65,10 +65,10 @@ public class TimeLineParser {
                                     }
                                     TimeLine tl = new TimeLine();
                                     mCalendar.setTime(timeF);
-                                    tl.setFromDate(DateFormat.format("hh:mm",mCalendar).toString());
+                                    tl.setFromDate(DateFormat.format("hh:mm aa",mCalendar).toString());
                                     if(timeT!=null) {
                                         mCalendar2.setTime(timeT);
-                                        tl.setThruDate(DateFormat.format("hh:mm",mCalendar2).toString());
+                                        tl.setThruDate(DateFormat.format("hh:mm aa",mCalendar2).toString());
                                         tl.setTimeSpace(DynamicElement.findMarginTop(tl.getFromDate(),tl.getThruDate()));
                                     }else{
                                         timeT = new Date();

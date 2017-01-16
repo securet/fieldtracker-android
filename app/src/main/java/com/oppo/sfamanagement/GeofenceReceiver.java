@@ -67,11 +67,13 @@ public class GeofenceReceiver extends IntentService {
 						strComments = "InLocation";
 						clockType = "clockIn";
 						preferences.saveBoolean(Preferences.INLOCATION, true);
-						break;
+                        Toast.makeText(getApplicationContext(),"Time In",Toast.LENGTH_SHORT).show();
+                        break;
 
 					case Geofence.GEOFENCE_TRANSITION_EXIT:
 						strComments = "OutLocation";
 						clockType = "clockOut";
+						Toast.makeText(getApplicationContext(),"Time out",Toast.LENGTH_SHORT).show();
 						preferences.saveBoolean(Preferences.INLOCATION, false);
 						break;
 				}
