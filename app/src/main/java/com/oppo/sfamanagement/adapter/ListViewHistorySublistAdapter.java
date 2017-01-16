@@ -74,7 +74,7 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
         LinearLayout layoutFrom = (LinearLayout) view.findViewById(R.id.llFromDate);
         LinearLayout layoutThru = (LinearLayout) view.findViewById(R.id.llThruDate);
         if(position == 0) {
-            if(list.size() == 1) {
+            /*if(list.size() == 1) {
                 Drawable blueBackground = null;
                 Drawable redBackground = null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -92,7 +92,7 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
                 }
                 tvLocationStatus1.setText("Time In");
                 tvLocationStatus2.setText("Time Out");
-            } else {
+            } else {*/
                 Drawable blueBackground = null;
                 Drawable redBackground = null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -110,7 +110,7 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
                 }
                 tvLocationStatus1.setText("Time In");
                 tvLocationStatus2.setText("Out of Location");
-            }
+ //           }
         }
         else if (position == list.size()-1) {
             Drawable blueBackground = null;

@@ -50,6 +50,7 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.oppo.sfamanagement.broadcasters.GeofenceBroadcaster;
 import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.CalenderUtils;
 import com.oppo.sfamanagement.database.EventDataSource;
@@ -328,9 +329,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		updateMarker(location.getLatitude(), location.getLongitude());
 	}
 	protected void registerGeofences() {
-		/*if (MainActivity.geofencesAlreadyRegistered) {
+		if (MainActivity.geofencesAlreadyRegistered) {
 			return;
-		}*/
+		}
 
 		Log.d(MainActivity.TAG, "Registering Geofences");
 
@@ -361,8 +362,10 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 			return mPendingIntent;
 		} else {
 
-			Intent intent = new Intent(getActivity(), GeofenceReceiver.class);
-			return PendingIntent.getService(getActivity(), 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+	//		Intent intent = new Intent(getActivity(), GeofenceReceiver.class);
+	//		return PendingIntent.getService(getActivity(), 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+			Intent intent = new Intent("com.oppo.sfamanagement.ACTION_GEOFENCE_RECEIVER");
+			return PendingIntent.getBroadcast(getActivity(), 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
 		}
 	}
