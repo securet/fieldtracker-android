@@ -22,6 +22,7 @@ public enum LoaderMethod
     TIMELINE_LIST,
     LEAVE_TYPES,
     APLLY_LEAVES,
-    UPDATE_LEAVES
+    UPDATE_LEAVES,
+    CHANGE_PASSWORD
 
 }

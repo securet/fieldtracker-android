@@ -8,6 +8,7 @@ import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.Preferences;
 import com.oppo.sfamanagement.parsers.AddPromoterParser;
 import com.oppo.sfamanagement.parsers.AddStoreParser;
+import com.oppo.sfamanagement.parsers.ChangePasswordParser;
 import com.oppo.sfamanagement.parsers.HistoryListParser;
 import com.oppo.sfamanagement.parsers.ImageUploadParser;
 import com.oppo.sfamanagement.parsers.LeaveApplyParser;
@@ -90,6 +91,8 @@ public class LoaderServices extends CustomAsyncTask
                 return new LeaveTypeParser(response).Parse();
             case APLLY_LEAVES:
                 return new LeaveApplyParser(response).Parse();
+            case CHANGE_PASSWORD:
+                return new ChangePasswordParser(response).Parse();
 
             default:
                 return  null;

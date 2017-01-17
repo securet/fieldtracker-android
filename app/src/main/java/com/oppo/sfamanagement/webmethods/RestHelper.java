@@ -104,17 +104,29 @@ public class RestHelper
                 os.close();
             }
             connection.connect();
+            if(connection.getResponseCode() == 200) {
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                StringBuilder buffer = new StringBuilder();
+                String line = "";
+                while ((line = reader.readLine())!=null)
+                {
+                    buffer.append(line);
+                }
+                response = buffer.toString();
+            } else{
+                InputStream stream = connection.getErrorStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                StringBuilder buffer = new StringBuilder();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+                response = buffer.toString();
+            }
   //          System.out.println(connection.getResponseCode() + "This is response code " + connection.getResponseMessage() + "params " + parameters);
 
-            InputStream stream = connection.getInputStream();
-            reader = new BufferedReader(new InputStreamReader(stream));
-            StringBuilder buffer = new StringBuilder();
-            String line = "";
-            while ((line = reader.readLine())!=null)
-            {
-                buffer.append(line);
-            }
-            response = buffer.toString();
+
 
         } catch (MalformedURLException e) {
             Logger.e("Log",e);

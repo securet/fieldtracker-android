@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -155,7 +156,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                         @Override
                         public void onClick(DialogInterface paramDialogInterface, int paramInt) {
                             // TODO Auto-generated method stub
-                            Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            Intent myIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                             startActivity(myIntent);
                             //get gps
                         }

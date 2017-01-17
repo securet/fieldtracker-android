@@ -1,5 +1,7 @@
 package com.oppo.sfamanagement.fragment;
 
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,15 +15,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
+import com.oppo.sfamanagement.database.AppsConstant;
 import com.oppo.sfamanagement.database.Preferences;
+import com.oppo.sfamanagement.database.SqliteHelper;
 import com.oppo.sfamanagement.model.Promoter;
+import com.oppo.sfamanagement.webmethods.LoaderConstant;
+import com.oppo.sfamanagement.webmethods.LoaderMethod;
+import com.oppo.sfamanagement.webmethods.LoaderServices;
+import com.oppo.sfamanagement.webmethods.ParameterBuilder;
+import com.oppo.sfamanagement.webmethods.Services;
+import com.oppo.sfamanagement.webmethods.UrlBuilder;
 
 /**
  * Created by allsmartlt218 on 04-01-2017.
  */
 
-public class ChangePasswordFragment extends Fragment {
+public class ChangePasswordFragment extends Fragment implements LoaderManager.LoaderCallbacks<Object> {
 
     private EditText currentPass,newPass,confirmPass;
     private Button btChange;
@@ -108,7 +119,12 @@ public class ChangePasswordFragment extends Fragment {
                     if (isNew) {
                         if (isConfirm) {
                             if (!TextUtils.isEmpty(nPass) && !TextUtils.isEmpty(sConfirmPass) && nPass.equals(sConfirmPass)) {
-                                Toast.makeText(getContext(), "Password Changed", Toast.LENGTH_SHORT).show();
+                            //    Toast.makeText(getContext(), "Password Changed", Toast.LENGTH_SHORT).show();
+                                Bundle bundle = new Bundle();
+                                bundle.putString(AppsConstant.METHOD ,AppsConstant.PUT);
+                                bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.CHANGE_PASSWORD));
+                                bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getChangePassword(currentPass.getText().toString(),nPass,sConfirmPass));
+                                getActivity().getLoaderManager().initLoader(LoaderConstant.CHANGE_PASSWORD,bundle,ChangePasswordFragment.this).forceLoad();
                             } else {
                                 Toast.makeText(getContext(), "new and confirm Paswords mismatching", Toast.LENGTH_SHORT).show();
                             }
@@ -126,5 +142,46 @@ public class ChangePasswordFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public Loader<Object> onCreateLoader(int id, Bundle args) {
+        ((MainActivity)getActivity()).showHideProgressForLoder(false);
+        switch (id) {
+            case LoaderConstant.CHANGE_PASSWORD:
+                return new LoaderServices(getContext(), LoaderMethod.CHANGE_PASSWORD,args);
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Object> loader, Object data) {
+        ((MainActivity)getActivity()).showHideProgressForLoder(true);
+        if(data != null && data instanceof String) {
+            if(!((String) data).equalsIgnoreCase("error") && ((String) data).equalsIgnoreCase("success")) {
+                Toast.makeText(getContext(),
+                        "Password changed successfully",
+                        Toast.LENGTH_SHORT).show();
+            } else if(!((String) data).equalsIgnoreCase("error")) {
+                Toast.makeText(getContext(),
+                        data.toString(),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(),
+                        "Password change failed",
+                        Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(getContext(),
+                    "Error in response. Please try again.",
+                    Toast.LENGTH_SHORT).show();
+        }
+        getActivity().getLoaderManager().destroyLoader(loader.getId());
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Object> loader) {
+
     }
 }

@@ -106,6 +106,22 @@ public class ParameterBuilder {
         }
     }
 
+    public static String getChangePassword(String oldPassword, String newPass, String confirmPass) {
+        String url = "";
+        try {
+            url = "oldPassword=" + URLEncoder.encode(oldPassword,"UTF-8") +
+                    "&newPassword=" + URLEncoder.encode(newPass,"UTF-8") +
+                    "&newPasswordVerify=" + URLEncoder.encode(confirmPass,"UTF-8");
+
+        } catch (Exception e) {
+            Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
+        } finally {
+            return url;
+        }
+    }
+
     public static String getAddPromoter(String rqtAddPromoter,String orgId,String description, String fName, String lName, String sPh, String email, String sAdd, String s, String reqSubmitted, String addPromoter, String s1, String s2, String s3) {
         String url = "";
         try {

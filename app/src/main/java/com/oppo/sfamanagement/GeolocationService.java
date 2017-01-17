@@ -95,7 +95,8 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 		} else {
 
 			Intent intent = new Intent(this, GeofenceReceiver.class);
-			return PendingIntent.getService(this, 0, intent,
+		//	Intent intent = new Intent("com.oppo.sfamanagement.geofencing.ACTION_GEOFENCE_RECEIVER");
+			return PendingIntent.getBroadcast(this, 0, intent,
 					PendingIntent.FLAG_UPDATE_CURRENT);
 
 		}
