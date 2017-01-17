@@ -319,7 +319,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 	}
 	@Override
 	public void onLocationChanged(Location location) {
-		Log.d(MainActivity.TAG,"new location : " + location.getLatitude() + ", "+ location.getLongitude() + ". "+ location.getAccuracy());
+
+        location.setAccuracy(1.0f);
+        Log.d(MainActivity.TAG,"new location : " + location.getLatitude() + ", "+ location.getLongitude() + ". "+ location.getAccuracy());
 		broadcastLocationFound(location);
 
 		if (!MainActivity.geofencesAlreadyRegistered) {
@@ -363,10 +365,10 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 			return mPendingIntent;
 		} else {
 
-	//		Intent intent = new Intent(getActivity(), GeofenceReceiver.class);
-	//		return PendingIntent.getService(getActivity(), 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
-			Intent intent = new Intent("com.oppo.sfamanagement.ACTION_GEOFENCE_RECEIVER");
-			return PendingIntent.getBroadcast(getActivity(), 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+			Intent intent = new Intent(getActivity(), GeofenceReceiver.class);
+			return PendingIntent.getService(getActivity(), 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+	//		Intent intent = new Intent("com.oppo.sfamanagement.ACTION_GEOFENCE_RECEIVER");
+	//		return PendingIntent.getBroadcast(getActivity(), 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
 		}
 	}
@@ -561,6 +563,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		}
 		preferences.saveString(Preferences.TIMEINTIME,CalenderUtils.getCurrentDate("dd/MM/yyyy HH:mm:ss"));
 		preferences.commit();
+
 		SetLoginLogOut();
 	}
     private TimeInOutDetails getTimeInOutDetails(String strComments,String strType, String strImage,String isPushed) {

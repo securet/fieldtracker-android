@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
-import com.oppo.sfamanagement.GeofenceNotification;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.CalenderUtils;
@@ -83,9 +82,7 @@ public class GeofenceBroadcaster extends BroadcastReceiver{
                         preferences.saveBoolean(Preferences.INLOCATION, false);
                         break;
                 }
-               // sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""));
-                GeofenceNotification notification = new GeofenceNotification(context);
-        //        notification.displayNotification();
+                sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""));
                 if(!TextUtils.isEmpty(clockType)) {
                     ///*dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,clockType));
                     String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
