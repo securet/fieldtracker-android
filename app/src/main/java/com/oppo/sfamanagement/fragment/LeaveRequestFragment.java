@@ -24,6 +24,7 @@ import com.oppo.sfamanagement.LeaveFragment;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
+import com.oppo.sfamanagement.database.CalenderUtils;
 import com.oppo.sfamanagement.database.CustomBuilder;
 import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.database.Preferences;
@@ -91,13 +92,16 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
 
 
                 if (!TextUtils.isEmpty(enumReasonId) && !TextUtils.isEmpty(enumTypeId)&& !TextUtils.isEmpty(etReason.getText().toString()) && !TextUtils.isEmpty(leaveReasonId)) {
+                    /*String fDate = CalenderUtils.getLeaveFromDate(fromDate);
+                    String tDate = CalenderUtils.getLeaveThruDate(thruDate);
+                    System.out.println(fDate + "     thru =>   " + tDate);*/
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
                     bundle.putString(AppsConstant.METHOD, AppsConstant.POST);
                     bundle.putString(AppsConstant.PARAMS,ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,etReason.getText().toString(),fromDate,thruDate,AppsConstant.ORGANIZATIONID));
                     getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,LeaveRequestFragment.this).forceLoad();
                 } else {
-                    Toast.makeText(getContext(),"Please select Leave Type and Reason Type",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Please select Leave Type and Reason Type and Enter Description",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -253,24 +257,25 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
                 break;
             case LoaderConstant.APPLY_LEAVE:
                 if(data != null && data instanceof String) {
-                    if (data!=null && data.equals("success")) {
+                    if(((String) data).equalsIgnoreCase("success")) {
                         Toast.makeText(getContext(),
-                                "Leave Applied Successfully",
+                                "Leave Applied successfully",
                                 Toast.LENGTH_SHORT).show();
-                        Fragment fragment = new LeaveStatusFragment();
-                        FragmentManager fm = getFragmentManager();
-                        fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
+                    } else if(!((String) data).equalsIgnoreCase("error") && !((String) data).equalsIgnoreCase("success")) {
+                        Toast.makeText(getContext(),
+                                data.toString(),
+                                Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(),
-                                "Leave Apply Failed",
+                                "Leave Apply failed",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getContext(),
-                            "Error in parser",
+                            "Error in response. Please try again.",
                             Toast.LENGTH_SHORT).show();
                 }
-
+                break;
 
         }
         getActivity().getLoaderManager().destroyLoader(loader.getId());

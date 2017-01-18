@@ -343,6 +343,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 						, StringUtils.getDouble(((MainActivity)getActivity()).preferences.getString(Preferences.LONGITUDE,"")),StringUtils.getInt(((MainActivity)getActivity()).preferences.getString(Preferences.SITE_RADIUS, AppsConstant.DEFAULTRADIUS))).getSimpleGeofences();
 
 		GeofencingRequest.Builder geofencingRequestBuilder = new GeofencingRequest.Builder();
+        geofencingRequestBuilder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
 		for (Map.Entry<String, SimpleGeofence> item : geofences.entrySet()) {
 			SimpleGeofence sg = item.getValue();
 
@@ -358,6 +359,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
 		MainActivity.geofencesAlreadyRegistered = true;
 	}
+
 	private PendingIntent requestPendingIntent() {
 
 		if (null != mPendingIntent) {
@@ -662,6 +664,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 					.fillColor( Color.argb(100, 137, 207, 240) )
 					.radius( sg.getRadius() );
 			 map.addCircle( circleOptions );
+
 		}
 	}
 

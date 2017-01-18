@@ -14,11 +14,13 @@ import java.util.Date;
  */
 public class CalenderUtils {
     public static final String DateMonthDashedFormate = "dd-MM-yyyy";
+    public static final String YearMonthDashedFormate = "yyyy-MM-dd";
     public static final String DateMonthSlashFormate = "dd/MM/yyyy";
     public static final String MonthDateFormate = "MM/dd/yyyy";
     public static final String DateFormate = "yyyy-MM-dd HH:mm:ss";
     public static final String TimeSecFormate = "HH:mm:ss";
     public static final String TimeMinFormate = "HH:mm";
+    public static final String DateFormateWithZone = "yyyy-MM-dd'T'HH:mm:ssZ";
 
 
     public static long getDateDifference(String cureentDate, String finalDate, String dateFormat) {
@@ -117,6 +119,39 @@ public class CalenderUtils {
         SimpleDateFormat df = new SimpleDateFormat(formate);
         String formattedDate = df.format(c.getTime());
         return formattedDate;
+    }
+
+    public static String getLeaveFromDate(String date) {
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("Z");
+        String gmt = sdf.format(today);
+        return date+"T00:00:00" + gmt;
+    }
+
+    public static String getLeaveThruDate(String date) {
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("Z");
+        String gmt = sdf.format(today);
+
+        return date+"T23:59:59" + gmt;
+    }
+
+    public static String getTimeZoneDate(String formate,String time) {
+            Date today = Calendar.getInstance().getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("Z");
+            String gmt = sdf.format(today);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(CalenderUtils.DateFormate);
+            Date date = null;
+            try {
+                date = simpleDateFormat.parse(time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar mCalendar = Calendar.getInstance();
+            if (date != null) {
+                mCalendar.setTime(date);
+            }
+            return DateFormat.format(formate.replaceAll("Z$", gmt), mCalendar).toString();
     }
 
     public static String getDateMethod(String timeStamp, String formate){

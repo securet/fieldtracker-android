@@ -178,10 +178,11 @@ public class ParameterBuilder {
     public static String getTimeinOut(Preferences preferences, TimeInOutDetails details, String imagePath) {
         String url = "";
         try {
-            String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateFormate);
+            String clockDate = CalenderUtils.getTimeZoneDate(CalenderUtils.DateFormateWithZone, details.getClockDate());
+            System.out.println("This is formatted date "  +clockDate);
             url = "username=" + URLEncoder.encode(details.getUsername(),"UTF-8") +
                     "&workEffortTypeEnumId=" + URLEncoder.encode("WetAvailable","UTF-8") +
-                    "&clockDate=" + URLEncoder.encode(details.getClockDate(),"UTF-8") +
+                    "&clockDate=" + URLEncoder.encode(clockDate,"UTF-8") +
                     "&purposeEnumId=" + URLEncoder.encode("WepAttendance","UTF-8") +
                     "&comments=" + URLEncoder.encode(details.getComments(),"UTF-8") +
                     "&productStoreId=" + URLEncoder.encode(preferences.getString(Preferences.PARTYID,""),"UTF-8") +

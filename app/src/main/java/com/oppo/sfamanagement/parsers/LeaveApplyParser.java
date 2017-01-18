@@ -23,23 +23,18 @@ public class LeaveApplyParser {
     public String Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
-            if(!TextUtils.isEmpty(response)){
+            if(parentObject.has("employeeLeave")) {
                 result = "success";
-                /*if (parentObject.has("employeeLeave")) {
-                    JSONObject employeeLeave = parentObject.getJSONObject("employeeLeave");
-                    if(employeeLeave.has("partyRelationshipId")) {
-                        String party = employeeLeave.getString("partyRelationshipId");
-                        result = party;
-                    }
-                }*/
+            } else if(parentObject.has("errors")) {
+                result = parentObject.getString("errors");
             } else {
-                result = "failed";
+                result = "error";
             }
         } catch (JSONException e) {
             Logger.e("Log",e);
             Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
             Crashlytics.logException(e);
-            result = "failed";
+            result = "error";
         } finally {
             return result;
         }

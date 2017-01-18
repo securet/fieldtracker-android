@@ -49,7 +49,12 @@ public class Leave implements Parcelable {
     }
 
     public void setDays(String days) {
-        this.days = days;
+        if(Integer.parseInt(days) == 1) {
+            this.days = days + " Day";
+        } else {
+            this.days = days + " Days";
+        }
+
     }
 
     public String getFromDate() {

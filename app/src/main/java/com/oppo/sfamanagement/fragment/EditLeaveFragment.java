@@ -22,6 +22,7 @@ import com.crashlytics.android.Crashlytics;
 import com.oppo.sfamanagement.MainActivity;
 import com.oppo.sfamanagement.R;
 import com.oppo.sfamanagement.database.AppsConstant;
+import com.oppo.sfamanagement.database.CalenderUtils;
 import com.oppo.sfamanagement.database.CustomBuilder;
 import com.oppo.sfamanagement.database.Logger;
 import com.oppo.sfamanagement.model.Leave;
@@ -92,13 +93,15 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
 
 
                 if (!TextUtils.isEmpty(enumReasonId) && !TextUtils.isEmpty(enumTypeId) && !TextUtils.isEmpty(leaveReasonId) && !TextUtils.isEmpty(leave.getPartyRelationShipId())) {
+                    String fDate = CalenderUtils.getLeaveFromDate(fromDate);
+                    String tDate = CalenderUtils.getLeaveThruDate(thruDate);
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
                     bundle.putString(AppsConstant.METHOD, AppsConstant.PUT);
-                    bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,leaveReasonId,fromDate,thruDate,leave.getPartyRelationShipId()));
+                    bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,leaveReasonId,fDate,tDate,leave.getPartyRelationShipId()));
                     getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,EditLeaveFragment.this).forceLoad();
                 } else {
-                    Toast.makeText(getContext(),"Please select Leave Type and Reason Type",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Please select Leave Type and Reason Type and Description",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -251,23 +254,25 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
                 break;
             case LoaderConstant.APPLY_LEAVE:
                 if(data != null && data instanceof String) {
-                    if (data!=null && data.equals("success")) {
+                    if(((String) data).equalsIgnoreCase("success")) {
                         Toast.makeText(getContext(),
-                                "Leave Applied Successfully",
+                                "Leave Applied successfully",
                                 Toast.LENGTH_SHORT).show();
-                        Fragment fragment = new LeaveStatusFragment();
-                        FragmentManager fm = getFragmentManager();
-                        fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
-                    }else {
+                    } else if(!((String) data).equalsIgnoreCase("error") && !((String) data).equalsIgnoreCase("success")) {
                         Toast.makeText(getContext(),
-                                "Leave Apply Failed",
+                                data.toString(),
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(),
+                                "Leave Apply failed",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getContext(),
-                            "Error in Parser",
+                            "Error in response. Please try again.",
                             Toast.LENGTH_SHORT).show();
                 }
+                break;
 
 
         }
