@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/retakeFragment"
     android:orientation="vertical"
+    android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.oppo.sfamanagement.fragment.RetakeFragment">
+    tools:context="com.allsmart.fieldtracker.fragment.RetakeFragment">
 
     <ImageView
         android:id="@+id/ivRetake"
