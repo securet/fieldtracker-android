@@ -48,7 +48,7 @@
             android:drawableRight="@drawable/email"
             android:drawableEnd="@drawable/email"
             android:inputType="textEmailAddress"
-            android:text="anand@securet.in"
+            android:text="manju+on@allsmart.in"
             android:textSize="@dimen/text_20" />
 
         <EditText
@@ -64,7 +64,7 @@
             android:layout_marginRight="@dimen/margin_25"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
-            android:text="test@1234"
+            android:text="moqui"
             android:textSize="@dimen/text_20" />
 
         <TextView

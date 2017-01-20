@@ -7,7 +7,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.crashlytics.android.Crashlytics;
-import com.allsmart.fieldtracker.database.Logger;
+import com.allsmart.fieldtracker.utils.Logger;
 
 import java.io.IOException;
 import java.util.List;

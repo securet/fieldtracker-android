@@ -1,7 +1,7 @@
 package com.allsmart.fieldtracker.parsers;
 
 import com.crashlytics.android.Crashlytics;
-import com.allsmart.fieldtracker.database.Logger;
+import com.allsmart.fieldtracker.utils.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;

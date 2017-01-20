@@ -7,10 +7,10 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
-import com.allsmart.fieldtracker.database.AppsConstant;
-import com.allsmart.fieldtracker.database.Logger;
-import com.allsmart.fieldtracker.database.MultipartUtility;
-import com.allsmart.fieldtracker.database.Preferences;
+import com.allsmart.fieldtracker.constants.AppsConstant;
+import com.allsmart.fieldtracker.utils.Logger;
+import com.allsmart.fieldtracker.utils.MultipartUtility;
+import com.allsmart.fieldtracker.storage.Preferences;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

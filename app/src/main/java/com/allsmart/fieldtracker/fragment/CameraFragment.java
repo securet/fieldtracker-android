@@ -19,14 +19,14 @@ import android.widget.ImageButton;
 
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.R;
-import com.allsmart.fieldtracker.database.Logger;
+import com.allsmart.fieldtracker.utils.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static com.allsmart.fieldtracker.database.AppsConstant.FRONT_CAMREA_OPEN;
+import static com.allsmart.fieldtracker.constants.AppsConstant.FRONT_CAMREA_OPEN;
 
 /**
  * Created by allsmartlt218 on 13-12-2016.

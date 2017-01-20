@@ -6,19 +6,19 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.allsmart.fieldtracker.database.AppsConstant;
-import com.allsmart.fieldtracker.database.EventDataSource;
-import com.allsmart.fieldtracker.database.Logger;
-import com.allsmart.fieldtracker.database.NetworkUtils;
-import com.allsmart.fieldtracker.database.Preferences;
+import com.allsmart.fieldtracker.constants.AppsConstant;
+import com.allsmart.fieldtracker.storage.EventDataSource;
+import com.allsmart.fieldtracker.utils.Logger;
+import com.allsmart.fieldtracker.utils.NetworkUtils;
+import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.model.Response;
 import com.allsmart.fieldtracker.model.TimeInOutDetails;
 import com.allsmart.fieldtracker.parsers.ImageUploadParser;
 import com.allsmart.fieldtracker.parsers.TimeInOutParser;
-import com.allsmart.fieldtracker.webmethods.ParameterBuilder;
+import com.allsmart.fieldtracker.utils.ParameterBuilder;
 import com.allsmart.fieldtracker.webmethods.RestHelper;
-import com.allsmart.fieldtracker.webmethods.Services;
-import com.allsmart.fieldtracker.webmethods.UrlBuilder;
+import com.allsmart.fieldtracker.constants.Services;
+import com.allsmart.fieldtracker.utils.UrlBuilder;
 
 import java.util.ArrayList;
 

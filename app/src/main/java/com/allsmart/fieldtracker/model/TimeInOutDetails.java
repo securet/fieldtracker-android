@@ -2,7 +2,7 @@ package com.allsmart.fieldtracker.model;
 
 import android.database.Cursor;
 
-import com.allsmart.fieldtracker.database.SqliteHelper;
+import com.allsmart.fieldtracker.storage.SqliteHelper;
 
 /**
  * Created by AllSmart-LT008 on 12/15/2016.

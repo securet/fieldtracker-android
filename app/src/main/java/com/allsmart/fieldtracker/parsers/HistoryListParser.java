@@ -4,9 +4,9 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 
 import com.crashlytics.android.Crashlytics;
-import com.allsmart.fieldtracker.database.Logger;
-import com.allsmart.fieldtracker.database.Preferences;
-import com.allsmart.fieldtracker.fragment.DynamicElement;
+import com.allsmart.fieldtracker.utils.Logger;
+import com.allsmart.fieldtracker.storage.Preferences;
+import com.allsmart.fieldtracker.utils.DynamicElement;
 import com.allsmart.fieldtracker.model.HistoryChild;
 import com.allsmart.fieldtracker.model.HistoryNew;
 
@@ -30,11 +30,7 @@ public class HistoryListParser {
     private Preferences preferences;
     private long fromDateMill = 0;
     private long thruDateMill = 0;
-    //private HistoryNew history;
     private ArrayList<HistoryNew> parentArraylist = new ArrayList<>();
-
-    //private HistoryChild historyChild;
-//    private ArrayList<HistoryChild> childArrayList = new ArrayList<>();
     public HistoryListParser(String response, Preferences preferences) {
         this.response = response;
         this.preferences = preferences;
@@ -43,7 +39,6 @@ public class HistoryListParser {
     public ArrayList<HistoryNew> Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
-            // size 0 or <10 make  IsLast = true
             if (parentObject.has("userTimeLog")) {
                 if (parentObject.has("totalEntries")) {
                     int count = parentObject.getInt("totalEntries");
@@ -51,16 +46,7 @@ public class HistoryListParser {
                     preferences.commit();
                 }
                 JSONArray arrayParent = parentObject.getJSONArray("userTimeLog");
-                //Log.d("a",String.valueOf(arrayParent.length()));
-                /*if (arrayParent.length() == 0 || arrayParent.length() < 10) {
-                    preferences.saveBoolean(Preferences.ISLAST, true);
-                    preferences.commit();
-                }else {
-                    preferences.saveBoolean(Preferences.ISLAST, false);
-                    preferences.commit();
-                }*/
                 for (int i = 0; i < arrayParent.length(); i++) {
-                    // System.out.println(arrayParent.length() + "     main array        " + i);
                     JSONObject childOject = arrayParent.getJSONObject(i);
                     if (childOject.has("estimatedStartDate")) {
                         HistoryNew history = new HistoryNew();
@@ -127,48 +113,16 @@ public class HistoryListParser {
                                             historyChild.setThruDate("");
                                             historyChild.setTimeSpace(0);
                                         }
-                                            /*if (j == childArray.length() - 1 && thruDateMill > 0 && fromDateMill > 0) {
-                                                Calendar hours = Calendar.getInstance();
-
-                                                hours.setTime(new Date(thruDateMill - fromDateMill));
-                                                history.setHours(DateFormat.format("h'h' m'm'", hours).toString());
-                                                System.out.println(DateFormat.format("h'h' m'm'", hours).toString());
-                                            }*/
-                                         /*else {
-                                            history.setHours("- : -");
-                                        }*/
-
-
                                         childArrayList.add(historyChild);
-
-                                                /*if ()
-
-                                                long millis = tDate.getTime() - fDate.getTime();
-                                                history.setHours(String.format("%02dh %02dm", TimeUnit.MILLISECONDS.toHours(millis),
-                                                        TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))));*/
                                         history.setHistoryChildren(childArrayList);
-                                        // }
                                     }
 
                                 }
 
                             }
-                            /*if (thruDateMill > 0 && fromDateMill > 0) {
-                                Calendar hours = Calendar.getInstance();
-
-                                hours.setTime(new Date(thruDateMill - fromDateMill));
-                                history.setHours(DateFormat.format("h'h' m'm'", hours).toString());
-                                System.out.println(DateFormat.format("h'h' m'm'", hours).toString());
-                            } else {
-                                history.setHours("- : -");
-                            }*/
-
                             parentArraylist.add(history);
                         }
-
                     }
-
-
                 }
             } else {
                 preferences.saveBoolean(Preferences.ISLAST, true);
@@ -181,11 +135,5 @@ public class HistoryListParser {
         } finally {
             return parentArraylist;
         }
-
     }
-
-    /*private String getTimeStamp(String timeStampMain) {
-        String timeStamp = timeStampMain.replace('T',' ');
-        return timeStamp;
-    }*/
 }

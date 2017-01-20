@@ -21,17 +21,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.allsmart.fieldtracker.MainActivity;
+import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.R;
-import com.allsmart.fieldtracker.database.AppsConstant;
-import com.allsmart.fieldtracker.database.Preferences;
+import com.allsmart.fieldtracker.constants.AppsConstant;
+import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.model.Store;
-import com.allsmart.fieldtracker.webmethods.LoaderConstant;
-import com.allsmart.fieldtracker.webmethods.LoaderMethod;
-import com.allsmart.fieldtracker.webmethods.LoaderServices;
-import com.allsmart.fieldtracker.webmethods.ParameterBuilder;
-import com.allsmart.fieldtracker.webmethods.Services;
-import com.allsmart.fieldtracker.webmethods.UrlBuilder;
+import com.allsmart.fieldtracker.constants.LoaderConstant;
+import com.allsmart.fieldtracker.constants.LoaderMethod;
+import com.allsmart.fieldtracker.service.LoaderServices;
+import com.allsmart.fieldtracker.utils.ParameterBuilder;
+import com.allsmart.fieldtracker.constants.Services;
+import com.allsmart.fieldtracker.utils.UrlBuilder;
 
 /**
  * Created by allsmartlt218 on 02-12-2016.

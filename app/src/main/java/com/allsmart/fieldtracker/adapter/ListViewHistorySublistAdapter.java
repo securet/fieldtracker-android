@@ -70,25 +70,6 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
         LinearLayout layoutFrom = (LinearLayout) view.findViewById(R.id.llFromDate);
         LinearLayout layoutThru = (LinearLayout) view.findViewById(R.id.llThruDate);
         if(position == 0) {
-            /*if(list.size() == 1) {
-                Drawable blueBackground = null;
-                Drawable redBackground = null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    blueBackground = context.getResources().getDrawable(R.drawable.history_time_in_element,null);
-                    redBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_gray,null);
-                } else {
-                    blueBackground = context.getResources().getDrawable(R.drawable.history_time_in_element);
-                    redBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_gray);
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    tvColor1.setBackground(blueBackground);
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    tvColor2.setBackground(redBackground);
-                }
-                tvLocationStatus1.setText("Time In");
-                tvLocationStatus2.setText("Time Out");
-            } else {*/
                 Drawable blueBackground = null;
                 Drawable redBackground = null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

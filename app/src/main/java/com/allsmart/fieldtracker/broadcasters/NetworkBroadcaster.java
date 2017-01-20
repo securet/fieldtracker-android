@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.allsmart.fieldtracker.database.NetworkUtils;
+import com.allsmart.fieldtracker.utils.NetworkUtils;
 import com.allsmart.fieldtracker.service.UploadTransactions;
 
 /**

@@ -47,9 +47,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.allsmart.fieldtracker.AutoFitTextureView;
+import com.allsmart.fieldtracker.customviews.AutoFitTextureView;
 import com.allsmart.fieldtracker.R;
-import com.allsmart.fieldtracker.database.AppsConstant;
+import com.allsmart.fieldtracker.constants.AppsConstant;
 
 import java.io.File;
 import java.io.FileOutputStream;

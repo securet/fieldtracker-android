@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.allsmart.fieldtracker.R;
-import com.allsmart.fieldtracker.database.Preferences;
+import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.model.TimeLine;
 
 import java.util.ArrayList;

@@ -13,11 +13,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
-import com.allsmart.fieldtracker.MainActivity;
+import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.R;
-import com.allsmart.fieldtracker.database.CalenderUtils;
-import com.allsmart.fieldtracker.database.EventDataSource;
-import com.allsmart.fieldtracker.database.Preferences;
+import com.allsmart.fieldtracker.utils.CalenderUtils;
+import com.allsmart.fieldtracker.storage.EventDataSource;
+import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.model.TimeInOutDetails;
 import com.allsmart.fieldtracker.service.UploadTransactions;
 
@@ -72,17 +72,19 @@ public class GeofenceBroadcaster extends BroadcastReceiver{
                         strComments = "InLocation";
                         clockType = "clockIn";
                         preferences.saveBoolean(Preferences.INLOCATION, true);
-                        Toast.makeText(context,"Time In",Toast.LENGTH_SHORT).show();
+                   //     Toast.makeText(context,"Time In",Toast.LENGTH_SHORT).show();
+                        sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are entering");
                         break;
 
                     case Geofence.GEOFENCE_TRANSITION_EXIT:
                         strComments = "OutLocation";
                         clockType = "clockOut";
-                        Toast.makeText(context,"Time out",Toast.LENGTH_SHORT).show();
+             //           Toast.makeText(context,"Time out",Toast.LENGTH_SHORT).show();
                         preferences.saveBoolean(Preferences.INLOCATION, false);
+                        sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are Leaving");
                         break;
                 }
-                sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""));
+
                 if(!TextUtils.isEmpty(clockType)) {
                     ///*dataSource.insertTimeInOutDetails(getTimeInOutDetails(strComments,clockType));
                     String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
@@ -108,7 +110,7 @@ public class GeofenceBroadcaster extends BroadcastReceiver{
             }
 
         }
-    private void sendNotification(String transitionType, String locationName) {
+    private void sendNotification(String transitionType, String locationName, String message) {
 
         // Create an explicit content Intent that starts the main Activity
         Intent notificationIntent = new Intent(context, MainActivity.class);
@@ -134,7 +136,7 @@ public class GeofenceBroadcaster extends BroadcastReceiver{
         // Set the notification contents
         builder.setSmallIcon(R.drawable.applogo)
                 .setContentTitle(transitionType + ": " + locationName)
-                .setContentText("Fencing event Occured")
+                .setContentText(message)
                 .setContentIntent(notificationPendingIntent);
 
         // Get an instance of the Notification manager

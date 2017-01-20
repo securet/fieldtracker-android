@@ -1,8 +1,8 @@
 package com.allsmart.fieldtracker.parsers;
 
 import com.crashlytics.android.Crashlytics;
-import com.allsmart.fieldtracker.database.Logger;
-import com.allsmart.fieldtracker.database.Preferences;
+import com.allsmart.fieldtracker.utils.Logger;
+import com.allsmart.fieldtracker.storage.Preferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +43,7 @@ public class UserDetailParser {
                     }
                     preferences.saveString(Preferences.USEREMAIL, obj.getString("emailAddress"));
                     preferences.saveString(Preferences.ROLETYPEID, obj.getString("roleTypeId"));
- /*For testing*///  preferences.saveString(Preferences.ROLETYPEID, "SalesExecutive");
+ /*For testing*/ // preferences.saveString(Preferences.ROLETYPEID, "FieldExecutiveOffPremise");
                     if(obj.has("productStoreId")) {
                         preferences.saveString(Preferences.PARTYID, obj.getString("productStoreId"));
                     } else {

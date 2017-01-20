@@ -4,9 +4,9 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 
 import com.crashlytics.android.Crashlytics;
-import com.allsmart.fieldtracker.database.Logger;
-import com.allsmart.fieldtracker.database.Preferences;
-import com.allsmart.fieldtracker.fragment.DynamicElement;
+import com.allsmart.fieldtracker.utils.Logger;
+import com.allsmart.fieldtracker.storage.Preferences;
+import com.allsmart.fieldtracker.utils.DynamicElement;
 import com.allsmart.fieldtracker.model.TimeLine;
 
 import org.json.JSONArray;

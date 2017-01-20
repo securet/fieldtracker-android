@@ -4,8 +4,8 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 
 import com.crashlytics.android.Crashlytics;
-import com.allsmart.fieldtracker.database.Logger;
-import com.allsmart.fieldtracker.database.Preferences;
+import com.allsmart.fieldtracker.utils.Logger;
+import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.model.Leave;
 
 import org.json.JSONArray;
@@ -44,13 +44,6 @@ public class LeaveListParser {
                 }
 
                 JSONArray parentArray = parentObject.getJSONArray("employeeLeavesList");
-                /*if (parentArray.length() == 0 || parentArray.length() < 10) {
-                    preferences.saveBoolean(Preferences.LEAVEISLAST,true);
-                    preferences.commit();
-                } else {
-                    preferences.saveBoolean(Preferences.LEAVEISLAST,false);
-                    preferences.commit();
-                }*/
                 for(int i = 0 ; i < parentArray.length() ; i++) {
                     JSONObject childObject = parentArray.getJSONObject(i);
                     if(childObject.has("fromDate")) {

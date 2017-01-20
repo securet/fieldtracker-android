@@ -66,7 +66,6 @@ public class ListViewHistoryAdapter extends ArrayAdapter<HistoryNew>{
         HistoryChild childForThrudate = historyNew.getHistoryChildren().get(historyNew.getHistoryChildren().size()-1);
         historyNew.setTimeIn(childForFromdate.getFromDate());
         historyNew.setTimeOut(childForThrudate.getThruDate());
-       // historyNew.setHours(TimeDifferenceCalculator.findMarginTop(childForFromdate.getFromDate(),childForThrudate.getThruDate()));
 
         TextView tvDate = (TextView) rowView.findViewById(R.id.tvHistoryDate);
         TextView tvTimeIn = (TextView) rowView.findViewById(R.id.tvHistoryTimeIn);

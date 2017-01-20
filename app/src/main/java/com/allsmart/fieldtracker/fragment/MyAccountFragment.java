@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.allsmart.fieldtracker.R;
-import com.allsmart.fieldtracker.database.Preferences;
+import com.allsmart.fieldtracker.storage.Preferences;
 
 /**
  * Created by allsmartlt218 on 03-01-2017.

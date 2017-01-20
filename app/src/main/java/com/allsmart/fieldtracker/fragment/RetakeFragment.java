@@ -21,7 +21,7 @@ import android.widget.ImageView;
 
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.R;
-import com.allsmart.fieldtracker.database.Logger;
+import com.allsmart.fieldtracker.utils.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

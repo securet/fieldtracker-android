@@ -16,20 +16,20 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.allsmart.fieldtracker.MainActivity;
+import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.R;
 import com.allsmart.fieldtracker.adapter.ListViewTimeLineAdapter;
-import com.allsmart.fieldtracker.database.AppsConstant;
-import com.allsmart.fieldtracker.database.CalenderUtils;
-import com.allsmart.fieldtracker.database.EventDataSource;
-import com.allsmart.fieldtracker.database.Preferences;
+import com.allsmart.fieldtracker.constants.AppsConstant;
+import com.allsmart.fieldtracker.utils.CalenderUtils;
+import com.allsmart.fieldtracker.storage.EventDataSource;
+import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.model.TimeInOutDetails;
 import com.allsmart.fieldtracker.model.TimeLine;
-import com.allsmart.fieldtracker.webmethods.LoaderConstant;
-import com.allsmart.fieldtracker.webmethods.LoaderMethod;
-import com.allsmart.fieldtracker.webmethods.LoaderServices;
-import com.allsmart.fieldtracker.webmethods.Services;
-import com.allsmart.fieldtracker.webmethods.UrlBuilder;
+import com.allsmart.fieldtracker.constants.LoaderConstant;
+import com.allsmart.fieldtracker.constants.LoaderMethod;
+import com.allsmart.fieldtracker.service.LoaderServices;
+import com.allsmart.fieldtracker.constants.Services;
+import com.allsmart.fieldtracker.utils.UrlBuilder;
 
 import java.util.ArrayList;
 

@@ -1,8 +1,8 @@
 package com.allsmart.fieldtracker.parsers;
 
 import com.crashlytics.android.Crashlytics;
-import com.allsmart.fieldtracker.database.Logger;
-import com.allsmart.fieldtracker.database.Preferences;
+import com.allsmart.fieldtracker.utils.Logger;
+import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.model.Promoter;
 
 import org.json.JSONArray;
@@ -38,13 +38,6 @@ public class PromoterListParser {
                 }
 
                 JSONArray jsonArray = parentObject.getJSONArray("requestList");
-                /*if (jsonArray.length() == 0 || jsonArray.length() < 10) {
-                    preferences.saveBoolean(Preferences.PROMOTERISLAST,true);
-                    preferences.commit();
-                } else {
-                    preferences.saveBoolean(Preferences.PROMOTERISLAST,false);
-                    preferences.commit();
-                }*/
                 for(int i = 0 ; i < jsonArray.length() ; i++) {
                     JSONObject childObject = jsonArray.getJSONObject(i);
                     if(childObject.has("requestId")) {
@@ -55,7 +48,6 @@ public class PromoterListParser {
                         promoter.setStatusId(childObject.getString("statusId"));
                     }
                     if(childObject.has("requestJson")){
-               //         JSONObject  object = childObject.getJSONObject("requestJson");
                         String s = childObject.getString("requestJson");
                         JSONObject object = new JSONObject(s);
                         if(object.has("requestType")) {
@@ -63,7 +55,6 @@ public class PromoterListParser {
                             promoter.setRequestType(object.getString("requestType"));
                             if(object.has("requestInfo")) {
                                 JSONObject o = object.getJSONObject("requestInfo");
-
                                 promoter.setFirstName(o.getString("firstName"));
                                 promoter.setLastName(o.getString("lastName"));
                                 promoter.setPhoneNum(o.getString("phone"));
