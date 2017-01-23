@@ -1,5 +1,8 @@
 package com.allsmart.fieldtracker.parsers;
 
+import android.widget.Toast;
+
+import com.allsmart.fieldtracker.activity.MainActivity;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.utils.Logger;
 import com.allsmart.fieldtracker.storage.Preferences;
@@ -27,7 +30,7 @@ public class UserDetailParser {
         try {
             JSONObject parentobject = new JSONObject(response);
             if(parentobject.has("user")){
-                result = "Success";
+                result = "success";
                 JSONArray users = new JSONArray(parentobject.getString("user"));
                 for(int i=0;i<users.length();i++) {
                     JSONObject obj = users.getJSONObject(i);
@@ -46,12 +49,10 @@ public class UserDetailParser {
  /*For testing*/ // preferences.saveString(Preferences.ROLETYPEID, "FieldExecutiveOffPremise");
                     if(obj.has("productStoreId")) {
                         preferences.saveString(Preferences.PARTYID, obj.getString("productStoreId"));
-                    } else {
-                        preferences.saveString(Preferences.PARTYID, obj.getString(""));
                     }
                     preferences.commit();;
                 }
-            }else if(parentobject.has("errors")){
+            }else if(parentobject.has("error")){
                 result =parentobject.getString("errors");
             }
         } catch (JSONException e) {

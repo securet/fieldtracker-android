@@ -43,7 +43,7 @@ public class CameraActivity extends AppCompatActivity{
         tvSiteName = (TextView) findViewById(R.id.tvSiteName);
         tvUser.setText(preferences.getString(Preferences.USERFIRSTNAME,""));
         tvUserSername.setText(preferences.getString(Preferences.USERLASTNAME,""));
-        tvSiteName.setText(preferences.getString(Preferences.SITENAME,""));
+        tvSiteName.setText(preferences.getString(Preferences.USER_CUREENTSITE,""));
         //FrameLayout fl = (FrameLayout) findViewById(R.id.flCapture);
         if (Build.VERSION.SDK_INT >= 22) {
             Fragment fragment = new CameraFragment2();

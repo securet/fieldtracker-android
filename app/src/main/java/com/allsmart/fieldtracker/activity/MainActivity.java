@@ -2,6 +2,7 @@ package com.allsmart.fieldtracker.activity;
 
 import android.app.Dialog;
 import android.app.LoaderManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.location.Location;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -22,6 +24,8 @@ import android.widget.Toast;
 import com.allsmart.fieldtracker.fragment.HistoryListFragment;
 import com.allsmart.fieldtracker.fragment.MapFragment;
 import com.allsmart.fieldtracker.R;
+import com.allsmart.fieldtracker.service.GeolocationService;
+import com.allsmart.fieldtracker.utils.NetworkUtils;
 import com.allsmart.fieldtracker.utils.StringUtils;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.constants.AppsConstant;
@@ -159,18 +163,31 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 	public void Logout()
 	{
-		preferences.saveBoolean(Preferences.ISLOGIN, false); // value to store
+		if(NetworkUtils.isNetworkConnectionAvailable(getApplicationContext())) {
+            preferences.saveBoolean(Preferences.ISLOGIN, false); // value to store
 
-		preferences.remove(Preferences.SITE_ADDRESS);
-		preferences.remove(Preferences.LATITUDE);
-		preferences.remove(Preferences.SITE_ENTITY);
-		preferences.remove(Preferences.SITENAME);
-		preferences.remove(Preferences.PARTYID);
+            preferences.remove(Preferences.SITE_ADDRESS);
+            preferences.remove(Preferences.LATITUDE);
+            preferences.remove(Preferences.SITE_ENTITY);
+            preferences.remove(Preferences.SITENAME);
+            preferences.remove(Preferences.PARTYID);
 
-		preferences.commit();
-	//	preferences.clearPreferences();
-		finish();
-		startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            preferences.commit();
+            //	preferences.clearPreferences();
+            finish();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+            builder.setTitle("No Internet!");
+            builder.setMessage("Please Connect Internet to Log Off");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
 	}
 
 	public void onLeavesClick(View view) {
@@ -195,7 +212,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	}
 
     public void changeSiteName(String text) {
+        preferences.saveString(Preferences.USER_CUREENTSITE,text);
+        preferences.commit();
         tvSiteName.setText(text);
+    }
+    public String getSiteName() {
+        String siteName = "Off Site";
+        if(!tvSiteName.getText().toString().equals(null) && !tvSiteName.getText().toString().equals(siteName)) {
+            return tvSiteName.getText().toString();
+        } else {
+            return siteName;
+        }
     }
 	@Override
 	public void onLoaderReset (Loader loader){
@@ -216,7 +243,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 							"Error in response. Please try again.",
 							Toast.LENGTH_SHORT).show();
 				}
-
+                Intent intent = new Intent(MainActivity.this, GeolocationService.class);
+                startService(intent);
                 Fragment f = new MapFragment();
 				FragmentManager fragmentManager = getSupportFragmentManager();
 				fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();

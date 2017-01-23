@@ -40,6 +40,7 @@ public class HistoryListParser {
         try {
             JSONObject parentObject = new JSONObject(response);
             if (parentObject.has("userTimeLog")) {
+                result = "success";
                 if (parentObject.has("totalEntries")) {
                     int count = parentObject.getInt("totalEntries");
                     preferences.saveInt(Preferences.HISTORY_COUNT, count);
@@ -124,12 +125,10 @@ public class HistoryListParser {
                         }
                     }
                 }
-            } else {
-                preferences.saveBoolean(Preferences.ISLAST, true);
-                preferences.commit();
             }
         } catch (JSONException e) {
             Logger.e("Log", e);
+            result = "error";
             Crashlytics.log(1, getClass().getName(), "Error in Parsing the response");
             Crashlytics.logException(e);
         } finally {

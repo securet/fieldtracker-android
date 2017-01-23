@@ -14,6 +14,7 @@ public class Preferences
     private SharedPreferences preferences;
     private SharedPreferences.Editor edit;
     public static String USER_PHOTO = "userPhoto";
+    public static String USER_CUREENTSITE = "userCurrentSite";
     public static String INLOCATION = "InLocation";
     public static String TIMEINOUTSTATUS = "TimeInOutStatus";
     public static String TIMEINTIME = "TimeInTime";

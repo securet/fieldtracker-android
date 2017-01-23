@@ -72,7 +72,7 @@
             </intent-filter>
         </receiver>
         <receiver android:name="com.allsmart.fieldtracker.broadcasters.GeofenceBroadcaster"
-            android:exported="false"
+            android:exported="true"
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.allsmart.fieldtracker.ACTION_GEOFENCE_RECEIVER"/>
@@ -91,11 +91,11 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCON7HyyWtOQa8xrvgT2bfLS4nQWUwh9MA" />
 
-            <!--<service
+           <service
                 android:name="com.allsmart.fieldtracker.service.GeolocationService"
                 android:icon="@drawable/ic_launcher"
                 android:label="@string/app_name" >
-            </service>-->
+            </service>
         <service
             android:name="com.allsmart.fieldtracker.service.GeofenceReceiver"
             android:exported="false"

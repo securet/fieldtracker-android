@@ -1,5 +1,6 @@
 package com.allsmart.fieldtracker.fragment;
 
+import android.app.Dialog;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
@@ -346,6 +347,10 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                     startActivityForResult(i,AppsConstant.IMAGE_PHOTO);
                 } else {
                     // just show previous image in new pop up
+                    Dialog dialog = new Dialog(getContext());
+                    dialog.setContentView(R.layout.promoter_image_fragment);
+                    ImageView imageView = (ImageView) dialog.findViewById(R.id.ivPromoterImage);
+                    Picasso.with(getContext()).load(UrlBuilder.getServerImage(promoter.getUserPhoto())).fit().into(imageView);
                 }
 
 
@@ -357,7 +362,10 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                     i2.putExtra("purpose","ForAadhar");
                     startActivityForResult(i2,AppsConstant.IMAGE_AADHAR);
                 } else {
-
+                    Dialog dialog = new Dialog(getContext());
+                    dialog.setContentView(R.layout.promoter_image_fragment);
+                    ImageView imageView = (ImageView) dialog.findViewById(R.id.ivPromoterImage);
+                    Picasso.with(getContext()).load(UrlBuilder.getServerImage(promoter.getAadharIdPath())).fit().into(imageView);
                 }
 
                 break;
@@ -368,7 +376,10 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                     i3.putExtra("purpose","ForAddressProof");
                     startActivityForResult(i3,AppsConstant.IMAGE_ADDRESS_PROOF);
                 } else {
-
+                    Dialog dialog = new Dialog(getContext());
+                    dialog.setContentView(R.layout.promoter_image_fragment);
+                    ImageView imageView = (ImageView) dialog.findViewById(R.id.ivPromoterImage);
+                    Picasso.with(getContext()).load(UrlBuilder.getServerImage(promoter.getAddressIdPath())).fit().into(imageView);
                 }
                 break;
         }

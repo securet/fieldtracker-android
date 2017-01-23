@@ -190,12 +190,35 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         llLogin_Logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (preferences == null) {
-                    preferences = new Preferences(getContext());
-                }
-                if (!preferences.getString(Preferences.ROLETYPEID, "").equals(null) && preferences.getString(Preferences.ROLETYPEID, "").equalsIgnoreCase("FieldExecutiveOnPremise")) {
-                    if (isUserInLoacation()) {
+                if(NetworkUtils.isNetworkConnectionAvailable(getContext())) {
+                    if (preferences == null) {
+                        preferences = new Preferences(getContext());
+                    }
+                    if (!preferences.getString(Preferences.ROLETYPEID, "").equals(null) && preferences.getString(Preferences.ROLETYPEID, "").equalsIgnoreCase("FieldExecutiveOnPremise")) {
+                        if (isUserInLoacation()) {
 
+                            if (checkCameraPermission()) {
+                                if (checkStoragePermission())
+                                    OpenCamera();
+                                else
+                                    askStoragePermission();
+                            } else {
+                                askCameraPermission();
+                            }
+                        } else {
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                            dialog.setTitle("Not at store location");
+                            dialog.setMessage("Please go to store location and try again!");
+                            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+
+                                }
+                            });
+
+                            dialog.show();
+                        }
+                    } else {
                         if (checkCameraPermission()) {
                             if (checkStoragePermission())
                                 OpenCamera();
@@ -204,27 +227,18 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                         } else {
                             askCameraPermission();
                         }
-                    } else {
-                        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                        dialog.setTitle("Not at store location");
-                        dialog.setMessage("Please go to store location and try again!");
-                        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                            }
-                        });
-
-                        dialog.show();
                     }
                 } else {
-                    if (checkCameraPermission()) {
-                        if (checkStoragePermission())
-                            OpenCamera();
-                        else
-                            askStoragePermission();
-                    } else {
-                        askCameraPermission();
-                    }
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                    dialog.setTitle("No Internet Connection");
+                    dialog.setMessage("Please connect to the internet to " +tvTimeInOut.getText().toString());
+                    dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
                 }
             }
         });
@@ -432,8 +446,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                         // for ActivityCompat#requestPermissions for more details.
                         return;
                     }
-                    map.setMyLocationEnabled(true);
+          //          map.setMyLocationEnabled(true);
                     map.animateCamera(CameraUpdateFactory.zoomTo(18));
+
                     displayGeofences();
                 }
             });
@@ -730,23 +745,27 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                     .fillColor(Color.argb(100, 137, 207, 240))
                     .radius(sg.getRadius());
             map.addCircle(circleOptions);
-
         }
     }
 
-    /*protected void createMarker(Double latitude, Double longitude) {
+    protected void createMarker(Double latitude, Double longitude) {
         LatLng latLng = new LatLng(latitude, longitude);
-      //  myPositionMarker = map.addMarker((new MarkerOptions().position(latLng)).icon(BitmapDescriptorFactory.fromResource(R.drawable.user)));
+        if(myPositionMarker != null) {
+            myPositionMarker.remove();
+            myPositionMarker = map.addMarker((new MarkerOptions().position(latLng)).icon(BitmapDescriptorFactory.fromResource(R.drawable.user)));
+        } else {
+            myPositionMarker = map.addMarker((new MarkerOptions().position(latLng)).icon(BitmapDescriptorFactory.fromResource(R.drawable.user)));
+        }
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-    }*/
+    }
 
     protected void updateMarker(Double latitude, Double longitude) {
-        LatLng latLng = new LatLng(latitude, longitude);
+//        LatLng latLng = new LatLng(latitude, longitude);
         //       System.out.println("This is at updateMarker  "+latitude + "      " + longitude);
-        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        /*if (myPositionMarker == null) {
+//        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+   //     if (myPositionMarker == null) {
             createMarker(latitude, longitude);
-        }*/
+   //     }
 		((MainActivity)getActivity()).preferences.saveString(Preferences.USERLATITUDE, latitude+""); // value to store
 		((MainActivity)getActivity()).preferences.commit();
 		((MainActivity)getActivity()).preferences.saveString(Preferences.USERLONGITUDE, longitude+""); // value to store

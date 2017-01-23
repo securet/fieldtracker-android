@@ -56,9 +56,10 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 	public void onDestroy() {
 		super.onDestroy();
 
-		if (mGoogleApiClient.isConnected()) {
+		/*if (mGoogleApiClient.isConnected()) {
 			mGoogleApiClient.disconnect();
-		}
+		}*/
+		//startService(new Intent(GeolocationService.this,GeolocationService.class));
 
 	}
 

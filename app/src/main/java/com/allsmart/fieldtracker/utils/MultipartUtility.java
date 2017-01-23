@@ -83,8 +83,7 @@ public class MultipartUtility {
         httpConn.setRequestProperty("Content-Type",
                 "multipart/form-data; boundary=" + boundary);
         httpConn.setRequestProperty("Authorization", "" + preferences.getString(Preferences.BASIC_AUTH,""));
-        /*httpConn.setRequestProperty("Authorization","Basic YW5hbmRAc2VjdXJldC5pbjp0ZXN0QDEyMzQ=");
-        httpConn.setRequestProperty("Content-Type","multipart/form-data");*/
+
         outputStream = httpConn.getOutputStream();
         writer = new PrintWriter(new OutputStreamWriter(outputStream, charset),
                 true);
