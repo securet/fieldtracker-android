@@ -24,4 +24,5 @@ public class LoaderConstant {
     public static final int APPLY_LEAVE = 17;
     public static final int UPDATE_LEAVE = 18;
     public static final int CHANGE_PASSWORD = 19;
+    public static final int LEAVE_REQUISITION = 20;
 }

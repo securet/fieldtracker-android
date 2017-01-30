@@ -23,6 +23,7 @@ public enum LoaderMethod
     LEAVE_TYPES,
     APLLY_LEAVES,
     UPDATE_LEAVES,
+    LEAVE_REQUISITION,
     CHANGE_PASSWORD
 
 }

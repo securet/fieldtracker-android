@@ -160,7 +160,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 if (!gps_enabled && !network_enabled) {
                     // notify user
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                    dialog.setMessage("Location is not enabled !");
+                    dialog.setMessage("Location is not enabṀled !");
                     dialog.setPositiveButton("Open setting", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface paramDialogInterface, int paramInt) {
@@ -521,8 +521,12 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     public void onConnected(Bundle connectionHint) {
         Log.i(MainActivity.TAG, "Connected to GoogleApiClient");
         // Zoom in the Google Map
-        map.animateCamera(CameraUpdateFactory.zoomTo(18));
-        getLastKnownLocation();
+        if(mGoogleApiClient.isConnected()) {
+            map.animateCamera(CameraUpdateFactory.zoomTo(18));
+            getLastKnownLocation();
+        } else {
+            Log.d(MainActivity.TAG,"google api not connected");
+        }
     }
 
     @Override

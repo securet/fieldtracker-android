@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import com.allsmart.fieldtracker.R;
 import com.allsmart.fieldtracker.model.Leave;
+import com.allsmart.fieldtracker.model.LeaveRequisition;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by allsmartlt218 on 02-12-2016.
@@ -24,16 +26,16 @@ public class ListViewLeaveStatusListAdapter extends ArrayAdapter<Leave> {
     protected ArrayList<Leave> list;
 
     public ListViewLeaveStatusListAdapter(Activity activity, int resource, ArrayList<Leave> list) {
-        super(activity, resource, list);
+        super(activity,resource);
         this.activity = activity;
         this.resourceId = resource;
         this.list = list;
     }
-
     public void refresh(ArrayList<Leave> list) {
         this.list = list;
         notifyDataSetChanged();
     }
+
     @Override
     public int getCount() {
         return list.size();
@@ -57,15 +59,14 @@ public class ListViewLeaveStatusListAdapter extends ArrayAdapter<Leave> {
             rowView = inflater.inflate(resourceId,parent,false);
         }
         Leave leave = list.get(position);
-
         TextView tvDays = (TextView) rowView.findViewById(R.id.tvLeaveDays);
         TextView tvFrom = (TextView) rowView.findViewById(R.id.tvLeaveFrom);
         TextView tvTo = (TextView) rowView.findViewById(R.id.tvLeaveTo);
         TextView tvStatus = (TextView) rowView.findViewById(R.id.tvLeaveStatus);
         TextView tvReason = (TextView) rowView.findViewById(R.id.tvLeaveReason);
         tvDays.setText(leave.getDays());
-        tvFrom.setText(leave.getFromDate());
-        tvTo.setText(leave.getToDate());
+        tvFrom.setText("From: " + leave.getFromDate());
+        tvTo.setText("To: " + leave.getToDate());
         tvStatus.setText(leave.getStatus());
         tvReason.setText(leave.getReason());
         return rowView;

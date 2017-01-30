@@ -12,6 +12,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/tvEditLeave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_22"
@@ -171,6 +172,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_height="wrap_content" />
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_marginTop="@dimen/margin_15"
                 android:gravity="center_horizontal"
@@ -203,6 +207,41 @@
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/margin_10">
+
+                    <Button
+                        android:id="@+id/btApprove"
+                        android:text="Approve"
+                        android:visibility="invisible"
+                        android:textAllCaps="false"
+                        android:background="@drawable/editstore_edit_button"
+                        android:textSize="@dimen/text_22"
+                        android:textColor="@color/colorWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_marginRight="@dimen/margin_5"
+                        android:layout_marginEnd="@dimen/margin_5"
+                        android:layout_height="wrap_content" />
+                    <Button
+                        android:id="@+id/btnReject"
+                        android:text="Reject"
+                        android:visibility="invisible"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:layout_marginStart="@dimen/margin_5"
+                        android:textAllCaps="false"
+                        android:background="@drawable/editstore_cancel_button"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="@dimen/text_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>

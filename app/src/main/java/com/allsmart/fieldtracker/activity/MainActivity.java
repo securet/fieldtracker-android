@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allsmart.fieldtracker.fragment.HistoryListFragment;
+import com.allsmart.fieldtracker.fragment.ManagerAttendence;
 import com.allsmart.fieldtracker.fragment.MapFragment;
 import com.allsmart.fieldtracker.R;
 import com.allsmart.fieldtracker.service.GeolocationService;
@@ -41,6 +42,7 @@ import com.allsmart.fieldtracker.constants.Services;
 import com.allsmart.fieldtracker.utils.UrlBuilder;
 import com.google.android.gms.location.LocationListener;
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 	public static String TAG = "lstech.aos.debug";
@@ -96,10 +98,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				if(openPage!=MAP) {
 					openPage=MAP;
 					if (!isLoading) {
-                        Fragment f = new MapFragment();
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-						fragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                        fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
+                        if(!isManager()) {
+                            Fragment f = new MapFragment();
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            fragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
+                        } else {
+                            Fragment f = new ManagerAttendence();
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            fragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
+                        }
                         UpadateButtonStatus();
                     }
 				}
@@ -190,13 +199,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
 	}
 
-	public void onLeavesClick(View view) {
-		Fragment fragment = new LeaveStatusFragment();
-		FragmentManager fm = getSupportFragmentManager();
-		fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
-		fm.executePendingTransactions();
-	}
-
+    public boolean isManager() {
+        if (preferences == null) {
+            preferences = new Preferences(getApplicationContext());
+        }
+        return !preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExecutiveOnPremise") &&
+                !preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExecutiveOffPremise");
+    }
 
 	@Override
 	public Loader onCreateLoader(int id, Bundle args)
@@ -243,12 +252,20 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 							"Error in response. Please try again.",
 							Toast.LENGTH_SHORT).show();
 				}
-                Intent intent = new Intent(MainActivity.this, GeolocationService.class);
-                startService(intent);
-                Fragment f = new MapFragment();
-				FragmentManager fragmentManager = getSupportFragmentManager();
-				fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
-				fragmentManager.executePendingTransactions();
+                /*Intent intent = new Intent(MainActivity.this, GeolocationService.class);
+                startService(intent);*/
+                if(isManager()) {
+                    Fragment f = new ManagerAttendence();
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
+                    fragmentManager.executePendingTransactions();
+                } else {
+                    Fragment f = new MapFragment();
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
+                    fragmentManager.executePendingTransactions();
+                }
+
 
 				break;
 		}
@@ -256,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         footerTabs.setVisibility(View.VISIBLE);
 	}
 	String SHOW_HIDE_LOADER = "SHOW_HIDE_LOADER";
-	public void showHideProgressForLoder(boolean isForHide)
+	/*public void showHideProgressForLoder(boolean isForHide)
 	{
 		synchronized (SHOW_HIDE_LOADER)
 		{
@@ -308,6 +325,69 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 					Animation rotateXaxis = AnimationUtils.loadAnimation(MainActivity.this, R.anim.rotate_x_axis);
 					rotateXaxis.setInterpolator(new LinearInterpolator());
 					ivOutsideImage.setAnimation(rotateXaxis);
+
+				}
+			}
+			catch(Exception e)
+			{
+				dialog = null;
+				Logger.e("Log",e);
+				Crashlytics.log(1,getClass().getName(),"Error in MainActivity while displaying animation loader");
+				Crashlytics.logException(e);
+			}
+		}
+	}
+	private Dialog dialog;*/
+	public void showHideProgressForLoder(boolean isForHide)
+	{
+		synchronized (SHOW_HIDE_LOADER)
+		{
+			if(isForHide)
+			{
+				if(AppsConstant.RunningLoaderCount>0)
+					AppsConstant.RunningLoaderCount = AppsConstant.RunningLoaderCount-1;
+				if(AppsConstant.RunningLoaderCount==0)
+					hideLoader();
+			}
+			else
+			{
+				AppsConstant.RunningLoaderCount++;
+				showLoader("");
+			}
+
+		}
+	}
+	public void hideLoader()
+	{
+		if (dialog != null && dialog.isShowing())
+		{
+			dialog.dismiss();
+		}
+	}
+	public void showLoader(String strMessage){
+		runOnUiThread(new MainActivity.RunShowLoaderCustom());
+	}
+
+	class RunShowLoaderCustom implements Runnable
+	{
+		public RunShowLoaderCustom()
+		{
+		}
+		@Override
+		public void run()
+		{
+			try
+			{
+
+				if(dialog == null|| (dialog != null && !dialog.isShowing()))
+				{
+					dialog = new Dialog(MainActivity.this, R.style.Theme_Dialog_Translucent);
+					dialog.setContentView(R.layout.loader_animation);
+					dialog.setCancelable(false);
+					dialog.show();
+					AVLoadingIndicatorView avl = (AVLoadingIndicatorView) dialog.findViewById(R.id.avlView);
+					avl.show();
+
 				}
 			}
 			catch(Exception e)
@@ -320,5 +400,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		}
 	}
 	private Dialog dialog;
+
 
 }

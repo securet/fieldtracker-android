@@ -14,12 +14,13 @@ import com.allsmart.fieldtracker.R;
 
 public class MoreFragment extends Fragment {
 
-    private TextView store,promoter,myAccount,changePassword;
+    private TextView store,promoter,myAccount,changePassword, leaveRequisition,leave;
     private Preferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferences = new Preferences(getContext());
     }
 
     @Override
@@ -28,11 +29,42 @@ public class MoreFragment extends Fragment {
         TextView tvLogout = (TextView) rootView.findViewById(R.id.tvLogout);
         myAccount = (TextView) rootView.findViewById(R.id.tvMyAccount);
         changePassword = (TextView) rootView.findViewById(R.id.tvChangePassword);
-        preferences = new Preferences(getContext());
+        leaveRequisition = (TextView) rootView.findViewById(R.id.tvLeaveRequisition);
+        leave = (TextView) rootView.findViewById(R.id.tvLeave);
+        if(((MainActivity)getActivity()).isManager()) {
+            leaveRequisition.setVisibility(View.VISIBLE);
+        } else {
+            leaveRequisition.setVisibility(View.GONE);
+        }
+
         tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((MainActivity)getActivity()).Logout();
+            }
+        });
+        leave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new LeaveStatusFragment();
+                FragmentManager fm = getFragmentManager();
+                Bundle bundle = new Bundle();
+                bundle.putInt("leave_requisition",2);
+                fragment.setArguments(bundle);
+                fm.beginTransaction().replace(R.id.flMiddle,fragment).addToBackStack(null).commit();
+                fm.executePendingTransactions();
+            }
+        });
+        leaveRequisition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment f = new LeaveRequisitionFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("leave_requisition",1);
+                f.setArguments(bundle);
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
+                fm.executePendingTransactions();
             }
         });
 
@@ -99,6 +131,7 @@ public class MoreFragment extends Fragment {
         });
         return rootView;
     }
+
 
     @Override
     public void onResume() {

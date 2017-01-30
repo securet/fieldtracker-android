@@ -18,6 +18,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allsmart.fieldtracker.R;
@@ -31,15 +32,24 @@ import com.allsmart.fieldtracker.constants.LoaderMethod;
 import com.allsmart.fieldtracker.service.LoaderServices;
 import com.allsmart.fieldtracker.constants.Services;
 import com.allsmart.fieldtracker.utils.UrlBuilder;
+import com.wang.avi.AVLoadingIndicatorView;
+
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.fabric.sdk.android.Fabric;
 
 public class LoginActivity extends Activity implements LoaderManager.LoaderCallbacks , View.OnClickListener {
 
-    Button loginBtn;
-    EditText emailET, passwordET;
+    Button loginBtn,resetBtn;
+    EditText emailET, passwordET, newPass, confirmPass;
+    TextView forgotPass;
 //    ProgressDialog pd;
     public Preferences preferences;
+    private String emailPattern = "^[_A-Za-z0-9-]+(\\\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$ ";
+    private Pattern pattern = Pattern.compile(emailPattern);
+    private Matcher matcher;
     private boolean isLogin = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +67,39 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
 
         // resources
         loginBtn = (Button) findViewById(R.id.loginBtn);
+        resetBtn = (Button) findViewById(R.id.resetButton);
         emailET = (EditText) findViewById(R.id.emailET);
         passwordET = (EditText) findViewById(R.id.passwordET);
+        newPass = (EditText) findViewById(R.id.etNewPass);
+        confirmPass = (EditText) findViewById(R.id.etConfirmPass);
+        forgotPass = (TextView) findViewById(R.id.tvForgotPass);
 
         // lictener
         loginBtn.setOnClickListener(this);
+        forgotPass.setOnClickListener(this);
+        resetBtn.setOnClickListener(this);
 
+    }
+    private void showResetViews() {
+        forgotPass.setVisibility(View.INVISIBLE);
+        emailET.setVisibility(View.INVISIBLE);
+        passwordET.setVisibility(View.INVISIBLE);
+        loginBtn.setVisibility(View.INVISIBLE);
 
+        newPass.setVisibility(View.VISIBLE);
+        confirmPass.setVisibility(View.VISIBLE);
+        resetBtn.setVisibility(View.VISIBLE);
+    }
+
+    private void showLoginViews() {
+        forgotPass.setVisibility(View.VISIBLE);
+        emailET.setVisibility(View.VISIBLE);
+        passwordET.setVisibility(View.VISIBLE);
+        loginBtn.setVisibility(View.VISIBLE);
+
+        newPass.setVisibility(View.INVISIBLE);
+        confirmPass.setVisibility(View.INVISIBLE);
+        resetBtn.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -78,16 +114,43 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
                             "Please enter valid username and password.",
                             Toast.LENGTH_SHORT).show();
                 } else {
-
-                    Bundle b = new Bundle();
-                    b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.USER_LOGIN));
-                    b.putString(AppsConstant.USER, emailET.getText().toString().trim() );
-                    b.putString(AppsConstant.PASSWORD, passwordET.getText().toString().trim());
-                    getLoaderManager().initLoader(LoaderConstant.USER_LOGIN,b,LoginActivity.this).forceLoad();
+                    if(!TextUtils.isEmpty(emailET.getText().toString())){
+                        if(emailValidator(emailET.getText().toString())) {
+                            Bundle b = new Bundle();
+                            b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.USER_LOGIN));
+                            b.putString(AppsConstant.USER, emailET.getText().toString().trim() );
+                            b.putString(AppsConstant.PASSWORD, passwordET.getText().toString().trim());
+                            getLoaderManager().initLoader(LoaderConstant.USER_LOGIN,b,LoginActivity.this).forceLoad();
+                        } else {
+                            displayMessage("Enter proper email");
+                        }
+                    } else {
+                        displayMessage("Username is required");
+                    }
                 }
 
                 break;
+            case R.id.tvForgotPass:
+
+                if(!TextUtils.isEmpty(emailET.getText().toString())){
+
+                    if(emailValidator(emailET.getText().toString())) {
+                        showResetViews();
+                    } else {
+                        displayMessage("Enter proper email");
+                    }
+                } else {
+                    displayMessage("Username is required");
+                }
+                break;
+            case R.id.resetButton:
+                showLoginViews();
+                displayMessage("Reset is Clicked");
+                break;
         }
+    }
+    private boolean emailValidator(String email) {
+        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
     @Override
     public Loader onCreateLoader(int id, Bundle args)
@@ -101,6 +164,9 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
                 return null;
         }
     }
+    public void displayMessage(String message) {
+        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+    }
     @Override
     public void onLoaderReset (Loader loader){
 
@@ -112,13 +178,13 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
         switch (loader.getId())
         {
             case LoaderConstant.USER_LOGIN:
-                if(data!=null && data instanceof String && ((String)data).equalsIgnoreCase("Success")){
+                if(data!=null && data instanceof String && ((String)data).equalsIgnoreCase("success")){
                     preferences.saveBoolean(Preferences.ISLOGIN,true);
                     preferences.commit();
                     startActivity(new Intent(LoginActivity.this,MainActivity.class));
                     finish();
 
-                }else if(data!=null && data instanceof String && !TextUtils.isEmpty((String)data)){
+                }else if(data!=null && data instanceof String && !((String) data).equalsIgnoreCase("error") && !((String) data).equalsIgnoreCase("success")){
                     preferences.saveBoolean(Preferences.ISLOGIN,false);
                     preferences.commit();
                     Toast.makeText(getApplicationContext(),
@@ -179,15 +245,23 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
             {
                 if(dialog == null|| (dialog != null && !dialog.isShowing()))
                 {
-                    dialog = new Dialog(LoginActivity.this, R.style.Theme_Dialog_Translucent);
+                    /*dialog = new Dialog(LoginActivity.this, R.style.Theme_Dialog_Translucent);
                     dialog.setContentView(R.layout.custom_loader);
                     dialog.setCancelable(false);
                     dialog.show();
+
                     ImageView ivOutsideImage;
                     ivOutsideImage = (ImageView) dialog.findViewById(R.id.ivOutsideImage);
                     Animation rotateXaxis = AnimationUtils.loadAnimation(LoginActivity.this, R.anim.rotate_x_axis);
                     rotateXaxis.setInterpolator(new LinearInterpolator());
-                    ivOutsideImage.setAnimation(rotateXaxis);
+                    ivOutsideImage.setAnimation(rotateXaxis);*/
+
+                    dialog = new Dialog(LoginActivity.this, R.style.Theme_Dialog_Translucent);
+                    dialog.setContentView(R.layout.loader_animation);
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    AVLoadingIndicatorView avl = (AVLoadingIndicatorView) dialog.findViewById(R.id.avlView);
+                    avl.show();
                 }
             }
             catch(Exception e)

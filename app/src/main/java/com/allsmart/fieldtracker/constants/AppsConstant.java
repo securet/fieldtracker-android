@@ -25,6 +25,7 @@ public class AppsConstant {
     public static String REASON ="REASON";
     public static String PARAMS ="PARAMS";
     public static String GET ="GET";
+    public static String GEOEVENT = "GeoEvent";
     public static String ORGANIZATIONID ="ORG_OPPO";
     public static String PUT = "PUT";
     public static String POST ="POST";
@@ -32,4 +33,5 @@ public class AppsConstant {
     public static final int IMAGE_AADHAR = 3;
     public static final int IMAGE_ADDRESS_PROOF = 4;
     public static int RunningLoaderCount =0;
+    public static String TAG = "lstech.aos.debug";
 }

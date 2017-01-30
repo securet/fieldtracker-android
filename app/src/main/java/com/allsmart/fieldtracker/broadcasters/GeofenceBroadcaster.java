@@ -57,9 +57,9 @@ public class GeofenceBroadcaster extends BroadcastReceiver{
         dataSource = new EventDataSource(context);
 
         if(geoEvent.hasError()) {
-            Log.d(MainActivity.TAG, "Error GeofenceReceiver.onHandleIntent");
+            Log.d(MainActivity.TAG, "Error GeofenceBroadcaster.onHandleIntent");
         } else {
-            Log.d(MainActivity.TAG, "GeofenceReceiver : Transition -> "+ geoEvent.getGeofenceTransition());
+            Log.d(MainActivity.TAG, "GeofenceBroadcaster : Transition -> "+ geoEvent.getGeofenceTransition());
 
             int transitionType = geoEvent.getGeofenceTransition();
 

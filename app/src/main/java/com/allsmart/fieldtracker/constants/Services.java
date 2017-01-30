@@ -29,4 +29,5 @@ public class Services{
     public static String APPLY_LEAVES = "leaves";
     public static String UPDATE_LEAVES = "leaves";
     public static String CHANGE_PASSWORD = "user/changePassword";
+    public static String LEAVE_REQUISITION = "leaves/requisitions";
 }

@@ -45,9 +45,8 @@ import java.util.Collection;
  * Created by allsmartlt218 on 02-12-2016.
  */
 
-public class LeaveStatusFragment extends Fragment implements LoaderManager.LoaderCallbacks<Object>, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+public class LeaveRequisitionFragment extends Fragment implements LoaderManager.LoaderCallbacks<Object>, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
 
-    private ArrayList<Leave> list = new ArrayList<>();
     private ArrayList<LeaveRequisition> listRequisition = new ArrayList<>();
     private Button btLeaveRequest;
     private int pageIndex = -1;
@@ -67,10 +66,9 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
         pageIndex = 0;
         System.out.println(pageIndex + "  before scroll");
         Bundle bundle = new Bundle();
-
-        bundle.putString(AppsConstant.URL, UrlBuilder.getLeaveList(Services.LEAVE_LIST, pageIndex + "", String.valueOf(pageSize)));
+        bundle.putString(AppsConstant.URL, UrlBuilder.getLeaveList(Services.LEAVE_REQUISITION, pageIndex + "", String.valueOf(pageSize)));
         bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
-        getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_LIST, bundle, LeaveStatusFragment.this).forceLoad();
+        getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_REQUISITION, bundle, LeaveRequisitionFragment.this).forceLoad();
     }
 
     @Nullable
@@ -83,13 +81,9 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
         footerView = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_view,null);
         ivLoader = (ImageView) footerView.findViewById(R.id.footer_1);
         footerView.setVisibility(View.INVISIBLE);
-
-            leaveStatus.setVisibility(View.VISIBLE);
-            adapter = new ListViewLeaveStatusListAdapter(getActivity(),R.layout.leave_status_list_item,list);
-            lvLeave.setAdapter(adapter);
-
-
-
+        leaveStatus.setVisibility(View.GONE);
+        requisitionAdapter = new LeaveRequisitionListAdapter(getActivity(), R.layout.leave_requisition_list_item, listRequisition);
+        lvLeave.setAdapter(requisitionAdapter);
         lvLeave.setOnItemClickListener(this);
 
         lvLeave.setOnScrollListener(this);
@@ -116,8 +110,6 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
             showLoader();
         }
         switch (id) {
-            case LoaderConstant.LEAVE_LIST:
-                return new LoaderServices(getContext(), LoaderMethod.LEAVE_LIST,args);
             case LoaderConstant.LEAVE_REQUISITION:
                 return new LoaderServices(getContext(),LoaderMethod.LEAVE_REQUISITION,args);
             default:
@@ -133,26 +125,6 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
             hideloader();
         }
         switch (loader.getId()) {
-            case LoaderConstant.LEAVE_LIST:
-                if(data != null && data instanceof ArrayList) {
-                    if (list == null) {
-                        list = (ArrayList<Leave>) data;
-                    } else {
-                        list.addAll((ArrayList<Leave>) data);
-                    }
-
-                }else {
-                    Toast.makeText(getContext(),
-                            "Error in response. Please try again.",
-                            Toast.LENGTH_SHORT).show();
-                }
-                isLoading = false;
-                ((MainActivity)getActivity()).isLoading = false;
-                if(adapter != null) {
-                    adapter.refresh(list);
-                }
-
-                break;
             case LoaderConstant.LEAVE_REQUISITION:
                 if(data != null && data instanceof ArrayList) {
                     if (listRequisition == null) {
@@ -214,21 +186,21 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
                     pageIndex++;
                     System.out.println("index   " + pageIndex);
                     Bundle b = new Bundle();
-                    b.putString(AppsConstant.URL, UrlBuilder.getLeaveList(Services.LEAVE_LIST, String.valueOf(pageIndex), String.valueOf(pageSize)));
+                    b.putString(AppsConstant.URL, UrlBuilder.getLeaveList(Services.LEAVE_REQUISITION, String.valueOf(pageIndex), String.valueOf(pageSize)));
                     b.putString(AppsConstant.METHOD, AppsConstant.GET);
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_LIST, b, LeaveStatusFragment.this).forceLoad();
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_LIST, b, LeaveRequisitionFragment.this).forceLoad();
                 }
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Leave leave = list.get(position);
+        LeaveRequisition leave = listRequisition.get(position);
         Bundle b = new Bundle();
-        b.putInt("leave_requisition",2);
-        b.putParcelable("leave_key",leave);
+        b.putInt("leave_requisition",1);
+        b.putParcelable("leave_requisition_key",leave);
         if(leave.getStatus().equalsIgnoreCase("Pending") || leave.getStatus().equalsIgnoreCase("Rejected")) {
-            Fragment f = new EditLeaveFragment();
+            Fragment f = new ApproveLeaveFragment();
             f.setArguments(b);
 
             FragmentManager fm = getFragmentManager();

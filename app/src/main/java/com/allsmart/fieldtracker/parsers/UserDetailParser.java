@@ -52,13 +52,14 @@ public class UserDetailParser {
                     }
                     preferences.commit();;
                 }
-            }else if(parentobject.has("error")){
+            }else if(parentobject.has("errors")){
                 result =parentobject.getString("errors");
             }
         } catch (JSONException e) {
             Logger.e("Log",e);
             Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
             Crashlytics.logException(e);
+            result = "error";
         } finally {
             return result;
         }

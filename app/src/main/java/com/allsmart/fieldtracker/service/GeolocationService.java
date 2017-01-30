@@ -42,20 +42,30 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 	public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 5;
 	protected GoogleApiClient mGoogleApiClient;
 	protected LocationRequest mLocationRequest;
-
+	private Preferences preferences;
 	private PendingIntent mPendingIntent;
 
 	@Override
 	public void onStart(Intent intent, int startId) {
+		/*buildGoogleApiClient();
+
+		mGoogleApiClient.connect();*/
+	}
+
+	@Override
+	public void onCreate() {
+		preferences = new Preferences(getApplicationContext());
+		super.onCreate();
 		buildGoogleApiClient();
 
 		mGoogleApiClient.connect();
+		Log.d(MainActivity.TAG,"GeolocationService is started");
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-
+		Log.d(MainActivity.TAG,"GeolocationService is destroyed");
 		/*if (mGoogleApiClient.isConnected()) {
 			mGoogleApiClient.disconnect();
 		}*/
@@ -65,9 +75,10 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 
 	protected void registerGeofences() {
 		if (MainActivity.geofencesAlreadyRegistered) {
+			Log.d(MainActivity.TAG,"Within Geofence Register");
 			return;
 		}
-
+		Log.d(MainActivity.TAG,"Outside Geofence Register");
 		Log.d(MainActivity.TAG, "Registering Geofences");
 		Preferences preferences = new Preferences(this);
 		HashMap<String, SimpleGeofence> geofences = SimpleGeofenceStore
@@ -100,19 +111,38 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 
 		//	Intent intent = new Intent(this, GeofenceReceiver.class);
 			Intent intent = new Intent("com.allsmart.fieldtracker.ACTION_GEOFENCE_RECEIVER");
-			return PendingIntent.getService(this, 0, intent,
+			return PendingIntent.getBroadcast(this, 0, intent,
 					PendingIntent.FLAG_UPDATE_CURRENT);
 		}
 	}
 
-	public void broadcastLocationFound(Location location) {
-	//	Intent intent = new Intent("com.allsmart.fieldtracker.geolocation.service");
-		Intent intent = new Intent("com.allsmart.fieldtracker.ACTION_GEOFENCE_RECEIVER");
-		intent.putExtra("latitude", location.getLatitude());
-		intent.putExtra("longitude", location.getLongitude());
-		intent.putExtra("done", 1);
+	private int isUserInLocation(Location location){
+		float[] result = new float[1];
+		double lat1 = location.getLatitude();
+		double lon1 = location.getLongitude();
+		double lat2 = StringUtils.getDouble(preferences.getString(Preferences.LATITUDE, ""));
+		double lon2 = StringUtils.getDouble(preferences.getString(Preferences.LONGITUDE, ""));
+		//Double distance = distance(lat1, lon1, lat2, lon2);
+		int siteRadius = Integer.parseInt(preferences.getString(Preferences.SITE_RADIUS, AppsConstant.DEFAULTRADIUS));
+		Location.distanceBetween(lat1, lon1, lat2, lon2, result);
+		float distance = result[0];
+		Boolean isInLocation = distance <= siteRadius;
 
+		if (isInLocation) {
+			return 1;
+		} else {
+			return 2;
+		}
+	}
+
+	public void broadcastLocationFound(Location location) {
+		Intent intent = new Intent("com.allsmart.fieldtracker.geolocation.service");
+	//	Intent intent = new Intent("com.allsmart.fieldtracker.ACTION_GEOFENCE_RECEIVER");
+
+		int geoEvent = isUserInLocation(location);
+		intent.putExtra(AppsConstant.GEOEVENT,geoEvent);
 		sendBroadcast(intent);
+
 	}
 
 	// Check for permission to access Location
@@ -137,17 +167,21 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		Log.i(MainActivity.TAG, "Connected to GoogleApiClient");
-		startLocationUpdates();
+		if(mGoogleApiClient.isConnected()) {
+			startLocationUpdates();
+		} else {
+			Log.d(MainActivity.TAG,"google api client not connected");
+		}
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
 		Log.d(MainActivity.TAG,"new location : " + location.getLatitude() + ", "+ location.getLongitude() + ". "+ location.getAccuracy());
-		broadcastLocationFound(location);
-
 		if (!MainActivity.geofencesAlreadyRegistered) {
+			Log.d(MainActivity.TAG,"Before Geofence Register");
 			registerGeofences();
 		}
+		broadcastLocationFound(location);
 	}
 
 	@Override

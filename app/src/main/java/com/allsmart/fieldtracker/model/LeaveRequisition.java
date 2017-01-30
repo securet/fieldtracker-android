@@ -4,10 +4,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by allsmartlt218 on 02-12-2016.
+ * Created by allsmartlt218 on 25-01-2017.
  */
 
-public class Leave implements Parcelable {
+public class LeaveRequisition implements Parcelable{
     private String days;
     private String fromDate;
     private String toDate;
@@ -18,11 +18,11 @@ public class Leave implements Parcelable {
     private String partyRelationShipId;
     private String agentName;
 
-    public Leave(){
+    public LeaveRequisition(){
 
     }
 
-    protected Leave(Parcel in) {
+    protected LeaveRequisition(Parcel in) {
         days = in.readString();
         fromDate = in.readString();
         toDate = in.readString();
@@ -42,11 +42,11 @@ public class Leave implements Parcelable {
         this.agentName = agentName;
     }
 
-    public static Creator<Leave> getCREATOR() {
+    public static Parcelable.Creator<Leave> getCREATOR() {
         return CREATOR;
     }
 
-    public static final Creator<Leave> CREATOR = new Creator<Leave>() {
+    public static final Parcelable.Creator<Leave> CREATOR = new Parcelable.Creator<Leave>() {
         @Override
         public Leave createFromParcel(Parcel in) {
             return new Leave(in);

@@ -8,11 +8,14 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,6 +28,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.allsmart.fieldtracker.utils.NetworkUtils;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.R;
@@ -36,11 +43,14 @@ import com.allsmart.fieldtracker.utils.ParameterBuilder;
 import com.allsmart.fieldtracker.constants.Services;
 import com.allsmart.fieldtracker.utils.UrlBuilder;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 /**
  * Created by allsmartlt218 on 02-12-2016.
  */
 
-public class AddStoreFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Object>, LocationListener {
+public class AddStoreFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Object>, LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     EditText storeName, storeAddress, siteRadius;
     Button getCurrentLocation, btAdd, btCancel;
@@ -48,15 +58,35 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
     String lat = "";
     String lon = "";
     private boolean isClicked = false;
+    private GoogleApiClient googleApiClient;
+    private Location location;
+    private LocationManager locationManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (googleApiClient != null && !googleApiClient.isConnected()) {
+            googleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.add_store_fragment, container, false);
         storeName = (EditText) view.findViewById(R.id.etStoreName);
         storeAddress = (EditText) view.findViewById(R.id.etAddress);
@@ -64,11 +94,44 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
         getCurrentLocation = (Button) view.findViewById(R.id.btGetLocation);
         btAdd = (Button) view.findViewById(R.id.btAdd);
         btAdd.setOnClickListener(this);
-       // btAdd.setEnabled(false);
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(getContext()).
+                    addConnectionCallbacks(AddStoreFragment.this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
+        }
+        // btAdd.setEnabled(false);
         btCancel = (Button) view.findViewById(R.id.btCancel);
         latitude = (TextView) view.findViewById(R.id.latitude);
         longitude = (TextView) view.findViewById(R.id.longitude);
-        getCurrentLocation.setOnClickListener(this);
+        getCurrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQ_PERMISSION);
+                } else {
+
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    lat = String.valueOf(location.getLatitude());
+                    lon = String.valueOf(location.getLongitude());
+                }
+
+
+                latitude.setText(lat);
+                longitude.setText(lon);
+                isClicked = true;
+//                Log.d("LAT", String.valueOf(location.getLatitude()));
+            }
+        });
         storeName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -87,7 +150,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
                             if (s.length() == 0) {
-                          //      btAdd.setEnabled(false);
+                                //      btAdd.setEnabled(false);
                             } else {
                                 /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                                     btAdd.setBackground(getResources().getDrawable(R.drawable.editstore_edit_button));
@@ -116,29 +179,64 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
         return view;
     }
 
+    private final static int REQ_PERMISSION = 1001;
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQ_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (googleApiClient.isConnected()) {
+                        if(checkPermission()) {
+                            location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                        }
+                        latitude.setText(location.getLatitude()+"");
+                        longitude.setText(location.getLongitude()+"");
+                        isClicked = true;
+                        Log.d(MainActivity.TAG,"Permision granted");
+                    }
+                } else {
+                    requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQ_PERMISSION);
+                }
+        }
+    }
+
+    private boolean checkPermission() {
+        // Ask for permission if it wasn't granted yet
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return (ContextCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED);
+        } else {
+            return false;
+        }
+    }
+
+    private void requestPermission(){
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)){
+            Toast.makeText(getContext(), "This app relies on location data for it's main functionality. Please enable GPS data to access all features.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQ_PERMISSION);
+        }
+    }
+
+    private Location getLastKnownLocation() {
+        if (googleApiClient.isConnected()) {
+            if (checkPermission()) {
+                location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                if (location != null) {
+                    return location;
+                }
+            }
+        } else {
+            Log.d(MainActivity.TAG, "Google API not connected");
+        }
+        return null;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btGetLocation:
-                LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                lat = String.valueOf(location.getLatitude());
-                lon = String.valueOf(location.getLongitude());
-                latitude.setText(lat);
-                longitude.setText(lon);
-                isClicked = true;
-                Log.d("LAT",String.valueOf(location.getLatitude()));
-                break;
             case R.id.btAdd:
                 String sN = storeName.getText().toString();
                 String sA = storeAddress.getText().toString();
@@ -236,6 +334,21 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 }

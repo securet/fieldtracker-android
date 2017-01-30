@@ -19,6 +19,7 @@ import com.allsmart.fieldtracker.utils.Logger;
 import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.fragment.CameraFragment;
 import com.allsmart.fieldtracker.fragment.CameraFragment2;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -98,7 +99,7 @@ public class CameraActivity extends AppCompatActivity{
             {
                 if(dialog == null|| (dialog != null && !dialog.isShowing()))
                 {
-                    dialog = new Dialog(CameraActivity.this, R.style.Theme_Dialog_Translucent);
+                    /*dialog = new Dialog(CameraActivity.this, R.style.Theme_Dialog_Translucent);
                     dialog.setContentView(R.layout.custom_loader);
                     dialog.setCancelable(false);
                     dialog.show();
@@ -106,7 +107,13 @@ public class CameraActivity extends AppCompatActivity{
                     ivOutsideImage = (ImageView) dialog.findViewById(R.id.ivOutsideImage);
                     Animation rotateXaxis = AnimationUtils.loadAnimation(CameraActivity.this, R.anim.rotate_x_axis);
                     rotateXaxis.setInterpolator(new LinearInterpolator());
-                    ivOutsideImage.setAnimation(rotateXaxis);
+                    ivOutsideImage.setAnimation(rotateXaxis);*/
+                    dialog = new Dialog(CameraActivity.this, R.style.Theme_Dialog_Translucent);
+                    dialog.setContentView(R.layout.loader_animation);
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    AVLoadingIndicatorView avl = (AVLoadingIndicatorView) dialog.findViewById(R.id.avlView);
+                    avl.show();
                 }
             }
             catch(Exception e)

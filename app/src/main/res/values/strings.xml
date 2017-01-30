@@ -79,5 +79,11 @@
     <string name="edit_leave">Edit Leave</string>
     <string name="lat">Lat:</string>
     <string name="lon">Lon:</string>
+    <string name="reset">Reset</string>
+    <string name="reporting_manager">Reporting Manager</string>
+    <string name="leave_requisition">Leave Requisition</string>
+    <string name="update">Update</string>
+    <string name="end_date">End Date</string>
+    <string name="select_type">Select Type</string>
 
 </resources>

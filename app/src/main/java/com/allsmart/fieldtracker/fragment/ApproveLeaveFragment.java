@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allsmart.fieldtracker.adapter.ListViewLeaveStatusListAdapter;
+import com.allsmart.fieldtracker.model.LeaveRequisition;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.R;
@@ -47,7 +48,7 @@ import java.util.GregorianCalendar;
  * Created by allsmartlt218 on 09-01-2017.
  */
 
-public class EditLeaveFragment  extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Object>, DatePickerDialog.OnDateSetListener {
+public class ApproveLeaveFragment  extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Object>, DatePickerDialog.OnDateSetListener {
 
     private TextView etStart,etEnd,etType,tvReasonType,tvDays, tvEditLeave;
     private ImageView ivStart,ivEnd;
@@ -112,7 +113,7 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
             }
         });
 
-        final Leave leave = getArguments().getParcelable("leave_key");
+        final LeaveRequisition leave = getArguments().getParcelable("leave_requisition_key");
         if(null != leave) {
             etStart.setText(leave.getFromDate());
             etEnd.setText(leave.getToDate());
@@ -137,7 +138,7 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
                     bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
                     bundle.putString(AppsConstant.METHOD, AppsConstant.PUT);
                     bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,leaveReasonId,fDate,tDate,leave.getPartyRelationShipId()));
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,EditLeaveFragment.this).forceLoad();
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,ApproveLeaveFragment.this).forceLoad();
                 } else {
                     Toast.makeText(getContext(),"Please select Leave Type and Reason Type and Description",Toast.LENGTH_SHORT).show();
                 }
@@ -204,7 +205,7 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
         Bundle b = new Bundle();
         b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.LEAVE_TYPES));
         b.putString(AppsConstant.METHOD,AppsConstant.GET);
-        getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_TYPES,b,EditLeaveFragment.this).forceLoad();
+        getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_TYPES,b,ApproveLeaveFragment.this).forceLoad();
 
         return view;
     }

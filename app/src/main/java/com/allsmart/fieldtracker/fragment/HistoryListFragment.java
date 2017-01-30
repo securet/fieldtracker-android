@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.allsmart.fieldtracker.R;
 import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.adapter.ListViewHistoryAdapter;
 import com.allsmart.fieldtracker.constants.AppsConstant;
+import com.allsmart.fieldtracker.model.Manager;
 import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.model.HistoryNew;
 import com.allsmart.fieldtracker.constants.LoaderConstant;
@@ -52,12 +54,24 @@ public class HistoryListFragment extends Fragment implements AdapterView.OnItemC
         Bundle bundle = new Bundle();
         System.out.println(pageIndex);
 
-        username = preferences.getString(Preferences.USERNAME,"");
-        if(!TextUtils.isEmpty(username)) {
-            bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,preferences.getString(Preferences.USERNAME,""),"0","10"));
-        }else {
-            bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,"", "0", "10"));
-        }bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
+        if(((MainActivity) getActivity()).isManager()) {
+            if(((MainActivity)getActivity()).openPage == MainActivity.MAP) {
+                Manager manager = getArguments().getParcelable("manager");
+                if(manager != null /*&& !TextUtils.isEmpty(manager.getEmail())*/) {
+                    bundle.putString(AppsConstant.URL,UrlBuilder.getHistoryList(Services.HISTORY_LIST,"manju+on@allsmart.in"/*manager.getEmail()*/,"0","10"));
+                } else {
+                    Log.d(MainActivity.TAG,"Error at Member History List  " + manager.getEmail());
+                }
+            }
+        } else {
+            username = preferences.getString(Preferences.USERNAME,"");
+            if(!TextUtils.isEmpty(username)) {
+                bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,username,"0","10"));
+            } else {
+                Log.d(MainActivity.TAG,"Error at Field History List");
+            }
+        }
+        bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
         getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST,bundle,HistoryListFragment.this);
 	}
 
@@ -183,21 +197,25 @@ public class HistoryListFragment extends Fragment implements AdapterView.OnItemC
             pageIndex++;
             System.out.println(pageIndex + "   onScroll");
             Bundle bundle = new Bundle();
-            bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST, preferences.getString(Preferences.USERNAME, ""), pageIndex + "", "10"));
+            if(((MainActivity) getActivity()).isManager()) {
+                if(((MainActivity)getActivity()).openPage == MainActivity.MAP) {
+                    Manager manager = getArguments().getParcelable("manager");
+                    if(manager != null /*&& !TextUtils.isEmpty(manager.getEmail())*/) {
+                        bundle.putString(AppsConstant.URL,UrlBuilder.getHistoryList(Services.HISTORY_LIST,"manju+on@allsmart.in"/*manager.getEmail()*/,pageIndex+"","10"));
+                    } else {
+                        Log.d(MainActivity.TAG,"Error at Member History List");
+                    }
+                }
+            } else {
+                username = preferences.getString(Preferences.USERNAME,"");
+                if(!TextUtils.isEmpty(username)) {
+                    bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,username,pageIndex+"","10"));
+                } else {
+                    Log.d(MainActivity.TAG,"Error at Field History List");
+                }
+            }
             bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
             getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST, bundle, HistoryListFragment.this);
         }
-        /*if (totalItemCount>0 &&!isLoading &&(firstVisibleItem + visibleItemCount >= totalItemCount-3) && !isLast) {
-            flag = 0;
-            isLoading = true;
-            pageIndex++;
-            System.out.println(pageIndex + "   onScroll");
-            Bundle bundle = new Bundle();
-            bundle.putString(AppsConstant.URL, UrlBuilder.getHistoryList(Services.HISTORY_LIST,preferences.getString(Preferences.USERNAME,""),pageIndex+"", "10"));
-            bundle.putString(AppsConstant.METHOD, AppsConstant.GET);
-            getActivity().getLoaderManager().initLoader(LoaderConstant.HISTORY_LIST, bundle, HistoryListFragment.this);
-
-        }*/
-
     }
 }

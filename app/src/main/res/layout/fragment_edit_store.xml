@@ -146,7 +146,7 @@
                 android:paddingLeft="@dimen/margin_35"
                 android:paddingRight="@dimen/margin_35"
                 android:paddingStart="@dimen/margin_35"
-                android:text="@string/edit"
+                android:text="@string/update"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/text_22" />

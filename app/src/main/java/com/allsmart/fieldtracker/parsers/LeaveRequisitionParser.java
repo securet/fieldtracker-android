@@ -5,10 +5,11 @@ import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.allsmart.fieldtracker.constants.AppsConstant;
-import com.crashlytics.android.Crashlytics;
-import com.allsmart.fieldtracker.utils.Logger;
-import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.model.Leave;
+import com.allsmart.fieldtracker.model.LeaveRequisition;
+import com.allsmart.fieldtracker.storage.Preferences;
+import com.allsmart.fieldtracker.utils.Logger;
+import com.crashlytics.android.Crashlytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,21 +21,21 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by allsmartlt218 on 06-01-2017.
+ * Created by allsmartlt218 on 25-01-2017.
  */
 
-public class LeaveListParser {
+public class LeaveRequisitionParser {
     private String response = "";
     private String result = "";
     private Preferences preferences;
-    private Leave leave;
-    private ArrayList<Leave> list = new ArrayList<>();
+    private LeaveRequisition leave;
+    private ArrayList<LeaveRequisition> list = new ArrayList<>();
 
-    public LeaveListParser(String response, Preferences preferences) {
+    public LeaveRequisitionParser(String response, Preferences preferences) {
         this.preferences = preferences;
         this.response = response;
     }
-    public ArrayList<Leave> Parse() {
+    public ArrayList<LeaveRequisition> Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
             if(parentObject.has("employeeLeavesList")) {
@@ -50,7 +51,7 @@ public class LeaveListParser {
                     JSONObject childObject = parentArray.getJSONObject(i);
                     if(childObject.has("fromDate")) {
                         if(childObject.has("thruDate")) {
-                            leave = new Leave();
+                            leave = new LeaveRequisition();
                             String sFromDate = childObject.getString("fromDate");
                             String sThruDate = childObject.getString("thruDate");
                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
