@@ -6,6 +6,8 @@ import android.os.Bundle;
 import com.allsmart.fieldtracker.constants.AppsConstant;
 import com.allsmart.fieldtracker.constants.LoaderMethod;
 import com.allsmart.fieldtracker.parsers.LeaveRequisitionParser;
+import com.allsmart.fieldtracker.parsers.PromoterApprovalListParser;
+import com.allsmart.fieldtracker.parsers.PromoterApproveParser;
 import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.parsers.AddPromoterParser;
 import com.allsmart.fieldtracker.parsers.AddStoreParser;
@@ -96,6 +98,10 @@ public class LoaderServices extends CustomAsyncTask
                 return new ChangePasswordParser(response).Parse();
             case LEAVE_REQUISITION:
                 return new LeaveRequisitionParser(response,preferences).Parse();
+            case PROMOTER_APPROVALS_LIST:
+                return new PromoterApprovalListParser(response,preferences).Parse();
+            case APPROVE_PROMOTER:
+                return new PromoterApproveParser(response).Parse();
 
             default:
                 return  null;

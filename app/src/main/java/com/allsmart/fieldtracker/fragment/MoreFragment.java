@@ -14,7 +14,7 @@ import com.allsmart.fieldtracker.R;
 
 public class MoreFragment extends Fragment {
 
-    private TextView store,promoter,myAccount,changePassword, leaveRequisition,leave;
+    private TextView store,promoter,myAccount,changePassword, leaveRequisition,leave,tvPromoterApprovals;
     private Preferences preferences;
 
     @Override
@@ -30,13 +30,22 @@ public class MoreFragment extends Fragment {
         myAccount = (TextView) rootView.findViewById(R.id.tvMyAccount);
         changePassword = (TextView) rootView.findViewById(R.id.tvChangePassword);
         leaveRequisition = (TextView) rootView.findViewById(R.id.tvLeaveRequisition);
+        tvPromoterApprovals = (TextView) rootView.findViewById(R.id.tvPromoterApprovals);
         leave = (TextView) rootView.findViewById(R.id.tvLeave);
         if(((MainActivity)getActivity()).isManager()) {
             leaveRequisition.setVisibility(View.VISIBLE);
         } else {
             leaveRequisition.setVisibility(View.GONE);
         }
-
+        tvPromoterApprovals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment f = new PromoterApprovalsFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
+                fragmentManager.executePendingTransactions();
+            }
+        });
         tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

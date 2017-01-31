@@ -55,6 +55,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferences = new Preferences(getContext());
     }
 
     @Nullable
@@ -77,13 +78,12 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
-                Fragment f = new PromotersFragment();
-                fm.beginTransaction().replace(R.id.flMiddle,f).commit();
-                fm.executePendingTransactions();
+                fm.popBackStackImmediate();
+                ((MainActivity)getActivity()).displayMessage("Cancel is clicked");
             }
         });
         tvStoreAssignment.setTag(new Store());
-        preferences = new Preferences(getActivity());
+
 
         Bundle b = new Bundle();
         b.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.STORE_LIST));

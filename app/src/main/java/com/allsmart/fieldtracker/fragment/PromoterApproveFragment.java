@@ -25,6 +25,7 @@ import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.R;
 import com.allsmart.fieldtracker.constants.AppsConstant;
 import com.allsmart.fieldtracker.customviews.CustomBuilder;
+import com.allsmart.fieldtracker.model.PromoterApprovals;
 import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.model.Promoter;
 import com.allsmart.fieldtracker.model.Store;
@@ -45,7 +46,7 @@ import static com.allsmart.fieldtracker.constants.AppsConstant.BACK_CAMREA_OPEN;
  * Created by allsmartlt218 on 10-12-2016.
  */
 
-public class EditPromoterFragment extends Fragment implements LoaderManager.LoaderCallbacks<Object>, View.OnClickListener {
+public class PromoterApproveFragment extends Fragment implements LoaderManager.LoaderCallbacks<Object>, View.OnClickListener {
 
     private Button edit,cancel;
     private EditText firstName,lastName,phone,emailAddress,Address;
@@ -55,7 +56,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
     private ArrayList<Store> list;
     private String[] image = new String[3];
     private int i = 0;
-    private Promoter promoter;
+    private PromoterApprovals promoter;
     private Preferences preferences;
     private int storeId;
     private LinearLayout llWeeklyOff;
@@ -63,7 +64,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        promoter = getArguments().getParcelable("promoter");
+        promoter = getArguments().getParcelable("promoter_approve");
         preferences = new Preferences(getContext());
 
     }
@@ -73,8 +74,10 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.edit_promoter_fragment,container,false);
         edit = (Button) view.findViewById(R.id.btEPEdit);
+        edit.setText("Approve");
         llWeeklyOff = (LinearLayout) view.findViewById(R.id.llWeeklyOff);
         cancel = (Button) view.findViewById(R.id.btEAddPCancel);
+        cancel.setText("Reject");
         firstName = (EditText) view.findViewById(R.id.etPromoterFN);
         lastName = (EditText) view.findViewById(R.id.etPromoterLN);
         phone = (EditText) view.findViewById(R.id.etPromoterPh);
@@ -96,8 +99,11 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).displayMessage("Cancel Button Clicked");
-                fragmentManager.popBackStackImmediate();
+                Bundle b = new Bundle();
+                b.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.REJECT_PROMOTER));
+                b.putString(AppsConstant.METHOD,AppsConstant.PUT);
+                b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterApprove(promoter.getRequestId()));
+                getActivity().getLoaderManager().initLoader(LoaderConstant.APPROVE_PROMOTER,b,PromoterApproveFragment.this);
             }
         });
         firstName.setText(promoter.getFirstName());
@@ -105,17 +111,14 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
         phone.setText(promoter.getPhoneNum());
         emailAddress.setText(promoter.getEmailAddress());
         Address.setText(promoter.getAddress());
-        if (isApproved()) {
-            firstName.setEnabled(false);
-            lastName.setEnabled(false);
-            phone.setEnabled(false);
-            emailAddress.setEnabled(false);
-            Address.setEnabled(false);
-            tvStore.setEnabled(false);
-            tvSE.setEnabled(false);
-            edit.setVisibility(View.GONE);
-            cancel.setVisibility(View.GONE);
-        }
+        firstName.setEnabled(false);
+        lastName.setEnabled(false);
+        phone.setEnabled(false);
+        emailAddress.setEnabled(false);
+        Address.setEnabled(false);
+        tvStore.setEnabled(false);
+        tvSE.setEnabled(false);
+
 
 
 
@@ -126,19 +129,23 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
         ivPhoto.setOnClickListener(this);
         ivAadhar.setOnClickListener(this);
         ivAddress.setOnClickListener(this);
+
+        ivPhoto.setEnabled(false);
+        ivAadhar.setEnabled(false);
+        ivAddress.setEnabled(false);
         tvStore.setTag(new Store());
-        if (!isApproved()) {
+        /*if (!isApproved()) {
             Bundle b = new Bundle();
             b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.STORE_LIST));
             b.putString(AppsConstant.METHOD, AppsConstant.GET);
-            getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_LIST, b, EditPromoterFragment.this).forceLoad();
-        } else {
+            getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_LIST, b, PromoterApproveFragment.this).forceLoad();
+        } else {*/
             Bundle b = new Bundle();
             b.putString(AppsConstant.URL, UrlBuilder.getStoreDetails(Services.STORE_DETAIL,promoter.getProductStoreId()));
             b.putString(AppsConstant.METHOD, AppsConstant.GET);
-            getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_DETAIL, b, EditPromoterFragment.this).forceLoad();
-        }
-        tvStore.setOnClickListener(new View.OnClickListener() {
+            getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_DETAIL, b, PromoterApproveFragment.this).forceLoad();
+      //  }
+        /*tvStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -161,25 +168,18 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                 });
                 builder.show();
             }
-        });
-      //  if (!promoter.getStatusId().equals(null) && !promoter.getStatusId().equalsIgnoreCase("ReqCompleted")) {
-            edit.setOnClickListener(new View.OnClickListener() {
+        });*/
+        //  if (!promoter.getStatusId().equals(null) && !promoter.getStatusId().equalsIgnoreCase("ReqCompleted")) {
+        edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Bundle b = new Bundle();
-                    b.putString(AppsConstant.URL,UrlBuilder.getUpdatePromoter(Services.UPDATE_PROMOTER,promoter.getRequestId()));
-                    b.putString(AppsConstant.METHOD,AppsConstant.PUT);
-                if(image != null) {
-                    b.putString(AppsConstant.PARAMS, ParameterBuilder.getPromoterUpdate(promoter.getRequestId(), promoter.getRequestType(), firstName.getText().toString(),
-                            lastName.getText().toString(), phone.getText().toString(), Address.getText().toString(), emailAddress.getText().toString(), storeId + "", "ReqSubmitted",
-                            "RqtAddPromoter", "description after updation", image[0], image[1], image[2]));
-                }else {
-                    b.putString(AppsConstant.PARAMS, ParameterBuilder.getPromoterUpdate(promoter.getRequestId(), promoter.getRequestType(), firstName.getText().toString(),
-                            lastName.getText().toString(), phone.getText().toString(), Address.getText().toString(), emailAddress.getText().toString(), storeId + "", "ReqSubmitted",
-                            "RqtAddPromoter", "description after updation", photo,adhar,address));
-                }getActivity().getLoaderManager().initLoader(LoaderConstant.UPDATE_PROMOTER,b,EditPromoterFragment.this);
+                Bundle b = new Bundle();
+                b.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.APPROVE_PROMOTER));
+                b.putString(AppsConstant.METHOD,AppsConstant.PUT);
+                b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterApprove(promoter.getRequestId()));
+                getActivity().getLoaderManager().initLoader(LoaderConstant.APPROVE_PROMOTER,b,PromoterApproveFragment.this);
 
-                    }
+            }
         });
 
         return view;
@@ -191,14 +191,10 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
             ((MainActivity)getActivity()).showHideProgressForLoder(false);
         }
         switch(id) {
-            case  LoaderConstant.IMAGE_UPLOAD:
-                return new LoaderServices(getContext(),LoaderMethod.IMAGE_UPLOAD,args);
-            case LoaderConstant.UPDATE_PROMOTER:
-                return new LoaderServices(getContext(), LoaderMethod.UPDATE_PROMOTER,args);
-            case LoaderConstant.STORE_LIST:
-                return new LoaderServices(getContext(),LoaderMethod.STORE_LIST,args);
             case LoaderConstant.STORE_DETAIL:
                 return new LoaderServices(getContext(),LoaderMethod.STORE_DETAIL,args);
+            case LoaderConstant.APPROVE_PROMOTER:
+                return new LoaderServices(getContext(),LoaderMethod.APPROVE_PROMOTER,args);
             default:
                 return null;
         }
@@ -207,7 +203,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
     private boolean isFieldExecutive() {
         if(preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExecutiveOnPremise") ||
                 preferences.getString(Preferences.ROLETYPEID,"").equalsIgnoreCase("FieldExecutiveOffPremise") ) {
-           return true;
+            return true;
         } else {
             return false;
         }
@@ -221,16 +217,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
             ((MainActivity) getActivity()).showHideProgressForLoder(true);
         }
         switch (loader.getId()) {
-            case LoaderConstant.STORE_LIST:
-            if (data != null && data instanceof ArrayList) {
-                list = (ArrayList<Store>) data;
-            } else {
-                Toast.makeText(getContext(),
-                        "Error in response. Please try again.",
-                        Toast.LENGTH_SHORT).show();
-            }
 
-                break;
             case LoaderConstant.STORE_DETAIL:
                 if (data != null && data instanceof String) {
                     String storeName = (String) data;
@@ -249,45 +236,31 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                 }
 
                 break;
-            case LoaderConstant.IMAGE_UPLOAD:
-                if (data != null && data instanceof String) {
-                    if(i == 1) {
-                        //photo
-                        image[0] = (String) data;
-                    }else if(i == 2) {
-                        //aadhar
-                        image[1] = (String) data;
-                    } else if(i == 3) {
-                        //address
-                        image[2] = (String) data;
+            case LoaderConstant.APPROVE_PROMOTER:
+                if(data != null && data instanceof String) {
+                    String message = (String) data;
+                    if(!TextUtils.isEmpty(message) && !message.equalsIgnoreCase("error") && !message.equalsIgnoreCase("success")) {
+                        Toast.makeText(getContext(),
+                                message,
+                                Toast.LENGTH_SHORT).show();
+                    } else if(!TextUtils.isEmpty(message) && message.equalsIgnoreCase("success")) {
+                        Toast.makeText(getContext(),
+                                "Success",
+                                Toast.LENGTH_SHORT).show();
+                        FragmentManager fm = getFragmentManager();
+                        fm.popBackStackImmediate();
                     } else {
-                        //error
-                        i = 0;
+                        Toast.makeText(getContext(),
+                                "Operation Failed",
+                                Toast.LENGTH_SHORT).show();
                     }
-                    //  image[i] = (String) data;
-                    Log.d("IMAGE", (String) data);
-
-                } else {
+                } else  {
                     Toast.makeText(getContext(),
                             "Error in response. Please try again.",
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case LoaderConstant.UPDATE_PROMOTER:
-                if(data != null && data instanceof String) {
-                    if (data.equals("success")) {
-                        Toast.makeText(getContext(),
-                                "Promoter Edited Successfully",
-                                Toast.LENGTH_SHORT).show();
-                        fragmentManager.popBackStackImmediate();
-                    } else {
-                        Toast.makeText(getContext(),
-                                "Failed to edit",
-                                Toast.LENGTH_SHORT).show();
-                    }
 
-                }
-                break;
         }
         if(getActivity() != null  && getActivity() instanceof  MainActivity) {
             getActivity().getLoaderManager().destroyLoader(loader.getId());
@@ -307,60 +280,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == AppsConstant.IMAGE_PHOTO) {
-                String responseValue = data.getStringExtra("response");
-                String purpose = data.getStringExtra("image_purpose");
-                if (!responseValue.equals(null)) {
-                    /*Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
-                    Log.d("path", responseValue);*/
-                    i = 1;
-                    Bundle bundle = new Bundle();
-                    bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
-                    bundle.putString(AppsConstant.FILE, responseValue);
-                    bundle.putString(AppsConstant.FILEPURPOSE,purpose);
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,EditPromoterFragment.this);
-                    ivPhoto.setImageResource(R.drawable.photo_tick);
-                    ivPhoto.setEnabled(false);
-                }
-            } else if (requestCode == AppsConstant.IMAGE_AADHAR) {
-                final String responseValue = data.getStringExtra("response");
-                final String purpose = data.getStringExtra("image_purpose");
-                if (!responseValue.equals(null)) {
-                    /*Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
-                    Log.d("path", responseValue);*/
-                    i = 2;
-                    Bundle bundle = new Bundle();
-                    bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
-                    bundle.putString(AppsConstant.FILE, responseValue);
-                    bundle.putString(AppsConstant.FILEPURPOSE,purpose);
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,EditPromoterFragment.this).forceLoad();
-                    ivAadhar.setImageResource(R.drawable.aadhartick);
-                    ivAadhar.setEnabled(false);
-                }
-            } else if (requestCode == AppsConstant.IMAGE_ADDRESS_PROOF) {
-                final String responseValue = data.getStringExtra("response");
-                final String purpose = data.getStringExtra("image_purpose");
-                if (!responseValue.equals(null)) {
-                    /*Toast.makeText(getContext(), responseValue, Toast.LENGTH_SHORT).show();
-                    Log.d("path", responseValue);*/
 
-                            Bundle bundle = new Bundle();
-                            bundle.putString(AppsConstant.URL, Services.DomainUrlImage);
-                            bundle.putString(AppsConstant.FILE, responseValue);
-                            bundle.putString(AppsConstant.FILEPURPOSE,purpose);
-                            getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,EditPromoterFragment.this).forceLoad();
-                    i = 3;
-                    //  image[2] = responseValue;
-                    ivAddress.setImageResource(R.drawable.id_card_tick);
-                    ivAddress.setEnabled(false);
-                }
-            }
-        }
-    }
 
 
 

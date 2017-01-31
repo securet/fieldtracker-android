@@ -1,5 +1,6 @@
 package com.allsmart.fieldtracker.parsers;
 
+import com.allsmart.fieldtracker.model.PromoterApprovals;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.utils.Logger;
 import com.allsmart.fieldtracker.storage.Preferences;
@@ -15,18 +16,18 @@ import java.util.ArrayList;
  * Created by allsmartlt218 on 09-12-2016.
  */
 
-public class PromoterListParser {
+public class PromoterApprovalListParser {
     private String response = "";
     private String result = "";
-    private ArrayList<Promoter> list = new ArrayList<>();
-    private Promoter promoter;
+    private ArrayList<PromoterApprovals> list = new ArrayList<>();
+    private PromoterApprovals promoter;
     private Preferences preferences;
-    public PromoterListParser(String response, Preferences preferences) {
+    public PromoterApprovalListParser(String response, Preferences preferences) {
         this.response = response;
         this.preferences = preferences;
     }
 
-    public ArrayList<Promoter> Parse() {
+    public ArrayList<PromoterApprovals> Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
 
@@ -41,12 +42,11 @@ public class PromoterListParser {
                 for(int i = 0 ; i < jsonArray.length() ; i++) {
                     JSONObject childObject = jsonArray.getJSONObject(i);
                     if(childObject.has("requestId")) {
-                        promoter = new Promoter();
+                        promoter = new PromoterApprovals();
                         promoter.setRequestId(childObject.getString("requestId"));
                     }
                     if(childObject.has("statusId")) {
-/*For testing*/   //      promoter.setStatusId(childObject.getString("statusId"));
-                        promoter.setStatusId("ReqCompleted");
+                        promoter.setStatusId(childObject.getString("statusId"));
                     }
                     if(childObject.has("requestJson")){
                         String s = childObject.getString("requestJson");

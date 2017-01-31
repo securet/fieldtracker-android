@@ -2,16 +2,24 @@ package com.allsmart.fieldtracker.activity;
 
 import android.app.Dialog;
 import android.app.LoaderManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -40,23 +48,26 @@ import com.allsmart.fieldtracker.constants.LoaderMethod;
 import com.allsmart.fieldtracker.service.LoaderServices;
 import com.allsmart.fieldtracker.constants.Services;
 import com.allsmart.fieldtracker.utils.UrlBuilder;
-import com.google.android.gms.location.LocationListener;
+
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks{
 	public static String TAG = "lstech.aos.debug";
-
 	public static boolean geofencesAlreadyRegistered = false;
 	public Preferences preferences;
 	public final static int  MAP =0,LIST=1,MORE=2;
 	public int openPage = MAP;
+
 
 	LinearLayout llAttendance,llHistory,llMore,footerTabs;
 	ImageView ivCurrentLocation,ivPhoto;
     public boolean isLoading = false;
 	DigitalClockView dtcLoginTime;
 	TextView tvSiteName,tvUserName,tvUserSerName,store;
+
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		dtcLoginTime = (DigitalClockView) findViewById(R.id.dtcLoginTime);
 		footerTabs = (LinearLayout) findViewById(R.id.footerTabs);
         tvSiteName.setText(getResources().getString(R.string.off_site));
+		registerReceiver(changeUI, new IntentFilter(AppsConstant.LOCATION_UPDATE));
 
 		tvUserName.setText(preferences.getString(Preferences.USERFIRSTNAME,""));
 		tvUserSerName.setText(preferences.getString(Preferences.USERLASTNAME,""));
@@ -180,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             preferences.remove(Preferences.SITE_ENTITY);
             preferences.remove(Preferences.SITENAME);
             preferences.remove(Preferences.PARTYID);
+			preferences.remove(Preferences.USER_CUREENTSITE);
 
             preferences.commit();
             //	preferences.clearPreferences();
@@ -367,6 +380,28 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	public void showLoader(String strMessage){
 		runOnUiThread(new MainActivity.RunShowLoaderCustom());
 	}
+
+	private BroadcastReceiver changeUI = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String siteName = intent.getStringExtra(Preferences.SITENAME);
+			if(!TextUtils.isEmpty(siteName)) {
+				tvSiteName.setText(siteName);
+				preferences.saveString(Preferences.USER_CUREENTSITE,siteName);
+			} else {
+				tvSiteName.setText(getString(R.string.off_site));
+				preferences.saveString(Preferences.USER_CUREENTSITE,getString(R.string.off_site));
+			}
+			preferences.commit();
+		}
+	};
+
+
+
+	public void displayMessage(String message) {
+		Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+	}
+
 
 	class RunShowLoaderCustom implements Runnable
 	{

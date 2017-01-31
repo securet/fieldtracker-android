@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by allsmartlt218 on 02-12-2016.
  */
 
-public class Promoter implements Parcelable{
+public class PromoterApprovals implements Parcelable{
     private String firstName;
     private String requestId;
     private String requestType;
@@ -25,11 +25,11 @@ public class Promoter implements Parcelable{
     private String addressIdPath;
     private String aadharIdPath;
     private ArrayList<Promoter> promoterArrayList;
-    public Promoter() {
+    public PromoterApprovals() {
 
     }
 
-    protected Promoter(Parcel in) {
+    protected PromoterApprovals(Parcel in) {
         firstName = in.readString();
         requestId = in.readString();
         requestType = in.readString();

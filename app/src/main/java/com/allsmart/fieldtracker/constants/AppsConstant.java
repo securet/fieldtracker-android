@@ -34,4 +34,5 @@ public class AppsConstant {
     public static final int IMAGE_ADDRESS_PROOF = 4;
     public static int RunningLoaderCount =0;
     public static String TAG = "lstech.aos.debug";
+    public static String LOCATION_UPDATE = "LOCATION_UPDATE";
 }

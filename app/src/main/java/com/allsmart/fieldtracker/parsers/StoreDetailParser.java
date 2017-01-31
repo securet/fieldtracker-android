@@ -18,34 +18,31 @@ import java.util.List;
  */
 
 public class StoreDetailParser {
-    String response = "";
-    String result = "";
-    Preferences preferences;
-    ArrayList<String> list;
+    private String response = "";
+    private String result = "";
+    private Preferences preferences;
+    //ArrayList<String> list;
 
     public StoreDetailParser(String response, Preferences preferences) {
         this.response = response;
         this.preferences = preferences;
     }
 
-    public List Parse() {
+    public String Parse() {
 
         Log.d("JSON",response);
         try {
             JSONObject parentObject = new JSONObject(response);
             if(parentObject.has("storeName")) {
-                JSONArray stores = new JSONArray("storeName");
-                for (int i = 0 ; i < stores.length() ; i++) {
-                    JSONObject obj = stores.getJSONObject(i);
-                    list.add(obj.getString("storeName"));
-                }
+                    result = parentObject.getString("storeName");
             }
         } catch (JSONException e) {
+            result = "error";
             Logger.e("Log",e);
             Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
             Crashlytics.logException(e);
         } finally {
-            return null;
+            return result;
         }
     }
 }

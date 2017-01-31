@@ -209,6 +209,19 @@ public class ParameterBuilder {
         }
     }
 
+    public static String getPromoterApprove(String requestId) {
+        String url = "";
+        try {
+            url = "requestId=" + URLEncoder.encode(requestId,"UTF-8");
+        } catch (Exception e) {
+            Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
+        } finally {
+            return url;
+        }
+    }
+
     public static String getPromoterUpdate(String requestId,String requestType,String firstName,
                                            String lastName,String phone,String address,String emailId,
                                            String productStoreId,String statusId,String requestTypeEnumId,

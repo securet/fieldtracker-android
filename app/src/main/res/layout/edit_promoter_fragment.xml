@@ -17,6 +17,7 @@
             android:layout_height="match_parent"
             />
         <EditText
+            android:textColor="@drawable/edit_text_disable_text_color"
             android:id="@+id/etPromoterFN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,6 +30,7 @@
             android:textSize="@dimen/text_20"
             android:hint="@string/first_name"/>
         <EditText
+            android:textColor="@drawable/edit_text_disable_text_color"
             android:id="@+id/etPromoterLN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,6 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="italic"
+            android:textColor="@drawable/edit_text_disable_text_color"
             android:padding="@dimen/margin_10"
             android:background="@drawable/edittext_editstore_item"
             android:layout_marginLeft="@dimen/margin_20"
@@ -58,6 +61,7 @@
             android:layout_height="wrap_content"
             android:textStyle="italic"
             android:padding="@dimen/margin_10"
+            android:textColor="@drawable/edit_text_disable_text_color"
             android:background="@drawable/edittext_editstore_item"
             android:layout_marginLeft="@dimen/margin_20"
             android:layout_marginRight="@dimen/margin_20"
@@ -69,6 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/margin_100"
             android:textStyle="italic"
+            android:textColor="@drawable/edit_text_disable_text_color"
             android:padding="@dimen/margin_10"
             android:gravity="start"
             android:background="@drawable/edittext_editstore_item"
@@ -86,6 +91,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:textColor="@android:color/black"
                 android:id="@+id/tvStoreAssignment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -100,6 +106,7 @@
                 android:layout_marginBottom="@dimen/margin_10"
                 android:textSize="@dimen/text_20"/>
             <TextView
+                android:textColor="@android:color/black"
                 android:id="@+id/tvSEAssignment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -126,6 +133,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/weekly_off"/>
             <LinearLayout
+                android:id="@+id/llWeeklyOff"
+
                 android:layout_marginLeft="@dimen/margin_10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -300,11 +309,11 @@
 
             <Button
                 android:id="@+id/btEPEdit"
-                android:text="@string/edit"
-                android:paddingLeft="@dimen/margin_35"
-                android:paddingStart="@dimen/margin_35"
-                android:paddingEnd="@dimen/margin_35"
-                android:paddingRight="@dimen/margin_35"
+                android:text="@string/update"
+                android:paddingLeft="@dimen/margin_20"
+                android:paddingStart="@dimen/margin_20"
+                android:paddingEnd="@dimen/margin_20"
+                android:paddingRight="@dimen/margin_20"
                 android:textAllCaps="false"
                 android:background="@drawable/editstore_edit_button"
                 android:textColor="@color/colorWhite"

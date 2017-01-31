@@ -358,15 +358,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
     @Override
     public void onLocationChanged(Location location) {
-
-        location.setAccuracy(1.0f);
-        if(isUserInLoacation()) {
-            ((MainActivity)getActivity()).changeSiteName(preferences.getString(Preferences.SITENAME,""));
-        } else {
-            ((MainActivity)getActivity()).changeSiteName(getString(R.string.off_site));
-        }
-        Log.d(MainActivity.TAG, "new location : " + location.getLatitude() + ", " + location.getLongitude() + ". " + location.getAccuracy());
         broadcastLocationFound(location);
+        Log.d(MainActivity.TAG, "new location : " + location.getLatitude() + ", " + location.getLongitude() + ". " + location.getAccuracy());
+
 
         if (!MainActivity.geofencesAlreadyRegistered) {
             registerGeofences();

@@ -20,6 +20,7 @@ public class Services{
     public static String STORE_UPDATE = "stores";
     public static String ADD_STORE = "stores";
     public static String PROMOTER_LIST = "request/promoter/list";
+    public static String PROMOTER_APPROVALS_LIST = "request/promoter/approvalRequests";
     public static String UPDATE_PROMOTER = "request/promoter";
     public static String ADD_PROMOTER = "request/promoter";
     public static String TIME_IN_OUT = "attendance/log";
@@ -30,4 +31,6 @@ public class Services{
     public static String UPDATE_LEAVES = "leaves";
     public static String CHANGE_PASSWORD = "user/changePassword";
     public static String LEAVE_REQUISITION = "leaves/requisitions";
+    public static String APPROVE_PROMOTER = "request/promoter/approve";
+    public static String REJECT_PROMOTER = "request/promoter/reject";
 }

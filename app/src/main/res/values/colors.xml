@@ -9,4 +9,7 @@
     <color name="colorMediumGray">#a3a2a1</color>
     <color name="colorRed">#d81313</color>
     <color name="colorGreen">#20d813</color>
+    <color name="subHeaderBlue">#548ab0</color>
+    <color name="mainHeaderBlue">#1e4e76</color>
+
 </resources>
