@@ -266,29 +266,42 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                 break;
             case LoaderConstant.IMAGE_UPLOAD:
                 if (data != null && data instanceof String) {
-                    if(i == 1) {
-                        //photo
-                        image[0] = (String) data;
-                    }else if(i == 2) {
-                        //aadhar
-                        image[1] = (String) data;
-                    } else if(i == 3) {
-                        //address
-                        image[2] = (String) data;
+                    String result = (String) data;
+                    if(!TextUtils.isEmpty(result) && !result.equalsIgnoreCase("error")) {
+                        if(i == 1) {
+                            //photo
+                            image[0] = (String) data;
+                            ivPhoto.setImageResource(R.drawable.photo_tick);
+                            ivPhoto.setEnabled(false);
+                        }else if(i == 2) {
+                            //aadhar
+                            image[1] = (String) data;
+                            ivAadhar.setImageResource(R.drawable.aadhartick);
+                            ivAadhar.setEnabled(false);
+                        } else if(i == 3) {
+                            //address
+                            image[2] = (String) data;
+                            ivAddress.setImageResource(R.drawable.id_card_tick);
+                            ivAddress.setEnabled(false);
+                        } else {
+                            //error
+                            Toast.makeText(getContext(),
+                                    "Failed to upload. Please try again.",
+                                    Toast.LENGTH_SHORT).show();
+                            i = 0;
+                        }
                     } else {
-                        //error
-                        i = 0;
+                        Toast.makeText(getContext(),
+                                "Error in response. Please try again.",
+                                Toast.LENGTH_SHORT).show();
                     }
                     //  image[i] = (String) data;
                     Log.d("IMAGE", (String) data);
+                    // i++;
 
-                } else {
-                    Toast.makeText(getContext(),
-                            "Error in response. Please try again.",
-                            Toast.LENGTH_SHORT).show();
-                }
-                if(getActivity() != null  && getActivity() instanceof  MainActivity) {
-                    getActivity().getLoaderManager().destroyLoader(loader.getId());
+                    if(getActivity() != null  && getActivity() instanceof  MainActivity) {
+                        getActivity().getLoaderManager().destroyLoader(loader.getId());
+                    }
                 }
                 break;
             case LoaderConstant.UPDATE_PROMOTER:
@@ -352,8 +365,8 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                     bundle.putString(AppsConstant.FILE, responseValue);
                     bundle.putString(AppsConstant.FILEPURPOSE,purpose);
                     getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,EditPromoterFragment.this);
-                    ivPhoto.setImageResource(R.drawable.photo_tick);
-                    ivPhoto.setEnabled(false);
+                    /*ivPhoto.setImageResource(R.drawable.photo_tick);
+                    ivPhoto.setEnabled(false);*/
                 }
             } else if (requestCode == AppsConstant.IMAGE_AADHAR) {
                 final String responseValue = data.getStringExtra("response");
@@ -367,8 +380,8 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                     bundle.putString(AppsConstant.FILE, responseValue);
                     bundle.putString(AppsConstant.FILEPURPOSE,purpose);
                     getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,EditPromoterFragment.this).forceLoad();
-                    ivAadhar.setImageResource(R.drawable.aadhartick);
-                    ivAadhar.setEnabled(false);
+                    /*ivAadhar.setImageResource(R.drawable.aadhartick);
+                    ivAadhar.setEnabled(false);*/
                 }
             } else if (requestCode == AppsConstant.IMAGE_ADDRESS_PROOF) {
                 final String responseValue = data.getStringExtra("response");
@@ -384,8 +397,8 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                             getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,EditPromoterFragment.this).forceLoad();
                     i = 3;
                     //  image[2] = responseValue;
-                    ivAddress.setImageResource(R.drawable.id_card_tick);
-                    ivAddress.setEnabled(false);
+                    /*ivAddress.setImageResource(R.drawable.id_card_tick);
+                    ivAddress.setEnabled(false);*/
                 }
             }
         }
