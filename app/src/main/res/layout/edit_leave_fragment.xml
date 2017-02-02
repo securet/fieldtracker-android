@@ -44,9 +44,10 @@
                     android:layout_width="wrap_content"
                     android:paddingTop="@dimen/margin_3"
                     android:textSize="@dimen/text_20"
+                    android:textColor="@drawable/edit_text_disable_text_color"
                     android:paddingRight="@dimen/margin_25"
                     android:paddingBottom="@dimen/margin_3"
-                    android:text="--/--/----"
+                    android:text="@string/start_date"
                     android:layout_toLeftOf="@id/ivDatePicker"
                     android:background="@drawable/leave_request_edittext"
                     android:layout_height="wrap_content" />
@@ -74,10 +75,11 @@
                     android:id="@+id/etEndDate"
                     android:layout_width="wrap_content"
                     android:paddingTop="@dimen/margin_3"
+                    android:textColor="@drawable/edit_text_disable_text_color"
                     android:textSize="@dimen/text_20"
                     android:paddingRight="@dimen/margin_25"
                     android:paddingBottom="@dimen/margin_3"
-                    android:text="--/--/----"
+                    android:text="@string/end_date"
                     android:layout_toLeftOf="@id/ivDatePicker2"
                     android:background="@drawable/leave_request_edittext"
                     android:layout_height="wrap_content" />
@@ -94,6 +96,7 @@
                     android:id="@+id/tvLeaveDays"
                     android:text="0"
                     android:layout_below="@id/etEndDate"
+                    android:textColor="@drawable/edit_text_disable_text_color"
                     android:layout_alignLeft="@id/etEndDate"
                     android:textSize="@dimen/text_23"
                     android:layout_marginTop="@dimen/margin_10"
@@ -120,10 +123,11 @@
                     android:layout_width="@dimen/type_width"
                     android:paddingTop="@dimen/margin_3"
                     android:paddingRight="@dimen/margin_2"
+                    android:textColor="@drawable/edit_text_disable_text_color"
                     android:drawableRight="@android:drawable/arrow_down_float"
                     android:paddingBottom="@dimen/margin_3"
                     android:textSize="@dimen/text_20"
-                    android:text="Casual"
+                    android:text="@string/select_type"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/leave_request_edittext"
                     android:layout_height="wrap_content" />
@@ -147,10 +151,11 @@
                     android:layout_width="@dimen/type_width"
                     android:paddingTop="@dimen/margin_3"
                     android:paddingRight="@dimen/margin_2"
+                    android:textColor="@drawable/edit_text_disable_text_color"
                     android:drawableRight="@android:drawable/arrow_down_float"
                     android:paddingBottom="@dimen/margin_3"
                     android:textSize="@dimen/text_20"
-                    android:text="Personal"
+                    android:text="@string/select_reason"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/leave_request_edittext"
                     android:layout_height="wrap_content" />
@@ -169,8 +174,20 @@
                     android:hint="Description"
                     android:textStyle="italic"
                     android:textSize="@dimen/text_20"
+                    android:textColor="@drawable/edit_text_disable_text_color"
                     android:layout_alignParentRight="true"
                     android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/etComments"
+                    android:layout_width="match_parent"
+                    android:hint="Comments"
+                    android:textColor="@drawable/edit_text_disable_text_color"
+                    android:layout_below="@id/etReason"
+                    android:textStyle="italic"
+                    android:textSize="@dimen/text_20"
+                    android:layout_alignParentRight="true"
+                    android:layout_height="wrap_content" />
+
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -185,7 +202,7 @@
 
                 <Button
                     android:id="@+id/btSubmit"
-                    android:text="@string/edit"
+                    android:text="@string/update"
                     android:textAllCaps="false"
                     android:background="@drawable/editstore_edit_button"
                     android:textSize="@dimen/text_22"

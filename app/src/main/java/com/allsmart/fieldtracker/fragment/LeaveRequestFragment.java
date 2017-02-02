@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.allsmart.fieldtracker.utils.CalenderUtils;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.R;
@@ -46,6 +47,7 @@ import java.util.GregorianCalendar;
 public class LeaveRequestFragment extends Fragment implements View.OnClickListener , DatePickerDialog.OnDateSetListener, LoaderManager.LoaderCallbacks<Object> {
 
     private TextView etStart,etEnd,etType,tvReasonType,tvDays;
+
     private ImageView ivStart,ivEnd;
     private Button submit,cancel;
     private String enumTypeId="";
@@ -71,6 +73,7 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
         etStart = (TextView) view.findViewById(R.id.etStartDate);
         etEnd = (TextView) view.findViewById(R.id.etEndDate);
         etReason = (EditText) view.findViewById(R.id.etReason);
+
         etType = (TextView) view.findViewById(R.id.etType);
         ivStart = (ImageView) view.findViewById(R.id.ivDatePicker);
         ivEnd = (ImageView) view.findViewById(R.id.ivDatePicker2);
@@ -257,6 +260,8 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
                         Toast.makeText(getContext(),
                                 "Leave Applied successfully",
                                 Toast.LENGTH_SHORT).show();
+                        FragmentManager fm = getFragmentManager();
+                        fm.popBackStack();
                     } else if(!((String) data).equalsIgnoreCase("error") && !((String) data).equalsIgnoreCase("success")) {
                         Toast.makeText(getContext(),
                                 data.toString(),
@@ -367,8 +372,12 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
             etEnd.setText(selDate);
         }
         if(isTo) {
-            String days = getDays(etStart.getText().toString(), etEnd.getText().toString());
-            tvDays.setText(days);
+            String days = CalenderUtils.getDifferenceDate(etStart.getText().toString(), etEnd.getText().toString());
+            if(days.equals("-")) {
+                ((MainActivity)getActivity()).displayMessage("Please select date properly");
+            } else {
+                tvDays.setText(days);
+            }
         }
     }
 }

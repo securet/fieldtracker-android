@@ -34,8 +34,10 @@ public class MoreFragment extends Fragment {
         leave = (TextView) rootView.findViewById(R.id.tvLeave);
         if(((MainActivity)getActivity()).isManager()) {
             leaveRequisition.setVisibility(View.VISIBLE);
+            tvPromoterApprovals.setVisibility(View.VISIBLE);
         } else {
             leaveRequisition.setVisibility(View.GONE);
+            tvPromoterApprovals.setVisibility(View.GONE);
         }
         tvPromoterApprovals.setOnClickListener(new View.OnClickListener() {
             @Override

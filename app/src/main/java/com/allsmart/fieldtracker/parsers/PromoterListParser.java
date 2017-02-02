@@ -45,8 +45,8 @@ public class PromoterListParser {
                         promoter.setRequestId(childObject.getString("requestId"));
                     }
                     if(childObject.has("statusId")) {
-/*For testing*/   //      promoter.setStatusId(childObject.getString("statusId"));
-                        promoter.setStatusId("ReqCompleted");
+/*For testing*/         promoter.setStatusId(childObject.getString("statusId"));
+                  //      promoter.setStatusId("ReqCompleted");
                     }
                     if(childObject.has("requestJson")){
                         String s = childObject.getString("requestJson");

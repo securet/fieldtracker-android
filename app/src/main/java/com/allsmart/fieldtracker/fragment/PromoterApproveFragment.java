@@ -177,7 +177,7 @@ public class PromoterApproveFragment extends Fragment implements LoaderManager.L
                 b.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.APPROVE_PROMOTER));
                 b.putString(AppsConstant.METHOD,AppsConstant.PUT);
                 b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterApprove(promoter.getRequestId()));
-                getActivity().getLoaderManager().initLoader(LoaderConstant.APPROVE_PROMOTER,b,PromoterApproveFragment.this);
+                getActivity().getLoaderManager().initLoader(LoaderConstant.APPROVE_PROMOTER,b,PromoterApproveFragment.this).forceLoad();
 
             }
         });
@@ -234,7 +234,6 @@ public class PromoterApproveFragment extends Fragment implements LoaderManager.L
                             "Error in response. Please try again.",
                             Toast.LENGTH_SHORT).show();
                 }
-
                 break;
             case LoaderConstant.APPROVE_PROMOTER:
                 if(data != null && data instanceof String) {
@@ -248,7 +247,11 @@ public class PromoterApproveFragment extends Fragment implements LoaderManager.L
                                 "Success",
                                 Toast.LENGTH_SHORT).show();
                         FragmentManager fm = getFragmentManager();
-                        fm.popBackStackImmediate();
+                        /*Fragment f = new PromoterApprovalsFragment();
+                        fm.
+                        fm.beginTransaction().replace(R.id.flMiddle,f).commit();
+                        fm.executePendingTransactions();*/
+                        fm.popBackStack();
                     } else {
                         Toast.makeText(getContext(),
                                 "Operation Failed",

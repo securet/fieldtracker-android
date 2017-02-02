@@ -40,6 +40,7 @@ import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
 import static com.allsmart.fieldtracker.constants.AppsConstant.BACK_CAMREA_OPEN;
+import static com.allsmart.fieldtracker.constants.AppsConstant.PUT;
 
 /**
  * Created by allsmartlt218 on 10-12-2016.
@@ -105,6 +106,8 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
         phone.setText(promoter.getPhoneNum());
         emailAddress.setText(promoter.getEmailAddress());
         Address.setText(promoter.getAddress());
+        tvStore.setText(preferences.getString(Preferences.SITENAME,""));
+        tvSE.setText(preferences.getString(Preferences.USERFULLNAME,""));
         if (isApproved()) {
             firstName.setEnabled(false);
             lastName.setEnabled(false);
@@ -166,19 +169,28 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
             edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Bundle b = new Bundle();
-                    b.putString(AppsConstant.URL,UrlBuilder.getUpdatePromoter(Services.UPDATE_PROMOTER,promoter.getRequestId()));
-                    b.putString(AppsConstant.METHOD,AppsConstant.PUT);
-                if(image != null) {
-                    b.putString(AppsConstant.PARAMS, ParameterBuilder.getPromoterUpdate(promoter.getRequestId(), promoter.getRequestType(), firstName.getText().toString(),
-                            lastName.getText().toString(), phone.getText().toString(), Address.getText().toString(), emailAddress.getText().toString(), storeId + "", "ReqSubmitted",
-                            "RqtAddPromoter", "description after updation", image[0], image[1], image[2]));
-                }else {
-                    b.putString(AppsConstant.PARAMS, ParameterBuilder.getPromoterUpdate(promoter.getRequestId(), promoter.getRequestType(), firstName.getText().toString(),
-                            lastName.getText().toString(), phone.getText().toString(), Address.getText().toString(), emailAddress.getText().toString(), storeId + "", "ReqSubmitted",
-                            "RqtAddPromoter", "description after updation", photo,adhar,address));
-                }getActivity().getLoaderManager().initLoader(LoaderConstant.UPDATE_PROMOTER,b,EditPromoterFragment.this);
-
+                if(isNotNull(firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(),emailAddress.getText().toString(),
+                        Address.getText().toString(),tvStore.getText().toString(),tvSE.getText().toString())) {
+                    if(TextUtils.isEmpty(photo) || TextUtils.isEmpty(adhar) || TextUtils.isEmpty(address)) {
+                        ((MainActivity)getActivity()).displayMessage("No photos, Please take again");
+                    } else {
+                        Bundle b = new Bundle();
+                        b.putString(AppsConstant.URL,UrlBuilder.getUpdatePromoter(Services.UPDATE_PROMOTER,promoter.getRequestId()));
+                        b.putString(AppsConstant.METHOD,AppsConstant.PUT);
+                        if(storeId == 0) {
+                            b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterUpdate(promoter.getRequestId(),promoter.getRequestType(),
+                                    firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(), Address.getText().toString(),emailAddress.getText().toString(),
+                                    promoter.getProductStoreId(),promoter.getStatusId(),"RqtAddPromoter","description after updation",adhar,photo,address));
+                        } else {
+                            b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterUpdate(promoter.getRequestId(),promoter.getRequestType(),
+                                    firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(), Address.getText().toString(),emailAddress.getText().toString(),
+                                    storeId+"",promoter.getStatusId(),"RqtAddPromoter","description after updation",adhar,photo,address));
+                        }
+                        getActivity().getLoaderManager().initLoader(LoaderConstant.UPDATE_PROMOTER,b,EditPromoterFragment.this).forceLoad();
+                    }
+                } else {
+                    ((MainActivity)getActivity()).displayMessage("Fields cannot be empty");
+                }
                     }
         });
 
@@ -228,8 +240,9 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                 Toast.makeText(getContext(),
                         "Error in response. Please try again.",
                         Toast.LENGTH_SHORT).show();
+            } if(getActivity() != null  && getActivity() instanceof  MainActivity) {
+                  getActivity().getLoaderManager().destroyLoader(loader.getId());
             }
-
                 break;
             case LoaderConstant.STORE_DETAIL:
                 if (data != null && data instanceof String) {
@@ -247,7 +260,9 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                             "Error in response. Please try again.",
                             Toast.LENGTH_SHORT).show();
                 }
-
+                if(getActivity() != null  && getActivity() instanceof  MainActivity) {
+                    getActivity().getLoaderManager().destroyLoader(loader.getId());
+                }
                 break;
             case LoaderConstant.IMAGE_UPLOAD:
                 if (data != null && data instanceof String) {
@@ -272,26 +287,40 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                             "Error in response. Please try again.",
                             Toast.LENGTH_SHORT).show();
                 }
+                if(getActivity() != null  && getActivity() instanceof  MainActivity) {
+                    getActivity().getLoaderManager().destroyLoader(loader.getId());
+                }
                 break;
             case LoaderConstant.UPDATE_PROMOTER:
                 if(data != null && data instanceof String) {
-                    if (data.equals("success")) {
+                    String result = (String) data;
+                    if (!TextUtils.isEmpty(result) && !result.equalsIgnoreCase("success") && !result.equalsIgnoreCase("error")) {
                         Toast.makeText(getContext(),
-                                "Promoter Edited Successfully",
+                                result,
                                 Toast.LENGTH_SHORT).show();
-                        fragmentManager.popBackStackImmediate();
-                    } else {
+
+                    } else if(!TextUtils.isEmpty(result) && result.equalsIgnoreCase("success") && !result.equalsIgnoreCase("error")) {
                         Toast.makeText(getContext(),
-                                "Failed to edit",
+                                "Updated Successfully",
+                                Toast.LENGTH_SHORT).show();
+                        FragmentManager fm = getFragmentManager();
+                        fm.popBackStack();
+                    }
+                    else {
+                        Toast.makeText(getContext(),
+                                "Failed to Update",
                                 Toast.LENGTH_SHORT).show();
                     }
 
                 }
+                if(getActivity() != null  && getActivity() instanceof  MainActivity) {
+                    getActivity().getLoaderManager().destroyLoader(loader.getId());
+                }
                 break;
         }
-        if(getActivity() != null  && getActivity() instanceof  MainActivity) {
-            getActivity().getLoaderManager().destroyLoader(loader.getId());
-        }
+       // if(getActivity() != null  && getActivity() instanceof  MainActivity) {
+
+       // }
     }
 
     @Override
@@ -410,6 +439,17 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                     Picasso.with(getContext()).load(UrlBuilder.getServerImage(promoter.getAddressIdPath())).fit().into(imageView);
                 }
                 break;
+        }
+    }
+
+    public boolean isNotNull(String firstName,String lastName, String phone,String email,String address,String storeAssign,String sEassign) {
+        if(!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName) &&
+                !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(email) &&
+                !TextUtils.isEmpty(address) && !TextUtils.isEmpty(storeAssign) &&
+                !TextUtils.isEmpty(sEassign)){
+            return true;
+        } else {
+            return false;
         }
     }
 }

@@ -73,16 +73,20 @@ public class GeofenceBroadcaster extends BroadcastReceiver{
                         clockType = "clockIn";
                         preferences.saveBoolean(Preferences.INLOCATION, true);
                    //     Toast.makeText(context,"Time In",Toast.LENGTH_SHORT).show();
-                        sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are entering");
-                        break;
+                        String storeName = preferences.getString(Preferences.SITENAME,"");
+                        if(!storeName.equalsIgnoreCase("Off Site")) {
+                            sendNotification(transitionType + "", preferences.getString(Preferences.SITENAME, ""), "You are entering");
+                        }break;
 
                     case Geofence.GEOFENCE_TRANSITION_EXIT:
                         strComments = "OutLocation";
                         clockType = "clockOut";
              //           Toast.makeText(context,"Time out",Toast.LENGTH_SHORT).show();
                         preferences.saveBoolean(Preferences.INLOCATION, false);
-                        sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are Leaving");
-                        break;
+                        String store = preferences.getString(Preferences.SITENAME,"");
+                        if(!store.equalsIgnoreCase("Off Site")) {
+                            sendNotification(transitionType + "", preferences.getString(Preferences.SITENAME, ""), "You are Leaving");
+                        }break;
                 }
 
                 if(!TextUtils.isEmpty(clockType)) {

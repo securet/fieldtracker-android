@@ -33,6 +33,7 @@ import com.allsmart.fieldtracker.model.Store;
 import com.allsmart.fieldtracker.constants.LoaderConstant;
 import com.allsmart.fieldtracker.constants.LoaderMethod;
 import com.allsmart.fieldtracker.service.LoaderServices;
+import com.allsmart.fieldtracker.utils.NetworkUtils;
 import com.allsmart.fieldtracker.utils.ParameterBuilder;
 import com.allsmart.fieldtracker.constants.Services;
 import com.allsmart.fieldtracker.utils.UrlBuilder;
@@ -121,10 +122,16 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                         // to handle the case where the user grants the permission. See the documentation
                         // for ActivityCompat#requestPermissions for more details.
                         return;
+                    }if(NetworkUtils.isNetworkConnectionAvailable(getContext())) {
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    } else {
+                        ((MainActivity)getActivity()).displayMessage("Internet Connection is required");
                     }
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    lat = String.valueOf(location.getLatitude());
-                    lon = String.valueOf(location.getLongitude());
+
+                    if(location != null) {
+                        lat = String.valueOf(location.getLatitude());
+                        lon = String.valueOf(location.getLongitude());
+                    }
                     lattitude.setText(lat);
                     longitude.setText(lon);
                 }
@@ -195,10 +202,8 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                 }
                 break;
             case R.id.btCancel:
-                Fragment fragment = new StoreListFragment();
                 FragmentManager fm = getFragmentManager();
-                fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
-                fm.executePendingTransactions();
+                fm.popBackStackImmediate();
                 break;
         }
     }
@@ -225,24 +230,22 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
         } else {
 
         }
-        getActivity().getLoaderManager().destroyLoader(loader.getId());
+
         if(data.equals("success")) {
             Toast.makeText(getContext(),
                     "Store Added Successfully",
                     Toast.LENGTH_SHORT).show();
-            Fragment fragment = new StoreListFragment();
             FragmentManager fm = getFragmentManager();
-            fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
-            fm.executePendingTransactions();
+            fm.popBackStack();
         } else {
             Toast.makeText(getContext(),
                     "Failed to Upload",
                     Toast.LENGTH_SHORT).show();
         }
 
-    //    if(getActivity() != null  && getActivity() instanceof  MainActivity) {
-
-    //    }
+        if(getActivity() != null  && getActivity() instanceof  MainActivity) {
+            getActivity().getLoaderManager().destroyLoader(loader.getId());
+        }
 
     }
 

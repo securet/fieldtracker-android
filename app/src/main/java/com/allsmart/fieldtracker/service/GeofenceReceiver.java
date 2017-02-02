@@ -99,14 +99,20 @@ public class GeofenceReceiver extends BroadcastReceiver{
 								dataSource.insertTimeInOutDetails(getTimeInOutDetails("InLocation", "clockIn"));
 								uploadData();
 								//
-								sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are entering");
+								String storeName = preferences.getString(Preferences.SITENAME,"");
+								if(!storeName.equalsIgnoreCase("Off Site")) {
+									sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are entering");
+								}
 							}
 						} else if (strComments.equalsIgnoreCase("OutLocation")) {
 							if(comments.equalsIgnoreCase("TimeIn") || comments.equalsIgnoreCase("InLocation")) {
 								dataSource.insertTimeInOutDetails(getTimeInOutDetails("OutLocation","clockOut"));
 								uploadData();
 								//
-								sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are Leaving");
+								String storeName = preferences.getString(Preferences.SITENAME,"");
+								if(!storeName.equalsIgnoreCase("Off Site")) {
+									sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are Leaving");
+								}
 							}
 						}
 					}

@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -155,8 +156,8 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                     bundle.putString(AppsConstant.FILEPURPOSE,purpose);
                     getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD,bundle,AddPromoterFragment.this).forceLoad();
 
-                    ivPhoto.setImageResource(R.drawable.photo_tick);
-                    ivPhoto.setEnabled(false);
+                //    ivPhoto.setImageResource(R.drawable.photo_tick);
+               //     ivPhoto.setEnabled(false);
                 }
             } else if (requestCode == AppsConstant.IMAGE_AADHAR) {
                 final String responseValue = data.getStringExtra("response");
@@ -168,8 +169,8 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                     bundle.putString(AppsConstant.FILE, responseValue);
                     bundle.putString(AppsConstant.FILEPURPOSE, purpose);
                     getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD, bundle, AddPromoterFragment.this).forceLoad();
-                    ivAdhar.setImageResource(R.drawable.aadhartick);
-                    ivAdhar.setEnabled(false);
+                 //   ivAdhar.setImageResource(R.drawable.aadhartick);
+                  //  ivAdhar.setEnabled(false);
                 }
             } else if (requestCode == AppsConstant.IMAGE_ADDRESS_PROOF) {
                 final String responseValue = data.getStringExtra("response");
@@ -182,8 +183,8 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                     bundle.putString(AppsConstant.FILEPURPOSE, purpose);
                     getActivity().getLoaderManager().initLoader(LoaderConstant.IMAGE_UPLOAD, bundle, AddPromoterFragment.this).forceLoad();
 
-                    ivAddressProof.setImageResource(R.drawable.id_card_tick);
-                    ivAddressProof.setEnabled(false);
+               //     ivAddressProof.setImageResource(R.drawable.id_card_tick);
+               //     ivAddressProof.setEnabled(false);
                 }
             }
         }
@@ -302,18 +303,34 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                 break;
             case LoaderConstant.IMAGE_UPLOAD:
                 if (data != null && data instanceof String) {
-                    if(i == 1) {
-                        //photo
-                        image[0] = (String) data;
-                    }else if(i == 2) {
-                        //aadhar
-                        image[1] = (String) data;
-                    } else if(i == 3) {
-                        //address
-                        image[2] = (String) data;
+                    String result = (String) data;
+                    if(!TextUtils.isEmpty(result) && !result.equalsIgnoreCase("error")) {
+                        if(i == 1) {
+                            //photo
+                            image[0] = (String) data;
+                            ivPhoto.setImageResource(R.drawable.photo_tick);
+                            ivPhoto.setEnabled(false);
+                        }else if(i == 2) {
+                            //aadhar
+                            image[1] = (String) data;
+                            ivAdhar.setImageResource(R.drawable.aadhartick);
+                            ivAdhar.setEnabled(false);
+                        } else if(i == 3) {
+                            //address
+                            image[2] = (String) data;
+                            ivAddressProof.setImageResource(R.drawable.id_card_tick);
+                            ivAddressProof.setEnabled(false);
+                        } else {
+                            //error
+                            Toast.makeText(getContext(),
+                                    "Failed to upload. Please try again.",
+                                    Toast.LENGTH_SHORT).show();
+                            i = 0;
+                        }
                     } else {
-                        //error
-                        i = 0;
+                        Toast.makeText(getContext(),
+                                "Error in response. Please try again.",
+                                Toast.LENGTH_SHORT).show();
                     }
                   //  image[i] = (String) data;
                     Log.d("IMAGE", (String) data);
@@ -329,12 +346,29 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
             case LoaderConstant.ADD_PROMOTER:
                 if (data != null && data instanceof String) {
 
+                    String result = (String) data;
+                    if(!TextUtils.isEmpty(result) && !result.equalsIgnoreCase("success") && !result.equalsIgnoreCase("error")) {
+                        Toast.makeText(getContext(),
+                                result,
+                                Toast.LENGTH_SHORT).show();
+                    } else if(!TextUtils.isEmpty(result) && result.equalsIgnoreCase("success") && !result.equalsIgnoreCase("error")) {
+                        Toast.makeText(getContext(),
+                                "Added Successfully",
+                                Toast.LENGTH_SHORT).show();
+                        FragmentManager fragmentManager = getFragmentManager();
+                        fragmentManager.popBackStack();
+                    } else {
+                        Toast.makeText(getContext(),
+                                "Failed to Add promoter",
+                                Toast.LENGTH_SHORT).show();
+                    }
+
                 } else {
                     Toast.makeText(getContext(),
                             "Error in response. Please try again.",
                             Toast.LENGTH_SHORT).show();
                 }
-                if(data.equals("success")) {
+                /*if(data.equals("success")) {
                     Toast.makeText(getContext(),
                             "Promoter Added Successfully",
                             Toast.LENGTH_SHORT).show();
@@ -346,7 +380,8 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                     Toast.makeText(getContext(),
                             "Failed to upload",
                             Toast.LENGTH_SHORT).show();
-                }
+                }*/
+                break;
         }
             if(getActivity() != null && getActivity() instanceof MainActivity) {
                 getActivity().getLoaderManager().destroyLoader(loader.getId());

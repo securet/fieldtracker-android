@@ -20,7 +20,13 @@ public class PromoterUpdateParser {
         result = "";
         try {
             JSONObject parentObject = new JSONObject(response);
-            result = "success";
+            if(parentObject.has("errors")) {
+                result = parentObject.getString("errors");
+            } else if(parentObject.has("request")){
+                result = "success";
+            } else {
+                result = "error";
+            }
 
         } catch (JSONException e) {
             Logger.e("Log",e);

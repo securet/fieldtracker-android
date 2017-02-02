@@ -56,6 +56,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferences = new Preferences(getContext());
         pageIndex = 0;
         System.out.println(pageIndex + "  before scroll");
         Bundle b = new Bundle();
@@ -69,7 +70,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_promoters,container,false);
-        preferences = new Preferences(getContext());
+
         listView = (ListView) view.findViewById(R.id.lvPromotersList);
         btAddPromoter = (Button) view.findViewById(R.id.btAddPromoter);
 

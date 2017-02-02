@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allsmart.fieldtracker.adapter.ListViewLeaveStatusListAdapter;
+import com.allsmart.fieldtracker.utils.JsonUtil;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.R;
@@ -54,7 +55,7 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
     private Button submit,cancel,Approve,Reject;
     private String enumTypeId="";
     private String enumReasonId="";
-    private EditText etReason;
+    private EditText etReason,etComments;
     private String leaveReasonId = "" ;
     private ArrayList<LeaveType> leaveTypeList;
     private ArrayList<LeaveReason> leaveReasonList;
@@ -74,6 +75,8 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
         ivEnd = (ImageView) view.findViewById(R.id.ivDatePicker2);
         submit = (Button) view.findViewById(R.id.btSubmit);
         cancel = (Button) view.findViewById(R.id.btnCancel);
+        etComments = (EditText) view.findViewById(R.id.etComments);
+        etComments.setVisibility(View.GONE);
         tvDays = (TextView) view.findViewById(R.id.tvLeaveDays);
         tvReasonType = (TextView) view.findViewById(R.id.etTypeReason);
         Approve = (Button) view.findViewById(R.id.btApprove);
@@ -130,16 +133,17 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
 
 
 
-                if (!TextUtils.isEmpty(enumReasonId) && !TextUtils.isEmpty(enumTypeId) && !TextUtils.isEmpty(leaveReasonId) && !TextUtils.isEmpty(leave.getPartyRelationShipId())) {
-                    String fDate = CalenderUtils.getLeaveFromDate(fromDate);
-                    String tDate = CalenderUtils.getLeaveThruDate(thruDate);
+                if (!TextUtils.isEmpty(tvReasonType.getText().toString()) && !TextUtils.isEmpty(etType.getText().toString()) && !TextUtils.isEmpty(etReason.getText().toString()) && !TextUtils.isEmpty(leave.getPartyRelationShipId())) {
+                    String fDate = CalenderUtils.getYearMonthDashedFormate(fromDate);
+                    System.out.println(leave.getPartyRelationShipId());
+                    String tDate = CalenderUtils.getYearMonthDashedFormate(thruDate);
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
                     bundle.putString(AppsConstant.METHOD, AppsConstant.PUT);
-                    bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,leaveReasonId,fDate,tDate,leave.getPartyRelationShipId()));
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,EditLeaveFragment.this).forceLoad();
+                    bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getUpdateLeave(getEnumType(etType.getText().toString()), getReaonType(tvReasonType.getText().toString()), etReason.getText().toString(), fDate, tDate, leave.getPartyRelationShipId()));
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE, bundle, EditLeaveFragment.this).forceLoad();
                 } else {
-                    Toast.makeText(getContext(),"Please select Leave Type and Reason Type and Description",Toast.LENGTH_SHORT).show();
+                    ((MainActivity)getActivity()).displayMessage("Fields cannot be empty");
                 }
             }
         });
@@ -223,6 +227,26 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
         submit.setVisibility(View.VISIBLE);
         cancel.setVisibility(View.VISIBLE);
         tvEditLeave.setText("Edit Leave");
+    }
+
+    private String getEnumType(String enumType) {
+        if(enumType.equals("Loss of Pay")){
+            return "EltLossOfPay";
+        } else if (enumType.equals("Holiday")) {
+            return "EltHoliday";
+        } else if(enumType.equals("Earned Leave")) {
+            return "EltEarned";
+        } else {
+            return "EltSpecialDayOff";
+        }
+    }
+
+    private String getReaonType(String reasonType) {
+        if(reasonType.equals("Medical")) {
+            return "ElrMedical";
+        } else {
+            return "ElrPersonal";
+        }
     }
 
 
@@ -314,6 +338,8 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
                         Toast.makeText(getContext(),
                                 "Leave Applied successfully",
                                 Toast.LENGTH_SHORT).show();
+                        FragmentManager fm = getFragmentManager();
+                        fm.popBackStack();
                     } else if(!((String) data).equalsIgnoreCase("error") && !((String) data).equalsIgnoreCase("success")) {
                         Toast.makeText(getContext(),
                                 data.toString(),
@@ -411,6 +437,7 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
 
 
 
+
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         if(isFrom){
@@ -427,8 +454,12 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
             etEnd.setText(selDate);
         }
         if(isTo) {
-            String days = getDays(etStart.getText().toString(), etEnd.getText().toString());
-            tvDays.setText(days);
+            String days = CalenderUtils.getDifferenceDate(etStart.getText().toString(), etEnd.getText().toString());
+            if(days.equals("-")) {
+                ((MainActivity)getActivity()).displayMessage("Please select date properly");
+            } else {
+                tvDays.setText(days);
+            }
         }
     }
 }

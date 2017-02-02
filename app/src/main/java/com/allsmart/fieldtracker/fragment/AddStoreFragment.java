@@ -259,10 +259,8 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
                     }
                 break;
             case R.id.btCancel:
-                Fragment fragment = new StoreListFragment();
                 FragmentManager fm = getFragmentManager();
-                fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
-                fm.executePendingTransactions();
+                fm.popBackStackImmediate();
                 break;
         }
     }
@@ -294,10 +292,11 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
             Toast.makeText(getContext(),
                     "Store Added Successfully",
                     Toast.LENGTH_SHORT).show();
-            Fragment fragment = new StoreListFragment();
             FragmentManager fm = getFragmentManager();
+            /*Fragment fragment = new StoreListFragment();
             fm.beginTransaction().replace(R.id.flMiddle,fragment).commit();
-            fm.executePendingTransactions();
+            fm.executePendingTransactions();*/
+            fm.popBackStack();
 
         } else {
             Toast.makeText(getContext(),
@@ -315,7 +314,7 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onLocationChanged(Location location) {
-        LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+
         lat = String.valueOf(location.getLatitude());
         lon = String.valueOf(location.getLongitude());
         latitude.setText(lat);

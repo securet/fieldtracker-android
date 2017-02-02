@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Admin on 08-Dec-15.
@@ -82,6 +83,9 @@ public class CalenderUtils {
 
     }
 
+
+
+
     public static long getDateDifference(String currentDate, String finalDate) {
         return getDateDifference(currentDate, finalDate, "dd-MM-yyyy hh:mm:ss");
     }
@@ -155,7 +159,7 @@ public class CalenderUtils {
     }
 
     public static String getDateMethod(String timeStamp, String formate){
-        Date date = new Date();
+        Date date;
         SimpleDateFormat simpleDateFormat  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar calendar = Calendar.getInstance();
         try {
@@ -167,4 +171,45 @@ public class CalenderUtils {
         }
         return (String) DateFormat.format(formate,calendar);
     }
+
+    public static String getDifferenceDate(String fromDate, String thruDate){
+        SimpleDateFormat simpleDateFormat  = new SimpleDateFormat(YearMonthDashedFormate);
+        Date f = null,t=null;
+        long difference = 0;
+        Calendar c = Calendar.getInstance();
+        try {
+            f = simpleDateFormat.parse(fromDate);
+            t = simpleDateFormat.parse(thruDate);
+        } catch (ParseException e) {
+            Logger.e("Log",e);
+            Crashlytics.logException(e);
+        }
+        if(f != null && t !=null) {
+            difference = t.getTime() - f.getTime();
+        }
+        int days = (int) TimeUnit.MILLISECONDS.toDays(difference);
+        if(days == 0) {
+            return "1";
+        } else if(days < 0) {
+            return "-";
+        } else {
+            return (days+1) + "";
+        }
+
+    }
+
+    public static String getYearMonthDashedFormate(String date){
+        Date d;
+        SimpleDateFormat simpleDateFormat  = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar calendar = Calendar.getInstance();
+        try {
+            d = simpleDateFormat.parse(date);
+            calendar.setTime(d);
+        } catch (ParseException e) {
+            Logger.e("Log",e);
+            Crashlytics.logException(e);
+        }
+        return (String) DateFormat.format(YearMonthDashedFormate,calendar);
+    }
+
 }

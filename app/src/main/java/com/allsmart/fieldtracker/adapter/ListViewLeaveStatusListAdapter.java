@@ -68,7 +68,7 @@ public class ListViewLeaveStatusListAdapter extends ArrayAdapter<Leave> {
         tvFrom.setText("From: " + leave.getFromDate());
         tvTo.setText("To: " + leave.getToDate());
         tvStatus.setText(leave.getStatus());
-        tvReason.setText(leave.getReason());
+        tvReason.setText(leave.getReasonType());
         return rowView;
     }
 }

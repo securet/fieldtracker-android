@@ -55,7 +55,7 @@ public class ApproveLeaveFragment  extends Fragment implements View.OnClickListe
     private Button submit,cancel,Approve,Reject;
     private String enumTypeId="";
     private String enumReasonId="";
-    private EditText etReason;
+    private EditText etReason,etComments;
     private String leaveReasonId = "" ;
     private ArrayList<LeaveType> leaveTypeList;
     private ArrayList<LeaveReason> leaveReasonList;
@@ -74,12 +74,21 @@ public class ApproveLeaveFragment  extends Fragment implements View.OnClickListe
         ivStart = (ImageView) view.findViewById(R.id.ivDatePicker);
         ivEnd = (ImageView) view.findViewById(R.id.ivDatePicker2);
         submit = (Button) view.findViewById(R.id.btSubmit);
+
         cancel = (Button) view.findViewById(R.id.btnCancel);
         tvDays = (TextView) view.findViewById(R.id.tvLeaveDays);
         tvReasonType = (TextView) view.findViewById(R.id.etTypeReason);
         Approve = (Button) view.findViewById(R.id.btApprove);
         Reject = (Button) view.findViewById(R.id.btnReject);
         tvEditLeave = (TextView) view.findViewById(R.id.tvEditLeave);
+
+        etStart.setEnabled(false);
+        etEnd.setEnabled(false);
+        etReason.setEnabled(false);
+        etType.setEnabled(false);
+        ivStart.setEnabled(false);
+        ivEnd.setEnabled(false);
+        tvReasonType.setEnabled(false);
 
         if(((MainActivity)getActivity()).isManager()) {
             try {
