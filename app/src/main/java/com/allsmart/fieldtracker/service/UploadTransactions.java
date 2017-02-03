@@ -3,8 +3,10 @@ package com.allsmart.fieldtracker.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.allsmart.fieldtracker.activity.MainActivity;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.constants.AppsConstant;
 import com.allsmart.fieldtracker.storage.EventDataSource;
@@ -103,7 +105,7 @@ public class UploadTransactions extends IntentService {
     private void uploadTimeInOut() {
 
         // get data base
-        EventDataSource dataSource = new EventDataSource(UploadTransactions.this);
+        EventDataSource dataSource = new EventDataSource(getApplicationContext());
         ArrayList<TimeInOutDetails> detailsArrayList = dataSource.getTimeInOutDetails();
 
         // upload to server // Asc time // first success than second
@@ -116,7 +118,8 @@ public class UploadTransactions extends IntentService {
                     Response responseMsg = new TimeInOutParser(response, d.getComments()).Parse();
                     if (responseMsg.getResponceCode().equals("200")) {
                         dataSource.updateIsPushed(d);
-                        Toast.makeText(getApplicationContext(),"200",Toast.LENGTH_SHORT).show();
+                    //    Toast.makeText(getApplicationContext(),"200",Toast.LENGTH_SHORT).show();
+                        Log.d(MainActivity.TAG,responseMsg.getResponceCode());
                         break;
                     }
                 }
@@ -127,7 +130,8 @@ public class UploadTransactions extends IntentService {
             }
 
         } else {
-            Toast.makeText(getApplicationContext(),"Failed to upload",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),"Failed to upload",Toast.LENGTH_SHORT).show();
+            Log.d(MainActivity.TAG,"Failed to upload");
         }
         // update database
 

@@ -120,15 +120,24 @@ public class AddStoreFragment extends Fragment implements View.OnClickListener, 
                         // for ActivityCompat#requestPermissions for more details.
                         return;
                     }
-                    location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    lat = String.valueOf(location.getLatitude());
-                    lon = String.valueOf(location.getLongitude());
+                }if(NetworkUtils.isNetworkConnectionAvailable(getContext())) {
+                    location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    if(location != null) {
+                        lat = String.valueOf(location.getLatitude());
+                        lon = String.valueOf(location.getLongitude());
+                        latitude.setText(lat);
+                        longitude.setText(lon);
+                        isClicked = true;
+                    } else {
+                        ((MainActivity)getActivity()).displayMessage("Unable to get your location");
+                    }
+
+                } else {
+                    ((MainActivity)getActivity()).displayMessage("Internet Connection is required");
                 }
 
 
-                latitude.setText(lat);
-                longitude.setText(lon);
-                isClicked = true;
+
 //                Log.d("LAT", String.valueOf(location.getLatitude()));
             }
         });

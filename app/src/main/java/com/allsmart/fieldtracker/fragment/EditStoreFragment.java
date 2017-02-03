@@ -108,7 +108,7 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
         getLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"Clicked",Toast.LENGTH_SHORT).show();
+
                 LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQ_PERMISSION);
@@ -124,19 +124,24 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                         return;
                     }if(NetworkUtils.isNetworkConnectionAvailable(getContext())) {
                         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        if(location != null) {
+                            lat = String.valueOf(location.getLatitude());
+                            lon = String.valueOf(location.getLongitude());
+                            lattitude.setText(lat);
+                            longitude.setText(lon);
+                            isGetLocationClicked = true;
+                        } else {
+                            ((MainActivity)getActivity()).displayMessage("Unable to get location");
+                        }
                     } else {
                         ((MainActivity)getActivity()).displayMessage("Internet Connection is required");
                     }
 
-                    if(location != null) {
-                        lat = String.valueOf(location.getLatitude());
-                        lon = String.valueOf(location.getLongitude());
-                    }
-                    lattitude.setText(lat);
-                    longitude.setText(lon);
+
+
                 }
 
-                isGetLocationClicked = true;
+
 
 
 

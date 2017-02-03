@@ -73,15 +73,17 @@
                 android:id="@+id/btGetLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin_10"
+                android:drawableLeft="@drawable/getloc"
+                android:paddingLeft="@dimen/margin_5"
+                android:paddingStart="@dimen/margin_5"
+                android:paddingRight="@dimen/margin_5"
                 android:textSize="@dimen/text_18"
                 android:textAllCaps="false"
 
                 android:background="@drawable/get_current_location_button"
                 android:textColor="@color/colorWhite"
                 android:text="@string/get_cuurent_location"
-                android:layout_gravity="center_horizontal"
-                android:drawableLeft="@drawable/currentloc"/>
+                android:layout_gravity="center_horizontal" />
             <LinearLayout
                 android:layout_marginTop="@dimen/margin_5"
                 android:orientation="horizontal"

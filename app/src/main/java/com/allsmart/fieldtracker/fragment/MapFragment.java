@@ -129,8 +129,8 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             public void onClick(View v) {
                 Fragment f = new TimeLineFragment();
                 FragmentManager fm = getFragmentManager();
-                fm.beginTransaction().replace(R.id.flMiddle, f).addToBackStack(null).commit();
-                fm.beginTransaction();
+                fm.beginTransaction().replace(R.id.flMiddle, f).commit();
+                fm.executePendingTransactions();
             }
         });
 

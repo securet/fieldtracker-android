@@ -72,8 +72,10 @@ public class TimeLineFragment extends Fragment implements LoaderManager.LoaderCa
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Fragment f = new MapFragment();
                 FragmentManager fm = getFragmentManager();
-                fm.popBackStackImmediate();
+                fm.beginTransaction().replace(R.id.flMiddle, f).commit();
+                fm.executePendingTransactions();
             }
         });
         String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);

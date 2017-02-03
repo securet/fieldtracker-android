@@ -161,6 +161,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		UpadateButtonStatus();
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(changeUI);
+	}
+
 	public void UpadateButtonStatus()
 	{
 		llAttendance.setAlpha(0.5f);
