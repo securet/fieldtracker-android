@@ -60,110 +60,114 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view;
+        ViewHolder holder;
         if(convertView == null) {
-            view = inflater.inflate(R.layout.history_tracking_item,parent,false);
+            convertView = inflater.inflate(R.layout.history_tracking_item,parent,false);
+            holder = new ViewHolder();
+            holder.timeF = (TextView) convertView.findViewById(R.id.tvTimeFrom);
+            holder.timeT = (TextView) convertView.findViewById(R.id.tvTimeThru);
+            holder.grayTop = (TextView) convertView.findViewById(R.id.tvGrayTop);
+            holder.grayBottom = (TextView) convertView.findViewById(R.id.tvGrayBottom);
+            holder.tvColor1 = (TextView) convertView.findViewById(R.id.tvColor1);
+            holder.tvLocationStatus1 = (TextView) convertView.findViewById(R.id.tvLocationStatus1);
+            holder.tvLocationStatus2 = (TextView) convertView.findViewById(R.id.tvLocationStatus2);
+            holder.tvColor2 = (TextView) convertView.findViewById(R.id.tvColor2);
+            holder.layoutFrom = (LinearLayout) convertView.findViewById(R.id.llFromDate);
+            holder.layoutThru = (LinearLayout) convertView.findViewById(R.id.llThruDate);
+            holder.position = position;
+            convertView.setTag(holder);
         } else {
-            view = convertView;
+            holder = (ViewHolder) convertView.getTag();
         }
         HistoryChild c = getItem(position);
-        TextView timeF = (TextView) view.findViewById(R.id.tvTimeFrom);
-        TextView timeT = (TextView) view.findViewById(R.id.tvTimeThru);
-        TextView grayTop = (TextView) view.findViewById(R.id.tvGrayTop);
-        TextView grayBottom = (TextView) view.findViewById(R.id.tvGrayBottom);
-        TextView tvColor1 = (TextView) view.findViewById(R.id.tvColor1);
-        TextView tvLocationStatus1 = (TextView) view.findViewById(R.id.tvLocationStatus1);
-        TextView tvLocationStatus2 = (TextView) view.findViewById(R.id.tvLocationStatus2);
-        TextView tvColor2 = (TextView) view.findViewById(R.id.tvColor2);
-        LinearLayout layoutFrom = (LinearLayout) view.findViewById(R.id.llFromDate);
-        LinearLayout layoutThru = (LinearLayout) view.findViewById(R.id.llThruDate);
+
         if(position == 0) {
-                Drawable blueBackground = null;
-                Drawable redBackground = null;
-                Drawable grayBackground = null;
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    blueBackground = context.getResources().getDrawable(R.drawable.history_time_in_element,null);
-                    redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red,null);
-                    grayBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_gray,null);
-                } else {
-                    blueBackground = context.getResources().getDrawable(R.drawable.history_time_in_element);
-                    redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red);
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    tvColor1.setBackground(blueBackground);
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    if(getCount() != 1) {
-                        tvColor2.setBackground(redBackground);
+                    holder.tvColor1.setBackground(context.getResources().getDrawable(R.drawable.history_time_in_element,null));
+                    if(getCount() == 1) {
+                        holder.tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_gray,null));
                     } else {
-                        tvColor2.setBackground(grayBackground);
+                        holder.tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_time_in_element_red,null));
+                    }
+                } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    holder.tvColor1.setBackground(context.getResources().getDrawable(R.drawable.history_time_in_element));
+                    if(getCount() == 1) {
+                        holder.tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_gray));
+                    } else {
+                        holder.tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_time_in_element_red));
                     }
                 }
-                grayTop.setVisibility(View.GONE);
-                if(getCount() == 1) {
-                    grayBottom.setVisibility(View.GONE);
-                    tvLocationStatus2.setText("Time Out");
-                } else {
-                    tvLocationStatus2.setText("Out of Location");
-                }
-                tvLocationStatus1.setText("Time In");
+            holder.grayTop.setVisibility(View.GONE);
+            if(getCount() == 1) {
+                holder.grayBottom.setVisibility(View.GONE);
+                holder.tvLocationStatus2.setText("Time Out");
+            }else{
+                holder.grayBottom.setVisibility(View.VISIBLE);
+                holder.tvLocationStatus2.setText("Out of Location");
+            }
+            holder.layoutThru.setVisibility(View.VISIBLE);
+            holder.tvLocationStatus1.setText("Time In");
+
 
         }
         else if (position == list.size()-1) {
-            Drawable blueBackground = null;
-            Drawable redBackground = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                blueBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_green, null);
-                redBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_gray, null);
-            } else {
-                blueBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_green);
-                redBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_gray);
+                holder.tvColor1.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_green,null));
+                holder.tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_gray,null));
+            } else  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                holder.tvColor1.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_green));
+                holder.tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_gray));
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                tvColor1.setBackground(blueBackground);
+            if(TextUtils.isEmpty(c.getThruDate())){
+                holder.layoutThru.setVisibility(View.GONE);
+            }else{
+                holder.layoutThru.setVisibility(View.VISIBLE);
+                holder.tvLocationStatus2.setText("Time Out");
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                tvColor2.setBackground(redBackground);
-            }
-            if (TextUtils.isEmpty(c.getThruDate())) {
-                layoutThru.setVisibility(View.GONE);
-            } else {
-                layoutThru.setVisibility(View.VISIBLE);
-                tvLocationStatus2.setText("Time Out");
-            }
-            tvLocationStatus1.setText("In Location");
-            grayBottom.setVisibility(View.GONE);
+            holder.tvLocationStatus1.setText("In Location");
+            holder.grayTop.setVisibility(View.VISIBLE);
+            holder.grayBottom.setVisibility(View.GONE);
+
 
         } else {
-            Drawable blueBackground = null;
-            Drawable redBackground = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                blueBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_green,null);
-                redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red,null);
-            } else {
-                blueBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_green);
-                redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red);
+                holder.tvColor1.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_green,null));
+                holder.tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_time_in_element_red,null));
+            } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                holder.tvColor1.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_green));
+                holder.tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_time_in_element_red));
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                tvColor1.setBackground(blueBackground);
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                tvColor2.setBackground(redBackground);
-            }
-
-            tvLocationStatus1.setText("In Location");
-            tvLocationStatus2.setText("Out of Location");
+            holder.layoutThru.setVisibility(View.VISIBLE);
+            holder.tvLocationStatus1.setText("In Location");
+            holder.tvLocationStatus2.setText("Out of Location");
+            holder.grayTop.setVisibility(View.VISIBLE);
+            holder.grayBottom.setVisibility(View.VISIBLE);
 
         }
-        RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) layoutFrom.getLayoutParams();
+        RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) holder.layoutFrom.getLayoutParams();
         params.bottomMargin = c.getTimeSpace();
-        layoutFrom.setLayoutParams(params);
-        timeF.setText(c.getFromDate());
+        holder.layoutFrom.setLayoutParams(params);
+        holder.timeF.setText(c.getFromDate());
         if(!TextUtils.isEmpty(c.getThruDate())){
-            timeT.setText(c.getThruDate());
+            holder. timeT.setText(c.getThruDate());
         } else{
-            timeT.setText("        -        ");
+            holder. timeT.setText("        -        ");
         }
-        return view;
+        return convertView;
+    }
+
+    public static class ViewHolder {
+        TextView timeF;
+        TextView timeT;
+        TextView grayTop;
+        TextView grayBottom;
+        TextView tvColor1 ;
+        TextView tvLocationStatus1 ;
+        TextView tvLocationStatus2 ;
+        TextView tvColor2 ;
+        LinearLayout layoutFrom;
+        LinearLayout layoutThru;
+        int position;
     }
 }

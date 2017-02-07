@@ -91,6 +91,7 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
             }else{
                 holder.grayBottom.setVisibility(View.VISIBLE);
             }
+            holder.layoutThru.setVisibility(View.VISIBLE);
             holder.tvLocationStatus1.setText("Time In");
             holder.tvLocationStatus2.setText("Out of Location");
         }
@@ -120,6 +121,7 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
                 holder.tvColor1.setBackground(context.getResources().getDrawable(R.drawable.history_tracking_element_green));
                 holder.tvColor2.setBackground(context.getResources().getDrawable(R.drawable.history_time_in_element_red));
             }
+            holder.layoutThru.setVisibility(View.VISIBLE);
             holder.tvLocationStatus1.setText("In Location");
             holder.tvLocationStatus2.setText("Out of Location");
             holder.grayTop.setVisibility(View.VISIBLE);
@@ -137,11 +139,6 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
             holder.timeT.setText("        -        ");
         }
         return view;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position;
     }
 
     @Override
