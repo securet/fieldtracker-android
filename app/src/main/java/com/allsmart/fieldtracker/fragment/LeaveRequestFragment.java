@@ -87,20 +87,29 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
                 String fromDate = etStart.getText().toString();
                 String thruDate = etEnd.getText().toString();
                 String leaveTypeEnumId = etType.getText().toString();
-
-
-                if (!TextUtils.isEmpty(enumReasonId) && !TextUtils.isEmpty(enumTypeId)&& !TextUtils.isEmpty(etReason.getText().toString()) && !TextUtils.isEmpty(leaveReasonId)) {
+                if(TextUtils.isEmpty(fromDate) || TextUtils.isEmpty(thruDate)|| fromDate.equals("Start Date") || thruDate.equals(getString(R.string.end_date))) {
+                    ((MainActivity)getActivity()).displayMessage("Please select Start date and End Date");
+                } else {
+                    if (!TextUtils.isEmpty(enumReasonId) && !TextUtils.isEmpty(enumTypeId)) {
                     /*String fDate = CalenderUtils.getLeaveFromDate(fromDate);
                     String tDate = CalenderUtils.getLeaveThruDate(thruDate);
                     System.out.println(fDate + "     thru =>   " + tDate);*/
-                    Bundle bundle = new Bundle();
-                    bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
-                    bundle.putString(AppsConstant.METHOD, AppsConstant.POST);
-                    bundle.putString(AppsConstant.PARAMS,ParameterBuilder.getApplyLeave(enumTypeId,enumReasonId,etReason.getText().toString(),fromDate,thruDate,AppsConstant.ORGANIZATIONID));
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,LeaveRequestFragment.this).forceLoad();
-                } else {
-                    Toast.makeText(getContext(),"Please select Leave Type and Reason Type and Enter Description",Toast.LENGTH_SHORT).show();
+                        String description = etReason.getText().toString();
+                        if(TextUtils.isEmpty(description) || description.length() <= 0) {
+                            ((MainActivity)getActivity()).displayMessage("Write Description");
+                        } else {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
+                            bundle.putString(AppsConstant.METHOD, AppsConstant.POST);
+                            bundle.putString(AppsConstant.PARAMS,ParameterBuilder.getApplyLeave(getEnumType(enumTypeId),getReaonType(enumReasonId),description,fromDate,thruDate,AppsConstant.ORGANIZATIONID));
+                            getActivity().getLoaderManager().initLoader(LoaderConstant.APPLY_LEAVE,bundle,LeaveRequestFragment.this).forceLoad();
+                        }
+                    } else {
+                        ((MainActivity)getActivity()).displayMessage("Select Leave Type and Leave Reason");
+                    }
                 }
+
+
             }
         });
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -167,6 +176,26 @@ public class LeaveRequestFragment extends Fragment implements View.OnClickListen
         getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_TYPES,b,LeaveRequestFragment.this).forceLoad();
 
         return view;
+    }
+
+    private String getEnumType(String enumType) {
+        if(enumType.equals("Loss of Pay")){
+            return "EltLossOfPay";
+        } else if (enumType.equals("Holiday")) {
+            return "EltHoliday";
+        } else if(enumType.equals("Earned Leave")) {
+            return "EltEarned";
+        } else {
+            return "EltSpecialDayOff";
+        }
+    }
+
+    private String getReaonType(String reasonType) {
+        if(reasonType.equals("Medical")) {
+            return "ElrMedical";
+        } else {
+            return "ElrPersonal";
+        }
     }
 
     @Override

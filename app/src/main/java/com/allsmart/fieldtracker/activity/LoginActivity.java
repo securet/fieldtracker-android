@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allsmart.fieldtracker.R;
+import com.allsmart.fieldtracker.utils.ParameterBuilder;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.constants.AppsConstant;
 import com.allsmart.fieldtracker.utils.Logger;
@@ -51,6 +52,7 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
     private Pattern pattern = Pattern.compile(emailPattern);
     private Matcher matcher;
     private boolean isLogin = false;
+    private boolean isForgotPassScreen = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +87,7 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
         emailET.setVisibility(View.INVISIBLE);
         passwordET.setVisibility(View.INVISIBLE);
         loginBtn.setVisibility(View.INVISIBLE);
-
+        isForgotPassScreen = true;
         newPass.setVisibility(View.VISIBLE);
         confirmPass.setVisibility(View.VISIBLE);
         resetBtn.setVisibility(View.VISIBLE);
@@ -96,10 +98,23 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
         emailET.setVisibility(View.VISIBLE);
         passwordET.setVisibility(View.VISIBLE);
         loginBtn.setVisibility(View.VISIBLE);
-
+      //  isForgotPassScreen = false;
         newPass.setVisibility(View.INVISIBLE);
         confirmPass.setVisibility(View.INVISIBLE);
         resetBtn.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onBackPressed() {
+      //  super.onBackPressed();
+        if(isForgotPassScreen) {
+            showLoginViews();
+            isForgotPassScreen = false;
+            return;
+        } else {
+            finish();
+        }
+        //return;
     }
 
     @Override
@@ -144,8 +159,26 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
                 }
                 break;
             case R.id.resetButton:
-                showLoginViews();
-                displayMessage("Reset is Clicked");
+                String nPass = newPass.getText().toString();
+                String cPass = confirmPass.getText().toString();
+                if(!TextUtils.isEmpty(nPass) ) {
+                    if(!TextUtils.isEmpty(cPass)) {
+                        if(nPass.equals(cPass)) {
+                  //          showLoginViews();
+                            Bundle bundle = new Bundle();
+                            bundle.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.FORGOT_PASSWORD));
+                            bundle.putString(AppsConstant.METHOD,AppsConstant.POST);
+                            bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getUserId("userId"));
+                            getLoaderManager().initLoader(LoaderConstant.FORGOT_PASSWORD,bundle,LoginActivity.this).forceLoad();
+                        } else {
+                            displayMessage("Password does not match");
+                        }
+                    } else {
+                        displayMessage("Type Confirm Password");
+                    }
+                } else {
+                    displayMessage("Type New Password");
+                }
                 break;
         }
     }
@@ -160,10 +193,15 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
         {
             case LoaderConstant.USER_LOGIN:
                 return new LoaderServices(LoginActivity.this, LoaderMethod.USER_LOGIN, args);
+            case LoaderConstant.FORGOT_PASSWORD:
+                return new LoaderServices(LoginActivity.this,LoaderMethod.FORGOT_PASSWORD,args);
             default:
                 return null;
         }
     }
+
+
+
     public void displayMessage(String message) {
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
     }
@@ -200,6 +238,20 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
 
 
                 break;
+            case LoaderConstant.FORGOT_PASSWORD:
+                if(data != null && data instanceof String) {
+                    String result = (String) data;
+                    if(result.equals("success")) {
+                        displayMessage("Forgot reset link is send to your mail");
+                        showLoginViews();
+                    } else if(!result.equals("success") && !result.equals("error")) {
+                        displayMessage(result);
+                    } else {
+                        displayMessage("Error in response. Please try again.");
+                    }
+                } else {
+                    displayMessage("Error in response. Please try again.");
+                }
         }
         getLoaderManager().destroyLoader(loader.getId());
     }

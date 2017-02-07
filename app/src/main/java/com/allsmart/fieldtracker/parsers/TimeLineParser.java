@@ -2,7 +2,9 @@ package com.allsmart.fieldtracker.parsers;
 
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 
+import com.allsmart.fieldtracker.activity.MainActivity;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.utils.Logger;
 import com.allsmart.fieldtracker.storage.Preferences;
@@ -69,7 +71,9 @@ public class TimeLineParser {
                                     if(timeT!=null) {
                                         mCalendar2.setTime(timeT);
                                         tl.setThruDate(DateFormat.format("hh:mm aa",mCalendar2).toString());
-                                        tl.setTimeSpace(DynamicElement.findMarginTop(tl.getFromDate(),tl.getThruDate()));
+                                        tl.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm",mCalendar).toString(),
+                                                DateFormat.format("hh:mm",mCalendar2).toString()));
+                                        Log.d(MainActivity.TAG,tl.getTimeSpace() + " Time line dp");
                                     }else{
                                         timeT = new Date();
                                         tl.setTimeSpace(0);

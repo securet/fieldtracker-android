@@ -17,8 +17,8 @@
     <dimen name="text_11">8sp</dimen>
     <dimen name="text_12">9sp</dimen>
     <dimen name="text_13">10sp</dimen>
-    <dimen name="text_14">11sp</dimen>
-    <dimen name="text_15">12sp</dimen>
+    <dimen name="text_14">12sp</dimen>
+    <dimen name="text_15">12.5sp</dimen>
     <dimen name="text_16">13sp</dimen>
     <dimen name="text_17">14sp</dimen>
     <dimen name="text_18">15sp</dimen>
@@ -66,7 +66,11 @@
     <dimen name="margin_28">25dp</dimen>
     <dimen name="margin_29">26dp</dimen>
     <dimen name="margin_30">27dp</dimen>
-    <dimen name="margin_35">32dp</dimen>
+    <dimen name="margin_31">25dp</dimen>
+    <dimen name="margin_32">27dp</dimen>
+    <dimen name="margin_33">28dp</dimen>
+    <dimen name="margin_34">29dp</dimen>
+    <dimen name="margin_35">30dp</dimen>
     <dimen name="margin_40">37dp</dimen>
     <dimen name="margin_45">42dp</dimen>
 

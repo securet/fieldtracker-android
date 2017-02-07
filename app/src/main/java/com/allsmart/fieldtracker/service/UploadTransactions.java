@@ -138,7 +138,7 @@ public class UploadTransactions extends IntentService {
     }
     public String uploadImage(String imgPath) {
         if (!TextUtils.isEmpty(imgPath)) {
-            String imageResponse = new RestHelper().makeRestCallAndGetResponseImageUpload(Services.DomainUrlImage, imgPath, "For Photo", preference);
+            String imageResponse = new RestHelper().makeRestCallAndGetResponseImageUpload(Services.DomainUrlImage, imgPath, "ForPhoto", preference);
             String serverPath = new ImageUploadParser(imageResponse).Parse();
             return serverPath;
         }

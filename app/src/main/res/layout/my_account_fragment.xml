@@ -32,7 +32,7 @@
                 android:padding="@dimen/margin_10"
                 android:layout_marginBottom="@dimen/margin_10"
                 android:text="Manjunath K"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/colorDarkGray"
                 android:textSize="@dimen/text_20" />
             <TextView
                 android:id="@+id/phoneNum"
@@ -43,7 +43,7 @@
                 android:padding="@dimen/margin_10"
                 android:layout_marginBottom="@dimen/margin_10"
                 android:text="1234567890"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/colorDarkGray"
                 android:textSize="@dimen/text_20" />
             <TextView
                 android:id="@+id/emailAddress"
@@ -54,7 +54,7 @@
                 android:padding="@dimen/margin_10"
                 android:layout_marginBottom="@dimen/margin_10"
                 android:text="test@com"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/colorDarkGray"
                 android:textSize="@dimen/text_20" />
             <TextView
                 android:id="@+id/Address"
@@ -65,7 +65,7 @@
                 android:padding="@dimen/margin_10"
                 android:layout_marginBottom="@dimen/margin_10"
                 android:text="Here only"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/colorDarkGray"
                 android:textSize="@dimen/text_20" />
             <TextView
                 android:id="@+id/storeName"
@@ -76,7 +76,7 @@
                 android:padding="@dimen/margin_10"
                 android:layout_marginBottom="@dimen/margin_10"
                 android:text="Oppo Store"
-                android:textColor="@android:color/darker_gray"
+                android:textColor="@color/colorDarkGray"
                 android:textSize="@dimen/text_20" />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,18 +90,19 @@
                     android:textColor="@android:color/black"
                     android:text="@string/reporting_manager"/>
                 <TextView
-                    android:id="@+id/managerUserName"
+                    android:id="@+id/managerName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:layout_marginTop="@dimen/margin_5"
-                    android:paddingLeft="@dimen/margin_30"
+                    android:paddingLeft="@dimen/margin_10"
                     android:paddingTop="@dimen/margin_5"
                     android:paddingBottom="@dimen/margin_5"
                     android:layout_marginBottom="@dimen/margin_10"
                     android:text="Manager name"
-                    android:textColor="@android:color/darker_gray"
+                    android:paddingStart="@dimen/margin_10"
+                    android:textColor="@color/colorDarkGray"
                     android:textSize="@dimen/text_20" />
                 <TextView
                     android:id="@+id/managerPhoneNum"
@@ -109,13 +110,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/margin_30"
+                    android:paddingStart="@dimen/margin_10"
+                    android:paddingLeft="@dimen/margin_10"
                     android:paddingTop="@dimen/margin_5"
                     android:paddingBottom="@dimen/margin_5"
-
                     android:layout_marginBottom="@dimen/margin_10"
                     android:text="phone num"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/colorDarkGray"
                     android:textSize="@dimen/text_20" />
                 <TextView
                     android:id="@+id/managerEmailAddress"
@@ -123,15 +124,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/margin_30"
+                    android:paddingLeft="@dimen/margin_10"
+                    android:paddingStart="@dimen/margin_10"
                     android:paddingTop="@dimen/margin_5"
                     android:paddingBottom="@dimen/margin_5"
-
                     android:layout_marginBottom="@dimen/margin_10"
                     android:text="Manager email"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/colorDarkGray"
                     android:textSize="@dimen/text_20" />
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

@@ -88,7 +88,7 @@
                 android:background="@drawable/login_edittext"
                 android:textStyle="italic"
                 android:hint="@string/new_password"
-                android:inputType="textEmailAddress"
+                android:inputType="textPassword"
                 android:textSize="@dimen/text_20" />
 
             <EditText

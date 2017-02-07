@@ -8,8 +8,11 @@
     <color name="colorLightGray">#eceae8</color>
     <color name="colorMediumGray">#a3a2a1</color>
     <color name="colorRed">#d81313</color>
-    <color name="colorGreen">#20d813</color>
+    <color name="colorGreen">#4ef230</color>
     <color name="subHeaderBlue">#548ab0</color>
     <color name="mainHeaderBlue">#1e4e76</color>
+    <color name="colorDarkGray">#5a5a5a</color>
+    <color name="colorOrange">#f26930</color>
+    <color name="colorLightBlue">#30aef2</color>
 
 </resources>

@@ -33,4 +33,6 @@ public class Services{
     public static String LEAVE_REQUISITION = "leaves/requisitions";
     public static String APPROVE_PROMOTER = "request/promoter/approve";
     public static String REJECT_PROMOTER = "request/promoter/reject";
+    public static String APPROVE_LEAVE = "updateLeave";
+    public static String FORGOT_PASSWORD = "resetPassword";
 }

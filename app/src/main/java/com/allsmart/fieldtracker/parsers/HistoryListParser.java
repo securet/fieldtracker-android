@@ -99,6 +99,7 @@ public class HistoryListParser {
                                             c2.setTime(tDate);
                                             historyChild.setThruDate(DateFormat.format("hh:mm aa", c2).toString());
                                             historyChild.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm", c1).toString(), DateFormat.format("hh:mm", c2).toString()));
+                                        //    historyChild.setTimeSpace(DynamicElement.findMarginTop(c1.getTimeInMillis(),c2.getTimeInMillis()));
 
                                             if (j == childArray.length() - 1) {
                                                 thruDateMill = tDate.getTime();

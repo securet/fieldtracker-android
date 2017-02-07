@@ -65,6 +65,19 @@ public class ParameterBuilder {
         }
     }
 
+    public static String getUserId(String userId) {
+        String url = "";
+        try {
+            url = "userId=" + URLEncoder.encode(userId,"UTF-8");
+        } catch (Exception e) {
+            Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
+        } finally {
+            return url;
+        }
+    }
+
     public static String getStoreUpdate(String storeId,String storeAddress) {
         String url = "" ;
         try {
@@ -213,6 +226,28 @@ public class ParameterBuilder {
         String url = "";
         try {
             url = "requestId=" + URLEncoder.encode(requestId,"UTF-8");
+        } catch (Exception e) {
+            Logger.e("Log",e);
+            Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");
+            Crashlytics.logException(e);
+        } finally {
+            return url;
+        }
+    }
+
+    public static String getLeaveApprove(String partyRelationshipId,String fromDate,
+                                         String thruDate,String leaveTypeEnumId,
+                                         String leaveReasonEnumId,String leaveApproved,String description) {
+        String url = "";
+        try {
+            url = "partyRelationshipId=" + URLEncoder.encode(partyRelationshipId,"UTF-8") +
+                    "&fromDate=" + URLEncoder.encode(fromDate,"UTF-8") +
+                    "&description=" + URLEncoder.encode(description,"UTF-8") +
+                    "&thruDate=" + URLEncoder.encode(thruDate,"UTF-8") +
+                    "&leaveTypeEnumId=" + URLEncoder.encode(leaveTypeEnumId,"UTF-8") +
+                    "&leaveReasonEnumId=" + URLEncoder.encode(leaveReasonEnumId,"UTF-8") +
+                    "&leaveApproved=" + URLEncoder.encode(leaveApproved,"UTF-8");
+
         } catch (Exception e) {
             Logger.e("Log",e);
             Crashlytics.log(1,"ParameterBuilder","ParameterBuilder");

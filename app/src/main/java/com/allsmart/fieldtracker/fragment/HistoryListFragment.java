@@ -131,7 +131,9 @@ public class HistoryListFragment extends Fragment implements AdapterView.OnItemC
 	@Override
 	public void onLoadFinished(Loader<Object> loader, Object data) {
         if(pageIndex==0 ){
-            ((MainActivity)getActivity()).showHideProgressForLoder(true);
+            if(getActivity() != null) {
+                ((MainActivity)getActivity()).showHideProgressForLoder(true);
+            }
         }else{
             hideloader();
         }
@@ -152,9 +154,9 @@ public class HistoryListFragment extends Fragment implements AdapterView.OnItemC
             isLoading = false;
         ((MainActivity)getActivity()).isLoading = false;
 			adapter.Refresh(list);
-
-		    getActivity().getLoaderManager().destroyLoader(loader.getId());
-
+            if(getActivity() != null) {
+                getActivity().getLoaderManager().destroyLoader(loader.getId());
+            }
 	}
 
 	@Override

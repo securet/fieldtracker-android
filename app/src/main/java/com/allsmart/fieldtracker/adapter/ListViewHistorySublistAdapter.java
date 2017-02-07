@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.allsmart.fieldtracker.R;
@@ -63,6 +64,8 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
         HistoryChild c = getItem(position);
         TextView timeF = (TextView) view.findViewById(R.id.tvTimeFrom);
         TextView timeT = (TextView) view.findViewById(R.id.tvTimeThru);
+        TextView grayTop = (TextView) view.findViewById(R.id.tvGrayTop);
+        TextView grayBottom = (TextView) view.findViewById(R.id.tvGrayBottom);
         TextView tvColor1 = (TextView) view.findViewById(R.id.tvColor1);
         TextView tvLocationStatus1 = (TextView) view.findViewById(R.id.tvLocationStatus1);
         TextView tvLocationStatus2 = (TextView) view.findViewById(R.id.tvLocationStatus2);
@@ -85,9 +88,12 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     tvColor2.setBackground(redBackground);
                 }
+                grayTop.setVisibility(View.GONE);
+                if(getCount() == 1) {
+                    grayBottom.setVisibility(View.GONE);
+                }
                 tvLocationStatus1.setText("Time In");
                 tvLocationStatus2.setText("Out of Location");
- //           }
         }
         else if (position == list.size()-1) {
             Drawable blueBackground = null;
@@ -112,6 +118,7 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
                 tvLocationStatus2.setText("Time Out");
             }
             tvLocationStatus1.setText("In Location");
+            grayBottom.setVisibility(View.GONE);
 
         } else {
             Drawable blueBackground = null;
@@ -134,7 +141,7 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
             tvLocationStatus2.setText("Out of Location");
 
         }
-        LinearLayout.LayoutParams params  = (LinearLayout.LayoutParams) layoutFrom.getLayoutParams();
+        RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) layoutFrom.getLayoutParams();
         params.bottomMargin = c.getTimeSpace();
         layoutFrom.setLayoutParams(params);
         timeF.setText(c.getFromDate());

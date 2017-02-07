@@ -1,5 +1,9 @@
 package com.allsmart.fieldtracker.utils;
 
+import android.util.Log;
+
+import com.allsmart.fieldtracker.activity.MainActivity;
+
 /**
  * Created by allsmartlt218 on 07-12-2016.
  * this class is created by manjunath to generate marginTop dp at runtime depending upon time in time out difference
@@ -51,6 +55,22 @@ public class DynamicElement {
         if (totalMin != 0 ) {
             dp =  (double) totalMin * 20 / 60;
         }
+        return (int)Math.round(dp);
+    }
+
+    public static int findMarginTop(long timeIn,long timeOut){
+        double dp = 0;
+        if(timeIn != 0 && timeOut != 0) {
+            if((timeOut-timeIn) > 0) {
+                dp = (double) (timeOut-timeIn) * 20/60;
+            } else if((timeOut-timeIn) < 0) {
+                long time = (timeOut-timeIn)*(-1);
+                dp = (double) time * 20/60;
+            } else {
+                dp = 0;
+            }
+        }
+        Log.d(MainActivity.TAG,(int)Math.round(dp) + "  this is margin top dp");
         return (int)Math.round(dp);
     }
 }

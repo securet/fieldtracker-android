@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:background="@android:color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
+    <TextView
+        android:layout_width="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_15"
+        android:layout_marginLeft="@dimen/margin_30"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:background="@color/colorMediumGray"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvGrayTop"
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_width="@dimen/margin_10"
+            android:background="@color/colorMediumGray"
+            android:layout_height="wrap_content" />
     <LinearLayout
         android:orientation="horizontal"
         android:id="@+id/llFromDate"
@@ -53,6 +70,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_below="@id/llFromDate"
         android:id="@+id/llThruDate"
         android:orientation="horizontal"
         android:layout_marginStart="@dimen/margin_10"
@@ -98,5 +116,13 @@
             android:text="Time In"/>
 
     </LinearLayout>
+        <TextView
+            android:layout_below="@id/llThruDate"
+            android:id="@+id/tvGrayBottom"
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_width="@dimen/margin_10"
+            android:background="@color/colorMediumGray"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
-</LinearLayout>
+</FrameLayout>

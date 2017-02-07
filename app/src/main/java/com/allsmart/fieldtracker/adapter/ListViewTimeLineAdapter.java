@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.allsmart.fieldtracker.R;
@@ -63,6 +64,8 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
         }
         TextView timeF = (TextView) view.findViewById(R.id.tvTimeFrom);
         TextView timeT = (TextView) view.findViewById(R.id.tvTimeThru);
+        TextView grayTop = (TextView) view.findViewById(R.id.tvGrayTop);
+        TextView grayBottom = (TextView) view.findViewById(R.id.tvGrayBottom);
         TextView tvColor1 = (TextView) view.findViewById(R.id.tvColor1);
         TextView tvLocationStatus1 = (TextView) view.findViewById(R.id.tvLocationStatus1);
         TextView tvLocationStatus2 = (TextView) view.findViewById(R.id.tvLocationStatus2);
@@ -88,6 +91,10 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 tvColor2.setBackground(redBackground);
+            }
+            grayTop.setVisibility(View.GONE);
+            if(getCount() == 1) {
+                grayBottom.setVisibility(View.GONE);
             }
             tvLocationStatus1.setText("Time In");
             tvLocationStatus2.setText("Out of Location");
@@ -117,6 +124,7 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
             }
 //            tvLocationStatus2.setText("Time Out");
             tvLocationStatus1.setText("In Location");
+            grayBottom.setVisibility(View.GONE);
 
         } else {
             Drawable blueBackground = null;
@@ -140,7 +148,7 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
 
         }
 
-        LinearLayout.LayoutParams params  = (LinearLayout.LayoutParams) layoutFrom.getLayoutParams();
+        RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) layoutFrom.getLayoutParams();
         params.bottomMargin = tl.getTimeSpace();
         layoutFrom.setLayoutParams(params);
         timeF.setText(tl.getFromDate());

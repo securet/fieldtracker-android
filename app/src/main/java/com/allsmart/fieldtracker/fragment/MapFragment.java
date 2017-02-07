@@ -2,10 +2,12 @@ package com.allsmart.fieldtracker.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.LoaderManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -32,11 +34,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.allsmart.fieldtracker.R;
+import com.allsmart.fieldtracker.constants.LoaderConstant;
+import com.allsmart.fieldtracker.constants.LoaderMethod;
+import com.allsmart.fieldtracker.constants.Services;
+import com.allsmart.fieldtracker.model.Response;
 import com.allsmart.fieldtracker.model.SimpleGeofence;
+import com.allsmart.fieldtracker.parsers.ImageUploadParser;
+import com.allsmart.fieldtracker.service.LoaderServices;
+import com.allsmart.fieldtracker.utils.ParameterBuilder;
 import com.allsmart.fieldtracker.utils.SimpleGeofenceStore;
 import com.allsmart.fieldtracker.activity.CameraActivity;
 import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.service.GeofenceReceiver;
+import com.allsmart.fieldtracker.utils.UrlBuilder;
+import com.allsmart.fieldtracker.webmethods.RestHelper;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -75,7 +86,7 @@ import java.util.Map;
 import static com.allsmart.fieldtracker.R.id.tvSiteName;
 
 public class MapFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status>/*, LoaderManager.LoaderCallbacks*/ {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status>, LoaderManager.LoaderCallbacks<Object>/*, LoaderManager.LoaderCallbacks*/ {
     protected SupportMapFragment mapFragment;
     protected GoogleMap map;
     private Preferences preferences;
@@ -635,11 +646,35 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         if (NetworkUtils.isNetworkConnectionAvailable(getContext())) {
             Intent uploadTraIntent = new Intent(getContext(), UploadTransactions.class);
             getActivity().startService(uploadTraIntent);
+            /*String image = uploadImage(strFile);
+            Log.d(MainActivity.TAG,image);
+            if (!TextUtils.isEmpty(image) && !image.equalsIgnoreCase("error")) {
+                Bundle b = new Bundle();
+                b.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.TIME_IN_OUT));
+                b.putString(AppsConstant.METHOD,AppsConstant.POST);
+                b.putString(AppsConstant.PARAMS,ParameterBuilder.getTimeinOut(preferences,strComments,strActionType,image));
+                getActivity().getLoaderManager().initLoader(LoaderConstant.TIMEINOUT,b,MapFragment.this).forceLoad();
+            } else {
+                ((MainActivity)getActivity()).displayMessage("Image was not uploaded try again ");
+            }*/
+
         }
         preferences.saveString(Preferences.TIMEINTIME, CalenderUtils.getCurrentDate("dd/MM/yyyy HH:mm:ss"));
         preferences.commit();
 
-        SetLoginLogOut();
+        //
+         SetLoginLogOut();
+    }
+
+    public String uploadImage(String imgPath) {
+        if (!TextUtils.isEmpty(imgPath)) {
+            String imageResponse = new RestHelper().makeRestCallAndGetResponseImageUpload(Services.DomainUrlImage, imgPath, "ForPhoto", preferences);
+            String serverPath = new ImageUploadParser(imageResponse).Parse();
+            return serverPath;
+        }
+        else {
+            return "";
+        }
     }
 
     private TimeInOutDetails getTimeInOutDetails(String strComments, String strType, String strImage, String isPushed) {
@@ -769,5 +804,44 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 		((MainActivity)getActivity()).preferences.saveString(Preferences.USERLONGITUDE, longitude+""); // value to store
 		((MainActivity)getActivity()).preferences.commit();
         UpdateLocationStatus();
+    }
+
+    @Override
+    public Loader<Object> onCreateLoader(int id, Bundle args) {
+        ((MainActivity)getActivity()).showHideProgressForLoder(false);
+        switch (id) {
+            case LoaderConstant.TIMEINOUT:
+                return new LoaderServices(getContext(), LoaderMethod.TIMEINOUT,args);
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Object> loader, Object data) {
+        ((MainActivity)getActivity()).showHideProgressForLoder(true);
+        if(data != null && data instanceof Response) {
+            Response response = (Response) data;
+            if(response != null) {
+              if(response.getResponceCode().equals("200")) {
+                  ((MainActivity)getActivity()).displayMessage(response.getResponceMessage());
+                  SetLoginLogOut();
+              }  else  {
+                  if(!TextUtils.isEmpty(response.getResponceMessage())) {
+                      ((MainActivity) getActivity()).displayMessage(response.getResponceMessage());
+                  } else {
+                      ((MainActivity) getActivity()).displayMessage("Something went wrong please try again");
+                  }
+              }
+            }
+        } else {
+            ((MainActivity)getActivity()).displayMessage("Error in response");
+        }
+        getActivity().getLoaderManager().destroyLoader(loader.getId());
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Object> loader) {
+
     }
 }

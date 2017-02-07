@@ -17,7 +17,7 @@ import com.allsmart.fieldtracker.storage.Preferences;
 
 public class MyAccountFragment extends Fragment {
 
-    private TextView username,phone,email,address,storeName;
+    private TextView username,phone,email,address,storeName,managerName,managerPhone,managerEmail;
     private Preferences preferences;
     @Nullable
     @Override
@@ -28,12 +28,15 @@ public class MyAccountFragment extends Fragment {
         email = (TextView) view.findViewById(R.id.emailAddress);
         address = (TextView) view.findViewById(R.id.Address);
         storeName = (TextView) view.findViewById(R.id.storeName);
+        managerName = (TextView) view.findViewById(R.id.managerName);
+        managerPhone = (TextView) view.findViewById(R.id.managerPhoneNum);
+        managerEmail = (TextView) view.findViewById(R.id.managerEmailAddress);
         preferences = new Preferences(getContext());
 
-        username.setText(preferences.getString(Preferences.USERFULLNAME,""));
-        phone.setText(preferences.getString(Preferences.PARTYID,""));
-        email.setText(preferences.getString(Preferences.USEREMAIL,""));
-        address.setText(preferences.getString(Preferences.SITE_ADDRESS,""));
+        username.setText("Agent Name");
+        phone.setText("Phone Number");
+        email.setText("Email Address");
+        address.setText("Address");
         storeName.setText(preferences.getString(Preferences.SITENAME,""));
         return view;
     }

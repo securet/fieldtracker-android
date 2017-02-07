@@ -27,4 +27,6 @@ public class LoaderConstant {
     public static final int LEAVE_REQUISITION = 20;
     public static final int PROMOTER_APPROVALS_LIST = 21;
     public static final int APPROVE_PROMOTER = 22;
+    public static final int APPROVE_LEAVE = 23;
+    public static final int FORGOT_PASSWORD = 24;
 }

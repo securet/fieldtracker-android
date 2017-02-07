@@ -21,7 +21,7 @@
             android:textColor="@android:color/black"
             android:layout_marginStart="@dimen/margin_20"
             android:layout_marginLeft="@dimen/margin_20"
-            android:text="12-OCt-16"/>
+            android:text=""/>
         <TextView
             android:id="@+id/tvHistoryTimeIn"
             android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
             android:textColor="@android:color/black"
             android:layout_marginStart="@dimen/margin_20"
             android:layout_marginLeft="@dimen/margin_20"
-            android:text="Time In: 10:12 am"/>
+            android:text=""/>
         <TextView
             android:id="@+id/tvHistoryTimeOut"
             android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
             android:layout_marginTop="@dimen/margin_5"
             android:layout_marginStart="@dimen/margin_20"
             android:layout_marginLeft="@dimen/margin_20"
-            android:text="Time In: 10:12 am"/>
+            android:text=""/>
 
 
     </LinearLayout>
@@ -54,7 +54,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="@dimen/margin_20"
         android:layout_marginRight="@dimen/margin_20"
-        android:text="9h 10m"
+        android:text=""
         android:textSize="@dimen/text_25" />
     <!--<ScrollView
         android:layout_marginTop="10dp"
