@@ -33,7 +33,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_12"
             android:id="@+id/tvColor1"
             android:layout_width="@dimen/margin_27"
             android:layout_height="@dimen/margin_27"
@@ -81,7 +81,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_12"
             android:id="@+id/tvColor2"
             android:layout_width="@dimen/margin_27"
             android:layout_height="@dimen/margin_27"

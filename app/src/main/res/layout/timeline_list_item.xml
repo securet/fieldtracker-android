@@ -6,9 +6,9 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:layout_width="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_15"
-        android:layout_marginLeft="@dimen/margin_30"
+        android:layout_width="@dimen/margin_5"
+        android:layout_marginTop="@dimen/margin_30"
+        android:layout_marginLeft="@dimen/margin_31"
         android:layout_marginBottom="@dimen/margin_10"
         android:background="@color/colorMediumGray"
         android:layout_height="match_parent" />
@@ -18,8 +18,8 @@
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/tvGrayTop"
-            android:layout_marginLeft="@dimen/margin_30"
-            android:layout_width="@dimen/margin_10"
+            android:layout_marginLeft="@dimen/margin_31"
+            android:layout_width="@dimen/margin_5"
             android:background="@color/colorMediumGray"
             android:layout_height="wrap_content" />
     <LinearLayout
@@ -32,10 +32,10 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_12"
             android:id="@+id/tvColor1"
-            android:layout_width="@dimen/margin_30"
-            android:layout_height="@dimen/margin_30"
+            android:layout_width="@dimen/margin_27"
+            android:layout_height="@dimen/margin_27"
             android:layout_marginStart="@dimen/margin_10"
             android:layout_marginLeft="@dimen/margin_10"
             android:layout_marginBottom="@dimen/margin_10"
@@ -80,10 +80,10 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_12"
             android:id="@+id/tvColor2"
-            android:layout_width="@dimen/margin_30"
-            android:layout_height="@dimen/margin_30"
+            android:layout_width="@dimen/margin_27"
+            android:layout_height="@dimen/margin_27"
             android:layout_marginStart="@dimen/margin_10"
             android:layout_marginLeft="@dimen/margin_10"
             android:layout_marginBottom="@dimen/margin_10"
@@ -119,8 +119,8 @@
         <TextView
             android:layout_below="@id/llThruDate"
             android:id="@+id/tvGrayBottom"
-            android:layout_marginLeft="@dimen/margin_30"
-            android:layout_width="@dimen/margin_10"
+            android:layout_marginLeft="@dimen/margin_31"
+            android:layout_width="@dimen/margin_5"
             android:background="@color/colorMediumGray"
             android:layout_height="wrap_content" />
     </RelativeLayout>

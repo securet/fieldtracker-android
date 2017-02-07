@@ -38,14 +38,14 @@ public class UserStoreDetailParser {
                     preferences.commit();
             }
         } catch (JSONException e) {
-            preferences.saveString(Preferences.SITE_ADDRESS,"");
+            /*preferences.saveString(Preferences.SITE_ADDRESS,"");
             preferences.saveString(Preferences.LATITUDE,"0.0");
             preferences.saveString(Preferences.SITE_ENTITY,"");
             preferences.saveString(Preferences.SITENAME,"Off Site" );
             preferences.saveString(Preferences.PARTYID,"");
             preferences.saveString(Preferences.LONGITUDE,"0.0");
             preferences.saveString(Preferences.SITE_RADIUS, AppsConstant.DEFAULTRADIUS);
-            preferences.commit();
+            preferences.commit();*/
             Logger.e("Log",e);
             Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
             Crashlytics.logException(e);

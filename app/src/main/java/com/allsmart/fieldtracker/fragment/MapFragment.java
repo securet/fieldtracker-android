@@ -527,7 +527,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         Log.i(MainActivity.TAG, "Connected to GoogleApiClient");
         // Zoom in the Google Map
         if(mGoogleApiClient.isConnected()) {
-            map.animateCamera(CameraUpdateFactory.zoomTo(18));
+            if(map != null) {
+                map.animateCamera(CameraUpdateFactory.zoomTo(18));
+            }
             getLastKnownLocation();
         } else {
             Log.d(MainActivity.TAG,"google api not connected");

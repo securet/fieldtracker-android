@@ -34,6 +34,11 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
         this.resource = resource;
     }
 
+    public void refresh(ArrayList<HistoryChild> list){
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return list.size();
@@ -75,9 +80,11 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
         if(position == 0) {
                 Drawable blueBackground = null;
                 Drawable redBackground = null;
+                Drawable grayBackground = null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     blueBackground = context.getResources().getDrawable(R.drawable.history_time_in_element,null);
                     redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red,null);
+                    grayBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_gray,null);
                 } else {
                     blueBackground = context.getResources().getDrawable(R.drawable.history_time_in_element);
                     redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red);
@@ -86,14 +93,21 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
                     tvColor1.setBackground(blueBackground);
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    tvColor2.setBackground(redBackground);
+                    if(getCount() != 1) {
+                        tvColor2.setBackground(redBackground);
+                    } else {
+                        tvColor2.setBackground(grayBackground);
+                    }
                 }
                 grayTop.setVisibility(View.GONE);
                 if(getCount() == 1) {
                     grayBottom.setVisibility(View.GONE);
+                    tvLocationStatus2.setText("Time Out");
+                } else {
+                    tvLocationStatus2.setText("Out of Location");
                 }
                 tvLocationStatus1.setText("Time In");
-                tvLocationStatus2.setText("Out of Location");
+
         }
         else if (position == list.size()-1) {
             Drawable blueBackground = null;

@@ -124,7 +124,7 @@ public class TimeLineFragment extends Fragment implements LoaderManager.LoaderCa
 
             adapter = new ListViewTimeLineAdapter(getContext(),R.layout.timeline_list_item, list);
             lvTimeLine.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+            adapter.refresh(list);
         }
 
 

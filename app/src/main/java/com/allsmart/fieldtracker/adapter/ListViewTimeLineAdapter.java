@@ -57,21 +57,28 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View view = convertView;
+        ViewHolder holder;
         TimeLine tl = getItem(position);
         if(view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.timeline_list_item,parent,false);
+            holder = new ViewHolder();
+            holder.timeF = (TextView) view.findViewById(R.id.tvTimeFrom);
+            holder.timeT = (TextView) view.findViewById(R.id.tvTimeThru);
+            holder.grayTop = (TextView) view.findViewById(R.id.tvGrayTop);
+            holder.grayBottom = (TextView) view.findViewById(R.id.tvGrayBottom);
+            holder.tvColor1 = (TextView) view.findViewById(R.id.tvColor1);
+            holder.tvLocationStatus1 = (TextView) view.findViewById(R.id.tvLocationStatus1);
+            holder.tvLocationStatus2 = (TextView) view.findViewById(R.id.tvLocationStatus2);
+            holder.tvColor2 = (TextView) view.findViewById(R.id.tvColor2);
+            holder.layoutFrom = (LinearLayout) view.findViewById(R.id.llFromDate);
+            holder.layoutThru = (LinearLayout) view.findViewById(R.id.llThruDate);
+            holder.position = position;
+            view.setTag(holder);
+        } else {
+            holder = (ViewHolder) view.getTag();
         }
-        TextView timeF = (TextView) view.findViewById(R.id.tvTimeFrom);
-        TextView timeT = (TextView) view.findViewById(R.id.tvTimeThru);
-        TextView grayTop = (TextView) view.findViewById(R.id.tvGrayTop);
-        TextView grayBottom = (TextView) view.findViewById(R.id.tvGrayBottom);
-        TextView tvColor1 = (TextView) view.findViewById(R.id.tvColor1);
-        TextView tvLocationStatus1 = (TextView) view.findViewById(R.id.tvLocationStatus1);
-        TextView tvLocationStatus2 = (TextView) view.findViewById(R.id.tvLocationStatus2);
-        TextView tvColor2 = (TextView) view.findViewById(R.id.tvColor2);
-        LinearLayout layoutFrom = (LinearLayout) view.findViewById(R.id.llFromDate);
-        LinearLayout layoutThru = (LinearLayout) view.findViewById(R.id.llThruDate);
+
 
 
         if(position == 0) {
@@ -86,18 +93,18 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                tvColor1.setBackground(blueBackground);
+                holder.tvColor1.setBackground(blueBackground);
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                tvColor2.setBackground(redBackground);
+                holder.tvColor2.setBackground(redBackground);
             }
-            grayTop.setVisibility(View.GONE);
+            holder.grayTop.setVisibility(View.GONE);
             if(getCount() == 1) {
-                grayBottom.setVisibility(View.GONE);
+                holder.grayBottom.setVisibility(View.GONE);
             }
-            tvLocationStatus1.setText("Time In");
-            tvLocationStatus2.setText("Out of Location");
+            holder.tvLocationStatus1.setText("Time In");
+            holder.tvLocationStatus2.setText("Out of Location");
         }
         else if (position == list.size()-1) {
             Drawable blueBackground = null;
@@ -110,21 +117,21 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
                 redBackground = context.getResources().getDrawable(R.drawable.history_tracking_element_gray);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                tvColor1.setBackground(blueBackground);
+                holder.tvColor1.setBackground(blueBackground);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                tvColor2.setBackground(redBackground);
+                holder.tvColor2.setBackground(redBackground);
             }
 
             if(TextUtils.isEmpty(tl.getThruDate())){
-                layoutThru.setVisibility(View.GONE);
+                holder.layoutThru.setVisibility(View.GONE);
             }else{
-                layoutThru.setVisibility(View.VISIBLE);
-                tvLocationStatus2.setText("Time Out");
+                holder.layoutThru.setVisibility(View.VISIBLE);
+                holder.tvLocationStatus2.setText("Time Out");
             }
 //            tvLocationStatus2.setText("Time Out");
-            tvLocationStatus1.setText("In Location");
-            grayBottom.setVisibility(View.GONE);
+            holder.tvLocationStatus1.setText("In Location");
+            holder.grayBottom.setVisibility(View.GONE);
 
         } else {
             Drawable blueBackground = null;
@@ -137,26 +144,26 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
                 redBackground = context.getResources().getDrawable(R.drawable.history_time_in_element_red);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                tvColor1.setBackground(blueBackground);
+                holder.tvColor1.setBackground(blueBackground);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                tvColor2.setBackground(redBackground);
+                holder.tvColor2.setBackground(redBackground);
             }
 
-            tvLocationStatus1.setText("In Location");
-            tvLocationStatus2.setText("Out of Location");
+            holder.tvLocationStatus1.setText("In Location");
+            holder.tvLocationStatus2.setText("Out of Location");
 
         }
 
-        RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) layoutFrom.getLayoutParams();
+        RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) holder.layoutFrom.getLayoutParams();
         params.bottomMargin = tl.getTimeSpace();
-        layoutFrom.setLayoutParams(params);
-        timeF.setText(tl.getFromDate());
+        holder.layoutFrom.setLayoutParams(params);
+        holder.timeF.setText(tl.getFromDate());
 //        timeT.setText(tl.getThruDate());
         if(!TextUtils.isEmpty(tl.getThruDate())){
-            timeT.setText(tl.getThruDate());
+            holder.timeT.setText(tl.getThruDate());
         } else {
-            timeT.setText("        -        ");
+            holder.timeT.setText("        -        ");
         }
         return view;
     }
@@ -170,4 +177,20 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+
+    public static class ViewHolder {
+        TextView timeF;
+        TextView timeT;
+        TextView grayTop;
+        TextView grayBottom;
+        TextView tvColor1 ;
+        TextView tvLocationStatus1 ;
+        TextView tvLocationStatus2 ;
+        TextView tvColor2 ;
+        LinearLayout layoutFrom;
+        LinearLayout layoutThru;
+        int position;
+    }
 }
+
+

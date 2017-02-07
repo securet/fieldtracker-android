@@ -51,7 +51,7 @@ public class HistoryListTrackFragment extends Fragment {
 
         ListViewHistorySublistAdapter adapter = new ListViewHistorySublistAdapter(getContext(),R.layout.history_tracking_item,historyNew.getHistoryChildren());
         listView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        adapter.refresh(historyNew.getHistoryChildren());
         return view;
     }
 
