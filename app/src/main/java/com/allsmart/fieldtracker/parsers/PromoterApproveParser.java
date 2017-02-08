@@ -21,8 +21,10 @@ public class PromoterApproveParser {
             JSONObject parentObject = new JSONObject(response);
             if(parentObject.has("request")) {
                 result = "success";
-            } else {
+            } else if(parentObject.has("errors")){
                 result = parentObject.getString("errors");
+            } else {
+                result = "error";
             }
         } catch (JSONException e) {
             result = "error";

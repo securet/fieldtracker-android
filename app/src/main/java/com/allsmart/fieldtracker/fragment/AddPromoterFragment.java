@@ -120,18 +120,29 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
         Add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String fName = fN.getText().toString();
-                String lName = lN.getText().toString();
-                String sPh = ph.getText().toString();
-                String  email = eAdd.getText().toString();
-                String sAdd = address.getText().toString();
-                String sId = tvStoreAssignment.getText().toString();
-                Bundle b = new Bundle();
-                b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.ADD_PROMOTER));
-                b.putString(AppsConstant.METHOD, AppsConstant.POST);
-                b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddPromoter("RqtAddPromoter",AppsConstant.ORGANIZATIONID,"Yeh hai description",fName,lName,sPh,email,sAdd,
-                        String.valueOf(storeId),"ReqSubmitted","RqtAddPromoter",image[0],image[1],image[2]));
-                getActivity().getLoaderManager().initLoader(LoaderConstant.ADD_PROMOTER,b,AddPromoterFragment.this).forceLoad();
+                if(isNotNull(fN.getText().toString(),lN.getText().toString(),ph.getText().toString(),eAdd.getText().toString(),
+                        address.getText().toString(),tvStoreAssignment.getText().toString(),seAssignment.getText().toString())) {
+                    if(!TextUtils.isEmpty(image[0]) && !TextUtils.isEmpty(image[1]) && !TextUtils.isEmpty(image[2])) {
+                        Bundle b = new Bundle();
+                        b.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.ADD_PROMOTER));
+                        b.putString(AppsConstant.METHOD, AppsConstant.POST);
+                        b.putString(AppsConstant.PARAMS, ParameterBuilder.getAddPromoter("RqtAddPromoter",AppsConstant.ORGANIZATIONID,"Yeh hai description",
+                                fN.getText().toString(),
+                                lN.getText().toString(),
+                                ph.getText().toString(),
+                                eAdd.getText().toString(),
+                                address.getText().toString(),
+                                String.valueOf(storeId),"ReqSubmitted","RqtAddPromoter",image[0],image[1],image[2]));
+                        getActivity().getLoaderManager().initLoader(LoaderConstant.ADD_PROMOTER,b,AddPromoterFragment.this).forceLoad();
+                    } else {
+                        ((MainActivity)getActivity()).displayMessage("Please take all photos");
+                    }
+
+                } else {
+                    ((MainActivity)getActivity()).displayMessage("Fields cannot be empty");
+                }
+
+
             }
         });
         ivPhoto.setOnClickListener(this);
@@ -139,6 +150,17 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
         ivAddressProof.setOnClickListener(this);
 
         return view;
+    }
+
+    public boolean isNotNull(String firstName,String lastName, String phone,String email,String address,String storeAssign,String sEassign) {
+        if(!TextUtils.isEmpty(firstName) && !TextUtils.isEmpty(lastName) &&
+                !TextUtils.isEmpty(phone) && !TextUtils.isEmpty(email) &&
+                !TextUtils.isEmpty(address) && !TextUtils.isEmpty(storeAssign) &&
+                !TextUtils.isEmpty(sEassign)){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

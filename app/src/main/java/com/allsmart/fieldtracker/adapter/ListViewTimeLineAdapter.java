@@ -107,7 +107,7 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
                 holder.layoutThru.setVisibility(View.GONE);
             }else{
                 holder.layoutThru.setVisibility(View.VISIBLE);
-                holder.tvLocationStatus2.setText("Time Out");
+                holder.tvLocationStatus2.setText("Out of Location");
             }
             holder.tvLocationStatus1.setText("In Location");
             holder.grayTop.setVisibility(View.VISIBLE);

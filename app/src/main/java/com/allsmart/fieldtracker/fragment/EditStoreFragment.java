@@ -3,6 +3,7 @@ package com.allsmart.fieldtracker.fragment;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -15,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.app.LoaderManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -111,24 +113,25 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
 
                 LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQ_PERMISSION);
+                    if(checkPermission()){
+                        if (googleApiClient.isConnected()) {
+                            if(checkPermission()) {
+                                location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                            }
+                            lattitude.setText(location.getLatitude()+"");
+                            longitude.setText(location.getLongitude()+"");
+                            isGetLocationClicked = true;
+                            Log.d(MainActivity.TAG,"Permision granted");
+                        }
+                    } else {
+                        requestPermission();
+                    }
                 } else {
-                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }if(NetworkUtils.isNetworkConnectionAvailable(getContext())) {
+                    if(NetworkUtils.isNetworkConnectionAvailable(getContext())) {
                         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         if(location != null) {
-                            lat = String.valueOf(location.getLatitude());
-                            lon = String.valueOf(location.getLongitude());
-                            lattitude.setText(lat);
-                            longitude.setText(lon);
+                            lattitude.setText(String.valueOf(location.getLatitude()));
+                            longitude.setText(String.valueOf(location.getLongitude()));
                             isGetLocationClicked = true;
                         } else {
                             ((MainActivity)getActivity()).displayMessage("Unable to get location");
@@ -136,15 +139,7 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                     } else {
                         ((MainActivity)getActivity()).displayMessage("Internet Connection is required");
                     }
-
-
-
                 }
-
-
-
-
-
             }
         });
         Store b = getArguments().getParcelable("Store");
@@ -157,15 +152,6 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
         return view;
     }
 
-    private boolean checkPermission() {
-        // Ask for permission if it wasn't granted yet
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return (ContextCompat.checkSelfPermission(getActivity(), ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED);
-        } else {
-            return false;
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -182,9 +168,42 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                         Log.d(MainActivity.TAG,"Permision granted");
                     }
                 } else {
-                    requestPermissions(new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQ_PERMISSION);
+                    ((MainActivity)getActivity()).displayMessage("Permission denied");
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                        if(shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)){
+                            showMessageOKCancel("You need to allow access to get location", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                        requestPermissions(new String[]{ACCESS_FINE_LOCATION},
+                                                REQ_PERMISSION);
+                                    }
+                                }
+                            });
+                        }
+                    }
                 }
+                break;
         }
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(getActivity())
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    private boolean checkPermission() {
+        // Ask for permission if it wasn't granted yet
+        int result = ContextCompat.checkSelfPermission(getContext(),ACCESS_FINE_LOCATION);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission(){
+        ActivityCompat.requestPermissions(getActivity(),new String[]{ACCESS_FINE_LOCATION},REQ_PERMISSION);
     }
 
     @Override

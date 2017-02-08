@@ -7,7 +7,7 @@
 
     <TextView
         android:layout_width="@dimen/margin_5"
-        android:layout_marginTop="@dimen/margin_30"
+        android:layout_marginTop="@dimen/margin_20"
         android:layout_marginLeft="@dimen/margin_31"
         android:layout_marginBottom="@dimen/margin_10"
         android:background="@color/colorMediumGray"

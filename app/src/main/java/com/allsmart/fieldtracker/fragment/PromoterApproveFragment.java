@@ -247,10 +247,6 @@ public class PromoterApproveFragment extends Fragment implements LoaderManager.L
                                 "Success",
                                 Toast.LENGTH_SHORT).show();
                         FragmentManager fm = getFragmentManager();
-                        /*Fragment f = new PromoterApprovalsFragment();
-                        fm.
-                        fm.beginTransaction().replace(R.id.flMiddle,f).commit();
-                        fm.executePendingTransactions();*/
                         fm.popBackStack();
                     } else {
                         Toast.makeText(getContext(),

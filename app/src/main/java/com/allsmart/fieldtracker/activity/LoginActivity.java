@@ -55,10 +55,12 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
     private boolean isForgotPassScreen = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        setContentView(R.layout.activity_login);
         preferences = new Preferences(LoginActivity.this);
+        setContentView(R.layout.activity_login);
+
         isLogin = preferences.getBoolean(Preferences.ISLOGIN, false);
         Utils.setAppVersion(this);
         if (isLogin) {
@@ -165,10 +167,13 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
                     if(!TextUtils.isEmpty(cPass)) {
                         if(nPass.equals(cPass)) {
                   //          showLoginViews();
+                            if(preferences == null) {
+                                preferences = new Preferences(LoginActivity.this);
+                            }
                             Bundle bundle = new Bundle();
                             bundle.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.FORGOT_PASSWORD));
                             bundle.putString(AppsConstant.METHOD,AppsConstant.POST);
-                            bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getUserId("userId"));
+                            bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getUserId(preferences.getString(Preferences.USERNAME,"")));
                             getLoaderManager().initLoader(LoaderConstant.FORGOT_PASSWORD,bundle,LoginActivity.this).forceLoad();
                         } else {
                             displayMessage("Password does not match");
@@ -247,7 +252,7 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
                     } else if(!result.equals("success") && !result.equals("error")) {
                         displayMessage(result);
                     } else {
-                        displayMessage("Error in response. Please try again.");
+                        displayMessage("Error in response");
                     }
                 } else {
                     displayMessage("Error in response. Please try again.");

@@ -171,12 +171,21 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
             public void onClick(View v) {
                 if(isNotNull(firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(),emailAddress.getText().toString(),
                         Address.getText().toString(),tvStore.getText().toString(),tvSE.getText().toString())) {
-                    if(TextUtils.isEmpty(photo) || TextUtils.isEmpty(adhar) || TextUtils.isEmpty(address)) {
-                        ((MainActivity)getActivity()).displayMessage("No photos, Please take again");
+                    Bundle b = new Bundle();
+                    b.putString(AppsConstant.URL,UrlBuilder.getUpdatePromoter(Services.UPDATE_PROMOTER,promoter.getRequestId()));
+                    b.putString(AppsConstant.METHOD,AppsConstant.PUT);
+                    if(!TextUtils.isEmpty(image[0]) && !TextUtils.isEmpty(image[1]) && !TextUtils.isEmpty(image[2])) {
+                        if(storeId == 0) {
+                            b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterUpdate(promoter.getRequestId(),promoter.getRequestType(),
+                                    firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(), Address.getText().toString(),emailAddress.getText().toString(),
+                                    promoter.getProductStoreId(),promoter.getStatusId(),"RqtAddPromoter","description after updation",image[1],image[0],image[2]));
+                        } else {
+                            b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterUpdate(promoter.getRequestId(),promoter.getRequestType(),
+                                    firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(), Address.getText().toString(),emailAddress.getText().toString(),
+                                    storeId+"",promoter.getStatusId(),"RqtAddPromoter","description after updation",adhar,photo,address));
+                        }
                     } else {
-                        Bundle b = new Bundle();
-                        b.putString(AppsConstant.URL,UrlBuilder.getUpdatePromoter(Services.UPDATE_PROMOTER,promoter.getRequestId()));
-                        b.putString(AppsConstant.METHOD,AppsConstant.PUT);
+
                         if(storeId == 0) {
                             b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterUpdate(promoter.getRequestId(),promoter.getRequestType(),
                                     firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(), Address.getText().toString(),emailAddress.getText().toString(),
@@ -186,8 +195,8 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                                     firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(), Address.getText().toString(),emailAddress.getText().toString(),
                                     storeId+"",promoter.getStatusId(),"RqtAddPromoter","description after updation",adhar,photo,address));
                         }
-                        getActivity().getLoaderManager().initLoader(LoaderConstant.UPDATE_PROMOTER,b,EditPromoterFragment.this).forceLoad();
                     }
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.UPDATE_PROMOTER,b,EditPromoterFragment.this).forceLoad();
                 } else {
                     ((MainActivity)getActivity()).displayMessage("Fields cannot be empty");
                 }
@@ -271,6 +280,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                         if(i == 1) {
                             //photo
                             image[0] = (String) data;
+
                             ivPhoto.setImageResource(R.drawable.photo_tick);
                             ivPhoto.setEnabled(false);
                         }else if(i == 2) {
@@ -312,7 +322,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                                 result,
                                 Toast.LENGTH_SHORT).show();
 
-                    } else if(!TextUtils.isEmpty(result) && result.equalsIgnoreCase("success") && !result.equalsIgnoreCase("error")) {
+                    } else if(!TextUtils.isEmpty(result) && result.equalsIgnoreCase("success")) {
                         Toast.makeText(getContext(),
                                 "Updated Successfully",
                                 Toast.LENGTH_SHORT).show();

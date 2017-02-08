@@ -64,9 +64,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	ImageView ivCurrentLocation,ivPhoto;
     public boolean isLoading = false;
 	DigitalClockView dtcLoginTime;
-	TextView tvSiteName,tvUserName,tvUserSerName,store;
+	TextView tvSiteName,tvUserName,tvUserSerName;
 
 
+	@Override
+	public void onBackPressed() {
+		if(!isLoading) {
+			super.onBackPressed();
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

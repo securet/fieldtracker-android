@@ -57,8 +57,7 @@ public class LeaveRequisitionFragment extends Fragment implements LoaderManager.
     private ListView lvLeave;
     private boolean isLoading = false;
     private RelativeLayout leaveStatus;
-    private ListViewLeaveStatusListAdapter adapter;
-    private LeaveRequisitionListAdapter requisitionAdapter;
+    private LeaveRequisitionListAdapter adapter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,10 +81,9 @@ public class LeaveRequisitionFragment extends Fragment implements LoaderManager.
         ivLoader = (ImageView) footerView.findViewById(R.id.footer_1);
         footerView.setVisibility(View.INVISIBLE);
         leaveStatus.setVisibility(View.GONE);
-        requisitionAdapter = new LeaveRequisitionListAdapter(getActivity(), R.layout.leave_requisition_list_item, listRequisition);
-        lvLeave.setAdapter(requisitionAdapter);
+        adapter = new LeaveRequisitionListAdapter(getActivity(), R.layout.leave_requisition_list_item, listRequisition);
+        lvLeave.setAdapter(adapter);
         lvLeave.setOnItemClickListener(this);
-
         lvLeave.setOnScrollListener(this);
         btLeaveRequest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +118,9 @@ public class LeaveRequisitionFragment extends Fragment implements LoaderManager.
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
         if(pageIndex==0 ){
-            ((MainActivity)getActivity()).showHideProgressForLoder(true);
+            if(getActivity() != null && getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).showHideProgressForLoder(true);
+            }
         }else{
             hideloader();
         }
@@ -139,13 +139,15 @@ public class LeaveRequisitionFragment extends Fragment implements LoaderManager.
                 }
                 isLoading = false;
                 ((MainActivity)getActivity()).isLoading = false;
-                if(requisitionAdapter != null) {
-                    requisitionAdapter.refresh(listRequisition);
+                if(adapter != null) {
+                    adapter.refresh(listRequisition);
                 }
                 break;
 
         }
-        getActivity().getLoaderManager().destroyLoader(loader.getId());
+        if(getActivity() != null && getActivity() instanceof MainActivity) {
+            getActivity().getLoaderManager().destroyLoader(loader.getId());
+        }
     }
 
     public void showLoader() {
@@ -188,7 +190,7 @@ public class LeaveRequisitionFragment extends Fragment implements LoaderManager.
                     Bundle b = new Bundle();
                     b.putString(AppsConstant.URL, UrlBuilder.getLeaveList(Services.LEAVE_REQUISITION, String.valueOf(pageIndex), String.valueOf(pageSize)));
                     b.putString(AppsConstant.METHOD, AppsConstant.GET);
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_LIST, b, LeaveRequisitionFragment.this).forceLoad();
+                    getActivity().getLoaderManager().initLoader(LoaderConstant.LEAVE_REQUISITION, b, LeaveRequisitionFragment.this).forceLoad();
                 }
         }
     }

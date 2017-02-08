@@ -61,7 +61,7 @@
                 android:gravity="top"
                 android:textStyle="italic"
                 android:layout_marginRight="@dimen/margin_20"
-                android:padding="@dimen/margin_5"
+                android:padding="@dimen/margin_10"
                 android:hint="@string/store_address"
                 android:textSize="@dimen/text_18"
                 android:background="@drawable/edittext_editstore_item"
