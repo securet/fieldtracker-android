@@ -171,7 +171,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 if (!gps_enabled && !network_enabled) {
                     // notify user
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                    dialog.setMessage("Location is not enabṀled !");
+                    dialog.setMessage("Location is not enabled !");
                     dialog.setPositiveButton("Open setting", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface paramDialogInterface, int paramInt) {

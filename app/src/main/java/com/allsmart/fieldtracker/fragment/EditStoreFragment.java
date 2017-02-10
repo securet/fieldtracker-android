@@ -55,7 +55,6 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
     protected EditText storeName,address,siteRadius;
     protected TextView lattitude,longitude;
     protected Button btEdit,btCancel,getLocation;
-    private Preferences preferences;
     private int storeId;
     protected ProgressDialog pd;
     private Location location;
@@ -67,7 +66,6 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = new Preferences(getContext());
     }
 
     @Override
@@ -111,33 +109,39 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
             @Override
             public void onClick(View v) {
 
-                LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if(checkPermission()){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkPermission()) {
                         if (googleApiClient.isConnected()) {
-                            if(checkPermission()) {
-                                location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                            Location loc = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                            if(loc != null) {
+                                lattitude.setText(loc.getLatitude() + "");
+                                longitude.setText(loc.getLongitude() + "");
+                                ((MainActivity) getActivity()).displayMessage("Accurate to " + location.getAccuracy() + " m");
+                                isGetLocationClicked = true;
+                            } else {
+                                ((MainActivity) getActivity()).displayMessage("Unable to get your location");
                             }
-                            lattitude.setText(location.getLatitude()+"");
-                            longitude.setText(location.getLongitude()+"");
-                            isGetLocationClicked = true;
-                            Log.d(MainActivity.TAG,"Permision granted");
+                        } else {
+                            Log.d(MainActivity.TAG,"Google API is not connected");
                         }
-                    } else {
+                    }else {
                         requestPermission();
                     }
-                } else {
-                    if(NetworkUtils.isNetworkConnectionAvailable(getContext())) {
-                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        if(location != null) {
-                            lattitude.setText(String.valueOf(location.getLatitude()));
-                            longitude.setText(String.valueOf(location.getLongitude()));
+                }else {
+                    // if (NetworkUtils.isNetworkConnectionAvailable(getContext())) {
+                    final LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                    if (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if(loc != null){
+                            lattitude.setText(loc.getLatitude()+"");
+                            longitude.setText(loc.getLongitude()+"");
+                            ((MainActivity) getActivity()).displayMessage("Accurate to " + loc.getAccuracy() + " m");
                             isGetLocationClicked = true;
-                        } else {
-                            ((MainActivity)getActivity()).displayMessage("Unable to get location");
+                        }else {
+                            ((MainActivity) getActivity()).displayMessage("Unable to get your location");
                         }
                     } else {
-                        ((MainActivity)getActivity()).displayMessage("Internet Connection is required");
+                        ((MainActivity) getActivity()).displayMessage("GPS is not available");
                     }
                 }
             }
@@ -160,12 +164,19 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (googleApiClient.isConnected()) {
                         if(checkPermission()) {
-                            location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                            Location loc = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                            if (loc != null) {
+                                lattitude.setText(loc.getLatitude() + "");
+                                longitude.setText(loc.getLongitude() + "");
+                                isGetLocationClicked = true;
+                            } else {
+                                ((MainActivity) getActivity()).displayMessage("Unable to get your location");
+                            }
+                            Log.d(MainActivity.TAG,"Permision granted");
+                        } else {
+                            requestPermission();
                         }
-                        lattitude.setText(location.getLatitude()+"");
-                        longitude.setText(location.getLongitude()+"");
-                        isGetLocationClicked = true;
-                        Log.d(MainActivity.TAG,"Permision granted");
+
                     }
                 } else {
                     ((MainActivity)getActivity()).displayMessage("Permission denied");

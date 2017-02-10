@@ -128,9 +128,9 @@ public class ListViewTimeLineAdapter extends BaseAdapter {
             holder.grayBottom.setVisibility(View.VISIBLE);
         }
 
-        RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) holder.layoutFrom.getLayoutParams();
+        /*RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) holder.layoutFrom.getLayoutParams();
         params.bottomMargin = tl.getTimeSpace();
-        holder.layoutFrom.setLayoutParams(params);
+        holder.layoutFrom.setLayoutParams(params);*/
         holder.timeF.setText(tl.getFromDate());
 //        timeT.setText(tl.getThruDate());
         if(!TextUtils.isEmpty(tl.getThruDate())){

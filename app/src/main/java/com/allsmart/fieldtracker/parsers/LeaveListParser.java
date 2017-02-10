@@ -4,7 +4,9 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 
+import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.constants.AppsConstant;
+import com.allsmart.fieldtracker.utils.CalenderUtils;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.utils.Logger;
 import com.allsmart.fieldtracker.storage.Preferences;
@@ -69,7 +71,10 @@ public class LeaveListParser {
                                 mCalender2.setTime(thruDate);
                                 leave.setFromDate((String) DateFormat.format("dd/MM/yyyy",mCalender));
                                 leave.setToDate((String) DateFormat.format("dd/MM/yyyy",mCalender2));
-                                leave.setDays(getDays((String) DateFormat.format("dd/MM/yyyy",mCalender),(String) DateFormat.format("dd/MM/yyyy",mCalender2)));
+                                leave.setDays(CalenderUtils.getDifferenceDate((String) DateFormat.format(CalenderUtils.YearMonthDashedFormate,mCalender),
+                                        (String) DateFormat.format(CalenderUtils.YearMonthDashedFormate,mCalender2)));
+                                Log.d(MainActivity.TAG,leave.getDays()+" this is leave days");
+                                //leave.setDays(getDays((String) DateFormat.format("dd/MM/yyyy",mCalender),(String) DateFormat.format("dd/MM/yyyy",mCalender2)));
                             } else {
 
                             }

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.allsmart.fieldtracker.R;
+import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.model.HistoryChild;
 
 import java.util.ArrayList;
@@ -145,9 +147,11 @@ public class ListViewHistorySublistAdapter extends ArrayAdapter<HistoryChild> {
             holder.grayBottom.setVisibility(View.VISIBLE);
 
         }
-        RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) holder.layoutFrom.getLayoutParams();
-        params.bottomMargin = c.getTimeSpace();
-        holder.layoutFrom.setLayoutParams(params);
+   //     RelativeLayout.LayoutParams params  = (RelativeLayout.LayoutParams) holder.layoutFrom.getLayoutParams();
+   //     params.bottomMargin =5 + c.getTimeSpace();
+        Log.d(MainActivity.TAG,c.getTimeSpace() + " This is bottom margin");
+
+   //     holder.layoutFrom.setLayoutParams(params);
         holder.timeF.setText(c.getFromDate());
         if(!TextUtils.isEmpty(c.getThruDate())){
             holder. timeT.setText(c.getThruDate());

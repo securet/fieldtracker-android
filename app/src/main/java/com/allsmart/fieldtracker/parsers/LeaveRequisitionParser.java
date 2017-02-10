@@ -4,10 +4,12 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 
+import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.constants.AppsConstant;
 import com.allsmart.fieldtracker.model.Leave;
 import com.allsmart.fieldtracker.model.LeaveRequisition;
 import com.allsmart.fieldtracker.storage.Preferences;
+import com.allsmart.fieldtracker.utils.CalenderUtils;
 import com.allsmart.fieldtracker.utils.Logger;
 import com.crashlytics.android.Crashlytics;
 
@@ -70,7 +72,10 @@ public class LeaveRequisitionParser {
                                 mCalender2.setTime(thruDate);
                                 leave.setFromDate((String) DateFormat.format("dd/MM/yyyy",mCalender));
                                 leave.setToDate((String) DateFormat.format("dd/MM/yyyy",mCalender2));
-                                leave.setDays(getDays((String) DateFormat.format("dd/MM/yyyy",mCalender),(String) DateFormat.format("dd/MM/yyyy",mCalender2)));
+                              //  leave.setDays(getDays((String) DateFormat.format("dd/MM/yyyy",mCalender),(String) DateFormat.format("dd/MM/yyyy",mCalender2)));
+                                leave.setDays(CalenderUtils.getDifferenceDate((String) DateFormat.format(CalenderUtils.YearMonthDashedFormate,mCalender),
+                                        (String) DateFormat.format(CalenderUtils.YearMonthDashedFormate,mCalender2)));
+                                Log.d(MainActivity.TAG,leave.getDays()+" this is leave days");
                             } else {
 
                             }

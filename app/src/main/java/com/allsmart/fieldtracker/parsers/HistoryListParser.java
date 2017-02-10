@@ -2,7 +2,9 @@ package com.allsmart.fieldtracker.parsers;
 
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 
+import com.allsmart.fieldtracker.activity.MainActivity;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.utils.Logger;
 import com.allsmart.fieldtracker.storage.Preferences;
@@ -99,8 +101,8 @@ public class HistoryListParser {
                                             c2.setTime(tDate);
                                             historyChild.setThruDate(DateFormat.format("hh:mm aa", c2).toString());
                                             historyChild.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm", c1).toString(), DateFormat.format("hh:mm", c2).toString()));
-                                        //    historyChild.setTimeSpace(DynamicElement.findMarginTop(c1.getTimeInMillis(),c2.getTimeInMillis()));
-
+                                     //       historyChild.setTimeSpace(DynamicElement.findMarginTop(c1.getTimeInMillis(),c2.getTimeInMillis()));
+                                            Log.d(MainActivity.TAG,DynamicElement.findMarginTop(c1.getTimeInMillis(),c2.getTimeInMillis()) + " This is margin at parser ");
                                             if (j == childArray.length() - 1) {
                                                 thruDateMill = tDate.getTime();
                                                 long millis = thruDateMill - fromDateMill;
@@ -110,7 +112,7 @@ public class HistoryListParser {
                                                         TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))));
                                             }
 
-                                            historyChild.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm", c1).toString(), DateFormat.format("hh:mm", c2).toString()));
+                 //                           historyChild.setTimeSpace(DynamicElement.findMarginTop(DateFormat.format("hh:mm", c1).toString(), DateFormat.format("hh:mm", c2).toString()));
                                         } else {
                                             historyChild.setThruDate("");
                                             historyChild.setTimeSpace(0);
