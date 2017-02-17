@@ -59,7 +59,7 @@ public class PromoterApprovalsListAdapter extends ArrayAdapter {
         TextView statusId = (TextView) view.findViewById(R.id.tvStatusId);
 
         name.setText(promoter.getFirstName() + " " + promoter.getLastName());
-        storeName.setText("Store Name");
+        //storeName.setText("Store Name");
         String status = promoter.getStatusId();
         if(status.equalsIgnoreCase("ReqRejected")) {
             statusId.setText("Rejected");

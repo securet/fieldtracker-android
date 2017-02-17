@@ -176,16 +176,16 @@ public class GeolocationService extends Service implements ConnectionCallbacks,
 
 	@Override
 	public void onLocationChanged(Location location) {
-		Log.d(MainActivity.TAG,"new location : " + location.getLatitude() + ", "+ location.getLongitude() + ". "+ location.getAccuracy());
+		Log.d(MainActivity.TAG,"GeolocationService new location : " + location.getLatitude() + ", "+ location.getLongitude() + ". "+ location.getAccuracy());
 		Intent intent = new Intent(AppsConstant.LOCATION_UPDATE);
 		if(isUserInLocation(location) == 1) {
 			intent.putExtra(Preferences.SITENAME,preferences.getString(Preferences.SITENAME,""));
 		} else {
 			intent.putExtra(Preferences.SITENAME,getString(R.string.off_site));
 		}
-		preferences.saveString(Preferences.USERLATITUDE,location.getLatitude()+"");
+		/*preferences.saveString(Preferences.USERLATITUDE,location.getLatitude()+"");
 		preferences.saveString(Preferences.USERLONGITUDE,location.getLongitude()+"");
-		preferences.commit();
+		preferences.commit();*/
 		sendBroadcast(intent);
 
 		if (!MainActivity.geofencesAlreadyRegistered) {

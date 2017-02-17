@@ -130,13 +130,14 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
             public void onClick(View v) {
                 String fromDate = etStart.getText().toString();
                 String thruDate = etEnd.getText().toString();
-
+                Log.d(MainActivity.TAG,"before    "+"fromDate: " +fromDate    + "    thruDate: " +thruDate);
 
 
                 if (!TextUtils.isEmpty(tvReasonType.getText().toString()) && !TextUtils.isEmpty(etType.getText().toString()) && !TextUtils.isEmpty(etReason.getText().toString()) && !TextUtils.isEmpty(leave.getPartyRelationShipId())) {
                     String fDate = CalenderUtils.getYearMonthDashedFormate(fromDate);
                     System.out.println(leave.getPartyRelationShipId());
                     String tDate = CalenderUtils.getYearMonthDashedFormate(thruDate);
+                    Log.d(MainActivity.TAG,"fromDate: " +fDate    + "    thruDate: " +tDate);
                     Bundle bundle = new Bundle();
                     bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.APPLY_LEAVES));
                     bundle.putString(AppsConstant.METHOD, AppsConstant.PUT);
@@ -334,13 +335,14 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
                 break;
             case LoaderConstant.APPLY_LEAVE:
                 if(data != null && data instanceof String) {
-                    if(((String) data).equalsIgnoreCase("success")) {
+                    String result = (String) data;
+                    if(result.equals("success")) {
                         Toast.makeText(getContext(),
                                 "Leave Applied successfully",
                                 Toast.LENGTH_SHORT).show();
                         FragmentManager fm = getFragmentManager();
                         fm.popBackStack();
-                    } else if(!((String) data).equalsIgnoreCase("error") && !((String) data).equalsIgnoreCase("success")) {
+                    } else if(!result.equals("error") && !result.equals("success")) {
                         Toast.makeText(getContext(),
                                 data.toString(),
                                 Toast.LENGTH_SHORT).show();
@@ -445,16 +447,16 @@ public class EditLeaveFragment  extends Fragment implements View.OnClickListener
             frommonth =monthOfYear;
             fromDay =dayOfMonth;
             monthOfYear = monthOfYear + 1;
-            String selDate = year + "-" + (monthOfYear < 10 ? "0" + (monthOfYear) : monthOfYear) + "-" + (dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth);
+            String selDate = (dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth) + "/" + (monthOfYear < 10 ? "0" + (monthOfYear) : monthOfYear) + "/" + year;
             etStart.setText(selDate);
             //etEnd.setText("");
         }else{
             monthOfYear = monthOfYear + 1;
-            String selDate = year + "-" + (monthOfYear < 10 ? "0" + (monthOfYear) : monthOfYear) + "-" + (dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth);
+            String selDate =  (dayOfMonth < 10 ? "0" + dayOfMonth : "" + dayOfMonth)+ "/" + (monthOfYear < 10 ? "0" + (monthOfYear) : monthOfYear) + "/" + year;
             etEnd.setText(selDate);
         }
         if(isTo) {
-            String days = CalenderUtils.getDifferenceDate(etStart.getText().toString(), etEnd.getText().toString());
+            String days = CalenderUtils.getDifferenceDate(CalenderUtils.getYearMonthDashedFormate(etStart.getText().toString()), CalenderUtils.getYearMonthDashedFormate(etEnd.getText().toString()));
             if(days.equals("-")) {
                 ((MainActivity)getActivity()).displayMessage("Please select date properly");
             } else {

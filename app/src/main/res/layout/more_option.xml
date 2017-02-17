@@ -51,6 +51,18 @@
             android:textColor="@android:color/black"
             android:textSize="@dimen/text_18" />
 
+        <TextView
+            android:id="@+id/tvReportees"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:padding="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:text="@string/reportees"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text_18" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

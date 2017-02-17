@@ -21,7 +21,7 @@ public class LeaveApplyParser {
     public String Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
-            if(parentObject.has("employeeLeave")) {
+            if(parentObject.has("messages")) {
                 result = "success";
             } else if(parentObject.has("errors")) {
                 result = parentObject.getString("errors");

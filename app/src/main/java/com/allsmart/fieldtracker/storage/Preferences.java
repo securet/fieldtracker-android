@@ -23,8 +23,9 @@ public class Preferences
     public static String LOCATIONSTATUS = "LocationStatus";
 //    public static String SITEID = "SiteId";
     public static String HISTORY_COUNT = "HistoryCount";
+    public static String REPORTEE_HISTORY_COUNT = "ReporteeHistoryCount";
     public static String SITENAME = "SiteName";
-
+    public static String APPVERSION = "appVersion";
     public static String LONGITUDE = "Longitude";
     public static String SITE_ADDRESS = "SiteAddress";
     public static String SITE_ENTITY = "SiteEntity";
@@ -46,6 +47,7 @@ public class Preferences
     public static String PROMOTERISLAST= "promoterIsLast";
     public static String STOREISLAST = "storeIsLast";
     public static String LEAVEISLAST = "leaveIsLast";
+    public static String FORCEUPDATE = "forceUpdate";
     public Preferences(Context context)
     {
         preferences = context.getSharedPreferences("AttendanceTracker", context.MODE_PRIVATE);

@@ -1,29 +1,31 @@
 package com.allsmart.fieldtracker.parsers;
 
-import com.crashlytics.android.Crashlytics;
+import com.allsmart.fieldtracker.model.Manager;
 import com.allsmart.fieldtracker.utils.Logger;
+import com.crashlytics.android.Crashlytics;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
- * Created by allsmartlt218 on 09-12-2016.
+ * Created by allsmartlt218 on 17-02-2017.
  */
 
-public class AddStoreParser {
-    String response = "";
-    String result = "";
-    public AddStoreParser(String response) {
+public class ReporteeListParser {
+    private String response;
+    private String result;
+    private ArrayList<Manager> list = new ArrayList<>();
+    private Manager manager;
+
+    public ReporteeListParser(String response) {
         this.response = response;
     }
-    public String Parse() {
+
+    public ArrayList<Manager> Parse() {
         try {
             JSONObject parentObject = new JSONObject(response);
-            if(parentObject.has("productStore")) {
-                result = "success";
-            } else {
-                result = "error";
-            }
 
         } catch (JSONException e) {
             result = "error";
@@ -31,7 +33,7 @@ public class AddStoreParser {
             Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
             Crashlytics.logException(e);
         } finally {
-            return result;
+            return list;
         }
     }
 }

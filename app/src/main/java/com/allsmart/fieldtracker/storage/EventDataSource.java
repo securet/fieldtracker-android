@@ -38,6 +38,9 @@ public class EventDataSource {
 		database.close();
 		dbHelper.close();
 	}
+	public boolean isOpen() {
+		return database.isOpen();
+	}
 
 	public void insertTimeInOutDetails(TimeInOutDetails data) {
 		ContentValues values = new ContentValues();
@@ -82,6 +85,7 @@ public class EventDataSource {
         cursor.moveToFirst();
         TimeInOutDetails details = TimeInOutDetails.fromCursor(cursor);
         cursor.close();
+
         return details;
     }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.allsmart.fieldtracker.R;
 import com.allsmart.fieldtracker.model.Promoter;
+import com.allsmart.fieldtracker.model.Store;
 
 import java.util.ArrayList;
 

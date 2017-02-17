@@ -9,7 +9,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,11 +27,13 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.allsmart.fieldtracker.customviews.CustomBuilder;
 import com.allsmart.fieldtracker.fragment.HistoryListFragment;
 import com.allsmart.fieldtracker.fragment.ManagerAttendence;
 import com.allsmart.fieldtracker.fragment.MapFragment;
@@ -52,6 +57,8 @@ import com.allsmart.fieldtracker.utils.UrlBuilder;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import io.fabric.sdk.android.Fabric;
+
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks{
 	public static String TAG = "lstech.aos.debug";
 	public static boolean geofencesAlreadyRegistered = false;
@@ -68,6 +75,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 
 	@Override
+	protected void onResume() {
+		if(preferences == null) {
+			preferences = new Preferences(getApplicationContext());
+		}
+		super.onResume();
+	}
+
+	@Override
 	public void onBackPressed() {
 		if(!isLoading) {
 			super.onBackPressed();
@@ -77,13 +92,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Fabric.with(this, new Crashlytics());
 		setContentView(R.layout.activity_main);
 		ActionBar actionBar = getSupportActionBar();
 		ivPhoto = (ImageView) findViewById(R.id.ivUserPhoto);
 		if (actionBar != null){
 			actionBar.hide();
 		}
-		preferences = new Preferences(MainActivity.this);
+		preferences = new Preferences(getApplicationContext());
 
 		if(!preferences.getString(Preferences.USER_PHOTO,"").equals(null)) {
 			Picasso.with(getApplicationContext()).load(UrlBuilder.getServerImage(preferences.getString(Preferences.USER_PHOTO,""))).placeholder(R.drawable.usericon).fit().into(ivPhoto);
@@ -116,17 +132,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				if(openPage!=MAP) {
 					openPage=MAP;
 					if (!isLoading) {
-                        if(!isManager()) {
+                       // /*if(!isManager()) {
                             Fragment f = new MapFragment();
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             fragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
                             fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
-                        } else {
+                       /* } else {
                             Fragment f = new ManagerAttendence();
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             fragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
                             fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
-                        }
+                        }*/
                         UpadateButtonStatus();
                     }
 				}
@@ -168,6 +184,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 	}
 
 	@Override
+	protected void onStart() {
+		super.onStart();
+		checkForNewVersion();
+	}
+
+	private void checkForNewVersion() {
+		Bundle bundle = new Bundle();
+		bundle.putString(AppsConstant.METHOD,AppsConstant.GET);
+		bundle.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.FORCED_UPDATE));
+		getLoaderManager().initLoader(LoaderConstant.FORCED_UPDATE,bundle,MainActivity.this).forceLoad();
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(changeUI);
@@ -194,14 +223,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		}
 	}
 
-	public void Logout()
-	{
+	public void Logout() {
 		if(NetworkUtils.isNetworkConnectionAvailable(getApplicationContext())) {
             preferences.saveBoolean(Preferences.ISLOGIN, false); // value to store
 
             preferences.remove(Preferences.SITE_ADDRESS);
             preferences.remove(Preferences.LATITUDE);
-            preferences.remove(Preferences.SITE_ENTITY);
+   //         preferences.remove(Preferences.SITE_ENTITY);
             preferences.remove(Preferences.SITENAME);
             preferences.remove(Preferences.PARTYID);
 			preferences.remove(Preferences.USER_CUREENTSITE);
@@ -240,9 +268,34 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		{
 			case LoaderConstant.USER_STORE_DETAIL:
 				return new LoaderServices(MainActivity.this, LoaderMethod.USER_STORE_DETAIL, args);
+			case LoaderConstant.FORCED_UPDATE:
+				return new LoaderServices(MainActivity.this,LoaderMethod.FORCED_UPDATE,args);
 			default:
 				return null;
 		}
+	}
+
+	private void showUpdateDialog() {
+		final Dialog dialog = new Dialog(getApplicationContext());
+		dialog.setContentView(R.layout.forced_update_screen);
+		dialog.setCancelable(false);
+		dialog.setTitle("New Update Available");
+		Button button = (Button) dialog.findViewById(R.id.forcedUpdate);
+		button.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String appUrl = "";
+				try {
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl)));
+					dialog.dismiss();
+				} catch (Exception e) {
+					e.printStackTrace();
+					Logger.e("Log", e);
+					Crashlytics.log(1, getClass().getName(), "Error at Forced Update");
+					Crashlytics.logException(e);
+				}
+			}
+		});
 	}
 
     public void changeSiteName(String text) {
@@ -269,8 +322,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 		switch (loader.getId())
 		{
 			case LoaderConstant.USER_STORE_DETAIL:
-				if(data!=null && data instanceof String && ((String)data).equalsIgnoreCase("Success"))
-				{
+				if(data!=null && data instanceof String) {
+					String result = (String) data;
+					if(result.equals("success")) {
+
+					} else if(!result.equals("success") && !result.equals("error")) {
+						displayMessage(result);
+					} else {
+						displayMessage("Error in getting store detail.");
+					}
 
 				}else{
 					Toast.makeText(getApplicationContext(),
@@ -279,19 +339,46 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 				}
                 /*Intent intent = new Intent(MainActivity.this, GeolocationService.class);
                 startService(intent);*/
-                if(isManager()) {
+                /*if(isManager()) {
                     Fragment f = new ManagerAttendence();
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
                     fragmentManager.executePendingTransactions();
-                } else {
+                } else {*/
                     Fragment f = new MapFragment();
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.flMiddle, f).commit();
                     fragmentManager.executePendingTransactions();
-                }
+                //}
 
 
+				break;
+
+			case LoaderConstant.FORCED_UPDATE:
+				if(data != null && data instanceof String) {
+					String result = (String) data;
+					if(result.equals("success")) {
+						if(preferences.getBoolean(Preferences.FORCEUPDATE,false)) {
+							PackageManager manager = getApplicationContext().getPackageManager();
+							try {
+								PackageInfo info = manager.getPackageInfo(getApplicationContext().getPackageName(),0);
+								String versionName = info.versionName;
+								if(versionName.equals(preferences.getString(Preferences.APPVERSION,""))) {
+									showUpdateDialog();
+								}
+								System.out.println("Version code   " + versionName);
+							} catch (PackageManager.NameNotFoundException e){
+								e.printStackTrace();
+							}
+						}
+					} else if(!result.equals("success") && !result.equals("error")) {
+						displayMessage(result);
+					} else {
+						Log.d(MainActivity.TAG,"Version check failed");
+					}
+				} else {
+					displayMessage("");
+				}
 				break;
 		}
         getLoaderManager().destroyLoader(loader.getId());

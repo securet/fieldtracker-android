@@ -35,4 +35,6 @@ public class Services{
     public static String REJECT_PROMOTER = "request/promoter/reject";
     public static String APPROVE_LEAVE = "updateLeave";
     public static String FORGOT_PASSWORD = "resetPassword";
+    public static String FORCED_UPDATE = "checkForceUpdate";
+    public static String REPORTEE_LIST = "user/reportees";
 }

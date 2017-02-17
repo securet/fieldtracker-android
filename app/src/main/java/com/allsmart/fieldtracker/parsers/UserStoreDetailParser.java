@@ -27,15 +27,19 @@ public class UserStoreDetailParser {
         try {
             JSONObject parentobject = new JSONObject(response);
             if(parentobject.has("address")){
-                result = "Success";
+                result = "success";
                     preferences.saveString(Preferences.SITE_ADDRESS, parentobject.getString("address"));
                     preferences.saveString(Preferences.LATITUDE, parentobject.getDouble("latitude")+"");
-                    preferences.saveString(Preferences.SITE_ENTITY, parentobject.getString("_entity"));
+               //     preferences.saveString(Preferences.SITE_ENTITY, parentobject.getString("_entity"));
                     preferences.saveString(Preferences.SITENAME, parentobject.getString("storeName"));
                     preferences.saveString(Preferences.PARTYID, parentobject.getString("productStoreId"));
                     preferences.saveString(Preferences.LONGITUDE, parentobject.getDouble("longitude")+"");
                     preferences.saveString(Preferences.SITE_RADIUS,parentobject.getInt("proximityRadius")+"");
                     preferences.commit();
+            } else if(parentobject.has("errors")) {
+                result = parentobject.getString("errors");
+            } else {
+                result = "error";
             }
         } catch (JSONException e) {
             /*preferences.saveString(Preferences.SITE_ADDRESS,"");
@@ -46,6 +50,7 @@ public class UserStoreDetailParser {
             preferences.saveString(Preferences.LONGITUDE,"0.0");
             preferences.saveString(Preferences.SITE_RADIUS, AppsConstant.DEFAULTRADIUS);
             preferences.commit();*/
+            result = "error";
             Logger.e("Log",e);
             Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
             Crashlytics.logException(e);

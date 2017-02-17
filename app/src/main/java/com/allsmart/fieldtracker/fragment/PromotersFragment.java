@@ -24,6 +24,7 @@ import com.allsmart.fieldtracker.activity.MainActivity;
 import com.allsmart.fieldtracker.R;
 import com.allsmart.fieldtracker.adapter.ListViewPromoterListAdapter;
 import com.allsmart.fieldtracker.constants.AppsConstant;
+import com.allsmart.fieldtracker.model.Store;
 import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.model.Promoter;
 import com.allsmart.fieldtracker.constants.LoaderConstant;
@@ -44,6 +45,7 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     Button btAddPromoter;
     ListView listView;
     ArrayList<Promoter> list = new ArrayList<>();
+    ArrayList<Store> storeList;
     ImageView ivLoader;
     Preferences preferences;
     private int pageIndex = -1;
@@ -57,6 +59,12 @@ public class PromotersFragment extends Fragment implements LoaderManager.LoaderC
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = new Preferences(getContext());
+        /*try {
+            storeList = getArguments().getParcelableArrayList("store_details");
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }*/
         pageIndex = 0;
         System.out.println(pageIndex + "  before scroll");
         Bundle b = new Bundle();

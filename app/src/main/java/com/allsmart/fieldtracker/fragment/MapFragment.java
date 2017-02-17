@@ -89,9 +89,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status>, LoaderManager.LoaderCallbacks<Object>/*, LoaderManager.LoaderCallbacks*/ {
     protected SupportMapFragment mapFragment;
     protected GoogleMap map;
-    private Preferences preferences;
     private LocationRequest mLocationRequest;
     protected Marker myPositionMarker;
+    private Preferences preferences;
     protected EventDataSource dataSource;
     private GoogleApiClient mGoogleApiClient;
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
@@ -100,9 +100,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        preferences = new Preferences(getContext());
         setRetainInstance(true);
         super.onCreate(savedInstanceState);
+        preferences = new Preferences(getContext());
     }
 
     LinearLayout llLogin_Logout, llShiftTime;
@@ -202,10 +202,10 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             @Override
             public void onClick(View view) {
                 if(NetworkUtils.isNetworkConnectionAvailable(getContext())) {
-                    if (preferences == null) {
-                        preferences = new Preferences(getContext());
+                    if (((MainActivity) getActivity()).preferences == null) {
+                        ((MainActivity) getActivity()).preferences = new Preferences(getContext());
                     }
-                    if (!preferences.getString(Preferences.ROLETYPEID, "").equals(null) && preferences.getString(Preferences.ROLETYPEID, "").equalsIgnoreCase("FieldExecutiveOnPremise")) {
+                    if (!((MainActivity) getActivity()).preferences.getString(Preferences.ROLETYPEID, "").equals(null) && ((MainActivity) getActivity()).preferences.getString(Preferences.ROLETYPEID, "").equalsIgnoreCase("FieldExecutiveOnPremise")) {
                         if (isUserInLoacation()) {
 
                             if (checkCameraPermission()) {
@@ -267,7 +267,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         double lat2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LATITUDE, ""));
         double lon2 = StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.LONGITUDE, ""));
         //Double distance = distance(lat1, lon1, lat2, lon2);
-        int siteRadius = Integer.parseInt(preferences.getString(Preferences.SITE_RADIUS, AppsConstant.DEFAULTRADIUS));
+        int siteRadius = Integer.parseInt(((MainActivity) getActivity()).preferences.getString(Preferences.SITE_RADIUS, AppsConstant.DEFAULTRADIUS));
         Location.distanceBetween(lat1, lon1, lat2, lon2, result);
         float distance = result[0];
         Boolean isInLocation = distance <= siteRadius;
@@ -289,7 +289,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             if (map != null) {
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(new
                         LatLng(StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.USERLATITUDE, ""))
-                        , StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.USERLONGITUDE, ""))), 18));
+                        , StringUtils.getDouble(((MainActivity) getActivity()).preferences.getString(Preferences.USERLONGITUDE, ""))), 16));
             }
         }
     }
@@ -434,6 +434,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
     @Override
     public void onResume() {
+        if(((MainActivity) getActivity()).preferences == null) {
+            ((MainActivity) getActivity()).preferences = new Preferences(getContext());
+        }
         super.onResume();
         if (mapFragment != null) {
             mapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -452,15 +455,16 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                         return;
                     }
           //          map.setMyLocationEnabled(true);
-                    map.animateCamera(CameraUpdateFactory.zoomTo(18));
+                    map.animateCamera(CameraUpdateFactory.zoomTo(16));
 
                     displayGeofences();
                 }
             });
         }
-//		if ( checkPermission())
-//			getActivity().registerReceiver(receiver,new IntentFilter("com.oppo.sfamanagement.geolocation.service"));
+        //moveToCurentLocation();
+
     }
+
 
     // Create GoogleApiClient instance
     protected synchronized void buildGoogleApiClient() {
@@ -600,7 +604,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                         dialog.setTitle("Confirm Time Out");
                     }
                     if (isUserInLoacation()) {
-                        dialog.setMessage("You are currently at " + preferences.getString(Preferences.SITENAME, ""));
+                        dialog.setMessage("You are currently at " + ((MainActivity) getActivity()).preferences.getString(Preferences.SITENAME, ""));
                     } else {
                         dialog.setMessage("You are currently Off Site");
                     }
@@ -661,8 +665,8 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             }*/
 
         }
-        preferences.saveString(Preferences.TIMEINTIME, CalenderUtils.getCurrentDate("dd/MM/yyyy HH:mm:ss"));
-        preferences.commit();
+        ((MainActivity) getActivity()).preferences.saveString(Preferences.TIMEINTIME, CalenderUtils.getCurrentDate("dd/MM/yyyy HH:mm:ss"));
+        ((MainActivity) getActivity()).preferences.commit();
 
         //
          SetLoginLogOut();
@@ -670,7 +674,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 
     public String uploadImage(String imgPath) {
         if (!TextUtils.isEmpty(imgPath)) {
-            String imageResponse = new RestHelper().makeRestCallAndGetResponseImageUpload(Services.DomainUrlImage, imgPath, "ForPhoto", preferences);
+            String imageResponse = new RestHelper().makeRestCallAndGetResponseImageUpload(Services.DomainUrlImage, imgPath, "ForPhoto", ((MainActivity) getActivity()).preferences);
             String serverPath = new ImageUploadParser(imageResponse).Parse();
             return serverPath;
         }
@@ -682,12 +686,12 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private TimeInOutDetails getTimeInOutDetails(String strComments, String strType, String strImage, String isPushed) {
         String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateFormate);
         TimeInOutDetails details = new TimeInOutDetails();
-        details.setUsername(preferences.getString(Preferences.USERNAME, ""));
+        details.setUsername(((MainActivity) getActivity()).preferences.getString(Preferences.USERNAME, ""));
         details.setClockDate(clockDate);
         details.setActionType(strType);
         details.setComments(strComments);
-        details.setLatitude(preferences.getString(Preferences.USERLATITUDE, ""));
-        details.setLongitude(preferences.getString(Preferences.USERLONGITUDE, ""));
+        details.setLatitude(((MainActivity) getActivity()).preferences.getString(Preferences.USERLATITUDE, ""));
+        details.setLongitude(((MainActivity) getActivity()).preferences.getString(Preferences.USERLONGITUDE, ""));
         details.setActionImage(strImage);
         details.setIsPushed(isPushed);
         return details;
@@ -791,6 +795,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         } else {
             myPositionMarker = map.addMarker((new MarkerOptions().position(latLng)).icon(BitmapDescriptorFactory.fromResource(R.drawable.user)));
         }
+        Log.d(MainActivity.TAG,"User Pointer Lat Long  :  " + latitude + "  " + longitude );
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
@@ -800,11 +805,13 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
 //        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
    //     if (myPositionMarker == null) {
             createMarker(latitude, longitude);
-   //     }
-		((MainActivity)getActivity()).preferences.saveString(Preferences.USERLATITUDE, latitude+""); // value to store
-		((MainActivity)getActivity()).preferences.commit();
-		((MainActivity)getActivity()).preferences.saveString(Preferences.USERLONGITUDE, longitude+""); // value to store
-		((MainActivity)getActivity()).preferences.commit();
+            if(preferences == null) {
+                preferences = new Preferences(getContext());
+            }
+            preferences.saveString(Preferences.USERLATITUDE, latitude+""); // value to store
+            preferences.saveString(Preferences.USERLONGITUDE, longitude+""); // value to store
+            preferences.commit();
+
         UpdateLocationStatus();
     }
 

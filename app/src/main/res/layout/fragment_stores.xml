@@ -25,6 +25,7 @@
             android:textAllCaps="false"
             android:textSize="@dimen/text_16"
             android:padding="@dimen/margin_10"
+            android:visibility="gone"
             android:background="@android:color/holo_blue_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

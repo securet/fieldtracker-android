@@ -32,11 +32,11 @@ public class PromoterApprovalListParser {
             JSONObject parentObject = new JSONObject(response);
 
             if(parentObject.has("requestList")) {
-                if(parentObject.has("totalEntries")) {
+               /* if(parentObject.has("totalEntries")) {
                     int count = parentObject.getInt("totalEntries");
                     preferences.saveInt(Preferences.PROMOTER_COUNT,count);
                     preferences.commit();
-                }
+                }*/
 
                 JSONArray jsonArray = parentObject.getJSONArray("requestList");
                 for(int i = 0 ; i < jsonArray.length() ; i++) {

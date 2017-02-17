@@ -238,19 +238,20 @@ public class PromoterApproveFragment extends Fragment implements LoaderManager.L
             case LoaderConstant.APPROVE_PROMOTER:
                 if(data != null && data instanceof String) {
                     String message = (String) data;
-                    if(!TextUtils.isEmpty(message) && !message.equalsIgnoreCase("error") && !message.equalsIgnoreCase("success")) {
-                        Toast.makeText(getContext(),
-                                message,
-                                Toast.LENGTH_SHORT).show();
-                    } else if(!TextUtils.isEmpty(message) && message.equalsIgnoreCase("success")) {
+                    if(message.equalsIgnoreCase("success")) {
                         Toast.makeText(getContext(),
                                 "Success",
                                 Toast.LENGTH_SHORT).show();
                         FragmentManager fm = getFragmentManager();
                         fm.popBackStack();
+
+                    } else if(message.equalsIgnoreCase("error")) {
+                        Toast.makeText(getContext(),
+                                "Approve Failed",
+                                Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(),
-                                "Operation Failed",
+                                message,
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else  {

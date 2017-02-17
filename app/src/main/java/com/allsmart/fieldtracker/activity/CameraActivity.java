@@ -38,7 +38,7 @@ public class CameraActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.camera_activity);
-        preferences = new Preferences(CameraActivity.this);
+        preferences = new Preferences(getApplicationContext());
         tvUser = (TextView) findViewById(R.id.tvUserName);
         tvUserSername = (TextView) findViewById(R.id.tvUserSerName);
         tvSiteName = (TextView) findViewById(R.id.tvSiteName);

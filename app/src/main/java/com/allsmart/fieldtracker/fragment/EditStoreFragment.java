@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,10 +36,12 @@ import com.allsmart.fieldtracker.model.Store;
 import com.allsmart.fieldtracker.constants.LoaderConstant;
 import com.allsmart.fieldtracker.constants.LoaderMethod;
 import com.allsmart.fieldtracker.service.LoaderServices;
+import com.allsmart.fieldtracker.utils.Logger;
 import com.allsmart.fieldtracker.utils.NetworkUtils;
 import com.allsmart.fieldtracker.utils.ParameterBuilder;
 import com.allsmart.fieldtracker.constants.Services;
 import com.allsmart.fieldtracker.utils.UrlBuilder;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -116,7 +119,7 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                             if(loc != null) {
                                 lattitude.setText(loc.getLatitude() + "");
                                 longitude.setText(loc.getLongitude() + "");
-                                ((MainActivity) getActivity()).displayMessage("Accurate to " + location.getAccuracy() + " m");
+              //                  ((MainActivity) getActivity()).displayMessage("Accurate to " + location.getAccuracy() + " m");
                                 isGetLocationClicked = true;
                             } else {
                                 ((MainActivity) getActivity()).displayMessage("Unable to get your location");
@@ -128,20 +131,93 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                         requestPermission();
                     }
                 }else {
-                    // if (NetworkUtils.isNetworkConnectionAvailable(getContext())) {
-                    final LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                    if (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        if(loc != null){
-                            lattitude.setText(loc.getLatitude()+"");
-                            longitude.setText(loc.getLongitude()+"");
-                            ((MainActivity) getActivity()).displayMessage("Accurate to " + loc.getAccuracy() + " m");
-                            isGetLocationClicked = true;
-                        }else {
-                            ((MainActivity) getActivity()).displayMessage("Unable to get your location");
-                        }
+                    boolean gps_enabled = false;
+                    boolean network_enabled = false;
+                    LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+                    try {
+                        gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                    } catch (Exception e) {
+                        Logger.e("Log", e);
+                        Crashlytics.log(1, getClass().getName(), "Error in Map Fragment");
+                        Crashlytics.logException(e);
+                    }
+
+                    try {
+                        network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+                    } catch (Exception e) {
+                        Logger.e("Log", e);
+                        Crashlytics.log(1, getClass().getName(), "Error in Map Fragment");
+                        Crashlytics.logException(e);
+                    }
+
+                    if (!gps_enabled && !network_enabled) {
+                        ((MainActivity)getActivity()).displayMessage("Network and GPS is not available");
                     } else {
-                        ((MainActivity) getActivity()).displayMessage("GPS is not available");
+                        if(network_enabled) {
+                            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
+                                @Override
+                                public void onLocationChanged(Location location) {
+
+                                }
+
+                                @Override
+                                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                                }
+
+                                @Override
+                                public void onProviderEnabled(String provider) {
+
+                                }
+
+                                @Override
+                                public void onProviderDisabled(String provider) {
+
+                                }
+                            });
+
+                            if(locationManager != null) {
+                                Location loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                                if(loc != null) {
+                                    lattitude.setText(loc.getLatitude()+"");
+                                    longitude.setText(loc.getLongitude()+"");
+                                    isGetLocationClicked = true;
+                                }
+                            }
+                        }
+                        if(gps_enabled){
+                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+                                @Override
+                                public void onLocationChanged(Location location) {
+
+                                }
+
+                                @Override
+                                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                                }
+
+                                @Override
+                                public void onProviderEnabled(String provider) {
+
+                                }
+
+                                @Override
+                                public void onProviderDisabled(String provider) {
+
+                                }
+                            });
+
+                            if(locationManager != null) {
+                                Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                if(loc != null) {
+                                    lattitude.setText(loc.getLatitude()+"");
+                                    longitude.setText(loc.getLongitude()+"");
+                                    isGetLocationClicked = true;
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -29,4 +29,7 @@ public class LoaderConstant {
     public static final int APPROVE_PROMOTER = 22;
     public static final int APPROVE_LEAVE = 23;
     public static final int FORGOT_PASSWORD = 24;
+    public static final int FORCED_UPDATE = 25;
+    public static final int REPORTEE_HISTORY = 26;
+    public static final int REPORTEE_LIST = 27;
 }

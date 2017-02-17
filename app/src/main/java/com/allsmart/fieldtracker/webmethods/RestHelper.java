@@ -67,6 +67,9 @@ public class RestHelper
             Crashlytics.log(1,getClass().getName(),"Error in RestHelper");
             Crashlytics.logException(e);
         }
+        if(strUrl.equals("http://ft.allsmart.in/rest/s1/ft/checkForceUpdate")) {
+            System.out.println();
+        }
         response ="";
         HttpURLConnection connection = null;
         URL url = null;
