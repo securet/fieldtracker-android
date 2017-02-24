@@ -39,7 +39,7 @@
 
     <dimen name="margin_1">1dp</dimen>
     <dimen name="margin_2">1dp</dimen>
-    <dimen name="margin_3">1.5dp</dimen>
+    <dimen name="margin_3">3dp</dimen>
     <dimen name="margin_4">2dp</dimen>
     <dimen name="margin_5">3dp</dimen>
     <dimen name="margin_6">4dp</dimen>
@@ -66,7 +66,7 @@
     <dimen name="margin_27">25dp</dimen>
     <dimen name="margin_28">26dp</dimen>
     <dimen name="margin_29">27dp</dimen>
-    <dimen name="margin_30">28dp</dimen>
+    <dimen name="margin_30">26dp</dimen>
     <dimen name="margin_31">27dp</dimen>
     <dimen name="margin_32">30dp</dimen>
     <dimen name="margin_33">31dp</dimen>

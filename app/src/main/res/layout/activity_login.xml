@@ -19,6 +19,7 @@
         <ImageView
             android:contentDescription="@string/oppo_logo"
             android:padding="@dimen/margin_5"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -51,7 +52,6 @@
             android:drawableRight="@drawable/email2"
             android:drawableEnd="@drawable/email2"
             android:inputType="textEmailAddress"
-            android:text="manju+on@allsmart.in"
             android:textSize="@dimen/text_20"
              />
 
@@ -70,7 +70,6 @@
             android:layout_marginRight="@dimen/margin_25"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
-            android:text="test@1234"
             android:textSize="@dimen/text_20" />
             <EditText
                 android:id="@+id/etNewPass"
@@ -146,7 +145,7 @@
                 android:textSize="@dimen/text_27"
                 android:textAllCaps="true"
                 android:visibility="invisible"
-                android:background="@drawable/login_button"
+                android:background="@android:drawable/dialog_holo_light_frame"
                 android:text="@string/reset"
                 android:textColor="@color/colorLoginButton" />
         </RelativeLayout>
@@ -173,8 +172,8 @@
             android:contentDescription="@string/allsmart_logo"
             android:id="@+id/ivAllSmartLogo"
             android:src="@drawable/allsmartmainlogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="@dimen/margin_130"
+            android:layout_height="@dimen/margin_20" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="fill_parent"

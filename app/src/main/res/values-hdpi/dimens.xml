@@ -53,7 +53,7 @@
     <dimen name="margin_15">12dp</dimen>
     <dimen name="margin_16">13dp</dimen>
     <dimen name="margin_17">14dp</dimen>
-    <dimen name="margin_18">15dp</dimen>
+    <dimen name="margin_18">11dp</dimen>
     <dimen name="margin_19">16dp</dimen>
     <dimen name="margin_20">17dp</dimen>
     <dimen name="margin_21">18dp</dimen>
@@ -62,10 +62,10 @@
     <dimen name="margin_24">21dp</dimen>
     <dimen name="margin_25">22dp</dimen>
     <dimen name="margin_26">23dp</dimen>
-    <dimen name="margin_27">24dp</dimen>
+    <dimen name="margin_27">23dp</dimen>
     <dimen name="margin_28">25dp</dimen>
     <dimen name="margin_29">26dp</dimen>
-    <dimen name="margin_30">27dp</dimen>
+    <dimen name="margin_30">24dp</dimen>
     <dimen name="margin_31">25dp</dimen>
     <dimen name="margin_32">27dp</dimen>
     <dimen name="margin_33">28dp</dimen>
@@ -83,7 +83,7 @@
     <dimen name="margin_250">230dp</dimen>
 
     <dimen name="days_padding">165dp</dimen>
-    <dimen name="type_width">178dp</dimen>
+    <dimen name="type_width">175dp</dimen>
     <dimen name="attendence_width">150dp</dimen>
 
 </resources>

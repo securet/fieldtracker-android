@@ -20,6 +20,8 @@
     <style name="LoginScreenTheme" parent="@android:style/Theme.NoTitleBar.Fullscreen">
 
     </style>
+
+    <style name="DialogTheme" parent="Base.Theme.AppCompat.Light.Dialog"></style>
     <style name="Theme_Dialog_Translucent" parent="android:Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>

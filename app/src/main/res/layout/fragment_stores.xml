@@ -40,6 +40,7 @@
     <ListView
         android:id="@+id/lvStoreList"
         android:layout_width="match_parent"
+        android:divider="@null"
         android:layout_height="fill_parent"/>
 
 </LinearLayout>

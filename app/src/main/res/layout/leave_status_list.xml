@@ -32,7 +32,7 @@
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
     <ListView
-        android:background="#eceae8"
+        android:divider="@null"
         android:id="@+id/lvLeaveStatus"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.allsmart.fieldtracker"
+    package="com.oppo.fieldtracker"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -29,7 +29,7 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <application
-        android:name="com.allsmart.fieldtracker.activity.MyApplication"
+        android:name="com.oppo.fieldtracker.activity.MyApplication"
         android:supportsRtl="true"
         android:allowBackup="true"
         android:icon="@drawable/applogo"
@@ -37,7 +37,7 @@
         android:theme="@style/AppTheme">
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.allsmart.fieldtracker.fileprovider"
+            android:authorities="com.oppo.fieldtracker.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -46,7 +46,7 @@
         </provider>
 
         <activity
-            android:name="com.allsmart.fieldtracker.activity.LoginActivity"
+            android:name="com.oppo.fieldtracker.activity.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/LoginScreenTheme"
             android:screenOrientation="portrait">
@@ -57,30 +57,30 @@
 
         </activity>
         <activity
-            android:name="com.allsmart.fieldtracker.activity.MainActivity"
+            android:name="com.oppo.fieldtracker.activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
 
         </activity>
 
         
-        <receiver android:name="com.allsmart.fieldtracker.broadcasters.NetworkBroadcaster">
+        <receiver android:name="com.oppo.fieldtracker.broadcasters.NetworkBroadcaster">
             <intent-filter>
    <!--             <action android:name="android.net.wifi.supplicant.CONNECTION_CHANGE" />
                 <action android:name="android.net.wifi.STATE_CHANGE" />    -->
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="com.allsmart.fieldtracker.broadcasters.GeofenceBroadcaster"
+        <receiver android:name="com.oppo.fieldtracker.broadcasters.GeofenceBroadcaster"
             android:exported="true"
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.allsmart.fieldtracker.ACTION_GEOFENCE_RECEIVER"/>
             </intent-filter>
         </receiver>
-        <service android:name="com.allsmart.fieldtracker.service.UploadTransactions"/>
+        <service android:name="com.oppo.fieldtracker.service.UploadTransactions"/>
         <activity
-            android:name="com.allsmart.fieldtracker.activity.CameraActivity"
+            android:name="com.oppo.fieldtracker.activity.CameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
@@ -92,12 +92,12 @@
             android:value="AIzaSyCON7HyyWtOQa8xrvgT2bfLS4nQWUwh9MA" />
 
            <service
-                android:name="com.allsmart.fieldtracker.service.GeolocationService"
+                android:name="com.oppo.fieldtracker.service.GeolocationService"
                 android:icon="@drawable/ic_launcher"
                 android:label="@string/app_name" >
             </service>
         <receiver
-            android:name=".service.GeofenceReceiver"
+            android:name="com.oppo.fieldtracker.service.GeofenceReceiver"
             android:exported="true"
             android:enabled="true">
             <intent-filter>

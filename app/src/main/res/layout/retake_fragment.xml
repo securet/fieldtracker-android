@@ -6,7 +6,7 @@
     android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.allsmart.fieldtracker.fragment.RetakeFragment">
+    tools:context="com.oppo.fieldtracker.fragment.RetakeFragment">
 
     <ImageView
         android:id="@+id/ivRetake"

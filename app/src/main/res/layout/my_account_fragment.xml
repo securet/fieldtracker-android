@@ -79,6 +79,7 @@
                 android:textColor="@color/colorDarkGray"
                 android:textSize="@dimen/text_20" />
             <LinearLayout
+                android:id="@+id/llReportingManager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">

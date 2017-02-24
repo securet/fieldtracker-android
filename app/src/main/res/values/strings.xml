@@ -16,8 +16,8 @@
     <string name="geofences_removed">Geofences removed</string>
     <string name="forgot_password">Forgot Password ?</string>
     <string name="attendence_tracker">Attendence Tracker</string>
-    <string name="password_hint">PASSWORD</string>
-    <string name="username_hint">USERNAME</string>
+    <string name="password_hint">Password</string>
+    <string name="username_hint">Username</string>
     <string name="login_text">LOGIN</string>
     <string name="allsmart_logo">All Smart Logo</string>
     <string name="powered_by">Powered by</string>
@@ -92,5 +92,7 @@
     <string name="select_reason">Select Reason</string>
     <string name="contact_phone">Phone:</string>
     <string name="reportees">Reportees</string>
+    <string name="configure_store">Configure Store</string>
+    <string name="enable">Enable</string>
 
 </resources>

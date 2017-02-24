@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="@android:color/white"
-    android:layout_marginTop="@dimen/margin_15"
-    android:layout_marginBottom="@dimen/margin_15"
+    android:layout_marginTop="@dimen/margin_10"
+    android:layout_marginBottom="@dimen/margin_10"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -15,7 +15,7 @@
             android:id="@+id/tvHistoryDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_23"
+            android:textSize="@dimen/text_22"
             android:layout_marginTop="@dimen/margin_5"
             android:textColor="@android:color/black"
             android:layout_marginStart="@dimen/margin_20"
@@ -25,7 +25,7 @@
             android:id="@+id/tvHistoryTimeIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_20"
+            android:textSize="@dimen/text_16"
             android:layout_marginTop="@dimen/margin_5"
             android:textColor="@android:color/black"
             android:layout_marginStart="@dimen/margin_20"
@@ -35,7 +35,7 @@
             android:id="@+id/tvHistoryTimeOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_20"
+            android:textSize="@dimen/text_16"
             android:layout_marginTop="@dimen/margin_5"
             android:layout_marginStart="@dimen/margin_20"
             android:layout_marginLeft="@dimen/margin_20"
@@ -54,7 +54,7 @@
             android:layout_marginEnd="@dimen/margin_20"
             android:layout_marginRight="@dimen/margin_20"
             android:text="9h 10m"
-            android:textSize="@dimen/text_25" />
+            android:textSize="@dimen/text_22" />
     <TextView
         android:layout_marginBottom="@dimen/margin_5"
         android:layout_marginTop="@dimen/margin_5"

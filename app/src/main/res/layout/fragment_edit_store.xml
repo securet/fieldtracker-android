@@ -74,6 +74,7 @@
             android:id="@+id/getLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/get_current_location_button"
             android:drawableLeft="@drawable/getloc"
@@ -91,6 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_7"
+            android:visibility="gone"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -131,6 +133,15 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/ivStorePhoto"
+            android:src="@android:drawable/ic_menu_camera"
+            android:padding="@dimen/margin_10"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/image_background"
+            android:layout_width="@dimen/margin_70"
+            android:layout_height="@dimen/margin_70" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -138,6 +149,8 @@
             android:layout_marginTop="@dimen/margin_25"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
+
+
 
             <Button
                 android:id="@+id/btEdit"

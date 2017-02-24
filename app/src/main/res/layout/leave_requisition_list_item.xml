@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/colorLightGray"
+    android:background="@color/colorWhite"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -13,7 +13,7 @@
             android:id="@+id/agentName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_23"
+            android:textSize="@dimen/text_22"
             android:layout_marginTop="@dimen/margin_5"
             android:textColor="@android:color/black"
             android:layout_marginStart="@dimen/margin_20"
@@ -23,7 +23,7 @@
             android:id="@+id/leaveFrom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_20"
+            android:textSize="@dimen/text_16"
             android:layout_marginTop="@dimen/margin_5"
             android:textColor="@android:color/black"
             android:layout_marginStart="@dimen/margin_20"
@@ -33,7 +33,7 @@
             android:id="@+id/leaveTo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/text_20"
+            android:textSize="@dimen/text_16"
             android:layout_marginTop="@dimen/margin_5"
             android:layout_marginStart="@dimen/margin_20"
             android:layout_marginLeft="@dimen/margin_20"
@@ -47,7 +47,7 @@
         android:id="@+id/leaveDays"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/text_23"
+        android:textSize="@dimen/text_22"
         android:layout_marginEnd="@dimen/margin_15"
         android:layout_marginRight="@dimen/margin_15"
         android:layout_alignParentRight="true"
@@ -68,12 +68,15 @@
         android:layout_marginEnd="@dimen/margin_15"
         android:layout_marginRight="@dimen/margin_15"
         android:text="Pending"
-        android:textSize="@dimen/text_25" />
+        android:textSize="@dimen/text_22" />
 
     <TextView
-        android:layout_marginBottom="@dimen/margin_5"
-        android:layout_marginTop="@dimen/margin_5"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/margin_2"
-        android:layout_below="@id/linearHistory" />
+        android:layout_height="@dimen/margin_1"
+        android:layout_marginStart="@dimen/margin_15"
+        android:background="@color/colorDarkGray"
+        android:layout_marginLeft="@dimen/margin_15"
+        android:layout_marginEnd="@dimen/margin_15"
+        android:layout_marginRight="@dimen/margin_15"
+        android:layout_below="@id/linearLeaveStatus"/>
 </RelativeLayout>
