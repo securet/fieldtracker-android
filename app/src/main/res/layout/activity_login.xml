@@ -34,9 +34,28 @@
             android:textColor="@color/colorWhite"
             android:text="@string/attendence_tracker"
             android:textSize="@dimen/text_27" />
+
+        <EditText
+            android:id="@+id/domain"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_25"
+            android:paddingStart="@dimen/margin_5"
+            android:paddingLeft="@dimen/margin_5"
+            android:layout_marginRight="@dimen/margin_25"
+            android:layout_marginTop="@dimen/margin_20"
+            android:background="@drawable/login_edittext"
+            android:hint="Domain"
+            android:drawableRight="@drawable/domain"
+            android:drawableEnd="@drawable/domain"
+            android:inputType="textEmailAddress"
+            android:textSize="@dimen/text_20"
+            />
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+
         <EditText
             android:id="@+id/emailET"
             android:layout_width="fill_parent"
@@ -46,7 +65,7 @@
             android:paddingStart="@dimen/margin_5"
             android:paddingLeft="@dimen/margin_5"
             android:layout_marginRight="@dimen/margin_25"
-            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
             android:background="@drawable/login_edittext"
             android:hint="@string/username_hint"
             android:drawableRight="@drawable/email2"
@@ -62,6 +81,7 @@
             android:layout_width="fill_parent"
             android:paddingStart="@dimen/margin_5"
             android:paddingLeft="@dimen/margin_5"
+            android:fontFamily=""
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/pass"
             android:drawableRight="@drawable/pass"
@@ -79,11 +99,12 @@
                 android:drawableEnd="@drawable/pass"
                 android:paddingStart="@dimen/margin_5"
                 android:paddingLeft="@dimen/margin_5"
+                android:fontFamily=""
                 android:drawableRight="@drawable/pass"
                 android:layout_marginBottom="@dimen/margin_10"
                 android:layout_marginLeft="@dimen/margin_25"
                 android:layout_marginRight="@dimen/margin_25"
-                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
                 android:background="@drawable/login_edittext"
                 android:textStyle="italic"
                 android:hint="@string/new_password"
@@ -98,6 +119,7 @@
                 android:layout_width="fill_parent"
                 android:paddingStart="@dimen/margin_5"
                 android:paddingLeft="@dimen/margin_5"
+                android:fontFamily=""
                 android:layout_height="wrap_content"
                 android:textStyle="italic"
                 android:drawableEnd="@drawable/pass"

@@ -45,7 +45,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/text_18" />
 
-                <com.oppo.fieldtracker.customviews.ShiftTimeView
+                <com.allsmart.fieldtracker.customviews.ShiftTimeView
                     android:id="@+id/stvShiftTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
