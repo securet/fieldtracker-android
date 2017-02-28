@@ -135,7 +135,7 @@
 
         <ImageView
             android:id="@+id/ivStorePhoto"
-            android:src="@android:drawable/ic_menu_camera"
+            android:src="@drawable/camera_icon"
             android:padding="@dimen/margin_10"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/image_background"

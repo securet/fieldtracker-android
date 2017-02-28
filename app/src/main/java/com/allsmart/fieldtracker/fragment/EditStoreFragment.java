@@ -687,6 +687,9 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                     String result = (String) data;
                     if(!TextUtils.isEmpty(result) && !result.equalsIgnoreCase("error")) {
                         storeImage = (String) data;
+                        Toast.makeText(getContext(),
+                                "Image Uploaded Successfully",
+                                Toast.LENGTH_SHORT).show();
                             storePhoto.setEnabled(false);
                     } else {
                             //error
