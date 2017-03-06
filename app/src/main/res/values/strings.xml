@@ -15,7 +15,7 @@
     <string name="geofences_added">Geofences added</string>
     <string name="geofences_removed">Geofences removed</string>
     <string name="forgot_password">Forgot Password ?</string>
-    <string name="attendence_tracker">Attendence Tracker</string>
+    <string name="attendence_tracker">Attendance Tracker</string>
     <string name="password_hint">Password</string>
     <string name="username_hint">Username</string>
     <string name="login_text">LOGIN</string>
@@ -94,5 +94,6 @@
     <string name="reportees">Reportees</string>
     <string name="configure_store">Configure Store</string>
     <string name="enable">Enable</string>
+    <string name="time_in_out_message">Time In/Out done for today</string>
 
 </resources>

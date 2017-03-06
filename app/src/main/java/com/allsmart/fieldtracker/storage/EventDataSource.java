@@ -88,4 +88,19 @@ public class EventDataSource {
 
         return details;
     }
+
+    public boolean checkLoggedOut(String username) {
+		String where = SqliteHelper.COLUMN_USERNAME +" = '"+username + "' AND " +SqliteHelper.COLUMN_COMMENTS + " = " + "'TimeOut'";
+		Cursor cursor = database.query(SqliteHelper.TABLE_TIMEINOUT,allColumns,where,null,null,null,null);
+		cursor.moveToFirst();
+		if(cursor.getCount() == 0) {
+			cursor.close();
+			return true;
+		} else {
+			cursor.close();
+			return false;
+		}
+
+
+	}
 }

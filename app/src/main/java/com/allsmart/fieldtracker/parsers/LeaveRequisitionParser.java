@@ -43,7 +43,7 @@ public class LeaveRequisitionParser {
 
                 if(parentObject.has("totalEntries")) {
                     int count = parentObject.getInt("totalEntries");
-                    preferences.saveInt(Preferences.LEAVE_COUNT,count);
+                    preferences.saveInt(Preferences.LEAVE_REQUISITION_COUNT,count);
                     preferences.commit();
                 }
 

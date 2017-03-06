@@ -2,11 +2,13 @@ package com.allsmart.fieldtracker.fragment;
 
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,10 +133,28 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
         switch (loader.getId()) {
             case LoaderConstant.LEAVE_LIST:
                 if(data != null && data instanceof ArrayList) {
-                    if (list == null) {
-                        list = (ArrayList<Leave>) data;
+                    if(preferences.getInt(Preferences.LEAVE_COUNT,0) == 0) {
+                        final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                        dialog.setCancelable(false);
+                        dialog.setTitle("No Leaves");
+                        dialog.setMessage("No Leaves Applied");
+                        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
                     } else {
-                        list.addAll((ArrayList<Leave>) data);
+                        if (list == null) {
+                            list = (ArrayList<Leave>) data;
+                        } else {
+                            list.addAll((ArrayList<Leave>) data);
+                        }
+                    }
+
+                    if(adapter != null) {
+                        adapter.refresh(list);
                     }
 
                 }else {
@@ -144,9 +164,7 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
                 }
                 isLoading = false;
                 ((MainActivity)getActivity()).isLoading = false;
-                if(adapter != null) {
-                    adapter.refresh(list);
-                }
+
 
                 break;
             case LoaderConstant.LEAVE_REQUISITION:
@@ -156,6 +174,10 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
                     } else {
                         listRequisition.addAll((ArrayList<LeaveRequisition>) data);
                     }
+
+                    if(requisitionAdapter != null) {
+                        requisitionAdapter.refresh(listRequisition);
+                    }
                 } else {
                     Toast.makeText(getContext(),
                             "Error in response. Please try again.",
@@ -163,9 +185,7 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
                 }
                 isLoading = false;
                 ((MainActivity)getActivity()).isLoading = false;
-                if(requisitionAdapter != null) {
-                    requisitionAdapter.refresh(listRequisition);
-                }
+
                 break;
 
         }

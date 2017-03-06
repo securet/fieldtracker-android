@@ -3,11 +3,13 @@ package com.allsmart.fieldtracker.fragment;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -158,11 +160,32 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
         {
             case LoaderConstant.STORE_LIST:
                 if(data!=null && data instanceof ArrayList ){
-                    if (list == null) {
-                        list = (ArrayList<Store>) data;
+                    if(preferences.getInt(Preferences.STORE_LIST_COUNT,0) == 0) {
+                        final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                        dialog.setCancelable(false);
+                        dialog.setTitle("No Stores");
+                        dialog.setMessage("No Stores to show");
+                        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
                     } else {
-                        list.addAll((ArrayList<Store>)data);
+                        if (list == null) {
+                            list = (ArrayList<Store>) data;
+                        } else {
+                            list.addAll((ArrayList<Store>)data);
+                        }
                     }
+
+                    if(list != null) {
+                        if(adapter != null) {
+                            adapter.refresh(list);
+                        }
+                    }
+
                 }
                  else {
 

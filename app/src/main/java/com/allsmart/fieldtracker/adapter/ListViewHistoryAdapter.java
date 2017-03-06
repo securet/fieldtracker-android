@@ -62,10 +62,13 @@ public class ListViewHistoryAdapter extends ArrayAdapter<HistoryNew>{
         }
 
         HistoryNew historyNew =  getItem(position);
-        HistoryChild childForFromdate = historyNew.getHistoryChildren().get(0);
-        HistoryChild childForThrudate = historyNew.getHistoryChildren().get(historyNew.getHistoryChildren().size()-1);
-        historyNew.setTimeIn(childForFromdate.getFromDate());
-        historyNew.setTimeOut(childForThrudate.getThruDate());
+        if (historyNew != null && historyNew.getHistoryChildren() != null) {
+            HistoryChild childForFromdate = historyNew.getHistoryChildren().get(0);
+            HistoryChild childForThrudate = historyNew.getHistoryChildren().get(historyNew.getHistoryChildren().size() - 1);
+            historyNew.setTimeIn(childForFromdate.getFromDate());
+            historyNew.setTimeOut(childForThrudate.getThruDate());
+        }
+
 
         TextView tvDate = (TextView) rowView.findViewById(R.id.tvHistoryDate);
         TextView tvTimeIn = (TextView) rowView.findViewById(R.id.tvHistoryTimeIn);

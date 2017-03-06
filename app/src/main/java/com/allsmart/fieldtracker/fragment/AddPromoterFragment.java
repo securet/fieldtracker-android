@@ -48,7 +48,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
     private EditText fN,lN,ph,eAdd,address;
     private ImageView ivPhoto,ivAdhar,ivAddressProof;
     private TextView tvStoreAssignment,seAssignment;
-    int storeId ;
+    private String storeId ;
     private Preferences preferences;
     ArrayList<Store> list;
     private int i = 0;
@@ -132,7 +132,7 @@ public class AddPromoterFragment extends Fragment implements View.OnClickListene
                                 ph.getText().toString(),
                                 eAdd.getText().toString(),
                                 address.getText().toString(),
-                                String.valueOf(storeId),"ReqSubmitted","RqtAddPromoter",image[0],image[1],image[2]));
+                                storeId,"ReqSubmitted","RqtAddPromoter",image[0],image[1],image[2]));
                         getActivity().getLoaderManager().initLoader(LoaderConstant.ADD_PROMOTER,b,AddPromoterFragment.this).forceLoad();
                     } else {
                         ((MainActivity)getActivity()).displayMessage("Please take all photos");

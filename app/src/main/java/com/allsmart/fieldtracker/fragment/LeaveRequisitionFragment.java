@@ -2,11 +2,13 @@ package com.allsmart.fieldtracker.fragment;
 
 import android.app.LoaderManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,10 +123,24 @@ public class LeaveRequisitionFragment extends Fragment implements LoaderManager.
         switch (loader.getId()) {
             case LoaderConstant.LEAVE_REQUISITION:
                 if(data != null && data instanceof ArrayList) {
-                    if (listRequisition == null) {
-                        listRequisition = (ArrayList<LeaveRequisition>) data;
+                    if(preferences.getInt(Preferences.LEAVE_REQUISITION_COUNT,0) == 0) {
+                        final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                        dialog.setCancelable(false);
+                        dialog.setTitle("No Requisition");
+                        dialog.setMessage("No Leave Requisitions available" );
+                        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
                     } else {
-                        listRequisition.addAll((ArrayList<LeaveRequisition>) data);
+                        if (listRequisition == null) {
+                            listRequisition = (ArrayList<LeaveRequisition>) data;
+                        } else {
+                            listRequisition.addAll((ArrayList<LeaveRequisition>) data);
+                        }
                     }
                 } else {
                     Toast.makeText(getContext(),
@@ -174,7 +190,7 @@ public class LeaveRequisitionFragment extends Fragment implements LoaderManager.
             case R.id.lvLeaveStatus:
 
                 final int lastItem = firstVisibleItem + visibleItemCount;
-                int count = preferences.getInt(Preferences.LEAVE_COUNT,0);
+                int count = preferences.getInt(Preferences.LEAVE_REQUISITION_COUNT,0);
                 if(count>totalItemCount&& totalItemCount>0 && !isLoading && (lastItem >= totalItemCount-3) )
                 {
                     isLoading = true;

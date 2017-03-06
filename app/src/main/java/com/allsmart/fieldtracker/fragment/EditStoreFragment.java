@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ import com.allsmart.fieldtracker.constants.LoaderConstant;
 import com.allsmart.fieldtracker.constants.LoaderMethod;
 import com.allsmart.fieldtracker.service.LoaderServices;
 import com.allsmart.fieldtracker.utils.Logger;
+import com.allsmart.fieldtracker.utils.NetworkUtils;
 import com.allsmart.fieldtracker.utils.ParameterBuilder;
 import com.allsmart.fieldtracker.constants.Services;
 import com.allsmart.fieldtracker.utils.UrlBuilder;
@@ -49,6 +51,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -59,14 +62,15 @@ import static com.allsmart.fieldtracker.constants.AppsConstant.BACK_CAMREA_OPEN;
  * Created by allsmartlt218 on 02-12-2016.
  */
 
-public class EditStoreFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class EditStoreFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     protected EditText storeName,address,siteRadius;
     protected TextView lattitude,longitude;
     protected Button btEdit,btCancel,getLocation;
     private Preferences preferences;
-    private ImageView storePhoto;
-    private int storeId;
+    private ImageView storePhoto, storeImg;
+    private ScrollView svParent;
+    private String storeId;
     protected ProgressDialog pd;
     private Location location;
     private String lat = "";
@@ -76,6 +80,7 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
     private String storeImage = "";
     private String sLattitude= "";
     private String sLongitude ="";
+    private Store b;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,9 +109,11 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
         View view = inflater.inflate(R.layout.fragment_edit_store,container,false);
         storeName = (EditText) view.findViewById(R.id.etStName);
         address = (EditText) view.findViewById(R.id.etStAddress);
+        svParent = (ScrollView) view.findViewById(R.id.svEditStore);
         lattitude = (TextView) view.findViewById(R.id.tvLattitude);
         longitude = (TextView) view.findViewById(R.id.tvLongitude);
         btEdit = (Button) view.findViewById(R.id.btEdit);
+        storeImg = (ImageView) view.findViewById(R.id.storeImage);
         siteRadius = (EditText) view.findViewById(R.id.etSiteRadius);
         getLocation = (Button) view.findViewById(R.id.getLocation);
         btCancel = (Button) view.findViewById(R.id.btCancel);
@@ -235,13 +242,50 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                 }
             }
         });
-        Store b = getArguments().getParcelable("Store");
-        storeId = b.getStoreId();
-        storeName.setText(b.getStoreName());
-        address.setText(b.getAddress());
-        siteRadius.setText(b.getSiteRadius());
-        lattitude.setText(b.getLattitude());
-        longitude.setText(b.getLongitude());
+
+        storeImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(b != null) {
+                    if(!TextUtils.isEmpty(b.getStoreImage()) && !b.getStoreImage().equals(null)){
+                        StorePhotoFragment f = new StorePhotoFragment();
+
+                        FragmentManager fm = getFragmentManager();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("store_photo",b.getStoreImage());
+                        f.setArguments(bundle);
+                        f.show(fm,"Photo_Dialog");
+                        /*fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
+                        fm.executePendingTransactions();*/
+                    }
+                }
+            }
+        });
+
+        try {
+            b = getArguments().getParcelable("Store");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Crashlytics.log(1,getClass().getName(),"Error at getting store details");
+        }
+        if(b != null) {
+            storeId = b.getStoreId();
+            storeName.setText(b.getStoreName());
+            address.setText(b.getAddress());
+            siteRadius.setText(b.getSiteRadius());
+            lattitude.setText(b.getLattitude());
+            longitude.setText(b.getLongitude());
+            if(!TextUtils.isEmpty(b.getStoreImage()) && !b.getStoreImage().equals("null")){
+                storeImg.setVisibility(View.VISIBLE);
+         //       Picasso.with(getContext()).load(UrlBuilder.getServerImage(b.getStoreImage())).fit().into(storeImg);
+            } else {
+                storeImg.setVisibility(View.INVISIBLE);
+            }
+
+        } else {
+            ((MainActivity)getActivity()).displayMessage("error in getting store details");
+        }
+
         return view;
     }
 
@@ -322,6 +366,7 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
 
         try {
             network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
         } catch (Exception e) {
             Logger.e("Log", e);
             Crashlytics.log(1, getClass().getName(), "Error in Map Fragment");
@@ -329,87 +374,129 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
         }
 
         if (!gps_enabled && !network_enabled) {
-            ((MainActivity)getActivity()).displayMessage("Network and GPS is not available");
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+            dialog.setMessage("Location is not enabled !");
+            dialog.setPositiveButton("Open setting", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                    Intent myIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(myIntent);
+                    //get gps
+                }
+            });
+            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+            dialog.show();
         } else {
-            if(network_enabled) {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
 
-                    }
-
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                    }
-
-                    @Override
-                    public void onProviderEnabled(String provider) {
-
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String provider) {
-
-                    }
-                });
-
-                if(locationManager != null) {
-                    loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    /*if(loc != null) {
-                                    *//*lattitude.setText(loc.getLatitude()+"");
-                                    longitude.setText(loc.getLongitude()+"");*//*
-                        isGetLocationClicked = true;
-                    }*/
-                }
-            }
             if(gps_enabled){
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+                    if(locationManager != null) {
+                        checkPermission();
+                        loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
                     }
 
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-
+            }
+            if(network_enabled) {
+                if(loc == null) {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+                    if(locationManager != null) {
+                        loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                     }
-
-                    @Override
-                    public void onProviderEnabled(String provider) {
-
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String provider) {
-
-                    }
-                });
-
-                if(locationManager != null) {
-                    checkPermission();
-                    loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    /*if(loc != null) {
-
-                        isGetLocationClicked = true;
-                    }*/
                 }
+
             }
         }
         return loc;
     }
 
     private Location getLocationForMarsh() {
-        LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
+        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         Location loc = null;
+
+        try {
+            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception e) {
+            Logger.e("Log", e);
+            Crashlytics.log(1, getClass().getName(), "Error in Map Fragment");
+            Crashlytics.logException(e);
+        }
+
+        try {
+            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        } catch (Exception e) {
+            Logger.e("Log", e);
+            Crashlytics.log(1, getClass().getName(), "Error in Map Fragment");
+            Crashlytics.logException(e);
+        }
+
         if(!googleApiClient.isConnected()) {
             googleApiClient.connect();
         }
-            if(checkPermission()) {
 
+        if (!gps_enabled && !network_enabled) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+            dialog.setMessage("Location is not enabled !");
+            dialog.setPositiveButton("Open setting", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+                    Intent myIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(myIntent);
+                    //get gps
+                }
+            });
+            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+            dialog.show();
+        } else {
+
+            if(checkPermission()) {
                 loc = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-                if (loc == null) {
-                    manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, new LocationListener() {
+            }
+
+            if(gps_enabled){
+                if(loc == null) {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+                    if(locationManager != null) {
+                        loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                    }
+                }
+
+            }
+            if(network_enabled) {
+                if(loc == null) {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+                    if(locationManager != null) {
+                        loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    }
+
+            }
+        }
+
+                /*if (loc == null) {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, new LocationListener() {
                         @Override
                         public void onLocationChanged(Location location) {
 
@@ -431,17 +518,7 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                         }
                     });
 
-                    /*loc.setLatitude(preferences.getDouble(Preferences.USERLATITUDE, 0));
-                    loc.setLongitude(preferences.getDouble(Preferences.USERLONGITUDE, 0));*/
-
-              //      Log.d(MainActivity.TAG, loc.getLatitude() + "     " + loc.getLongitude());
-             //       Log.d(MainActivity.TAG, ""+StringUtils.getDouble(preferences.getString(Preferences.USERLATITUDE, "") + "     " + StringUtils.getDouble(preferences.getString(Preferences.USERLATITUDE, ""))));
-                    // }
-                    //   } else {
-                    //          requestPermission();
-                    //     }
-
-                }
+                }*/
             }
         return loc;
     }
@@ -455,14 +532,18 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                 /*String sLattitude = lattitude.getText().toString();
                 String sLongitude = longitude.getText().toString();*/
                 String proximity = siteRadius.getText().toString();
-                if(!TextUtils.isEmpty(sName) && !TextUtils.isEmpty(sAddress) && !TextUtils.isEmpty(proximity) && !TextUtils.isEmpty(storeImage)) {
+                if (!TextUtils.isEmpty(sName) && !TextUtils.isEmpty(sAddress) && !TextUtils.isEmpty(proximity)) {
                     Bundle b = new Bundle();
-                    b.putString(AppsConstant.URL, UrlBuilder.getStoreUpdate(Services.STORE_UPDATE, String.valueOf(storeId)));
+                    b.putString(AppsConstant.URL, UrlBuilder.getStoreUpdate(Services.STORE_UPDATE, storeId));
                     b.putString(AppsConstant.METHOD, AppsConstant.PUT);
-                    b.putString(AppsConstant.PARAMS, ParameterBuilder.updateStore(sName, sAddress, sLattitude, sLongitude, proximity,storeImage));
-                    getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_UPDATE, b, EditStoreFragment.this).forceLoad();
+                    if (!TextUtils.isEmpty(storeImage)) {
+                        b.putString(AppsConstant.PARAMS, ParameterBuilder.updateStore(sName, sAddress, sLattitude, sLongitude, proximity, storeImage));
+                        getActivity().getLoaderManager().initLoader(LoaderConstant.STORE_UPDATE, b, EditStoreFragment.this).forceLoad();
+                    } else {
+                        Toast.makeText(getContext(), "Please take store photo", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(getContext(),"Fields cannot be empty",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Fields cannot be empty", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btCancel:
@@ -537,47 +618,59 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
              exif = new ExifInterface(imagePath);
             if(exif != null) {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE,convert(getLocationForMarsh().getLatitude()));
-                    exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE,convert(getLocationForMarsh().getLongitude()));
-                    sLattitude = getLocationForMarsh().getLatitude()+"";
-                    sLongitude = getLocationForMarsh().getLongitude()+"";
-                    if(getLocationForMarsh().getLatitude() > 0) {
-                        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,"N");
+                    if(getLocationForMarsh() != null) {
+                        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE,convert(getLocationForMarsh().getLatitude()));
+                        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE,convert(getLocationForMarsh().getLongitude()));
+                        sLattitude = getLocationForMarsh().getLatitude()+"";
+                        sLongitude = getLocationForMarsh().getLongitude()+"";
+                        if(getLocationForMarsh().getLatitude() > 0) {
+                            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,"N");
 
-                    } else {
-                        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,"S");
-                    }
+                        } else {
+                            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,"S");
+                        }
 
-                    if(getLocationForMarsh().getLongitude() > 0) {
-                        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,"E");
+                        if(getLocationForMarsh().getLongitude() > 0) {
+                            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,"E");
+                        } else {
+                            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,"F");
+                        }
+                        if (exif != null) {
+                            exif.saveAttributes();
+                            isExifAdded = true;
+                        }
                     } else {
-                        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,"F");
+                        ((MainActivity)getActivity()).displayMessage("GeoTag was not added");
                     }
-                    exif.saveAttributes();
-                    isExifAdded = true;
 
                 } else {
-                    exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE,convert(getLocationForLollipop().getLatitude()));
-                    exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE,convert(getLocationForLollipop().getLongitude()));
+                    if(getLocationForLollipop() != null) {
+                        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE,convert(getLocationForLollipop().getLatitude()));
+                        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE,convert(getLocationForLollipop().getLongitude()));
 
-                    sLattitude = getLocationForLollipop().getLatitude()+"";
-                    sLongitude = getLocationForLollipop().getLongitude()+"";
-                    if(getLocationForLollipop().getLatitude() > 0) {
-                        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,"N");
+                        sLattitude = getLocationForLollipop().getLatitude()+"";
+                        sLongitude = getLocationForLollipop().getLongitude()+"";
+                        if(getLocationForLollipop().getLatitude() > 0) {
+                            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,"N");
 
+                        } else {
+                            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,"S");
+                        }
+
+                        if(getLocationForLollipop().getLongitude() > 0) {
+                            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,"E");
+                        } else {
+                            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,"F");
+                        }
+                        if (exif != null) {
+                            exif.saveAttributes();
+                            isExifAdded = true;
+                        }
+                        Log.d(MainActivity.TAG,"Exif Data" + getLocationForLollipop().getLatitude() +"   "
+                                + getLocationForLollipop().getLongitude());
                     } else {
-                        exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF,"S");
+                        ((MainActivity)getActivity()).displayMessage("GeoTag was not added");
                     }
-
-                    if(getLocationForLollipop().getLongitude() > 0) {
-                        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,"E");
-                    } else {
-                        exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF,"F");
-                    }
-                    exif.saveAttributes();
-                    isExifAdded = true;
-                    Log.d(MainActivity.TAG,"Exif Data" + getLocationForLollipop().getLatitude() +"   "
-                            + getLocationForLollipop().getLongitude());
                 }
 
             } else {
@@ -734,6 +827,26 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 }

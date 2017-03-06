@@ -89,23 +89,25 @@ public class GeofenceBroadcaster extends BroadcastReceiver{
                     if(details != null && !TextUtils.isEmpty(details.getClockDate())) {
                         String lastDate = CalenderUtils.getDateMethod(details.getClockDate(),CalenderUtils.DateMonthDashedFormate);
                         String comments = details.getComments();
-                        if (clockDate.equalsIgnoreCase(lastDate)) {
-                            if(strComments.equalsIgnoreCase("InLocation")){
-                                if (comments.equalsIgnoreCase("OutLocation")) {
-                                    dataSource.insertTimeInOutDetails(getTimeInOutDetails("InLocation", "clockIn"));
-                                    uploadData();
-                                    String storeName = preferences.getString(Preferences.SITENAME,"");
-                                    if(!storeName.equalsIgnoreCase("Off Site")) {
-                                        sendNotification(transitionType + "", preferences.getString(Preferences.SITENAME, ""), "You are entering");
+                        if(preferences.getBoolean(Preferences.ISONPREMISE,false)) {
+                            if (clockDate.equalsIgnoreCase(lastDate)) {
+                                if(strComments.equalsIgnoreCase("InLocation")){
+                                    if (comments.equalsIgnoreCase("OutLocation")) {
+                                        dataSource.insertTimeInOutDetails(getTimeInOutDetails("InLocation", "clockIn"));
+                                        uploadData();
+                                        String storeName = preferences.getString(Preferences.SITENAME,"");
+                                        if(!storeName.equalsIgnoreCase("Off Site")) {
+                                            sendNotification(transitionType + "", preferences.getString(Preferences.SITENAME, ""), "You are entering");
+                                        }
                                     }
-                                }
-                            } else if (strComments.equalsIgnoreCase("OutLocation")) {
-                                if(comments.equalsIgnoreCase("TimeIn") || comments.equalsIgnoreCase("InLocation")) {
-                                    dataSource.insertTimeInOutDetails(getTimeInOutDetails("OutLocation","clockOut"));
-                                    uploadData();
-                                    String store = preferences.getString(Preferences.SITENAME,"");
-                                    if(!store.equalsIgnoreCase("Off Site")) {
-                                        sendNotification(transitionType + "", preferences.getString(Preferences.SITENAME, ""), "You are Leaving");
+                                } else if (strComments.equalsIgnoreCase("OutLocation")) {
+                                    if(comments.equalsIgnoreCase("TimeIn") || comments.equalsIgnoreCase("InLocation")) {
+                                        dataSource.insertTimeInOutDetails(getTimeInOutDetails("OutLocation","clockOut"));
+                                        uploadData();
+                                        String store = preferences.getString(Preferences.SITENAME,"");
+                                        if(!store.equalsIgnoreCase("Off Site")) {
+                                            sendNotification(transitionType + "", preferences.getString(Preferences.SITENAME, ""), "You are Leaving");
+                                        }
                                     }
                                 }
                             }

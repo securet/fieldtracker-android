@@ -130,7 +130,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     }
 
     LinearLayout llLogin_Logout, llShiftTime;
-    TextView tvTimeInOut, tvTimeInOutLocation;
+    TextView tvTimeInOut, tvTimeInOutLocation,tvTimeInOutMessage;
     ImageView ivCurrentLocation, ivTimeLineExpand;
 
     @Override
@@ -143,6 +143,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         }
         ivTimeLineExpand = (ImageView) rootView.findViewById(R.id.ivTimeLineExapand);
         llLogin_Logout = (LinearLayout) rootView.findViewById(R.id.llLogin_Logout);
+        tvTimeInOutMessage = (TextView) rootView.findViewById(R.id.tvTimeInOutMessage);
         dataSource = new EventDataSource(getContext());
         /*if(dataSource.getToday().getComments().equalsIgnoreCase("TimeOut")) {
             *//*GregorianCalendar gc = new GregorianCalendar();
@@ -372,7 +373,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
         }
     }
 
-    private void setUpMapIfNeeded() {
+   /* private void setUpMapIfNeeded() {
         if (map == null) {
             mapFragment.getMapAsync(new OnMapReadyCallback() {
                 @Override
@@ -384,7 +385,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                 }
             });
         }
-    }
+    }*/
 
     public void UpdateLocationStatus() {
         if (TextUtils.isEmpty(preferences.getString(Preferences.LOCATIONSTATUS, ""))) {
@@ -414,6 +415,54 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     public void SetLoginLogOut() {
         String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
         TimeInOutDetails details = dataSource.getToday();
+
+        tvTimeInOutMessage.setVisibility(View.GONE);
+        tvTimeInOut.setVisibility(View.VISIBLE);
+
+        if(/*dataSource.getToday().getUsername().equalsIgnoreCase(preferences.getString(Preferences.USERNAME,""))*/
+                dataSource.checkLoggedOut(preferences.getString(Preferences.USERNAME,""))) {
+            String clocDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
+            String lastDate = CalenderUtils.getDateMethod(dataSource.getToday().getClockDate(), CalenderUtils.DateMonthDashedFormate);
+
+            Log.d(MainActivity.TAG,"today " + clocDate + "     lastEntry " + lastDate);
+            if(clocDate.equals(lastDate)) {
+                //  ((MainActivity)getActivity()).displayMessage("You can Time In/Out once per day");
+                llLogin_Logout.setEnabled(true);
+                tvTimeInOutMessage.setVisibility(View.GONE);
+                tvTimeInOut.setVisibility(View.VISIBLE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.bluerectagleborder,null));
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.bluerectagleborder));
+                }
+
+
+            }else {
+                tvTimeInOut.setVisibility(View.GONE);
+                llLogin_Logout.setEnabled(false);
+                tvTimeInOutMessage.setVisibility(View.VISIBLE);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.grayrectangleborder,null));
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.grayrectangleborder));
+                }
+            }
+        } else {
+            llLogin_Logout.setEnabled(false);
+            tvTimeInOutMessage.setVisibility(View.VISIBLE);
+            tvTimeInOut.setVisibility(View.GONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.grayrectangleborder,null));
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.grayrectangleborder));
+            }
+        }
+
+
         String lastDate = CalenderUtils.getDateMethod(details.getClockDate(), CalenderUtils.DateMonthDashedFormate);
         if (!details.equals(null) && clockDate.equalsIgnoreCase(lastDate)) {
             String actionType = details.getComments();
@@ -512,7 +561,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
           //  Intent intent = new Intent(getActivity(), GeofenceReceiver.class);
           //  return PendingIntent.getService(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             Intent intent = new Intent("com.allsmart.fieldtracker.ACTION_GEOFENCE_RECEIVER");
-            return PendingIntent.getBroadcast(getActivity(), 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+            return PendingIntent.getBroadcast(getContext(), 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
         }
     }
@@ -557,23 +606,59 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(new
                             LatLng(StringUtils.getDouble(preferences.getString(Preferences.USERLATITUDE, ""))
                             , StringUtils.getDouble(preferences.getString(Preferences.USERLONGITUDE, ""))), 16));
-                    displayGeofences();
+
+                    if(preferences.getBoolean(Preferences.ISONPREMISE,true)) {
+                        displayGeofences();
+                    }
+
                 }
             });
         }
 
-        if(dataSource.getToday().getComments().equalsIgnoreCase("TimeOut")) {
+        Log.d(MainActivity.TAG,preferences.getString(Preferences.USERNAME,"") + " This is username");
+        if(/*dataSource.getToday().getUsername().equalsIgnoreCase(preferences.getString(Preferences.USERNAME,""))*/
+                dataSource.checkLoggedOut(preferences.getString(Preferences.USERNAME,""))) {
             String clockDate = CalenderUtils.getCurrentDate(CalenderUtils.DateMonthDashedFormate);
             String lastDate = CalenderUtils.getDateMethod(dataSource.getToday().getClockDate(), CalenderUtils.DateMonthDashedFormate);
 
             Log.d(MainActivity.TAG,"today " + clockDate + "     lastEntry " + lastDate);
             if(clockDate.equals(lastDate)) {
-                ((MainActivity)getActivity()).displayMessage("You have made Time Out for today");
-                llLogin_Logout.setEnabled(false);
-            }else {
+              //  ((MainActivity)getActivity()).displayMessage("You can Time In/Out once per day");
                 llLogin_Logout.setEnabled(true);
+                tvTimeInOutMessage.setVisibility(View.GONE);
+                tvTimeInOut.setVisibility(View.VISIBLE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.bluerectagleborder,null));
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.bluerectagleborder));
+                }
+
+
+            }else {
+                tvTimeInOut.setVisibility(View.GONE);
+                llLogin_Logout.setEnabled(false);
+                tvTimeInOutMessage.setVisibility(View.VISIBLE);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.grayrectangleborder,null));
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.grayrectangleborder));
+                }
+            }
+        } else {
+            llLogin_Logout.setEnabled(false);
+            tvTimeInOutMessage.setVisibility(View.VISIBLE);
+            tvTimeInOut.setVisibility(View.GONE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.grayrectangleborder,null));
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                llLogin_Logout.setBackground(getResources().getDrawable(R.drawable.grayrectangleborder));
             }
         }
+
 
 
     }
@@ -630,7 +715,9 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if (lastLocation != null) {
                 updateMarker(lastLocation.getLatitude(), lastLocation.getLongitude());
-                map.animateCamera(CameraUpdateFactory.zoomTo(18));
+                if(map != null) {
+                    map.animateCamera(CameraUpdateFactory.zoomTo(18));
+                }
                 startLocationUpdates();
             } else {
                 startLocationUpdates();
@@ -674,7 +761,7 @@ public class MapFragment extends Fragment implements GoogleApiClient.ConnectionC
     private boolean checkPermission() {
         // Ask for permission if it wasn't granted yet
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+            return (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED);
         } else {
             return true;

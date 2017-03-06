@@ -160,6 +160,11 @@ public class HistoryListFragment extends Fragment implements AdapterView.OnItemC
                     list.addAll((ArrayList<HistoryNew>) data);
                 }
             }
+            if(list != null) {
+                if(adapter != null) {
+                    adapter.Refresh(list);
+                }
+            }
         } else {
 
             Toast.makeText(getContext(),
@@ -170,7 +175,7 @@ public class HistoryListFragment extends Fragment implements AdapterView.OnItemC
 
             isLoading = false;
         ((MainActivity)getActivity()).isLoading = false;
-			adapter.Refresh(list);
+
             if(getActivity() != null) {
                 getActivity().getLoaderManager().destroyLoader(loader.getId());
             }

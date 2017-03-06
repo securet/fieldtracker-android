@@ -163,6 +163,12 @@ public class ReporteeHistory extends Fragment implements LoaderManager.LoaderCal
                 }
             }
 
+            if (list != null) {
+                if(adapter != null) {
+                    adapter.Refresh(list);
+                }
+            }
+
         } else {
 
             Toast.makeText(getContext(),
@@ -172,7 +178,7 @@ public class ReporteeHistory extends Fragment implements LoaderManager.LoaderCal
 
         isLoading = false;
         ((MainActivity)getActivity()).isLoading = false;
-        adapter.Refresh(list);
+
         if(getActivity() != null) {
             getActivity().getLoaderManager().destroyLoader(loader.getId());
         }

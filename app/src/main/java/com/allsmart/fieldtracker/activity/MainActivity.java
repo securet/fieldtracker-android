@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -225,25 +226,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
 	public void Logout() {
 		if(NetworkUtils.isNetworkConnectionAvailable(getApplicationContext())) {
-            preferences.saveBoolean(Preferences.ISLOGIN, false); // value to store
-
-            preferences.remove(Preferences.SITE_ADDRESS);
-            preferences.remove(Preferences.LATITUDE);
-   //         preferences.remove(Preferences.SITE_ENTITY);
-            preferences.remove(Preferences.SITENAME);
-            preferences.remove(Preferences.PARTYID);
-			preferences.remove(Preferences.USER_CUREENTSITE);
-			preferences.remove(Preferences.ROLETYPEID);
-
-			preferences.remove(Preferences.ISONPREMISE);
-
-			preferences.remove(Preferences.REPORTEE_MANAGER_NAME);
-			preferences.remove(Preferences.REPORTEE_MANAGER_EMAIL);
-			preferences.remove(Preferences.REPORTEE_MANAGER_PHONE);
-
-            preferences.commit();
-            //	preferences.clearPreferences();
-            finish();
+            //preferences.saveBoolean(Preferences.ISLOGIN, false); // value to store
+			//removePreferences();
+            preferences.clearPreferences();
+			finish();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
@@ -269,6 +255,55 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 			return true;
 		}
     }
+
+	/*private void removePreferences() {
+		preferences.remove(Preferences.LEAVE_COUNT);
+		preferences.remove(Preferences.LEAVE_REQUISITION_COUNT
+				preferences.remove(Preferences.PROMOTER_COUNT
+						preferences.remove(Preferences.LATITUDE
+								preferences.remove(Preferences.DOMAIN
+										preferences.remove(Preferences.USER_PHOTO
+												preferences.remove(Preferences.USER_CUREENTSITE
+														preferences.remove(Preferences.INLOCATION
+		TIMEINOUTSTATUS
+		TIMEINTIME
+		USERLATITUDE
+		USERLONGITUDE
+		LOCATIONSTATUS
+		ALLOWTIMEIN
+		HISTORY_COUNT
+		REPORTEE_HISTORY_COUNT
+		REPORTEE_LIST_COUNT
+		STORE_LIST_COUNT
+		SITENAME
+		APPVERSION
+		LONGITUDE
+		SITE_ADDRESS
+		SITE_ENTITY
+		SITE_RADIUS
+		USERNAME
+		USERFULLNAME
+		USERFIRSTNAME
+		USERLASTNAME
+		USERPHONE
+		USERID
+		USEREMAIL
+		BASIC_AUTH
+		ROLETYPEID
+		PARTYID
+		SHIFTTIME
+		PROMOTERISLAST
+		FORCEUPDATE
+		FORCEUPDATE_MESSAGE
+		REPORTEE_MANAGER_NAME
+		REPORTEE_MANAGER_EMAIL
+		REPORTEE_MANAGER_PHONE
+		USER_EMAIL
+		USER_ADDRESS
+		ISONPREMISE
+
+		preferences.commit();
+	}*/
 
 	@Override
 	public Loader onCreateLoader(int id, Bundle args)

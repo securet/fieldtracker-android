@@ -1,11 +1,13 @@
 package com.allsmart.fieldtracker.fragment;
 
 import android.app.LoaderManager;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import com.allsmart.fieldtracker.constants.LoaderMethod;
 import com.allsmart.fieldtracker.constants.Services;
 import com.allsmart.fieldtracker.model.PromoterApprovals;
 import com.allsmart.fieldtracker.service.LoaderServices;
+import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.utils.UrlBuilder;
 
 import java.util.ArrayList;
@@ -76,10 +79,24 @@ public class PromoterApprovalsFragment extends Fragment implements LoaderManager
         switch (loader.getId()) {
             case LoaderConstant.PROMOTER_APPROVALS_LIST:
                 if (data != null && data instanceof ArrayList) {
-                    list = (ArrayList<PromoterApprovals>) data;
-                    adapter = new PromoterApprovalsListAdapter(getContext(),R.layout.promoter_approvals_item,(ArrayList<PromoterApprovals>) data);
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(this);
+                    if(((ArrayList) data).size() == 0) {
+                        final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                        dialog.setCancelable(false);
+                        dialog.setTitle("No Approvals");
+                        dialog.setMessage("No Promoter Approvals available" );
+                        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    } else {
+                        list = (ArrayList<PromoterApprovals>) data;
+                        adapter = new PromoterApprovalsListAdapter(getContext(),R.layout.promoter_approvals_item,(ArrayList<PromoterApprovals>) data);
+                        listView.setAdapter(adapter);
+                        listView.setOnItemClickListener(this);
+                    }
                 } else {
                     Toast.makeText(getContext(),"Error in response",Toast.LENGTH_SHORT).show();
                 }

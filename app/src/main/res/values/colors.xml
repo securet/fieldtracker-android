@@ -14,5 +14,7 @@
     <color name="colorDarkGray">#5a5a5a</color>
     <color name="colorOrange">#f26930</color>
     <color name="colorLightBlue">#30aef2</color>
+    <color name="colorDimRed">#f19393</color>
+    <color name="colorGreenStore">#5cb85c</color>
 
 </resources>

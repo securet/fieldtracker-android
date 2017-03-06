@@ -59,6 +59,7 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
     private Matcher matcher;
     private boolean isLogin = false;
     private boolean isForgotPassScreen = false;
+    private String username="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -215,6 +216,7 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
                 if(!TextUtils.isEmpty(emailET.getText().toString())){
 
                     if(emailValidator(emailET.getText().toString())) {
+                        username = emailET.getText().toString();
                         showResetViews();
                     } else {
                         displayMessage("Enter proper email");
@@ -236,8 +238,13 @@ public class LoginActivity extends Activity implements LoaderManager.LoaderCallb
                             Bundle bundle = new Bundle();
                             bundle.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.FORGOT_PASSWORD));
                             bundle.putString(AppsConstant.METHOD,AppsConstant.POST);
-                            bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getUserId(preferences.getString(Preferences.USERNAME,"")));
-                            getLoaderManager().initLoader(LoaderConstant.FORGOT_PASSWORD,bundle,LoginActivity.this).forceLoad();
+                            if(!TextUtils.isEmpty(username)) {
+                                bundle.putString(AppsConstant.PARAMS, ParameterBuilder.getUserId(username));
+                                getLoaderManager().initLoader(LoaderConstant.FORGOT_PASSWORD,bundle,LoginActivity.this).forceLoad();
+                            } else {
+                                displayMessage("Username is not entered");
+                            }
+
                         } else {
                             displayMessage("Password does not match");
                         }

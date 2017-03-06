@@ -59,7 +59,7 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
     private int i = 0;
     private Promoter promoter;
     private Preferences preferences;
-    private int storeId;
+    private String storeId;
     private LinearLayout llWeeklyOff;
 
     @Override
@@ -192,25 +192,27 @@ public class EditPromoterFragment extends Fragment implements LoaderManager.Load
                     b.putString(AppsConstant.URL,UrlBuilder.getUpdatePromoter(Services.UPDATE_PROMOTER,promoter.getRequestId()));
                     b.putString(AppsConstant.METHOD,AppsConstant.PUT);
                     if(!TextUtils.isEmpty(image[0]) && !TextUtils.isEmpty(image[1]) && !TextUtils.isEmpty(image[2])) {
-                        if(storeId == 0) {
+
+
+                        if(TextUtils.isEmpty(storeId)||storeId.equals("null")) {
                             b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterUpdate(promoter.getRequestId(),promoter.getRequestType(),
                                     firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(), Address.getText().toString(),emailAddress.getText().toString(),
                                     promoter.getProductStoreId(),promoter.getStatusId(),"RqtAddPromoter","description after updation",image[1],image[0],image[2]));
                         } else {
                             b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterUpdate(promoter.getRequestId(),promoter.getRequestType(),
                                     firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(), Address.getText().toString(),emailAddress.getText().toString(),
-                                    storeId+"",promoter.getStatusId(),"RqtAddPromoter","description after updation",adhar,photo,address));
+                                    storeId,promoter.getStatusId(),"RqtAddPromoter","description after updation",adhar,photo,address));
                         }
                     } else {
 
-                        if(storeId == 0) {
+                        if(TextUtils.isEmpty(storeId) || storeId.equals("null")) {
                             b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterUpdate(promoter.getRequestId(),promoter.getRequestType(),
                                     firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(), Address.getText().toString(),emailAddress.getText().toString(),
                                     promoter.getProductStoreId(),promoter.getStatusId(),"RqtAddPromoter","description after updation",adhar,photo,address));
                         } else {
                             b.putString(AppsConstant.PARAMS,ParameterBuilder.getPromoterUpdate(promoter.getRequestId(),promoter.getRequestType(),
                                     firstName.getText().toString(),lastName.getText().toString(),phone.getText().toString(), Address.getText().toString(),emailAddress.getText().toString(),
-                                    storeId+"",promoter.getStatusId(),"RqtAddPromoter","description after updation",adhar,photo,address));
+                                    storeId,promoter.getStatusId(),"RqtAddPromoter","description after updation",adhar,photo,address));
                         }
                     }
                     getActivity().getLoaderManager().initLoader(LoaderConstant.UPDATE_PROMOTER,b,EditPromoterFragment.this).forceLoad();

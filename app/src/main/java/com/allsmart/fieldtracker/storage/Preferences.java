@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 public class Preferences
 {
     public static String LEAVE_COUNT = "LeaveCount";
+    public static String LEAVE_REQUISITION_COUNT = "LeaveRequisitionCount";
     public static String PROMOTER_COUNT = "PromoterCount";
     public static String LATITUDE= "Latitude";
     public static String DOMAIN = "domain";
@@ -23,7 +24,6 @@ public class Preferences
     public static String USERLONGITUDE = "UserLongitude";
     public static String LOCATIONSTATUS = "LocationStatus";
     public static String ALLOWTIMEIN = "allowTimeIn";
-//    public static String SITEID = "SiteId";
     public static String HISTORY_COUNT = "HistoryCount";
     public static String REPORTEE_HISTORY_COUNT = "ReporteeHistoryCount";
     public static String REPORTEE_LIST_COUNT = "ReporteeListCount";
@@ -31,9 +31,7 @@ public class Preferences
     public static String SITENAME = "SiteName";
     public static String APPVERSION = "appVersion";
     public static String LONGITUDE = "Longitude";
-    public static String TOMORROW = "tomorrow";
     public static String SITE_ADDRESS = "SiteAddress";
-    public static String SITE_ENTITY = "SiteEntity";
     public static String SITE_RADIUS = "SiteRadius";
     public static String ISLOGIN = "IsLogin";
     public static String USERNAME = "UserName";
@@ -43,16 +41,11 @@ public class Preferences
     public static String USERPHONE = "userPhone";
     public static String USERID = "UserId";
     public static String USEREMAIL = "UserEmail";
-    public static String ISEMPLOYEEVALID = "IsEmployeeValid";
-    public static String USERBIRTHDAY = "userBirthDay";
     public static String BASIC_AUTH = "BasicAuth";
     public static String ROLETYPEID = "roleTypeId";
     public static String PARTYID = "partyId";
     public static String SHIFTTIME = "ShiftTime";
-    public static String ISLAST = "isLast";
     public static String PROMOTERISLAST= "promoterIsLast";
-    public static String STOREISLAST = "storeIsLast";
-    public static String LEAVEISLAST = "leaveIsLast";
     public static String FORCEUPDATE = "forceUpdate";
     public static String FORCEUPDATE_MESSAGE = "forceUpdateMessage";
     public static String REPORTEE_MANAGER_NAME = "reporteeManagerName";
@@ -62,7 +55,6 @@ public class Preferences
     public static String USER_ADDRESS = "userAddress";
     public static String ISONPREMISE ="isOnPremise";
 
-    public static String TIMEINCOUNT = "timeInCount";
     public Preferences(Context context)
     {
         preferences = context.getSharedPreferences("AttendanceTracker", context.MODE_PRIVATE);

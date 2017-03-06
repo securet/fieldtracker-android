@@ -1,7 +1,9 @@
 package com.allsmart.fieldtracker.parsers;
 
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.allsmart.fieldtracker.activity.MainActivity;
 import com.crashlytics.android.Crashlytics;
 import com.allsmart.fieldtracker.utils.Logger;
 import com.allsmart.fieldtracker.storage.Preferences;
@@ -45,9 +47,30 @@ public class StoreListParser {
                     JSONObject obj =  array.getJSONObject(i);
                     store = new Store();
                     store.setStoreName(obj.getString("storeName"));
-                    store.setStoreId(obj.getInt("productStoreId"));
+                    if(obj.has("productStoreId") ) {
+                        Log.d(MainActivity.TAG,obj.getString("productStoreId"));
+                        store.setStoreId(obj.getString("productStoreId"));
+                    }
+
+                    if(obj.has("locationImagePath")) {
+                        store.setStoreImage(obj.getString("locationImagePath"));
+                    }
 
                     store.setAddress(obj.getString("address"));
+                    if (obj.has("latitude") && obj.has("longitude") && obj.has("locationImagePath")) {
+                        Log.d(MainActivity.TAG, obj.getString("latitude") + "    " + obj.getString("longitude"));
+                        if (!TextUtils.isEmpty(obj.getString("latitude")) && !obj.getString("latitude").equals("null")
+                                && !TextUtils.isEmpty(obj.getString("longitude")) && !obj.getString("longitude").equals("null")) {
+                            if (!obj.getString("locationImagePath").equals("null")
+                                    && !TextUtils.isEmpty(obj.getString("locationImagePath"))) {
+                                store.setIsUpdated("Y");
+                            }
+                        } else {
+                            store.setIsUpdated("N");
+                        }
+                    } else {
+                        store.setIsUpdated("N");
+                    }
                     store.setLattitude(obj.getString("latitude"));
                     store.setLongitude(obj.getString("longitude"));
                     if(obj.has("proximityRadius") && !TextUtils.isEmpty(obj.getString("proximityRadius")) && !"null".equals(obj.getString("proximityRadius"))) {
@@ -61,7 +84,13 @@ public class StoreListParser {
             Logger.e("Log",e);
             Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
             Crashlytics.logException(e);
-        } finally {
+        } catch (Exception e) {
+            e.printStackTrace();
+            Logger.e("Log",e);
+            Crashlytics.log(1,getClass().getName(),"Error in Parsing the response");
+            Crashlytics.logException(e);
+        }
+        finally {
             return list;
         }
 

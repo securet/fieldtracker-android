@@ -171,6 +171,12 @@ public class ManagerAttendence extends Fragment implements AdapterView.OnItemCli
                     } else {
                         arrayList.addAll((ArrayList<Manager>) data);
                     }
+
+                    if(arrayList != null) {
+                        if(adapter != null) {
+                            adapter.refresh(arrayList);
+                        }
+                    }
                    /* arrayList = (ArrayList<Manager>) data;
                     adapter = new AttendenceManagerAdapter(getContext(),R.layout.manager_attendence_item,arrayList);
                     listView.setAdapter(adapter);
@@ -181,7 +187,7 @@ public class ManagerAttendence extends Fragment implements AdapterView.OnItemCli
                 }
                 isLoading = false;
                 ((MainActivity)getActivity()).isLoading = false;
-                adapter.refresh(arrayList);
+
                 break;
         }
 

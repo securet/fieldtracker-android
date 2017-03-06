@@ -93,25 +93,27 @@ public class GeofenceReceiver extends BroadcastReceiver{
 						String comments = details.getComments();
 						Log.d(MainActivity.TAG,clockDate + "            from db" + lastDate);
 
-						if (clockDate.equalsIgnoreCase(lastDate)) {
-							if(strComments.equalsIgnoreCase("InLocation")){
-								if (comments.equalsIgnoreCase("OutLocation")) {
-									dataSource.insertTimeInOutDetails(getTimeInOutDetails("InLocation", "clockIn"));
-									uploadData();
-									//
-									String storeName = preferences.getString(Preferences.SITENAME,"");
-									if(!storeName.equalsIgnoreCase("Off Site")) {
-										sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are entering");
+						if(preferences.getBoolean(Preferences.ISONPREMISE,false)) {
+							if (clockDate.equalsIgnoreCase(lastDate)) {
+								if(strComments.equalsIgnoreCase("InLocation")){
+									if (comments.equalsIgnoreCase("OutLocation")) {
+										dataSource.insertTimeInOutDetails(getTimeInOutDetails("InLocation", "clockIn"));
+										uploadData();
+										//
+										String storeName = preferences.getString(Preferences.SITENAME,"");
+										if(!storeName.equalsIgnoreCase("Off Site")) {
+											sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are entering");
+										}
 									}
-								}
-							} else if (strComments.equalsIgnoreCase("OutLocation")) {
-								if(comments.equalsIgnoreCase("TimeIn") || comments.equalsIgnoreCase("InLocation")) {
-									dataSource.insertTimeInOutDetails(getTimeInOutDetails("OutLocation","clockOut"));
-									uploadData();
-									//
-									String storeName = preferences.getString(Preferences.SITENAME,"");
-									if(!storeName.equalsIgnoreCase("Off Site")) {
-										sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are Leaving");
+								} else if (strComments.equalsIgnoreCase("OutLocation")) {
+									if(comments.equalsIgnoreCase("TimeIn") || comments.equalsIgnoreCase("InLocation")) {
+										dataSource.insertTimeInOutDetails(getTimeInOutDetails("OutLocation","clockOut"));
+										uploadData();
+										//
+										String storeName = preferences.getString(Preferences.SITENAME,"");
+										if(!storeName.equalsIgnoreCase("Off Site")) {
+											sendNotification(transitionType+"",preferences.getString(Preferences.SITENAME,""),"You are Leaving");
+										}
 									}
 								}
 							}

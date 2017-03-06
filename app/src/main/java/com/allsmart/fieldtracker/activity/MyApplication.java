@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.multidex.MultiDex;
 
+
 import com.allsmart.fieldtracker.service.GeolocationService;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;

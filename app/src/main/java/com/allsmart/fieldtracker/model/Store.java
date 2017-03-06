@@ -10,12 +10,14 @@ import java.util.HashMap;
  */
 
 public class Store implements Parcelable{
-    private int storeId;
+    private String storeId;
     private String storeName;
     private String lattitude;
     private String longitude;
     private String address;
+    private String isUpdated;
     private String siteRadius;
+    private String storeImage;
     public static HashMap<String,String> storeMap = new HashMap<>();
 
     public Store() {
@@ -23,12 +25,14 @@ public class Store implements Parcelable{
     }
 
     protected Store(Parcel in) {
-        storeId = in.readInt();
+        storeId = in.readString();
         storeName = in.readString();
         lattitude = in.readString();
         longitude = in.readString();
         address = in.readString();
+        isUpdated = in.readString();
         siteRadius = in.readString();
+        storeImage = in.readString();
     }
 
     public static final Creator<Store> CREATOR = new Creator<Store>() {
@@ -43,11 +47,11 @@ public class Store implements Parcelable{
         }
     };
 
-    public int getStoreId() {
+    public String getStoreId() {
         return storeId;
     }
 
-    public void setStoreId(int storeId) {
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
 
@@ -83,12 +87,28 @@ public class Store implements Parcelable{
         this.address = address;
     }
 
+    public String getIsUpdated() {
+        return isUpdated;
+    }
+
+    public void setIsUpdated(String isUpdated) {
+        this.isUpdated = isUpdated;
+    }
+
     public String getSiteRadius() {
         return siteRadius;
     }
 
     public void setSiteRadius(String siteRadius) {
         this.siteRadius = siteRadius;
+    }
+
+    public String getStoreImage() {
+        return storeImage;
+    }
+
+    public void setStoreImage(String storeImage) {
+        this.storeImage = storeImage;
     }
 
     @Override
@@ -98,11 +118,13 @@ public class Store implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(storeId);
+        dest.writeString(storeId);
         dest.writeString(storeName);
         dest.writeString(lattitude);
         dest.writeString(longitude);
         dest.writeString(address);
+        dest.writeString(isUpdated);
         dest.writeString(siteRadius);
+        dest.writeString(storeImage);
     }
 }
