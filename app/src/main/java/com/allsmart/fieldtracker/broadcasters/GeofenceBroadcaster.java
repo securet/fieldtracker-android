@@ -68,15 +68,15 @@ public class GeofenceBroadcaster extends BroadcastReceiver{
                 switch (transitionType) {
 
                     case Geofence.GEOFENCE_TRANSITION_ENTER:
-                        strComments = "InLocation";
-                        clockType = "clockIn";
+                        strComments = "clockIn";
+                        clockType = "InLocation";
                         preferences.saveBoolean(Preferences.INLOCATION, true);
                    //     Toast.makeText(context,"Time In",Toast.LENGTH_SHORT).show();
                         break;
 
                     case Geofence.GEOFENCE_TRANSITION_EXIT:
-                        strComments = "OutLocation";
-                        clockType = "clockOut";
+                        strComments = "clockOut";
+                        clockType = "OutLocation";
              //           Toast.makeText(context,"Time out",Toast.LENGTH_SHORT).show();
                         preferences.saveBoolean(Preferences.INLOCATION, false);
                         break;
@@ -88,21 +88,21 @@ public class GeofenceBroadcaster extends BroadcastReceiver{
                     TimeInOutDetails details = dataSource.getToday();
                     if(details != null && !TextUtils.isEmpty(details.getClockDate())) {
                         String lastDate = CalenderUtils.getDateMethod(details.getClockDate(),CalenderUtils.DateMonthDashedFormate);
-                        String comments = details.getComments();
+                        String comments = details.getActionType();
                         if(preferences.getBoolean(Preferences.ISONPREMISE,false)) {
                             if (clockDate.equalsIgnoreCase(lastDate)) {
-                                if(strComments.equalsIgnoreCase("InLocation")){
+                                if(clockType.equalsIgnoreCase("InLocation")){
                                     if (comments.equalsIgnoreCase("OutLocation")) {
-                                        dataSource.insertTimeInOutDetails(getTimeInOutDetails("InLocation", "clockIn"));
+                                        dataSource.insertTimeInOutDetails(getTimeInOutDetails("clockIn","InLocation"));
                                         uploadData();
                                         String storeName = preferences.getString(Preferences.SITENAME,"");
                                         if(!storeName.equalsIgnoreCase("Off Site")) {
                                             sendNotification(transitionType + "", preferences.getString(Preferences.SITENAME, ""), "You are entering");
                                         }
                                     }
-                                } else if (strComments.equalsIgnoreCase("OutLocation")) {
-                                    if(comments.equalsIgnoreCase("TimeIn") || comments.equalsIgnoreCase("InLocation")) {
-                                        dataSource.insertTimeInOutDetails(getTimeInOutDetails("OutLocation","clockOut"));
+                                } else if (clockType.equalsIgnoreCase("OutLocation")) {
+                                    if(comments.equalsIgnoreCase("clockIn") || comments.equalsIgnoreCase("InLocation")) {
+                                        dataSource.insertTimeInOutDetails(getTimeInOutDetails("clockOut","OutLocation"));
                                         uploadData();
                                         String store = preferences.getString(Preferences.SITENAME,"");
                                         if(!store.equalsIgnoreCase("Off Site")) {

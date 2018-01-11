@@ -90,17 +90,30 @@ public class EventDataSource {
     }
 
     public boolean checkLoggedOut(String username) {
-		String where = SqliteHelper.COLUMN_USERNAME +" = '"+username + "' AND " +SqliteHelper.COLUMN_COMMENTS + " = " + "'TimeOut'";
+		String where = SqliteHelper.COLUMN_USERNAME +" = '"+username + "' AND " +SqliteHelper.COLUMN_ACTIONTYPE + " = " + "'clockOut'";
 		Cursor cursor = database.query(SqliteHelper.TABLE_TIMEINOUT,allColumns,where,null,null,null,null);
 		cursor.moveToFirst();
 		if(cursor.getCount() == 0) {
 			cursor.close();
-			return true;
+			return false;
 		} else {
 			cursor.close();
-			return false;
+			return true;
 		}
 
+	}
+
+	public boolean checkLoggedIn(String username) {
+		String where = SqliteHelper.COLUMN_USERNAME +" = '"+username + "' AND " +SqliteHelper.COLUMN_ACTIONTYPE + " = " + "'clockIn'";
+		Cursor cursor = database.query(SqliteHelper.TABLE_TIMEINOUT,allColumns,where,null,null,null,null);
+		cursor.moveToFirst();
+		if(cursor.getCount() == 0) {
+			cursor.close();
+			return false;
+		} else {
+			cursor.close();
+			return true;
+		}
 
 	}
 }

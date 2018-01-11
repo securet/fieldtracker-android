@@ -82,10 +82,9 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
         ivLoader = (ImageView) footerView.findViewById(R.id.footer_1);
         footerView.setVisibility(View.INVISIBLE);
 
-            leaveStatus.setVisibility(View.VISIBLE);
-            adapter = new ListViewLeaveStatusListAdapter(getActivity(),R.layout.leave_status_list_item,list);
-            lvLeave.setAdapter(adapter);
-
+        leaveStatus.setVisibility(View.VISIBLE);
+        adapter = new ListViewLeaveStatusListAdapter(getActivity(), R.layout.leave_status_list_item, list);
+        lvLeave.setAdapter(adapter);
 
 
         lvLeave.setOnItemClickListener(this);
@@ -153,14 +152,16 @@ public class LeaveStatusFragment extends Fragment implements LoaderManager.Loade
                         }
                     }
 
-                    if(adapter != null) {
-                        adapter.refresh(list);
-                    }
+
 
                 }else {
                     Toast.makeText(getContext(),
                             "Error in response. Please try again.",
                             Toast.LENGTH_SHORT).show();
+                }
+
+                if(adapter != null) {
+                    adapter.refresh(list);
                 }
                 isLoading = false;
                 ((MainActivity)getActivity()).isLoading = false;

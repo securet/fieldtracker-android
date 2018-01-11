@@ -91,6 +91,10 @@ public class LeaveListParser {
                                         } else {
                                             leave.setStatus("Rejected");
                                         }
+                                    } else {
+                                        leave.setStatus("Pending");
+                                    }
+
                                         if(childObject.has("leaveTypeEnumId")) {
                                             leave.setEnumTypeId(childObject.getString("leaveTypeEnumId"));
                                             /*for (Map.Entry<String,String> hm : LeaveType.type.entrySet()) {
@@ -125,7 +129,7 @@ public class LeaveListParser {
                                             }
                                         }
                                         list.add(leave);
-                                    }
+
                                 }
                             }
                         }

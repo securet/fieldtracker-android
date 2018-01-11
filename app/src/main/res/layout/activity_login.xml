@@ -17,22 +17,22 @@
         android:weightSum="1">
 
         <ImageView
-            android:contentDescription="@string/oppo_logo"
-            android:padding="@dimen/margin_5"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="@dimen/margin_3"
-            android:background="@drawable/oppologowhite" />
+            android:background="@drawable/oppologowhite"
+            android:contentDescription="@string/oppo_logo"
+            android:padding="@dimen/margin_5"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/margin_10"
+            android:text="@string/app_name"
             android:textColor="@color/colorWhite"
-            android:text="@string/attendence_tracker"
             android:textSize="@dimen/text_27" />
 
         <EditText
@@ -40,163 +40,168 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_25"
-            android:paddingStart="@dimen/margin_5"
-            android:paddingLeft="@dimen/margin_5"
             android:layout_marginRight="@dimen/margin_25"
             android:layout_marginTop="@dimen/margin_20"
             android:background="@drawable/login_edittext"
-            android:hint="Domain"
-            android:drawableRight="@drawable/domain"
             android:drawableEnd="@drawable/domain"
+            android:drawableRight="@drawable/domain"
+            android:hint="Domain"
             android:inputType="textEmailAddress"
-            android:textSize="@dimen/text_20"
-            />
+            android:paddingLeft="@dimen/margin_5"
+            android:paddingStart="@dimen/margin_5"
+            android:textSize="@dimen/text_20" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
-        <EditText
-            android:id="@+id/emailET"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_10"
-            android:layout_marginLeft="@dimen/margin_25"
-            android:paddingStart="@dimen/margin_5"
-            android:paddingLeft="@dimen/margin_5"
-            android:layout_marginRight="@dimen/margin_25"
-            android:layout_marginTop="@dimen/margin_10"
-            android:background="@drawable/login_edittext"
-            android:hint="@string/username_hint"
-            android:drawableRight="@drawable/email2"
-            android:drawableEnd="@drawable/email2"
-            android:inputType="textEmailAddress"
-            android:textSize="@dimen/text_20"
-             />
-
-        <EditText
-            android:id="@+id/passwordET"
-            android:layout_below="@id/emailET"
-            android:background="@drawable/login_edittext"
-            android:layout_width="fill_parent"
-            android:paddingStart="@dimen/margin_5"
-            android:paddingLeft="@dimen/margin_5"
-            android:fontFamily=""
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/pass"
-            android:drawableRight="@drawable/pass"
-            android:layout_marginBottom="@dimen/margin_15"
-            android:layout_marginLeft="@dimen/margin_25"
-            android:layout_marginRight="@dimen/margin_25"
-            android:hint="@string/password_hint"
-            android:inputType="textPassword"
-            android:textSize="@dimen/text_20" />
             <EditText
-                android:id="@+id/etNewPass"
-                android:visibility="invisible"
+                android:id="@+id/emailET"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/pass"
-                android:paddingStart="@dimen/margin_5"
-                android:paddingLeft="@dimen/margin_5"
-                android:fontFamily=""
-                android:drawableRight="@drawable/pass"
                 android:layout_marginBottom="@dimen/margin_10"
                 android:layout_marginLeft="@dimen/margin_25"
                 android:layout_marginRight="@dimen/margin_25"
                 android:layout_marginTop="@dimen/margin_10"
                 android:background="@drawable/login_edittext"
-                android:textStyle="italic"
-                android:hint="@string/new_password"
-                android:inputType="textPassword"
+                android:drawableEnd="@drawable/email2"
+                android:drawableRight="@drawable/email2"
+                android:hint="@string/username_hint"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="@dimen/margin_5"
+                android:paddingStart="@dimen/margin_5"
                 android:textSize="@dimen/text_20" />
 
             <EditText
-                android:id="@+id/etConfirmPass"
-                android:visibility="invisible"
-                android:layout_below="@id/etNewPass"
-                android:background="@drawable/login_edittext"
+                android:id="@+id/passwordET"
                 android:layout_width="fill_parent"
-                android:paddingStart="@dimen/margin_5"
-                android:paddingLeft="@dimen/margin_5"
-                android:fontFamily=""
                 android:layout_height="wrap_content"
-                android:textStyle="italic"
-                android:drawableEnd="@drawable/pass"
-                android:drawableRight="@drawable/pass"
+                android:layout_below="@id/emailET"
                 android:layout_marginBottom="@dimen/margin_15"
                 android:layout_marginLeft="@dimen/margin_25"
                 android:layout_marginRight="@dimen/margin_25"
+                android:background="@drawable/login_edittext"
+                android:drawableEnd="@drawable/pass"
+                android:drawableRight="@drawable/pass"
+                android:fontFamily=""
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:paddingLeft="@dimen/margin_5"
+                android:paddingStart="@dimen/margin_5"
+                android:textSize="@dimen/text_20" />
+
+            <EditText
+                android:id="@+id/etNewPass"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:layout_marginLeft="@dimen/margin_25"
+                android:layout_marginRight="@dimen/margin_25"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/login_edittext"
+                android:drawableEnd="@drawable/pass"
+                android:drawableRight="@drawable/pass"
+                android:fontFamily=""
+                android:hint="@string/new_password"
+                android:inputType="textPassword"
+                android:paddingLeft="@dimen/margin_5"
+                android:paddingStart="@dimen/margin_5"
+                android:textSize="@dimen/text_20"
+                android:textStyle="italic"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/etConfirmPass"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/etNewPass"
+                android:layout_marginBottom="@dimen/margin_15"
+                android:layout_marginLeft="@dimen/margin_25"
+                android:layout_marginRight="@dimen/margin_25"
+                android:background="@drawable/login_edittext"
+                android:drawableEnd="@drawable/pass"
+                android:drawableRight="@drawable/pass"
+                android:fontFamily=""
                 android:hint="@string/confirm_password"
                 android:inputType="textPassword"
-                android:textSize="@dimen/text_20" />
+                android:paddingLeft="@dimen/margin_5"
+                android:paddingStart="@dimen/margin_5"
+                android:textSize="@dimen/text_20"
+                android:textStyle="italic"
+                android:visibility="invisible" />
         </RelativeLayout>
 
         <TextView
             android:id="@+id/tvForgotPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorWhite"
-            android:textSize="@dimen/text_16"
+            android:layout_marginBottom="@dimen/margin_15"
+            android:layout_marginTop="@dimen/margin_10"
             android:gravity="center_horizontal"
             android:text="@string/forgot_password"
-            android:layout_marginTop="@dimen/margin_10"
-            android:layout_marginBottom="@dimen/margin_15"
-            />
+            android:textColor="@color/colorWhite"
+            android:textSize="@dimen/text_16" />
+
         <RelativeLayout
-            android:gravity="center_horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/loginBtn"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="@dimen/margin_70"
-            android:paddingLeft="@dimen/margin_70"
-            android:textSize="@dimen/text_27"
-            android:textAllCaps="true"
-            android:background="@drawable/login_button"
-            android:text="@string/login_text"
-            android:textColor="@color/colorLoginButton" />
+            android:gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/loginBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_button"
+                android:paddingLeft="@dimen/margin_70"
+                android:paddingRight="@dimen/margin_70"
+                android:text="@string/login_text"
+                android:textAllCaps="true"
+                android:textColor="@color/colorLoginButton"
+                android:textSize="@dimen/text_27" />
+
             <Button
                 android:id="@+id/resetButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="@dimen/margin_70"
-                android:paddingLeft="@dimen/margin_70"
-                android:textSize="@dimen/text_27"
-                android:textAllCaps="true"
-                android:visibility="invisible"
                 android:background="@android:drawable/dialog_holo_light_frame"
+                android:paddingLeft="@dimen/margin_70"
+                android:paddingRight="@dimen/margin_70"
                 android:text="@string/reset"
-                android:textColor="@color/colorLoginButton" />
+                android:textAllCaps="true"
+                android:textColor="@color/colorLoginButton"
+                android:textSize="@dimen/text_27"
+                android:visibility="invisible" />
         </RelativeLayout>
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:layout_gravity="center_horizontal">
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/tvPoweredBy"
-            android:layout_marginTop="@dimen/margin_10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_10"
             android:text="@string/powered_by"
             android:textColor="#ffffff"
             android:textSize="@dimen/text_16" />
 
         <ImageView
-            android:contentDescription="@string/allsmart_logo"
             android:id="@+id/ivAllSmartLogo"
-            android:src="@drawable/allsmartmainlogo"
             android:layout_width="@dimen/margin_130"
-            android:layout_height="@dimen/margin_20" />
+            android:layout_height="@dimen/margin_20"
+            android:contentDescription="@string/allsmart_logo"
+            android:src="@drawable/allsmartmainlogo" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

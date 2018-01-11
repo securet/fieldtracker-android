@@ -19,6 +19,8 @@ public class Preferences
     public static String USER_CUREENTSITE = "userCurrentSite";
     public static String INLOCATION = "InLocation";
     public static String TIMEINOUTSTATUS = "TimeInOutStatus";
+    public static String ISTIMETAMPER = "isTimeTamper";
+    public static String TIMEINTIME_MESSAGE = "timeInTimeMessage";
     public static String TIMEINTIME = "TimeInTime";
     public static String USERLATITUDE = "UserLatitude";
     public static String USERLONGITUDE = "UserLongitude";

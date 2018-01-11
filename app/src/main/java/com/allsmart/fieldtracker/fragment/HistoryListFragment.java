@@ -107,15 +107,38 @@ public class HistoryListFragment extends Fragment implements AdapterView.OnItemC
 				Fragment f = new HistoryListTrackFragment();
 				FragmentManager fm = getFragmentManager();
                 Bundle b = new Bundle();
-                HistoryNew hn = list.get(position);
-                b.putParcelable("sub_history",hn);
-                b.putInt("position",position);
-                f.setArguments(b);
-				fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
-				fm.executePendingTransactions();
+                HistoryNew hn = null;
+                if(list != null) {
+                    hn = list.get(position);
+                    if(hn != null && isNotNull(hn)) {
+                        b.putParcelable("sub_history",hn);
+                        b.putInt("position",position);
+                        f.setArguments(b);
+                        fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
+                        fm.executePendingTransactions();
+                    } else {
+                        ((MainActivity)getActivity()).displayMessage("No data to show time line");
+                    }
+                }
+
+
+
 		}
 	}
-	@Override
+
+    private boolean isNotNull(HistoryNew hn) {
+        if(hn.getDate() == null ||
+                hn.getHistoryChildren() == null ||
+                hn.getHours() == null ||
+                hn.getTimeIn() == null ||
+                hn.getTimeOut() == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
 	public Loader<Object> onCreateLoader(int id, Bundle args) {
         ((MainActivity)getActivity()).isLoading = true;
         isLoading = true;

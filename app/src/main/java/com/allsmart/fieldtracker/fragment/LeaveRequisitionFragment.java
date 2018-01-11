@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -211,13 +212,15 @@ public class LeaveRequisitionFragment extends Fragment implements LoaderManager.
         Bundle b = new Bundle();
         b.putInt("leave_requisition",1);
         b.putParcelable("leave_requisition_key",leave);
-        if(leave.getStatus().equalsIgnoreCase("Pending") || leave.getStatus().equalsIgnoreCase("Rejected")) {
-            Fragment f = new ApproveLeaveFragment();
-            f.setArguments(b);
+        if(leave != null && !TextUtils.isEmpty(leave.getStatus())) {
+            if (leave.getStatus().equalsIgnoreCase("Pending") || leave.getStatus().equalsIgnoreCase("Rejected")) {
+                Fragment f = new ApproveLeaveFragment();
+                f.setArguments(b);
 
-            FragmentManager fm = getFragmentManager();
-            fm.beginTransaction().replace(R.id.flMiddle,f).addToBackStack(null).commit();
-            fm.executePendingTransactions();
+                FragmentManager fm = getFragmentManager();
+                fm.beginTransaction().replace(R.id.flMiddle, f).addToBackStack(null).commit();
+                fm.executePendingTransactions();
+            }
         }
 
     }

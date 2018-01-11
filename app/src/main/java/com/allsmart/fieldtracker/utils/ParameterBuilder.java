@@ -215,6 +215,7 @@ public class ParameterBuilder {
                     "&comments=" + URLEncoder.encode(details.getComments(),"UTF-8") +
                     "&productStoreId=" + URLEncoder.encode(preferences.getString(Preferences.PARTYID,""),"UTF-8") +
                     "&actionType=" + URLEncoder.encode(details.getActionType(),"UTF-8") +
+              //      "&actionType=" + URLEncoder.encode("clockOut","UTF-8") +
                     "&actionImage=" + URLEncoder.encode(imagePath,"UTF-8") +
                     "&latitude=" + URLEncoder.encode(details.getLatitude(),"UTF-8") +
                     "&longitude=" + URLEncoder.encode(details.getLongitude(),"UTF-8");

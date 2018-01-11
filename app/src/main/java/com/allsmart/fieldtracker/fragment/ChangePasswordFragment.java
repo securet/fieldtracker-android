@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.allsmart.fieldtracker.constants.AppsConstant;
 import com.allsmart.fieldtracker.constants.LoaderConstant;
 import com.allsmart.fieldtracker.constants.LoaderMethod;
 import com.allsmart.fieldtracker.service.LoaderServices;
+import com.allsmart.fieldtracker.storage.Preferences;
 import com.allsmart.fieldtracker.utils.ParameterBuilder;
 import com.allsmart.fieldtracker.constants.Services;
 import com.allsmart.fieldtracker.utils.UrlBuilder;
@@ -36,6 +38,17 @@ public class ChangePasswordFragment extends Fragment implements LoaderManager.Lo
     private boolean isCurrent = false;
     private boolean isNew = false;
     private boolean isConfirm = false;
+    private Preferences preferences;
+    private String username = "";
+    private String password = "";
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(preferences == null) {
+            preferences = new Preferences(getContext());
+        }
+    }
 
     @Nullable
     @Override
@@ -45,6 +58,10 @@ public class ChangePasswordFragment extends Fragment implements LoaderManager.Lo
         newPass = (EditText) view.findViewById(R.id.etNewPassword);
         confirmPass = (EditText) view.findViewById(R.id.etConfirmPassword);
         btChange = (Button) view.findViewById(R.id.btChangePassword);
+
+        if(preferences == null) {
+            preferences = new Preferences(getContext());
+        }
 
         confirmPass.addTextChangedListener(new TextWatcher() {
             @Override
@@ -117,6 +134,7 @@ public class ChangePasswordFragment extends Fragment implements LoaderManager.Lo
                         if (isConfirm) {
                             if (!TextUtils.isEmpty(nPass) && !TextUtils.isEmpty(sConfirmPass) && nPass.equals(sConfirmPass)) {
                             //    Toast.makeText(getContext(), "Password Changed", Toast.LENGTH_SHORT).show();
+                                password = sConfirmPass;
                                 Bundle bundle = new Bundle();
                                 bundle.putString(AppsConstant.METHOD ,AppsConstant.PUT);
                                 bundle.putString(AppsConstant.URL, UrlBuilder.getUrl(Services.CHANGE_PASSWORD));
@@ -160,6 +178,13 @@ public class ChangePasswordFragment extends Fragment implements LoaderManager.Lo
                 Toast.makeText(getContext(),
                         "Password changed successfully",
                         Toast.LENGTH_SHORT).show();
+                String basicAuth = "Basic " + new String(Base64
+                        .encode((preferences.getString(Preferences.USERNAME,"")+":"+password)
+                        .getBytes(),Base64.NO_WRAP ));
+
+                preferences.saveString(Preferences.BASIC_AUTH,basicAuth);
+                preferences.commit();
+
             } else if(!((String) data).equalsIgnoreCase("error")) {
                 Toast.makeText(getContext(),
                         data.toString(),

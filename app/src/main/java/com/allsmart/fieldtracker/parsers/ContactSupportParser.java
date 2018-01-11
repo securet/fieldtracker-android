@@ -26,9 +26,15 @@ public class ContactSupportParser {
             if(parentObject.has("userObj")) {
                 JSONObject childObject = parentObject.getJSONObject("userObj");
                 contact = new Contact();
-                contact.setAddress(childObject.getString("address1"));
-                contact.setContactNum(childObject.getString("contactNumber"));
-                contact.setEmailAddress(childObject.getString("emailAddress"));
+                if (childObject.has("address1")) {
+                    contact.setAddress(childObject.getString("address1"));
+                }
+                if (childObject.has("contactNumber")) {
+                    contact.setContactNum(childObject.getString("contactNumber"));
+                }
+                if (childObject.has("emailAddress")) {
+                    contact.setEmailAddress(childObject.getString("emailAddress"));
+                }
             }
         }  catch (JSONException e) {
             result = "error";

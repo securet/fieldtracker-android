@@ -131,7 +131,7 @@ public class ApproveLeaveFragment  extends Fragment implements LoaderManager.Loa
                     if(leaveRequisition != null) {
                         Bundle bundle = new Bundle();
                         bundle.putString(AppsConstant.METHOD,AppsConstant.PUT);
-                        bundle.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.APPROVE_LEAVE));
+                        bundle.putString(AppsConstant.URL,UrlBuilder.getUrl(Services.REJECT_LEAVE));
                         bundle.putString(AppsConstant.PARAMS,ParameterBuilder.getLeaveApprove(leaveRequisition.getPartyRelationShipId(),
                                 fDate,tDate,getEnumType(etType.getText().toString()),getReaonType(tvReasonType.getText().toString()),"N",comments));
                         getActivity().getLoaderManager().initLoader(LoaderConstant.APPROVE_LEAVE,bundle,ApproveLeaveFragment.this);
@@ -217,7 +217,7 @@ public class ApproveLeaveFragment  extends Fragment implements LoaderManager.Loa
                 if(data != null && data instanceof String) {
                     if(((String) data).equalsIgnoreCase("success")) {
                         Toast.makeText(getContext(),
-                                "Leave Applied successfully",
+                                "Successful",
                                 Toast.LENGTH_SHORT).show();
                         FragmentManager fragmentManager = getFragmentManager();
                         fragmentManager.popBackStack();
@@ -227,7 +227,7 @@ public class ApproveLeaveFragment  extends Fragment implements LoaderManager.Loa
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(),
-                                "Leave Apply failed",
+                                "failed",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {

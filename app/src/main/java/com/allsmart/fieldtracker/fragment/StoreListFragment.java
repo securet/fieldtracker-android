@@ -202,9 +202,7 @@ public class StoreListFragment extends Fragment implements AdapterView.OnItemCli
           //      adapter = new ListViewStoreListAdapter(getActivity(),R.layout.store_list_item,list);
            //     listView.setAdapter(adapter);
           //      listView.setOnItemClickListener(this);
-                if(list != null) {
-                    adapter.refresh(list);
-                }
+
 
                 break;
         }

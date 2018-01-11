@@ -91,6 +91,9 @@ public class LeaveRequisitionParser {
                                         } else {
                                             leave.setStatus("Rejected");
                                         }
+                                    } else {
+                                        leave.setStatus("Pending");
+                                    }
                                         if(childObject.has("leaveTypeEnumId")) {
                                             String enumType = childObject.getString("leaveTypeEnumId");
                                             if(enumType.equals("EltLossOfPay")){
@@ -124,7 +127,7 @@ public class LeaveRequisitionParser {
                                             }
                                         }
                                         list.add(leave);
-                                    }
+
                                 }
                             }
                         }

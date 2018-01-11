@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Attendance Tracker</string>
+    <string name="app_name">Time-IN Track</string>
     <string name="geofence_enter">Now entering %1$s</string>
     <string name="geofence_dwell">Dwelling in %1$s</string>
     <string name="geofence_exit">Now exiting %1$s</string>

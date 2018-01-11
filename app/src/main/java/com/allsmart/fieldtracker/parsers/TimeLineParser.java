@@ -40,10 +40,10 @@ public class TimeLineParser {
             if(parentObject.has("userTimeLog")) {
 
                 JSONArray parentArray = parentObject.getJSONArray("userTimeLog");
-                if(parentArray.length() == 0) {
+                /*if(parentArray.length() == 0) {
                     preferences.saveBoolean(Preferences.ALLOWTIMEIN,true);
                     preferences.commit();
-                }
+                }*/
                 for (int i = 0 ; i < parentArray.length() ; i++) {
 
                     JSONObject childObject = parentArray.getJSONObject(i);
@@ -78,6 +78,9 @@ public class TimeLineParser {
                                         if((childArray.length()-1) == j) {
                                             preferences.saveBoolean(Preferences.ALLOWTIMEIN,false);
                                             preferences.commit();
+                                        } else {
+                                            preferences.saveBoolean(Preferences.ALLOWTIMEIN,true);
+                                            preferences.commit();
                                         }
                                         mCalendar2.setTime(timeT);
                                         tl.setThruDate(DateFormat.format("hh:mm aa",mCalendar2).toString());
@@ -90,6 +93,9 @@ public class TimeLineParser {
                                         tl.setThruDate("");
                                         if((childArray.length()-1) == j) {
                                             preferences.saveBoolean(Preferences.ALLOWTIMEIN,true);
+                                            preferences.commit();
+                                        } else {
+                                            preferences.saveBoolean(Preferences.ALLOWTIMEIN,false);
                                             preferences.commit();
                                         }
                                     }

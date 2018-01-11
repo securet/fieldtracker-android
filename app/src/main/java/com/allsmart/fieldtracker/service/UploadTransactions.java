@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.allsmart.fieldtracker.activity.MainActivity;
 import com.crashlytics.android.Crashlytics;
@@ -34,6 +35,8 @@ public class UploadTransactions extends IntentService {
     private static Transactions currentTransaction=Transactions.NONE;
     private static TransactionSatus currentTransactionSatus=TransactionSatus.NONE;
     private String response = "";
+    private boolean isClockOut = false;
+    private boolean isClockIn = false;
 
     public enum Transactions{
         NONE,
@@ -110,13 +113,49 @@ public class UploadTransactions extends IntentService {
         // upload to server // Asc time // first success than second
         if(detailsArrayList != (null) && detailsArrayList.size() > 0) {
             for (TimeInOutDetails d : detailsArrayList) {
+
+                if(dataSource.checkLoggedOut(preference.getString(Preferences.USERNAME,""))) {
+                    isClockOut = true;
+                } else {
+                    isClockOut = false;
+                }
+
+                if(dataSource.checkLoggedIn(preference.getString(Preferences.USERNAME,""))) {
+                    isClockIn = true;
+                } else {
+                    isClockIn = false;
+                }
                 // imgae server server path
                 String imagePath = uploadImage(d.getActionImage());
                 if((!TextUtils.isEmpty(d.getActionImage()) && !TextUtils.isEmpty(imagePath)) || TextUtils.isEmpty(imagePath)) {
                     response = new RestHelper().makeRestCallAndGetResponse(UrlBuilder.getUrl(Services.TIME_IN_OUT), AppsConstant.POST, ParameterBuilder.getTimeinOut(preference, d, imagePath), preference);
-                    Response responseMsg = new TimeInOutParser(response, d.getComments()).Parse();
+                    Response responseMsg = new TimeInOutParser(response, d.getActionType()).Parse();
+
+
+                    if(isClockIn) {
+                        if(responseMsg.getResponceCode().equals("200")) {
+                            preference.saveBoolean(Preferences.ISTIMETAMPER,false);
+                            preference.saveString(Preferences.TIMEINTIME_MESSAGE,responseMsg.getResponceMessage());
+                        } else {
+                            preference.saveBoolean(Preferences.ISTIMETAMPER,true);
+                            preference.saveString(Preferences.TIMEINTIME_MESSAGE,responseMsg.getResponceMessage());
+                        }
+                        preference.commit();
+                    }
+                    if(isClockOut) {
+                        if(responseMsg.getResponceCode().equals("200")) {
+                            preference.saveBoolean(Preferences.ISTIMETAMPER,false);
+                            preference.saveString(Preferences.TIMEINTIME_MESSAGE,responseMsg.getResponceMessage());
+                        } else {
+                            preference.saveBoolean(Preferences.ISTIMETAMPER,true);
+                            preference.saveString(Preferences.TIMEINTIME_MESSAGE,responseMsg.getResponceMessage());
+                        }
+                        preference.commit();
+                    }
+
                     if (responseMsg.getResponceCode().equals("200")) {
                         dataSource.updateIsPushed(d);
+
                     //    Toast.makeText(getApplicationContext(),"200",Toast.LENGTH_SHORT).show();
                         Log.d(MainActivity.TAG,responseMsg.getResponceMessage());
                         Crashlytics.log(1,getClass().getName(),

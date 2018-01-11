@@ -400,7 +400,7 @@ public class EditStoreFragment extends Fragment implements View.OnClickListener,
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
                     if(locationManager != null) {
-                        checkPermission();
+                        if(checkPermission())
                         loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
                     }
